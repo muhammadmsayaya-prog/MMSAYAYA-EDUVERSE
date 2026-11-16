@@ -1,0 +1,3261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MMSAYAYA EDUVERSE | Learn Today, Lead Tomorrow</title>
+  <script>if(location.hash==="#login")document.documentElement.classList.add("is-login");</script>
+  <meta name="description" content="MMSAYAYA EDUVERSE - Multi-disciplinary online learning platform." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0D47A1; --secondary: #1976D2; --emerald: #00796B;
+      --text: #1a237e; --text-muted: #546e7a; --bg: #f8fafc;
+      --card: #fff; --border: #e2e8f0;
+      --shadow: 0 4px 20px rgba(13,71,161,0.08);
+      --shadow-lg: 0 20px 50px rgba(13,71,161,0.15);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+    a { text-decoration:none; color:inherit; }
+    .container { max-width:1200px; margin:0 auto; padding:0 20px; }
+
+    .header { background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.06); position:sticky; top:0; z-index:100; }
+    .header-inner { display:flex; align-items:center; justify-content:space-between; height:70px; }
+    .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.2rem; color:var(--primary); }
+    .logo-icon { width:38px; height:38px; background:linear-gradient(135deg,var(--primary),var(--secondary)); border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; }
+    .nav { display:flex; align-items:center; gap:22px; }
+    .nav a { font-size:0.875rem; font-weight:500; color:var(--text-muted); }
+    .nav a:hover { color:var(--primary); }
+    .header-actions { display:flex; align-items:center; gap:12px; }
+    .lang-select { padding:7px 10px; border:1.5px solid var(--border); border-radius:8px; font-size:0.8rem; font-family:inherit; background:#fff; cursor:pointer; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 22px; border-radius:10px; font-size:0.9rem; font-weight:600; font-family:inherit; border:none; cursor:pointer; transition:all 0.2s; }
+    .btn-primary { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; }
+    .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(13,71,161,0.3); }
+    .btn-outline { background:transparent; border:2px solid var(--primary); color:var(--primary); }
+    .btn-outline:hover { background:var(--primary); color:#fff; }
+    .btn-white { background:#fff; color:var(--primary); }
+    .btn-white:hover { background:#f0f7ff; }
+    .btn-emerald { background:var(--emerald); color:#fff; }
+    .mobile-menu-btn { display:none; background:none; border:none; cursor:pointer; padding:8px; flex-direction:column; gap:5px; }
+    .mobile-menu-btn span { display:block; width:24px; height:2.5px; background:var(--primary); border-radius:2px; }
+    .mobile-nav { display:none; background:#fff; border-top:1px solid var(--border); padding:12px 20px 20px; }
+    .mobile-nav.show { display:block; }
+    .mobile-nav a { display:block; padding:12px 0; font-size:0.95rem; font-weight:500; border-bottom:1px solid var(--border); }
+
+    .hero { background:linear-gradient(135deg,#0D47A1 0%,#1565C0 40%,#1976D2 100%); color:#fff; padding:90px 0 100px; position:relative; overflow:hidden; }
+    .hero-content { position:relative; z-index:1; max-width:700px; }
+    .hero-badge { display:inline-block; background:rgba(255,255,255,0.15); padding:6px 14px; border-radius:50px; font-size:0.8rem; font-weight:600; margin-bottom:20px; border:1px solid rgba(255,255,255,0.2); }
+    .hero h1 { font-size:2.8rem; font-weight:800; line-height:1.15; margin-bottom:16px; letter-spacing:-1px; }
+    .hero .slogan { font-size:1.15rem; font-weight:600; opacity:0.95; margin-bottom:12px; color:#BBDEFB; }
+    .hero p { font-size:1.05rem; opacity:0.9; margin-bottom:32px; line-height:1.7; max-width:560px; }
+    .hero-actions { display:flex; gap:12px; flex-wrap:wrap; }
+
+    .section { padding:70px 0; }
+    .section-header { text-align:center; margin-bottom:44px; }
+    .section-header h2 { font-size:1.9rem; font-weight:800; color:var(--primary); margin-bottom:10px; }
+    .section-header p { color:var(--text-muted); font-size:1.05rem; max-width:560px; margin:0 auto; }
+
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+    .about-text h3 { font-size:1.15rem; font-weight:700; color:var(--primary); margin:20px 0 8px; }
+    .about-text h3:first-child { margin-top:0; }
+    .about-text p { color:var(--text-muted); font-size:0.95rem; line-height:1.7; }
+    .about-cards { display:grid; gap:16px; }
+    .about-card { background:#fff; border-radius:12px; padding:22px; border:1px solid var(--border); box-shadow:var(--shadow); }
+    .about-card h4 { font-size:1rem; font-weight:700; color:var(--primary); margin-bottom:6px; }
+    .about-card p { font-size:0.875rem; color:var(--text-muted); }
+
+    .categories-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:18px; }
+    .category-card { background:#fff; border-radius:14px; padding:26px 20px; box-shadow:var(--shadow); border:1px solid var(--border); transition:all 0.25s; cursor:pointer; text-align:center; }
+    .category-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--secondary); }
+    .category-icon { width:54px; height:54px; background:linear-gradient(135deg,#e3f2fd,#bbdefb); border-radius:14px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; font-size:1.4rem; }
+    .category-card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; }
+    .category-card p { font-size:0.8rem; color:var(--text-muted); margin-bottom:10px; }
+    .category-count { font-size:0.75rem; font-weight:600; color:var(--primary); }
+
+    .courses-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
+    .course-card { background:#fff; border-radius:14px; overflow:hidden; border:1px solid var(--border); box-shadow:var(--shadow); transition:all 0.25s; cursor:pointer; }
+    .course-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+    .course-img { height:140px; background:linear-gradient(135deg,var(--primary),var(--secondary)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:2.2rem; font-weight:800; }
+    .course-body { padding:18px; }
+    .course-cat { font-size:0.72rem; font-weight:600; color:var(--secondary); text-transform:uppercase; margin-bottom:6px; }
+    .course-body h3 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+    .course-body p { font-size:0.85rem; color:var(--text-muted); margin-bottom:14px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .course-meta { display:flex; gap:12px; font-size:0.78rem; color:var(--text-muted); margin-bottom:14px; }
+
+    .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:24px; }
+    .step { text-align:center; }
+    .step-number { width:48px; height:48px; background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.1rem; margin:0 auto 14px; }
+    .step h3 { font-size:0.95rem; font-weight:700; margin-bottom:6px; }
+    .step p { font-size:0.82rem; color:var(--text-muted); }
+
+    .practice-box { background:linear-gradient(135deg,#00796B,#00897B); border-radius:16px; padding:48px 40px; color:#fff; text-align:center; }
+    .practice-box h2 { font-size:1.8rem; font-weight:800; margin-bottom:12px; }
+    .practice-box p { font-size:1.05rem; opacity:0.9; margin-bottom:28px; max-width:500px; margin-left:auto; margin-right:auto; }
+
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+    .feature-card { background:#fff; border-radius:14px; padding:26px; box-shadow:var(--shadow); border:1px solid var(--border); }
+    .feature-card h3 { font-size:1.05rem; font-weight:700; margin-bottom:8px; color:var(--primary); }
+    .feature-card p { font-size:0.875rem; color:var(--text-muted); }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:20px; text-align:center; }
+    .stat-item { background:#fff; border-radius:14px; padding:28px 16px; border:1px solid var(--border); box-shadow:var(--shadow); }
+    .stat-item .num { font-size:2rem; font-weight:800; color:var(--primary); margin-bottom:4px; }
+    .stat-item .label { font-size:0.85rem; color:var(--text-muted); font-weight:500; }
+
+    .announcements-list { display:grid; gap:16px; }
+    .announcement-item { background:#fff; border-radius:12px; padding:20px 24px; border:1px solid var(--border); box-shadow:var(--shadow); display:flex; gap:16px; }
+    .ann-date { background:#e3f2fd; color:var(--primary); padding:8px 12px; border-radius:8px; font-size:0.75rem; font-weight:700; text-align:center; min-width:60px; }
+    .announcement-item h4 { font-size:0.95rem; font-weight:700; margin-bottom:4px; }
+    .announcement-item p { font-size:0.85rem; color:var(--text-muted); }
+
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+    .contact-info h3 { font-size:1.1rem; font-weight:700; color:var(--primary); margin-bottom:16px; }
+    .contact-item { display:flex; gap:12px; margin-bottom:16px; font-size:0.9rem; color:var(--text-muted); }
+    .contact-form { background:#fff; border-radius:14px; padding:28px; border:1px solid var(--border); box-shadow:var(--shadow); }
+    .form-group { margin-bottom:14px; }
+    .form-group label { display:block; font-size:0.8rem; font-weight:600; margin-bottom:5px; }
+    .form-group input, .form-group textarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:#fafbfc; }
+    .form-group input:focus, .form-group textarea:focus { outline:none; border-color:var(--primary); background:#fff; box-shadow:0 0 0 3px rgba(13,71,161,0.1); }
+    .form-group textarea { resize:vertical; min-height:100px; }
+    .form-alert { padding:10px 14px; border-radius:8px; font-size:0.875rem; margin-bottom:14px; display:none; }
+    .form-alert.show { display:block; }
+    .form-alert.success { background:#e8f5e9; color:#2e7d32; }
+    .form-alert.error { background:#ffebee; color:#c62828; }
+
+    .cta { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; padding:60px 0; text-align:center; }
+    .cta h2 { font-size:1.8rem; font-weight:800; margin-bottom:12px; }
+    .cta p { font-size:1.05rem; opacity:0.9; margin-bottom:28px; max-width:500px; margin-left:auto; margin-right:auto; }
+
+    .footer { background:#0a1628; color:#94a3b8; padding:60px 0 30px; }
+    .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; margin-bottom:40px; }
+    .footer-brand h3 { color:#fff; font-size:1.15rem; font-weight:700; margin-bottom:12px; }
+    .footer-brand p { font-size:0.875rem; line-height:1.6; max-width:280px; }
+    .footer-col h4 { color:#fff; font-size:0.9rem; font-weight:600; margin-bottom:16px; }
+    .footer-col a { display:block; font-size:0.85rem; margin-bottom:10px; }
+    .footer-col a:hover { color:#fff; }
+    .footer-bottom { border-top:1px solid #1e293b; padding-top:24px; text-align:center; font-size:0.85rem; }
+    .empty-msg { text-align:center; color:var(--text-muted); padding:20px; font-size:0.9rem; }
+
+    @media(max-width:900px) {
+      .nav{display:none;} .mobile-menu-btn{display:flex;}
+      .hero h1{font-size:2.1rem;} .about-grid,.contact-grid{grid-template-columns:1fr;}
+      .footer-grid{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:600px) {
+      .hero{padding:60px 0 70px;} .hero h1{font-size:1.75rem;}
+      .section{padding:50px 0;} .section-header h2{font-size:1.5rem;}
+      .footer-grid{grid-template-columns:1fr;} .practice-box{padding:36px 24px;}
+      .header-actions .lang-select{display:none;}
+    }
+
+    /* ===== Login view (added) ===== */
+    [hidden] { display:none !important; }
+    #loginView { display:none; }
+    html.is-login #loginView { display:block; }
+    html.is-login body > section { display:none; }
+    .login-wrap { background:linear-gradient(135deg,#0D47A1 0%,#1565C0 40%,#1976D2 100%); padding:60px 20px 80px; }
+    .login-card { background:#fff; max-width:440px; margin:0 auto; border-radius:16px; padding:32px 28px; box-shadow:var(--shadow-lg); }
+    .login-card h1 { font-size:1.6rem; font-weight:800; color:var(--primary); margin-bottom:4px; }
+    .login-sub { font-size:0.9rem; color:var(--text-muted); margin-bottom:20px; }
+    .pw-wrap { position:relative; }
+    .pw-wrap input { padding-right:64px; }
+    .pw-toggle { position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--primary); font-size:0.78rem; font-weight:600; font-family:inherit; cursor:pointer; padding:6px; }
+    .link-btn { background:none; border:none; color:var(--primary); font-size:0.85rem; font-weight:600; font-family:inherit; cursor:pointer; margin-top:12px; padding:4px 0; display:block; }
+    .login-divider { border:none; border-top:1px solid var(--border); margin:24px 0 18px; }
+    .login-card .btn:disabled { opacity:0.6; cursor:not-allowed; }
+    .login-hint { font-size:0.8rem; color:var(--text-muted); margin:14px 0; }
+  
+    /* ===== ADMIN DASHBOARD STYLES ===== */
+
+    :root {
+      --primary: #0D47A1;
+      --secondary: #1976D2;
+      --emerald: #00796B;
+      --gold: #C9A227;
+      --text: #1a237e;
+      --text-muted: #546e7a;
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --sidebar-w: 260px;
+      --header-h: 64px;
+      --shadow: 0 4px 20px rgba(13,71,161,0.08);
+      --shadow-lg: 0 12px 40px rgba(13,71,161,0.12);
+      --danger: #c62828;
+      --success: #2e7d32;
+      --warning: #f9a825;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    a { text-decoration:none; color:inherit; }
+    button, input, select, textarea { font-family:inherit; }
+    [hidden] { display:none !important; }
+
+    /* Layout */
+    .app { display:flex; min-height:100vh; }
+    .sidebar {
+      width:var(--sidebar-w); background:linear-gradient(180deg,#0a1628 0%,#0D47A1 100%);
+      color:#fff; position:fixed; top:0; left:0; bottom:0; z-index:200;
+      display:flex; flex-direction:column; transition:transform 0.25s ease;
+    }
+    .sidebar-brand {
+      padding:18px 20px; display:flex; align-items:center; gap:12px;
+      border-bottom:1px solid rgba(255,255,255,0.1); flex-shrink:0;
+    }
+    .sidebar-brand .logo {
+      width:40px; height:40px; background:linear-gradient(135deg,var(--gold),#e8c547);
+      border-radius:10px; display:flex; align-items:center; justify-content:center;
+      font-weight:800; color:#0a1628; font-size:0.95rem;
+    }
+    .sidebar-brand span { font-weight:700; font-size:0.95rem; line-height:1.2; }
+    .sidebar-brand small { display:block; font-size:0.7rem; opacity:0.7; font-weight:500; }
+    .sidebar-nav { flex:1; overflow-y:auto; padding:12px 10px 24px; }
+    .nav-section { margin-bottom:18px; }
+    .nav-section-title {
+      font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+      color:rgba(255,255,255,0.45); padding:6px 12px 8px;
+    }
+    .nav-item {
+      display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px;
+      font-size:0.875rem; font-weight:500; color:rgba(255,255,255,0.85); cursor:pointer;
+      transition:all 0.15s; border:none; background:none; width:100%; text-align:left;
+    }
+    .nav-item:hover { background:rgba(255,255,255,0.1); color:#fff; }
+    .nav-item.active { background:rgba(255,255,255,0.18); color:#fff; font-weight:600; }
+    .nav-item .icon { width:22px; text-align:center; font-size:1rem; flex-shrink:0; }
+    .sidebar-footer {
+      padding:14px 16px; border-top:1px solid rgba(255,255,255,0.1); flex-shrink:0;
+    }
+    .sidebar-user { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .sidebar-user .avatar {
+      width:36px; height:36px; border-radius:50%; background:var(--emerald);
+      display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem;
+    }
+    .sidebar-user .info { flex:1; min-width:0; }
+    .sidebar-user .name { font-size:0.85rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .sidebar-user .role { font-size:0.7rem; opacity:0.7; }
+    .btn-logout {
+      width:100%; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.25);
+      background:transparent; color:#fff; font-size:0.8rem; font-weight:600; cursor:pointer;
+    }
+    .btn-logout:hover { background:rgba(255,255,255,0.1); }
+
+    .main { margin-left:var(--sidebar-w); flex:1; min-width:0; display:flex; flex-direction:column; }
+    .topbar {
+      height:var(--header-h); background:#fff; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; padding:0 24px;
+      position:sticky; top:0; z-index:100; box-shadow:0 1px 3px rgba(0,0,0,0.04);
+    }
+    .topbar-left { display:flex; align-items:center; gap:14px; }
+    .menu-toggle {
+      display:none; background:none; border:none; cursor:pointer; padding:8px;
+      flex-direction:column; gap:5px;
+    }
+    .menu-toggle span { display:block; width:22px; height:2.5px; background:var(--primary); border-radius:2px; }
+    .page-title { font-size:1.15rem; font-weight:700; color:var(--primary); }
+    .topbar-right { display:flex; align-items:center; gap:12px; }
+    .topbar-badge {
+      background:#e3f2fd; color:var(--primary); padding:4px 10px; border-radius:20px;
+      font-size:0.75rem; font-weight:600;
+    }
+
+    .content { padding:24px; flex:1; }
+    .view { display:none; }
+    .view.active { display:block; }
+
+    /* Cards & Stats */
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; margin-bottom:24px; }
+    .stat-card {
+      background:var(--card); border-radius:14px; padding:20px; border:1px solid var(--border);
+      box-shadow:var(--shadow); display:flex; flex-direction:column; gap:6px;
+    }
+    .stat-card .label { font-size:0.8rem; color:var(--text-muted); font-weight:500; }
+    .stat-card .value { font-size:1.75rem; font-weight:800; color:var(--primary); }
+    .stat-card .sub { font-size:0.75rem; color:var(--text-muted); }
+    .stat-card.emerald .value { color:var(--emerald); }
+    .stat-card.gold .value { color:var(--gold); }
+
+    .card {
+      background:var(--card); border-radius:14px; border:1px solid var(--border);
+      box-shadow:var(--shadow); margin-bottom:20px; overflow:hidden;
+    }
+    .card-header {
+      padding:16px 20px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    }
+    .card-header h2 { font-size:1.05rem; font-weight:700; color:var(--primary); }
+    .card-body { padding:20px; }
+
+    /* Toolbar */
+    .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:16px; }
+    .search-box {
+      flex:1; min-width:180px; position:relative;
+    }
+    .search-box input {
+      width:100%; padding:10px 14px 10px 38px; border:1.5px solid var(--border);
+      border-radius:10px; font-size:0.875rem; background:#fafbfc;
+    }
+    .search-box input:focus { outline:none; border-color:var(--primary); background:#fff; }
+    .search-box::before {
+      content:"🔍"; position:absolute; left:12px; top:50%; transform:translateY(-50%);
+      font-size:0.9rem; opacity:0.6;
+    }
+    .filter-select {
+      padding:10px 14px; border:1.5px solid var(--border); border-radius:10px;
+      font-size:0.875rem; background:#fff; min-width:140px;
+    }
+
+    /* Buttons */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:10px 18px; border-radius:10px; font-size:0.875rem; font-weight:600;
+      border:none; cursor:pointer; transition:all 0.15s; white-space:nowrap;
+    }
+    .btn:disabled { opacity:0.55; cursor:not-allowed; }
+    .btn-primary { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; }
+    .btn-primary:hover:not(:disabled) { box-shadow:0 4px 14px rgba(13,71,161,0.35); transform:translateY(-1px); }
+    .btn-emerald { background:var(--emerald); color:#fff; }
+    .btn-emerald:hover:not(:disabled) { filter:brightness(1.08); }
+    .btn-outline {
+      background:transparent; border:1.5px solid var(--primary); color:var(--primary);
+    }
+    .btn-outline:hover:not(:disabled) { background:var(--primary); color:#fff; }
+    .btn-danger { background:var(--danger); color:#fff; }
+    .btn-danger:hover:not(:disabled) { filter:brightness(1.08); }
+    .btn-ghost { background:transparent; color:var(--text-muted); border:1.5px solid var(--border); }
+    .btn-ghost:hover:not(:disabled) { background:#f1f5f9; }
+    .btn-sm { padding:6px 12px; font-size:0.8rem; border-radius:8px; }
+    .btn-icon { padding:7px 10px; }
+
+    /* Tables */
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:0.875rem; }
+    th {
+      text-align:left; padding:12px 14px; background:#f8fafc; font-weight:600;
+      color:var(--text-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.03em;
+      border-bottom:1px solid var(--border); white-space:nowrap;
+    }
+    td { padding:12px 14px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    tr:hover td { background:#f8fafc; }
+    .badge {
+      display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.72rem; font-weight:600;
+    }
+    .badge-success { background:#e8f5e9; color:#2e7d32; }
+    .badge-warning { background:#fff8e1; color:#f57f17; }
+    .badge-danger { background:#ffebee; color:#c62828; }
+    .badge-info { background:#e3f2fd; color:#1565c0; }
+    .badge-muted { background:#f1f5f9; color:#64748b; }
+    .actions { display:flex; gap:6px; flex-wrap:wrap; }
+
+    /* Forms */
+    .form-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+    .form-group { margin-bottom:14px; }
+    .form-group label {
+      display:block; font-size:0.8rem; font-weight:600; margin-bottom:5px; color:var(--text);
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width:100%; padding:10px 14px; border:1.5px solid var(--border); border-radius:10px;
+      font-size:0.9rem; background:#fafbfc;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline:none; border-color:var(--primary); background:#fff;
+      box-shadow:0 0 0 3px rgba(13,71,161,0.1);
+    }
+    .form-group textarea { resize:vertical; min-height:90px; }
+    .form-hint { font-size:0.75rem; color:var(--text-muted); margin-top:4px; }
+    .form-row { display:flex; gap:12px; flex-wrap:wrap; }
+    .form-row .form-group { flex:1; min-width:160px; }
+
+    /* Modal */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(10,22,40,0.55); z-index:300;
+      display:flex; align-items:center; justify-content:center; padding:20px;
+      opacity:0; visibility:hidden; transition:all 0.2s;
+    }
+    .modal-overlay.show { opacity:1; visibility:visible; }
+    .modal {
+      background:#fff; border-radius:16px; width:100%; max-width:560px; max-height:90vh;
+      overflow:hidden; display:flex; flex-direction:column; box-shadow:var(--shadow-lg);
+      transform:translateY(12px); transition:transform 0.2s;
+    }
+    .modal-overlay.show .modal { transform:translateY(0); }
+    .modal.wide { max-width:720px; }
+    .modal-header {
+      padding:18px 22px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .modal-header h3 { font-size:1.1rem; font-weight:700; color:var(--primary); }
+    .modal-close {
+      background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--text-muted);
+      line-height:1; padding:4px;
+    }
+    .modal-body { padding:22px; overflow-y:auto; flex:1; }
+    .modal-footer {
+      padding:14px 22px; border-top:1px solid var(--border);
+      display:flex; justify-content:flex-end; gap:10px;
+    }
+
+    /* Alerts / Toast */
+    .toast-container {
+      position:fixed; top:20px; right:20px; z-index:400; display:flex; flex-direction:column; gap:10px;
+    }
+    .toast {
+      background:#fff; border-radius:12px; padding:14px 18px; box-shadow:var(--shadow-lg);
+      border-left:4px solid var(--primary); min-width:280px; max-width:380px;
+      display:flex; align-items:flex-start; gap:12px; animation:slideIn 0.25s ease;
+    }
+    .toast.success { border-left-color:var(--success); }
+    .toast.error { border-left-color:var(--danger); }
+    .toast.warning { border-left-color:var(--warning); }
+    .toast .msg { flex:1; font-size:0.875rem; font-weight:500; }
+    .toast .close { background:none; border:none; cursor:pointer; color:var(--text-muted); font-size:1.1rem; }
+    @keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+
+    .empty-state {
+      text-align:center; padding:40px 20px; color:var(--text-muted);
+    }
+    .empty-state p { margin-bottom:16px; font-size:0.95rem; }
+
+    .loading {
+      text-align:center; padding:40px; color:var(--text-muted); font-size:0.9rem;
+    }
+    .spinner {
+      width:28px; height:28px; border:3px solid var(--border); border-top-color:var(--primary);
+      border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 12px;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* Charts placeholder */
+    .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+    .chart-box {
+      background:var(--card); border-radius:14px; border:1px solid var(--border);
+      padding:20px; min-height:220px;
+    }
+    .chart-box h3 { font-size:0.95rem; font-weight:700; margin-bottom:14px; color:var(--primary); }
+    .bar-chart { display:flex; align-items:flex-end; gap:8px; height:140px; padding-top:10px; }
+    .bar-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .bar {
+      width:100%; max-width:40px; background:linear-gradient(180deg,var(--secondary),var(--primary));
+      border-radius:6px 6px 0 0; min-height:4px; transition:height 0.4s;
+    }
+    .bar-label { font-size:0.7rem; color:var(--text-muted); text-align:center; }
+
+    /* Confirm dialog */
+    .confirm-msg { font-size:0.95rem; margin-bottom:8px; }
+    .confirm-sub { font-size:0.85rem; color:var(--text-muted); }
+
+    /* Tabs */
+    .tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); margin-bottom:20px; flex-wrap:wrap; }
+    .tab {
+      padding:10px 16px; font-size:0.875rem; font-weight:600; color:var(--text-muted);
+      background:none; border:none; cursor:pointer; border-bottom:2px solid transparent;
+      margin-bottom:-1px;
+    }
+    .tab.active { color:var(--primary); border-bottom-color:var(--primary); }
+    .tab:hover { color:var(--primary); }
+
+    /* Language flags */
+    .lang-pills { display:flex; gap:8px; flex-wrap:wrap; }
+    .lang-pill {
+      padding:6px 14px; border-radius:20px; border:1.5px solid var(--border);
+      font-size:0.8rem; font-weight:600; cursor:pointer; background:#fff;
+    }
+    .lang-pill.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+    /* Overlay for mobile sidebar */
+    .sidebar-overlay {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:150;
+    }
+    .sidebar-overlay.show { display:block; }
+
+    /* Responsive */
+    @media (max-width:960px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .main { margin-left:0; }
+      .menu-toggle { display:flex; }
+      .chart-row { grid-template-columns:1fr; }
+    }
+    @media (max-width:600px) {
+      .content { padding:16px; }
+      .stats-grid { grid-template-columns:1fr 1fr; }
+      .card-header { flex-direction:column; align-items:flex-start; }
+      .topbar { padding:0 14px; }
+    }
+  
+    /* Admin view: only when html.is-admin */
+    #adminApp { display: none !important; }
+    html.is-admin #adminApp { display: flex !important; }
+    html.is-admin body > header.header,
+    html.is-admin body > section,
+    html.is-admin body > footer,
+    html.is-admin #loginView { display: none !important; }
+</style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><div class="logo-icon">ME</div><span>MMSAYAYA EDUVERSE</span></a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#categories">Explore Learning</a>
+        <a href="#practice">Practice Questions</a>
+        <a href="#announcements">Announcements</a>
+        <a href="#contact">Contact Us</a>
+      </nav>
+      <div class="header-actions">
+        <select class="lang-select" id="langSelect">
+          <option value="en">English</option>
+          <option value="ha">Hausa</option>
+          <option value="ar">العربية</option>
+        </select>
+        <a href="#login" class="btn btn-primary" style="padding:9px 18px;">Login</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="index.html">Home</a><a href="#about">About Us</a><a href="#categories">Explore Learning</a>
+      <a href="#practice">Practice Questions</a><a href="#announcements">Announcements</a>
+      <a href="#contact">Contact Us</a><a href="#login">Login</a>
+    </div>
+  </header>
+
+  <div id="loginView">
+    <div class="login-wrap">
+      <div class="login-card">
+        <h1>Login</h1>
+        <p class="login-sub">Sign in to continue to your dashboard.</p>
+        <div class="form-alert" id="loginAlert" role="alert"></div>
+
+        <div id="loginForm">
+          <div class="form-group"><label for="loginEmail">Email Address</label><input type="email" id="loginEmail" autocomplete="username" placeholder="your@email.com" /></div>
+          <div class="form-group"><label for="loginPassword">Password</label>
+            <div class="pw-wrap"><input type="password" id="loginPassword" autocomplete="current-password" /><button type="button" class="pw-toggle" data-target="loginPassword">Show</button></div>
+          </div>
+          <button class="btn btn-primary" id="loginBtn" style="width:100%;">Login</button>
+          <button type="button" class="link-btn" id="forgotBtn">Forgot password?</button>
+        </div>
+
+        <div id="signedInPanel" hidden>
+          <p class="login-hint" id="signedInText"></p>
+          <button class="btn btn-outline" id="logoutBtn" style="width:100%;">Logout</button>
+        </div>
+
+        <div id="saSection" hidden>
+          <hr class="login-divider">
+          <button type="button" class="btn btn-outline" id="saToggleBtn" style="width:100%;">Create Super Admin Account</button>
+          <div id="saForm" hidden>
+            <p class="login-hint">This can only be done once. After it is created, this option disappears permanently.</p>
+            <div class="form-group"><label for="saName">Full Name</label><input type="text" id="saName" autocomplete="name" maxlength="100" /></div>
+            <div class="form-group"><label for="saEmail">Email Address</label><input type="email" id="saEmail" autocomplete="email" maxlength="200" /></div>
+            <div class="form-group"><label for="saPassword">Password</label>
+              <div class="pw-wrap"><input type="password" id="saPassword" autocomplete="new-password" maxlength="128" /><button type="button" class="pw-toggle" data-target="saPassword">Show</button></div>
+            </div>
+            <div class="form-group"><label for="saConfirm">Confirm Password</label>
+              <div class="pw-wrap"><input type="password" id="saConfirm" autocomplete="new-password" maxlength="128" /><button type="button" class="pw-toggle" data-target="saConfirm">Show</button></div>
+            </div>
+            <div class="form-group"><label for="saKey">Setup Key</label><input type="password" id="saKey" autocomplete="off" maxlength="64" /></div>
+            <button class="btn btn-primary" id="saCreateBtn" style="width:100%;">Create Super Admin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">Multi-Disciplinary Learning Platform</div>
+        <h1>Explore Knowledge.<br>Develop Skills.<br>Build Your Future.</h1>
+        <p class="slogan">Learn Today, Lead Tomorrow.</p>
+        <p>Welcome to MMSAYAYA EDUVERSE, a multi-disciplinary learning platform designed to help learners explore knowledge, develop practical skills and advance their educational journey across different fields.</p>
+        <div class="hero-actions">
+          <a href="#categories" class="btn btn-white">Explore Courses</a>
+          <a href="#practice" class="btn btn-emerald">Free Practice Questions</a>
+          <a href="#login" class="btn btn-outline" style="border-color:white;color:white;">Login</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about" style="background:#fff;">
+    <div class="container">
+      <div class="section-header"><h2>About MMSAYAYA EDUVERSE</h2><p>An online educational platform that brings different fields of knowledge together in one learning environment.</p></div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>MMSAYAYA EDUVERSE provides access to learning resources, practice questions, online assessments and structured courses across technology, mathematics, Islamic studies and more.</p>
+          <h3>Our Mission</h3><p>To make quality multi-disciplinary education accessible, structured and practical for every learner.</p>
+          <h3>Our Vision</h3><p>To become a leading online learning platform that empowers students to learn today and lead tomorrow.</p>
+          <h3>Our Objectives</h3><p>Provide structured courses, free practice questions, online examinations, progress tracking and certificates across multiple fields of knowledge.</p>
+        </div>
+        <div class="about-cards">
+          <div class="about-card"><h4>Structured Learning</h4><p>Well-organized courses with clear outlines, lessons, and learning outcomes.</p></div>
+          <div class="about-card"><h4>Free Practice Questions</h4><p>Test your knowledge for free before enrolling in full courses.</p></div>
+          <div class="about-card"><h4>Online Examinations</h4><p>Timed exams with automatic scoring and detailed results.</p></div>
+          <div class="about-card"><h4>Progress Tracking</h4><p>Monitor your learning progress and earn certificates upon completion.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="categories">
+    <div class="container">
+      <div class="section-header"><h2>Explore Learning Categories</h2><p>Browse different fields of knowledge and find the courses that match your goals.</p></div>
+      <div class="categories-grid" id="categoriesGrid">
+        <div class="category-card"><div class="category-icon">💻</div><h3>Computer Science</h3><p>Core CS concepts & programming</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">🖥️</div><h3>Information Technology</h3><p>IT systems & infrastructure</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">📐</div><h3>Mathematics</h3><p>From basics to advanced</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">⚙️</div><h3>Software Development</h3><p>Build real applications</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">🌐</div><h3>Web Development</h3><p>Frontend, Backend & Full-Stack</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">📊</div><h3>Data Science</h3><p>Analysis, ML & Visualization</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">📡</div><h3>Networking</h3><p>Network design & admin</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">🔐</div><h3>Cybersecurity</h3><p>Security principles & practice</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">🤖</div><h3>Artificial Intelligence</h3><p>AI fundamentals & applications</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">💾</div><h3>Database Management</h3><p>SQL, NoSQL & Data systems</p><div class="category-count">Explore</div></div>
+        <div class="category-card"><div class="category-icon">📖</div><h3>Islamic Studies</h3><p>Qur'an, Hadith & Islamic knowledge</p><div class="category-count">Explore</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="featured" style="background:#fff;">
+    <div class="container">
+      <div class="section-header"><h2>Featured Courses</h2><p>Hand-picked courses selected by our administrators.</p></div>
+      <div class="courses-grid" id="featuredCourses"><div class="empty-msg">Featured courses will appear here once published.</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="popular">
+    <div class="container">
+      <div class="section-header"><h2>Popular Courses</h2><p>Courses that learners are exploring the most.</p></div>
+      <div class="courses-grid" id="popularCourses"><div class="empty-msg">Popular courses will appear here once published.</div></div>
+    </div>
+  </section>
+
+  <section class="section" style="background:#fff;">
+    <div class="container">
+      <div class="section-header"><h2>How Does It Work?</h2><p>Getting started is simple. Follow these six steps.</p></div>
+      <div class="steps">
+        <div class="step"><div class="step-number">1</div><h3>EXPLORE</h3><p>Browse learning categories</p></div>
+        <div class="step"><div class="step-number">2</div><h3>SELECT</h3><p>Choose your preferred course</p></div>
+        <div class="step"><div class="step-number">3</div><h3>DISCOVER</h3><p>View course details and outlines</p></div>
+        <div class="step"><div class="step-number">4</div><h3>CONTACT</h3><p>Request learning access from Admin</p></div>
+        <div class="step"><div class="step-number">5</div><h3>ACCESS</h3><p>Receive your account details</p></div>
+        <div class="step"><div class="step-number">6</div><h3>LEARN</h3><p>Login and begin learning</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="practice">
+    <div class="container">
+      <div class="practice-box">
+        <h2>Test Your Knowledge for Free</h2>
+        <p>Practice questions are available to everyone. Select a category, topic and start testing yourself — no account required.</p>
+        <a href="#categories" class="btn btn-white">Start Free Practice</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:#fff;">
+    <div class="container">
+      <div class="section-header"><h2>Why Choose MMSAYAYA EDUVERSE?</h2><p>We provide a complete learning experience with quality content and modern tools.</p></div>
+      <div class="features-grid">
+        <div class="feature-card"><h3>Multiple Learning Fields</h3><p>From technology to Islamic Studies — learn what matters to you in one platform.</p></div>
+        <div class="feature-card"><h3>Structured Learning Materials</h3><p>Access video lessons, PDFs and organized course outlines.</p></div>
+        <div class="feature-card"><h3>Free Practice Questions</h3><p>Practice freely before taking the full course examinations.</p></div>
+        <div class="feature-card"><h3>Online Examinations</h3><p>Timed exams with automatic scoring and performance tracking.</p></div>
+        <div class="feature-card"><h3>Flexible Learning</h3><p>Learn at your own pace from any device, anytime.</p></div>
+        <div class="feature-card"><h3>Progress Tracking & Certificates</h3><p>Monitor your progress and earn certificates upon completion.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header"><h2>Learning Statistics</h2><p>Real numbers from our platform.</p></div>
+      <div class="stats-row">
+        <div class="stat-item"><div class="num" id="statCategories">0</div><div class="label">Categories</div></div>
+        <div class="stat-item"><div class="num" id="statCourses">0</div><div class="label">Published Courses</div></div>
+        <div class="stat-item"><div class="num" id="statQuestions">0</div><div class="label">Practice Questions</div></div>
+        <div class="stat-item"><div class="num" id="statAnnouncements">0</div><div class="label">Announcements</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="announcements" style="background:#fff;">
+    <div class="container">
+      <div class="section-header"><h2>Latest Announcements</h2><p>Stay updated with the latest news from MMSAYAYA EDUVERSE.</p></div>
+      <div class="announcements-list" id="announcementsList"><div class="empty-msg">No announcements at the moment.</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header"><h2>Get In Touch</h2><p>Have a question or want to request course access? Contact us.</p></div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Contact Information</h3>
+          <div class="contact-item"><span>📧</span><span>info@mmsayaya.edu</span></div>
+          <div class="contact-item"><span>📱</span><span>Phone / WhatsApp</span></div>
+          <div class="contact-item"><span>💬</span><span>Send us a message using the form</span></div>
+          <p style="margin-top:20px;font-size:0.9rem;color:var(--text-muted);">For course access requests, include the course name in your message. Admin will create your account and grant access after review.</p>
+        </div>
+        <div class="contact-form">
+          <div class="form-alert" id="contactAlert"></div>
+          <div class="form-group"><label>Full Name *</label><input type="text" id="contactName" placeholder="Your full name" /></div>
+          <div class="form-group"><label>Email Address *</label><input type="email" id="contactEmailInput" placeholder="your@email.com" /></div>
+          <div class="form-group"><label>Subject *</label><input type="text" id="contactSubject" placeholder="e.g. Request access to Web Development" /></div>
+          <div class="form-group"><label>Message *</label><textarea id="contactMessage" placeholder="Write your message here..."></textarea></div>
+          <button class="btn btn-primary" id="contactSubmitBtn" style="width:100%;">Submit Message</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>Ready to Start Learning?</h2>
+      <p>Join MMSAYAYA EDUVERSE today and take the next step in your educational journey.</p>
+      <a href="#login" class="btn btn-white">Login to Get Started</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><h3>MMSAYAYA EDUVERSE</h3><p>Learn Today, Lead Tomorrow. A complete multi-disciplinary online learning management system.</p></div>
+        <div class="footer-col"><h4>Quick Links</h4><a href="index.html">Home</a><a href="#about">About Us</a><a href="#categories">Explore Learning</a><a href="#practice">Practice Questions</a><a href="#contact">Contact Us</a></div>
+        <div class="footer-col"><h4>Learning Categories</h4><a href="#categories">Computer Science</a><a href="#categories">Mathematics</a><a href="#categories">Web Development</a><a href="#categories">Islamic Studies</a><a href="#categories">More Categories</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="mailto:info@mmsayaya.edu">info@mmsayaya.edu</a><a href="#contact">WhatsApp Support</a><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a></div>
+      </div>
+      <div class="footer-bottom">&copy; 2026 MMSAYAYA EDUVERSE. All rights reserved.</div>
+    </div>
+  </footer>
+
+  
+  <!-- ========== COMPLETE ADMIN DASHBOARD ========== -->
+<div class="app" id="adminApp">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo">ME</div>
+        <div>
+          <span>MMSAYAYA EDUVERSE</span>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <button class="nav-item active" data-view="overview"><span class="icon">📊</span> Overview</button>
+          <button class="nav-item" data-view="analytics"><span class="icon">📈</span> Analytics & Reports</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Website</div>
+          <button class="nav-item" data-view="homepage"><span class="icon">🏠</span> Homepage</button>
+          <button class="nav-item" data-view="content"><span class="icon">📝</span> Website Content</button>
+          <button class="nav-item" data-view="branding"><span class="icon">🎨</span> Branding & Settings</button>
+          <button class="nav-item" data-view="navigation"><span class="icon">🔗</span> Navigation</button>
+          <button class="nav-item" data-view="languages"><span class="icon">🌐</span> Languages</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Learning</div>
+          <button class="nav-item" data-view="categories"><span class="icon">📁</span> Categories</button>
+          <button class="nav-item" data-view="courses"><span class="icon">📚</span> Courses</button>
+          <button class="nav-item" data-view="subjects"><span class="icon">📖</span> Subjects & Topics</button>
+          <button class="nav-item" data-view="lessons"><span class="icon">🎬</span> Lessons</button>
+          <button class="nav-item" data-view="questions"><span class="icon">❓</span> Question Bank</button>
+          <button class="nav-item" data-view="import"><span class="icon">📥</span> Bulk Import</button>
+          <button class="nav-item" data-view="exams"><span class="icon">📋</span> Examinations</button>
+          <button class="nav-item" data-view="assignments"><span class="icon">✏️</span> Assignments</button>
+          <button class="nav-item" data-view="certificates"><span class="icon">🏅</span> Certificates</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Users</div>
+          <button class="nav-item" data-view="students"><span class="icon">👨‍🎓</span> Students</button>
+          <button class="nav-item" data-view="teachers"><span class="icon">👩‍🏫</span> Teachers</button>
+          <button class="nav-item" data-view="access"><span class="icon">🔑</span> Course Access</button>
+          <button class="nav-item" data-view="roles"><span class="icon">🛡️</span> Roles & Permissions</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <button class="nav-item" data-view="payments"><span class="icon">💳</span> Payments</button>
+          <button class="nav-item" data-view="announcements"><span class="icon">📢</span> Announcements</button>
+          <button class="nav-item" data-view="notifications"><span class="icon">🔔</span> Notifications</button>
+          <button class="nav-item" data-view="contacts"><span class="icon">✉️</span> Contact Requests</button>
+          <button class="nav-item" data-view="forum"><span class="icon">💬</span> Discussion Forum</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">System</div>
+          <button class="nav-item" data-view="security"><span class="icon">🔒</span> Security</button>
+          <button class="nav-item" data-view="audit"><span class="icon">📜</span> Login History & Audit</button>
+          <button class="nav-item" data-view="backup"><span class="icon">💾</span> Backup & Restore</button>
+          <button class="nav-item" data-view="profile"><span class="icon">👤</span> Admin Profile</button>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="avatar" id="adminAvatar">A</div>
+          <div class="info">
+            <div class="name" id="adminName">Admin</div>
+            <div class="role" id="adminRole">Administrator</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main -->
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+          <h1 class="page-title" id="pageTitle">Overview</h1>
+        </div>
+        <div class="topbar-right">
+          <span class="topbar-badge" id="liveBadge">Live</span>
+        </div>
+      </header>
+
+      <div class="content" id="content">
+        <!-- ========== OVERVIEW ========== -->
+        <div class="view active" id="view-overview">
+          <div class="stats-grid" id="overviewStats">
+            <div class="stat-card"><div class="label">Categories</div><div class="value" id="statCategories">—</div></div>
+            <div class="stat-card"><div class="label">Published Courses</div><div class="value" id="statCourses">—</div></div>
+            <div class="stat-card emerald"><div class="label">Students</div><div class="value" id="statStudents">—</div></div>
+            <div class="stat-card"><div class="label">Teachers</div><div class="value" id="statTeachers">—</div></div>
+            <div class="stat-card gold"><div class="label">Practice Questions</div><div class="value" id="statQuestions">—</div></div>
+            <div class="stat-card"><div class="label">Contact Requests</div><div class="value" id="statContacts">—</div></div>
+            <div class="stat-card"><div class="label">Announcements</div><div class="value" id="statAnnouncements">—</div></div>
+            <div class="stat-card emerald"><div class="label">Pending Access</div><div class="value" id="statPendingAccess">—</div></div>
+          </div>
+          <div class="chart-row">
+            <div class="chart-box">
+              <h3>Courses by Status</h3>
+              <div class="bar-chart" id="chartCourseStatus"></div>
+            </div>
+            <div class="chart-box">
+              <h3>Recent Activity</h3>
+              <div id="recentActivity" class="loading"><div class="spinner"></div>Loading…</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h2>Quick Actions</h2></div>
+            <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;">
+              <button class="btn btn-primary" data-goto="courses">+ Add Course</button>
+              <button class="btn btn-emerald" data-goto="categories">+ Add Category</button>
+              <button class="btn btn-outline" data-goto="announcements">+ Announcement</button>
+              <button class="btn btn-outline" data-goto="students">Manage Students</button>
+              <button class="btn btn-ghost" data-goto="contacts">View Contacts</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== CATEGORIES ========== -->
+        <div class="view" id="view-categories">
+          <div class="card">
+            <div class="card-header">
+              <h2>Categories Management</h2>
+              <button class="btn btn-primary" id="btnAddCategory">+ Add Category</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="catSearch" placeholder="Search categories…" /></div>
+                <select class="filter-select" id="catFilter">
+                  <option value="all">All status</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Name</th><th>Description</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody id="categoriesTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== COURSES ========== -->
+        <div class="view" id="view-courses">
+          <div class="card">
+            <div class="card-header">
+              <h2>Courses Management</h2>
+              <button class="btn btn-primary" id="btnAddCourse">+ Add Course</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="courseSearch" placeholder="Search courses…" /></div>
+                <select class="filter-select" id="courseStatusFilter">
+                  <option value="all">All status</option>
+                  <option value="published">Published</option>
+                  <option value="draft">Draft</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Title</th><th>Category</th><th>Difficulty</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead>
+                  <tbody id="coursesTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== SUBJECTS & TOPICS ========== -->
+        <div class="view" id="view-subjects">
+          <div class="card">
+            <div class="card-header">
+              <h2>Subjects & Topics</h2>
+              <button class="btn btn-primary" id="btnAddSubject">+ Add Subject</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="subjectSearch" placeholder="Search subjects…" /></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Subject</th><th>Course</th><th>Topics</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody id="subjectsTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== LESSONS ========== -->
+        <div class="view" id="view-lessons">
+          <div class="card">
+            <div class="card-header">
+              <h2>Lessons Management</h2>
+              <button class="btn btn-primary" id="btnAddLesson">+ Add Lesson</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="lessonSearch" placeholder="Search lessons…" /></div>
+                <select class="filter-select" id="lessonCourseFilter"><option value="all">All courses</option></select>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Title</th><th>Course</th><th>Order</th><th>Duration</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody id="lessonsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== QUESTION BANK ========== -->
+        <div class="view" id="view-questions">
+          <div class="card">
+            <div class="card-header">
+              <h2>Question Bank</h2>
+              <button class="btn btn-primary" id="btnAddQuestion">+ Add Question</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="qSearch" placeholder="Search questions…" /></div>
+                <select class="filter-select" id="qCategoryFilter"><option value="all">All categories</option></select>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Question</th><th>Category</th><th>Type</th><th>Difficulty</th><th>Actions</th></tr></thead>
+                  <tbody id="questionsTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== BULK IMPORT ========== -->
+        <div class="view" id="view-import">
+          <div class="card">
+            <div class="card-header"><h2>Bulk Question Import (CSV / Excel)</h2></div>
+            <div class="card-body">
+              <p style="margin-bottom:16px;color:var(--text-muted);font-size:0.9rem;">
+                Upload a CSV file with columns: <strong>question, optionA, optionB, optionC, optionD, correctAnswer, category, difficulty, type</strong>.
+                Correct answer should be A, B, C or D. Type: mcq or truefalse.
+              </p>
+              <div class="form-group">
+                <label>Select CSV file</label>
+                <input type="file" id="importFile" accept=".csv,text/csv" />
+              </div>
+              <div class="form-group">
+                <label>Default category (if missing in file)</label>
+                <select id="importCategory"><option value="">— Select —</option></select>
+              </div>
+              <button class="btn btn-primary" id="btnImport" disabled>Import Questions</button>
+              <div id="importResult" style="margin-top:16px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== EXAMINATIONS ========== -->
+        <div class="view" id="view-exams">
+          <div class="card">
+            <div class="card-header">
+              <h2>Examination Management</h2>
+              <button class="btn btn-primary" id="btnAddExam">+ Create Exam</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="examSearch" placeholder="Search exams…" /></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Title</th><th>Course</th><th>Duration</th><th>Questions</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody id="examsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== STUDENTS ========== -->
+        <div class="view" id="view-students">
+          <div class="card">
+            <div class="card-header">
+              <h2>Student Management</h2>
+              <button class="btn btn-primary" id="btnAddStudent">+ Add Student</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="studentSearch" placeholder="Search by name or email…" /></div>
+                <select class="filter-select" id="studentStatusFilter">
+                  <option value="all">All status</option>
+                  <option value="active">Active</option>
+                  <option value="suspended">Suspended</option>
+                </select>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+                  <tbody id="studentsTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== TEACHERS ========== -->
+        <div class="view" id="view-teachers">
+          <div class="card">
+            <div class="card-header">
+              <h2>Teacher Management</h2>
+              <button class="btn btn-primary" id="btnAddTeacher">+ Add Teacher</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="teacherSearch" placeholder="Search teachers…" /></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+                  <tbody id="teachersTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== COURSE ACCESS ========== -->
+        <div class="view" id="view-access">
+          <div class="card">
+            <div class="card-header">
+              <h2>Course Access Management</h2>
+              <button class="btn btn-primary" id="btnGrantAccess">+ Grant Access</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="accessSearch" placeholder="Search by student or course…" /></div>
+                <select class="filter-select" id="accessStatusFilter">
+                  <option value="all">All</option>
+                  <option value="active">Active</option>
+                  <option value="pending">Pending</option>
+                  <option value="revoked">Revoked</option>
+                </select>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Student</th><th>Course</th><th>Status</th><th>Granted</th><th>Actions</th></tr></thead>
+                  <tbody id="accessTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== PAYMENTS ========== -->
+        <div class="view" id="view-payments">
+          <div class="card">
+            <div class="card-header"><h2>Payment Management</h2></div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="paymentSearch" placeholder="Search payments…" /></div>
+                <select class="filter-select" id="paymentStatusFilter">
+                  <option value="all">All</option>
+                  <option value="completed">Completed</option>
+                  <option value="pending">Pending</option>
+                  <option value="failed">Failed</option>
+                </select>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Student</th><th>Course / Item</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                  <tbody id="paymentsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== ASSIGNMENTS ========== -->
+        <div class="view" id="view-assignments">
+          <div class="card">
+            <div class="card-header">
+              <h2>Assignments Management</h2>
+              <button class="btn btn-primary" id="btnAddAssignment">+ Add Assignment</button>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Title</th><th>Course</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody id="assignmentsTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== CERTIFICATES ========== -->
+        <div class="view" id="view-certificates">
+          <div class="card">
+            <div class="card-header">
+              <h2>Certificates Management</h2>
+              <button class="btn btn-primary" id="btnIssueCert">+ Issue Certificate</button>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Student</th><th>Course</th><th>Issued</th><th>Certificate ID</th><th>Actions</th></tr></thead>
+                  <tbody id="certificatesTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== ANNOUNCEMENTS ========== -->
+        <div class="view" id="view-announcements">
+          <div class="card">
+            <div class="card-header">
+              <h2>Announcements</h2>
+              <button class="btn btn-primary" id="btnAddAnnouncement">+ New Announcement</button>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Title</th><th>Published</th><th>Date</th><th>Actions</th></tr></thead>
+                  <tbody id="announcementsTable"><tr><td colspan="4" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== NOTIFICATIONS ========== -->
+        <div class="view" id="view-notifications">
+          <div class="card">
+            <div class="card-header">
+              <h2>Notifications & Messages</h2>
+              <button class="btn btn-primary" id="btnSendNotification">+ Send Notification</button>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Title</th><th>Audience</th><th>Date</th><th>Actions</th></tr></thead>
+                  <tbody id="notificationsTable"><tr><td colspan="4" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== CONTACT REQUESTS ========== -->
+        <div class="view" id="view-contacts">
+          <div class="card">
+            <div class="card-header"><h2>Contact Requests</h2></div>
+            <div class="card-body">
+              <div class="toolbar">
+                <select class="filter-select" id="contactStatusFilter">
+                  <option value="all">All</option>
+                  <option value="new">New</option>
+                  <option value="replied">Replied</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                  <tbody id="contactsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== FORUM ========== -->
+        <div class="view" id="view-forum">
+          <div class="card">
+            <div class="card-header"><h2>Discussion Forum Management</h2></div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Topic</th><th>Author</th><th>Replies</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody id="forumTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== LANGUAGES ========== -->
+        <div class="view" id="view-languages">
+          <div class="card">
+            <div class="card-header"><h2>Language Management</h2></div>
+            <div class="card-body">
+              <p style="margin-bottom:16px;color:var(--text-muted);font-size:0.9rem;">
+                Manage interface languages: English, Hausa and Arabic. Toggle availability and set default.
+              </p>
+              <div class="lang-pills" id="langPills">
+                <button class="lang-pill active" data-lang="en">English</button>
+                <button class="lang-pill" data-lang="ha">Hausa</button>
+                <button class="lang-pill" data-lang="ar">العربية</button>
+              </div>
+              <div style="margin-top:24px;">
+                <div class="form-group">
+                  <label>Default language</label>
+                  <select id="defaultLang">
+                    <option value="en">English</option>
+                    <option value="ha">Hausa</option>
+                    <option value="ar">Arabic</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary" id="btnSaveLangs">Save Language Settings</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== HOMEPAGE ========== -->
+        <div class="view" id="view-homepage">
+          <div class="card">
+            <div class="card-header"><h2>Homepage Management</h2></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>Hero Title</label>
+                <input type="text" id="heroTitle" placeholder="Explore Knowledge. Develop Skills. Build Your Future." />
+              </div>
+              <div class="form-group">
+                <label>Slogan</label>
+                <input type="text" id="heroSlogan" placeholder="Learn Today, Lead Tomorrow." />
+              </div>
+              <div class="form-group">
+                <label>Hero Description</label>
+                <textarea id="heroDesc" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Show Featured Courses</label>
+                <select id="showFeatured"><option value="true">Yes</option><option value="false">No</option></select>
+              </div>
+              <button class="btn btn-primary" id="btnSaveHomepage">Save Homepage Settings</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== CONTENT ========== -->
+        <div class="view" id="view-content">
+          <div class="card">
+            <div class="card-header"><h2>Website Content Management</h2></div>
+            <div class="card-body">
+              <div class="tabs" id="contentTabs">
+                <button class="tab active" data-tab="about">About</button>
+                <button class="tab" data-tab="mission">Mission / Vision</button>
+                <button class="tab" data-tab="footer">Footer</button>
+              </div>
+              <div id="contentAbout">
+                <div class="form-group"><label>About text</label><textarea id="aboutText" rows="4"></textarea></div>
+              </div>
+              <div id="contentMission" hidden>
+                <div class="form-group"><label>Mission</label><textarea id="missionText" rows="3"></textarea></div>
+                <div class="form-group"><label>Vision</label><textarea id="visionText" rows="3"></textarea></div>
+              </div>
+              <div id="contentFooter" hidden>
+                <div class="form-group"><label>Footer tagline</label><input type="text" id="footerTagline" /></div>
+                <div class="form-group"><label>Contact email</label><input type="email" id="footerEmail" /></div>
+              </div>
+              <button class="btn btn-primary" id="btnSaveContent" style="margin-top:12px;">Save Content</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== BRANDING ========== -->
+        <div class="view" id="view-branding">
+          <div class="card">
+            <div class="card-header"><h2>Branding & Website Settings</h2></div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group"><label>Site Name</label><input type="text" id="siteName" value="MMSAYAYA EDUVERSE" /></div>
+                <div class="form-group"><label>Primary Color</label><input type="color" id="colorPrimary" value="#0D47A1" /></div>
+                <div class="form-group"><label>Secondary Color</label><input type="color" id="colorSecondary" value="#1976D2" /></div>
+                <div class="form-group"><label>Emerald Accent</label><input type="color" id="colorEmerald" value="#00796B" /></div>
+              </div>
+              <div class="form-group" style="margin-top:12px;"><label>Logo URL (optional)</label><input type="url" id="logoUrl" placeholder="https://…" /></div>
+              <button class="btn btn-primary" id="btnSaveBranding">Save Branding</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== NAVIGATION ========== -->
+        <div class="view" id="view-navigation">
+          <div class="card">
+            <div class="card-header">
+              <h2>Navigation Management</h2>
+              <button class="btn btn-primary" id="btnAddNav">+ Add Link</button>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Label</th><th>URL / Anchor</th><th>Order</th><th>Visible</th><th>Actions</th></tr></thead>
+                  <tbody id="navTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== ANALYTICS ========== -->
+        <div class="view" id="view-analytics">
+          <div class="stats-grid">
+            <div class="stat-card"><div class="label">Total Users</div><div class="value" id="anTotalUsers">—</div></div>
+            <div class="stat-card emerald"><div class="label">Active Students</div><div class="value" id="anActiveStudents">—</div></div>
+            <div class="stat-card"><div class="label">Courses Completed</div><div class="value" id="anCompleted">—</div></div>
+            <div class="stat-card gold"><div class="label">Exams Taken</div><div class="value" id="anExams">—</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h2>Reports</h2></div>
+            <div class="card-body">
+              <p style="color:var(--text-muted);margin-bottom:12px;">Generate summary reports from live data.</p>
+              <button class="btn btn-outline" id="btnExportUsers">Export Users CSV</button>
+              <button class="btn btn-outline" id="btnExportCourses">Export Courses CSV</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== ROLES ========== -->
+        <div class="view" id="view-roles">
+          <div class="card">
+            <div class="card-header"><h2>User Roles & Permissions</h2></div>
+            <div class="card-body">
+              <p style="color:var(--text-muted);margin-bottom:16px;font-size:0.9rem;">
+                Roles: <strong>student</strong>, <strong>teacher</strong>, <strong>admin</strong>, <strong>super_admin</strong>.
+                Change a user’s role below. Super Admin role is protected.
+              </p>
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="roleSearch" placeholder="Search users…" /></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Name</th><th>Email</th><th>Current Role</th><th>Change Role</th><th>Actions</th></tr></thead>
+                  <tbody id="rolesTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== SECURITY ========== -->
+        <div class="view" id="view-security">
+          <div class="card">
+            <div class="card-header"><h2>Security Management</h2></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>Require email verification for new accounts</label>
+                <select id="secEmailVerify"><option value="true">Yes</option><option value="false">No</option></select>
+              </div>
+              <div class="form-group">
+                <label>Max failed login attempts before temporary lock</label>
+                <input type="number" id="secMaxAttempts" value="5" min="3" max="20" />
+              </div>
+              <div class="form-group">
+                <label>Session timeout (minutes)</label>
+                <input type="number" id="secSessionTimeout" value="60" min="15" max="480" />
+              </div>
+              <button class="btn btn-primary" id="btnSaveSecurity">Save Security Settings</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== AUDIT ========== -->
+        <div class="view" id="view-audit">
+          <div class="card">
+            <div class="card-header"><h2>Login History & Audit Logs</h2></div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>User</th><th>Action</th><th>IP / Device</th><th>Time</th></tr></thead>
+                  <tbody id="auditTable"><tr><td colspan="4" class="loading"><div class="spinner"></div></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== BACKUP ========== -->
+        <div class="view" id="view-backup">
+          <div class="card">
+            <div class="card-header"><h2>Backup & Restore</h2></div>
+            <div class="card-body">
+              <p style="color:var(--text-muted);margin-bottom:16px;font-size:0.9rem;">
+                Export key collections as JSON for offline backup. Restore is a manual process via Firebase Console or a custom script.
+              </p>
+              <button class="btn btn-primary" id="btnBackupCategories">Backup Categories</button>
+              <button class="btn btn-primary" id="btnBackupCourses">Backup Courses</button>
+              <button class="btn btn-outline" id="btnBackupQuestions">Backup Question Bank</button>
+              <div id="backupResult" style="margin-top:16px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== PROFILE ========== -->
+        <div class="view" id="view-profile">
+          <div class="card">
+            <div class="card-header"><h2>Admin Profile & Settings</h2></div>
+            <div class="card-body">
+              <div class="form-group"><label>Full Name</label><input type="text" id="profileName" /></div>
+              <div class="form-group"><label>Email</label><input type="email" id="profileEmail" disabled /></div>
+              <button class="btn btn-primary" id="btnSaveProfile">Update Profile</button>
+              <hr style="margin:24px 0;border:none;border-top:1px solid var(--border);" />
+              <h3 style="font-size:0.95rem;margin-bottom:12px;">Change Password</h3>
+              <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">Use Firebase “Forgot password” from the login page, or contact Super Admin.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Generic Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Form</h3>
+        <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer" id="modalFooter">
+        <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+        <button class="btn btn-primary" id="modalSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="modal-overlay" id="confirmOverlay">
+    <div class="modal" style="max-width:400px;">
+      <div class="modal-header"><h3 id="confirmTitle">Confirm</h3><button class="modal-close" id="confirmClose">&times;</button></div>
+      <div class="modal-body">
+        <p class="confirm-msg" id="confirmMsg"></p>
+        <p class="confirm-sub" id="confirmSub"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="confirmNo">Cancel</button>
+        <button class="btn btn-danger" id="confirmYes">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getFirestore, collection, getDocs, addDoc, query, where, orderBy, limit, serverTimestamp, doc, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlEw1Pb5HzIePo5SlolYm9ofvCUSBS0wM",
+      authDomain: "mmsayaya-academy.firebaseapp.com",
+      projectId: "mmsayaya-academy",
+      storageBucket: "mmsayaya-academy.firebasestorage.app",
+      messagingSenderId: "261003419792",
+      appId: "1:261003419792:web:9710d497a942a92c10b815",
+      measurementId: "G-0N2Q1V11LG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    isSupported().then(ok => { if (ok) getAnalytics(app); }).catch(() => {});
+    const db = getFirestore(app);
+
+    const categoryIcons = {
+      "computer science":"💻","information technology":"🖥️","mathematics":"📐",
+      "software development":"⚙️","web development":"🌐","data science":"📊",
+      "networking":"📡","cybersecurity":"🔐","artificial intelligence":"🤖",
+      "database":"💾","islamic studies":"📖"
+    };
+
+    function getIcon(name) {
+      const key = (name||"").toLowerCase();
+      for (const [k,icon] of Object.entries(categoryIcons)) { if (key.includes(k)) return icon; }
+      return "📚";
+    }
+
+    document.getElementById("mobileMenuBtn").addEventListener("click", () => {
+      document.getElementById("mobileNav").classList.toggle("show");
+    });
+
+    async function loadCategories() {
+      try {
+        const snap = await getDocs(query(collection(db,"categories"), where("isActive","==",true), orderBy("order","asc")));
+        if (snap.empty) return;
+        let html = "";
+        snap.forEach(d => {
+          const c = d.data();
+          html += `<div class="category-card" onclick="window.location.href='course.html?category=${d.id}'"><div class="category-icon">${getIcon(c.name)}</div><h3>${c.name||"Category"}</h3><p>${(c.description||"Explore courses").substring(0,50)}</p><div class="category-count">Explore →</div></div>`;
+        });
+        document.getElementById("categoriesGrid").innerHTML = html;
+        document.getElementById("statCategories").textContent = snap.size;
+      } catch(e) { console.log("Categories fallback:", e.message); }
+    }
+
+    async function loadCourses() {
+      try {
+        const snap = await getDocs(query(collection(db,"courses"), where("status","==","published"), limit(12)));
+        document.getElementById("statCourses").textContent = snap.size;
+        if (snap.empty) return;
+        let featuredHtml="", popularHtml="", i=0;
+        snap.forEach(d => {
+          const c = d.data();
+          const card = `<div class="course-card" onclick="window.location.href='course.html?id=${d.id}'"><div class="course-img">${(c.title||"C").charAt(0)}</div><div class="course-body"><div class="course-cat">${c.categoryName||"General"}</div><h3>${c.title||"Untitled"}</h3><p>${c.shortDescription||c.description||""}</p><div class="course-meta"><span>📊 ${c.difficulty||"All Levels"}</span><span>⏱ ${c.duration||"Self-paced"}</span></div><span class="btn btn-outline" style="padding:7px 14px;font-size:0.8rem;">View Course</span></div></div>`;
+          if (c.isFeatured || i<3) featuredHtml += card;
+          if (c.isPopular || i<6) popularHtml += card;
+          i++;
+        });
+        if (featuredHtml) document.getElementById("featuredCourses").innerHTML = featuredHtml;
+        if (popularHtml) document.getElementById("popularCourses").innerHTML = popularHtml;
+      } catch(e) { console.log("Courses:", e.message); }
+    }
+
+    async function loadAnnouncements() {
+      try {
+        const snap = await getDocs(query(collection(db,"announcements"), where("isPublished","==",true), orderBy("createdAt","desc"), limit(5)));
+        document.getElementById("statAnnouncements").textContent = snap.size;
+        if (snap.empty) return;
+        let html = "";
+        snap.forEach(d => {
+          const a = d.data();
+          const date = a.createdAt ? new Date(a.createdAt.toDate()) : new Date();
+          html += `<div class="announcement-item"><div class="ann-date">${date.getDate()}<br>${date.toLocaleString("en",{month:"short"})}</div><div><h4>${a.title||"Announcement"}</h4><p>${(a.content||"").substring(0,120)}...</p></div></div>`;
+        });
+        document.getElementById("announcementsList").innerHTML = html;
+      } catch(e) { console.log("Announcements:", e.message); }
+    }
+
+    async function loadStats() {
+      try {
+        const snap = await getDocs(collection(db,"questionBank"));
+        document.getElementById("statQuestions").textContent = snap.size;
+      } catch(e) {}
+    }
+
+    document.getElementById("contactSubmitBtn").addEventListener("click", async () => {
+      const fullName = document.getElementById("contactName").value.trim();
+      const email = document.getElementById("contactEmailInput").value.trim();
+      const subject = document.getElementById("contactSubject").value.trim();
+      const message = document.getElementById("contactMessage").value.trim();
+      const alertEl = document.getElementById("contactAlert");
+      if (!fullName||!email||!subject||!message) { alertEl.textContent="Please fill in all fields."; alertEl.className="form-alert error show"; return; }
+      try {
+        await addDoc(collection(db,"contactRequests"), { fullName, email, phone:null, subject, message, status:"new", createdAt:serverTimestamp(), repliedAt:null, repliedBy:null });
+        alertEl.textContent="Message sent successfully! Admin will get back to you.";
+        alertEl.className="form-alert success show";
+        document.getElementById("contactName").value="";
+        document.getElementById("contactEmailInput").value="";
+        document.getElementById("contactSubject").value="";
+        document.getElementById("contactMessage").value="";
+      } catch(error) { alertEl.textContent="Failed to send. Please try again."; alertEl.className="form-alert error show"; }
+    });
+
+    loadCategories(); loadCourses(); loadAnnouncements(); loadStats();
+
+    // ===== Login + one-time First Super Admin (added) =====
+    const auth = getAuth(app);
+
+    // Dashboard page for each role. Change a file name here if yours is different.
+    const DASHBOARDS = {
+      student: "student-dashboard.html",
+      teacher: "teacher-dashboard.html",
+      admin: "#admin",
+      super_admin: "#admin"
+    };
+    const ROLE_LABELS = { student:"Student", teacher:"Teacher", admin:"Admin", super_admin:"Super Admin" };
+
+    const byId = (id) => document.getElementById(id);
+    const loginAlert = byId("loginAlert");
+    function setAlert(type, msg) { loginAlert.textContent = msg; loginAlert.className = "form-alert " + type + " show"; }
+    function clearAlert() { loginAlert.className = "form-alert"; }
+
+    function normRole(r) {
+      r = String(r || "").toLowerCase().replace(/[\s-]+/g, "_");
+      return r === "superadmin" ? "super_admin" : r;
+    }
+
+    function applyRoute(scroll) {
+      const isLogin = location.hash === "#login";
+      const isAdmin = location.hash === "#admin";
+      document.documentElement.classList.toggle("is-login", isLogin);
+      document.documentElement.classList.toggle("is-admin", isAdmin);
+      byId("mobileNav").classList.remove("show");
+      if (isAdmin) { window.scrollTo(0, 0); return; }
+      if (isLogin) { window.scrollTo(0, 0); refreshSetupState(); }
+      else if (scroll && location.hash.length > 1) {
+        try { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); } catch (e) {}
+      }
+    }
+    window.addEventListener("hashchange", () => applyRoute(true));
+
+    // The Super Admin option is shown only when setup is confirmed NOT completed.
+    async function refreshSetupState() {
+      let show = false;
+      try {
+        const snap = await getDoc(doc(db, "system", "initialSetup"));
+        show = !snap.exists();
+      } catch (e) { show = false; }
+      byId("saSection").hidden = !show;
+    }
+
+    document.querySelectorAll(".pw-toggle").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const input = byId(btn.dataset.target);
+        const reveal = input.type === "password";
+        input.type = reveal ? "text" : "password";
+        btn.textContent = reveal ? "Hide" : "Show";
+      });
+    });
+
+    async function dashboardExists(url) {
+      try { const r = await fetch(url, { method: "HEAD", cache: "no-store" }); return r.ok; }
+      catch (e) { return false; }
+    }
+
+    // Verifies the role, then redirects to the matching dashboard.
+    async function routeUser(user) {
+      const tokenRes = await user.getIdTokenResult(true);
+      const claims = tokenRes.claims || {};
+      let role = normRole(claims.role);
+      if (claims.super_admin === true || claims.superAdmin === true) role = "super_admin";
+
+      let profile = null;
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) profile = snap.data();
+      } catch (e) {}
+
+      if (profile) {
+        const status = String(profile.status || "active").toLowerCase();
+        if (["suspended", "disabled", "deleted"].includes(status)) {
+          await signOut(auth);
+          const err = new Error("This account is suspended. Contact the administrator."); err.custom = true; throw err;
+        }
+        if (normRole(profile.role) === "super_admin") role = "super_admin";
+        else if (!role) role = normRole(profile.role);
+      }
+
+      if (!DASHBOARDS[role]) {
+        await signOut(auth);
+        const err = new Error("No role is assigned to this account. Contact the administrator."); err.custom = true; throw err;
+      }
+
+      const url = DASHBOARDS[role];
+      if (url && String(url).startsWith("#")) {
+        document.documentElement.classList.remove("is-login");
+        document.documentElement.classList.add("is-admin");
+        if (location.hash !== "#admin") location.hash = "admin";
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (await dashboardExists(url)) { window.location.href = url; return; }
+
+      // Dashboard page not found: confirm the login instead of a dead link.
+      byId("loginForm").hidden = true;
+      byId("saSection").hidden = true;
+      byId("signedInPanel").hidden = false;
+      const name = (profile && profile.fullName) || user.email;
+      byId("signedInText").textContent = "Login successful. Signed in as " + name + " (" + ROLE_LABELS[role] + "). The dashboard page " + url + " was not found.";
+      setAlert("success", "Login successful.");
+    }
+
+    function authError(e) {
+      if (e && e.custom) return e.message;
+      switch (e && e.code) {
+        case "auth/invalid-credential":
+        case "auth/wrong-password":
+        case "auth/user-not-found": return "Incorrect email or password.";
+        case "auth/invalid-email": return "Enter a valid email address.";
+        case "auth/user-disabled": return "This account has been disabled. Contact the administrator.";
+        case "auth/too-many-requests": return "Too many attempts. Wait a few minutes and try again.";
+        case "auth/network-request-failed": return "Network error. Check your connection and try again.";
+        case "auth/operation-not-allowed": return "Email/Password sign-in is off. Turn it on in Firebase Console → Authentication → Sign-in method.";
+        case "auth/email-already-in-use": return "This email already has an account. Delete it in Firebase Authentication first, or use another email.";
+        case "auth/weak-password": return "Password is too weak. Use at least 8 characters.";
+        default: return "Something went wrong. Try again.";
+      }
+    }
+
+    byId("loginBtn").addEventListener("click", async () => {
+      const email = byId("loginEmail").value.trim();
+      const password = byId("loginPassword").value;
+      if (!email || !password) return setAlert("error", "Enter your email and password.");
+      const btn = byId("loginBtn");
+      btn.disabled = true; btn.textContent = "Logging in…"; clearAlert();
+      try {
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        await routeUser(cred.user);
+      } catch (e) { setAlert("error", authError(e)); }
+      finally { btn.disabled = false; btn.textContent = "Login"; }
+    });
+    byId("loginPassword").addEventListener("keydown", (e) => { if (e.key === "Enter") byId("loginBtn").click(); });
+
+    byId("forgotBtn").addEventListener("click", async () => {
+      const email = byId("loginEmail").value.trim();
+      if (!email) return setAlert("error", "Enter your email address above first.");
+      try {
+        await sendPasswordResetEmail(auth, email);
+        setAlert("success", "If an account exists for this email, a reset link has been sent.");
+      } catch (e) { setAlert("error", authError(e)); }
+    });
+
+    byId("logoutBtn").addEventListener("click", async () => {
+      try { await signOut(auth); } catch (e) {}
+      byId("signedInPanel").hidden = true;
+      byId("loginForm").hidden = false;
+      byId("loginPassword").value = "";
+      clearAlert();
+      refreshSetupState();
+    });
+
+    byId("saToggleBtn").addEventListener("click", () => {
+      byId("saForm").hidden = !byId("saForm").hidden;
+    });
+
+    byId("saCreateBtn").addEventListener("click", async () => {
+      const fullName = byId("saName").value.trim();
+      const email = byId("saEmail").value.trim().toLowerCase();
+      const password = byId("saPassword").value;
+      const confirm = byId("saConfirm").value;
+      const key = byId("saKey").value.trim();
+
+      if (!fullName || !email || !password || !confirm || !key) return setAlert("error", "Fill in all Super Admin fields.");
+      if (!/^[A-Za-z0-9_-]{8,64}$/.test(key)) return setAlert("error", "Setup Key is not valid.");
+      if (password.length < 8) return setAlert("error", "Password must be at least 8 characters.");
+      if (password !== confirm) return setAlert("error", "Passwords do not match.");
+
+      const btn = byId("saCreateBtn");
+      btn.disabled = true; btn.textContent = "Creating…"; clearAlert();
+
+      let cred;
+      try {
+        cred = await createUserWithEmailAndPassword(auth, email, password);
+      } catch (e) {
+        btn.disabled = false; btn.textContent = "Create Super Admin";
+        return setAlert("error", authError(e));
+      }
+
+      try {
+        const batch = writeBatch(db);
+        batch.set(doc(db, "users", cred.user.uid), {
+          uid: cred.user.uid, fullName, email: cred.user.email,
+          role: "super_admin", status: "active", createdBy: "first-setup",
+          createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+        });
+        batch.set(doc(db, "system", "initialSetup"), {
+          status: "completed", completedAt: serverTimestamp(), setupKey: key
+        });
+        await batch.commit();
+      } catch (e) {
+        try { await cred.user.delete(); } catch (_) {}
+        btn.disabled = false; btn.textContent = "Create Super Admin";
+        const denied = e && (e.code === "permission-denied" || /permission/i.test(e.message || ""));
+        return setAlert("error", denied
+          ? "Not allowed: the Setup Key is wrong, the rules are not published, or setup was already completed."
+          : "Could not save the Super Admin profile. Try again.");
+      }
+
+      // Setup is done: remove the option permanently and sign in.
+      byId("saSection").hidden = true;
+      byId("saForm").hidden = true;
+      setAlert("success", "Super Admin created. Signing you in…");
+      try { await routeUser(cred.user); } catch (e) { setAlert("error", authError(e)); }
+    });
+
+    applyRoute(false);
+  </script>
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import {
+      getFirestore, collection, getDocs, getDoc, addDoc, setDoc, updateDoc, deleteDoc,
+      doc, query, where, orderBy, limit, serverTimestamp, writeBatch
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlEw1Pb5HzIePo5SlolYm9ofvCUSBS0wM",
+      authDomain: "mmsayaya-academy.firebaseapp.com",
+      projectId: "mmsayaya-academy",
+      storageBucket: "mmsayaya-academy.firebasestorage.app",
+      messagingSenderId: "261003419792",
+      appId: "1:261003419792:web:9710d497a942a92c10b815",
+      measurementId: "G-0N2Q1V11LG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ---------- Auth gate ----------
+    let currentUser = null;
+    let currentProfile = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        document.documentElement.classList.remove("is-admin");
+        if (location.hash === "#admin") location.hash = "#login";
+        return;
+      }
+      currentUser = user;
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+          currentProfile = snap.data();
+          const role = String(currentProfile.role || "").toLowerCase().replace(/[\s-]+/g, "_");
+          if (role !== "admin" && role !== "super_admin") {
+            document.documentElement.classList.remove("is-admin");
+            if (location.hash === "#admin") {
+              try { await signOut(auth); } catch (_) {}
+              location.hash = "#login";
+            }
+            return;
+          }
+          document.documentElement.classList.add("is-admin");
+          document.getElementById("adminName").textContent = currentProfile.fullName || user.email;
+          document.getElementById("adminRole").textContent = role === "super_admin" ? "Super Admin" : "Admin";
+          document.getElementById("adminAvatar").textContent = (currentProfile.fullName || "A").charAt(0).toUpperCase();
+          document.getElementById("profileName").value = currentProfile.fullName || "";
+          document.getElementById("profileEmail").value = user.email || "";
+        } else {
+          document.getElementById("adminName").textContent = user.email;
+        }
+      } catch (e) {
+        console.warn("Profile load:", e);
+      }
+      loadOverview();
+    });
+
+    (function(){
+      const adminLogoutBtn = document.getElementById("logoutBtn");
+      if (adminLogoutBtn) adminLogoutBtn.addEventListener("click", async () => {
+        try { await signOut(auth); } catch (e) {}
+        document.documentElement.classList.remove("is-admin");
+        location.hash = "#login";
+      });
+    })();
+
+    // ---------- UI helpers ----------
+    const $ = (id) => document.getElementById(id);
+    const toastContainer = $("toastContainer");
+
+    function toast(msg, type = "info") {
+      const el = document.createElement("div");
+      el.className = "toast " + type;
+      el.innerHTML = `<span class="msg">${msg}</span><button class="close">&times;</button>`;
+      el.querySelector(".close").onclick = () => el.remove();
+      toastContainer.appendChild(el);
+      setTimeout(() => el.remove(), 4500);
+    }
+
+    function formatDate(ts) {
+      if (!ts) return "—";
+      try {
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+      } catch { return "—"; }
+    }
+
+    function escapeHtml(s) {
+      if (s == null) return "";
+      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+
+    // Modal
+    let modalSaveHandler = null;
+    const modalOverlay = $("modalOverlay");
+    function openModal(title, bodyHtml, onSave, wide = false) {
+      $("modalTitle").textContent = title;
+      $("modalBody").innerHTML = bodyHtml;
+      $("modal").classList.toggle("wide", wide);
+      modalSaveHandler = onSave;
+      modalOverlay.classList.add("show");
+    }
+    function closeModal() {
+      modalOverlay.classList.remove("show");
+      modalSaveHandler = null;
+    }
+    $("modalClose").onclick = closeModal;
+    $("modalCancel").onclick = closeModal;
+    $("modalSave").onclick = async () => {
+      if (modalSaveHandler) {
+        const btn = $("modalSave");
+        btn.disabled = true;
+        try { await modalSaveHandler(); } finally { btn.disabled = false; }
+      }
+    };
+    modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
+
+    // Confirm
+    let confirmResolve = null;
+    function confirmDialog(title, msg, sub = "") {
+      return new Promise((resolve) => {
+        confirmResolve = resolve;
+        $("confirmTitle").textContent = title;
+        $("confirmMsg").textContent = msg;
+        $("confirmSub").textContent = sub;
+        $("confirmOverlay").classList.add("show");
+      });
+    }
+    function closeConfirm(val) {
+      $("confirmOverlay").classList.remove("show");
+      if (confirmResolve) confirmResolve(val);
+      confirmResolve = null;
+    }
+    $("confirmClose").onclick = () => closeConfirm(false);
+    $("confirmNo").onclick = () => closeConfirm(false);
+    $("confirmYes").onclick = () => closeConfirm(true);
+
+    // Sidebar & navigation
+    const views = document.querySelectorAll(".view");
+    const navItems = document.querySelectorAll(".nav-item[data-view]");
+    const pageTitle = $("pageTitle");
+    const titleMap = {
+      overview: "Overview", analytics: "Analytics & Reports", homepage: "Homepage",
+      content: "Website Content", branding: "Branding & Settings", navigation: "Navigation",
+      languages: "Languages", categories: "Categories", courses: "Courses",
+      subjects: "Subjects & Topics", lessons: "Lessons", questions: "Question Bank",
+      import: "Bulk Import", exams: "Examinations", assignments: "Assignments",
+      certificates: "Certificates", students: "Students", teachers: "Teachers",
+      access: "Course Access", roles: "Roles & Permissions", payments: "Payments",
+      announcements: "Announcements", notifications: "Notifications", contacts: "Contact Requests",
+      forum: "Discussion Forum", security: "Security", audit: "Login History & Audit",
+      backup: "Backup & Restore", profile: "Admin Profile"
+    };
+
+    function showView(name) {
+      views.forEach(v => v.classList.remove("active"));
+      const el = $("view-" + name);
+      if (el) el.classList.add("active");
+      navItems.forEach(n => n.classList.toggle("active", n.dataset.view === name));
+      pageTitle.textContent = titleMap[name] || name;
+      $("sidebar").classList.remove("open");
+      $("sidebarOverlay").classList.remove("show");
+      loadViewData(name);
+    }
+
+    navItems.forEach(btn => btn.addEventListener("click", () => showView(btn.dataset.view)));
+    document.querySelectorAll("[data-goto]").forEach(btn => {
+      btn.addEventListener("click", () => showView(btn.dataset.goto));
+    });
+
+    $("menuToggle").addEventListener("click", () => {
+      $("sidebar").classList.toggle("open");
+      $("sidebarOverlay").classList.toggle("show");
+    });
+    $("sidebarOverlay").addEventListener("click", () => {
+      $("sidebar").classList.remove("open");
+      $("sidebarOverlay").classList.remove("show");
+    });
+
+    // Content tabs
+    document.querySelectorAll("#contentTabs .tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll("#contentTabs .tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        ["about","mission","footer"].forEach(id => {
+          const el = $("content" + id.charAt(0).toUpperCase() + id.slice(1));
+          if (el) el.hidden = tab.dataset.tab !== id;
+        });
+      });
+    });
+
+    // ---------- Data loaders ----------
+    async function loadOverview() {
+      try {
+        const [cats, courses, users, questions, contacts, anns, access] = await Promise.all([
+          getDocs(collection(db, "categories")),
+          getDocs(query(collection(db, "courses"), where("status", "==", "published"))),
+          getDocs(collection(db, "users")),
+          getDocs(collection(db, "questionBank")),
+          getDocs(query(collection(db, "contactRequests"), where("status", "==", "new"))),
+          getDocs(collection(db, "announcements")),
+          getDocs(query(collection(db, "courseAccess"), where("status", "==", "pending"))).catch(() => ({ size: 0, docs: [] }))
+        ]);
+        $("statCategories").textContent = cats.size;
+        $("statCourses").textContent = courses.size;
+        let students = 0, teachers = 0;
+        users.forEach(d => {
+          const r = String(d.data().role || "").toLowerCase();
+          if (r === "student") students++;
+          if (r === "teacher") teachers++;
+        });
+        $("statStudents").textContent = students;
+        $("statTeachers").textContent = teachers;
+        $("statQuestions").textContent = questions.size;
+        $("statContacts").textContent = contacts.size;
+        $("statAnnouncements").textContent = anns.size;
+        $("statPendingAccess").textContent = access.size || 0;
+
+        // Simple bar chart for course statuses
+        const allCourses = await getDocs(collection(db, "courses"));
+        let published = 0, draft = 0, archived = 0;
+        allCourses.forEach(d => {
+          const s = d.data().status || "draft";
+          if (s === "published") published++;
+          else if (s === "archived") archived++;
+          else draft++;
+        });
+        const max = Math.max(published, draft, archived, 1);
+        $("chartCourseStatus").innerHTML = `
+          <div class="bar-item"><div class="bar" style="height:${(published/max)*100}%"></div><span class="bar-label">Published<br>${published}</span></div>
+          <div class="bar-item"><div class="bar" style="height:${(draft/max)*100}%"></div><span class="bar-label">Draft<br>${draft}</span></div>
+          <div class="bar-item"><div class="bar" style="height:${(archived/max)*100}%"></div><span class="bar-label">Archived<br>${archived}</span></div>
+        `;
+
+        // Recent contacts as activity
+        const recent = await getDocs(query(collection(db, "contactRequests"), orderBy("createdAt", "desc"), limit(5))).catch(() => null);
+        if (recent && !recent.empty) {
+          let html = "<ul style='list-style:none;font-size:0.85rem;'>";
+          recent.forEach(d => {
+            const c = d.data();
+            html += `<li style="padding:8px 0;border-bottom:1px solid var(--border);"><strong>${escapeHtml(c.fullName)}</strong> — ${escapeHtml(c.subject || "Contact")} <span style="color:var(--text-muted);">${formatDate(c.createdAt)}</span></li>`;
+          });
+          html += "</ul>";
+          $("recentActivity").innerHTML = html;
+        } else {
+          $("recentActivity").innerHTML = "<p class='empty-state'>No recent activity yet.</p>";
+        }
+      } catch (e) {
+        console.error(e);
+        toast("Could not load overview stats.", "error");
+      }
+    }
+
+    async function loadCategories() {
+      const tbody = $("categoriesTable");
+      tbody.innerHTML = `<tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(query(collection(db, "categories"), orderBy("order", "asc")));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No categories yet.</p></div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => {
+          const c = d.data();
+          const active = c.isActive !== false;
+          html += `<tr data-id="${d.id}">
+            <td><strong>${escapeHtml(c.name)}</strong></td>
+            <td>${escapeHtml((c.description || "").substring(0, 60))}</td>
+            <td>${c.order ?? 0}</td>
+            <td><span class="badge ${active ? "badge-success" : "badge-muted"}">${active ? "Active" : "Inactive"}</span></td>
+            <td class="actions">
+              <button class="btn btn-sm btn-outline btn-edit-cat" data-id="${d.id}">Edit</button>
+              <button class="btn btn-sm btn-ghost btn-toggle-cat" data-id="${d.id}" data-active="${active}">${active ? "Deactivate" : "Activate"}</button>
+              <button class="btn btn-sm btn-danger btn-del-cat" data-id="${d.id}">Delete</button>
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        bindCategoryActions();
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="5">Error loading categories.</td></tr>`;
+        toast(e.message, "error");
+      }
+    }
+
+    function bindCategoryActions() {
+      document.querySelectorAll(".btn-edit-cat").forEach(btn => {
+        btn.onclick = async () => {
+          const id = btn.dataset.id;
+          const snap = await getDoc(doc(db, "categories", id));
+          if (!snap.exists()) return toast("Not found", "error");
+          const c = snap.data();
+          openModal("Edit Category", `
+            <div class="form-group"><label>Name *</label><input id="fName" value="${escapeHtml(c.name || "")}" /></div>
+            <div class="form-group"><label>Description</label><textarea id="fDesc">${escapeHtml(c.description || "")}</textarea></div>
+            <div class="form-group"><label>Order</label><input type="number" id="fOrder" value="${c.order ?? 0}" /></div>
+            <div class="form-group"><label>Active</label><select id="fActive"><option value="true" ${c.isActive !== false ? "selected" : ""}>Yes</option><option value="false" ${c.isActive === false ? "selected" : ""}>No</option></select></div>
+          `, async () => {
+            const name = $("fName").value.trim();
+            if (!name) return toast("Name is required", "error");
+            await updateDoc(doc(db, "categories", id), {
+              name, description: $("fDesc").value.trim(), order: Number($("fOrder").value) || 0,
+              isActive: $("fActive").value === "true", updatedAt: serverTimestamp()
+            });
+            toast("Category updated", "success");
+            closeModal();
+            loadCategories();
+          });
+        };
+      });
+      document.querySelectorAll(".btn-toggle-cat").forEach(btn => {
+        btn.onclick = async () => {
+          const id = btn.dataset.id;
+          const next = btn.dataset.active !== "true";
+          await updateDoc(doc(db, "categories", id), { isActive: next, updatedAt: serverTimestamp() });
+          toast(next ? "Activated" : "Deactivated", "success");
+          loadCategories();
+        };
+      });
+      document.querySelectorAll(".btn-del-cat").forEach(btn => {
+        btn.onclick = async () => {
+          const ok = await confirmDialog("Delete Category", "Delete this category permanently?", "This cannot be undone.");
+          if (!ok) return;
+          await deleteDoc(doc(db, "categories", btn.dataset.id));
+          toast("Category deleted", "success");
+          loadCategories();
+        };
+      });
+    }
+
+    $("btnAddCategory").addEventListener("click", () => {
+      openModal("Add Category", `
+        <div class="form-group"><label>Name *</label><input id="fName" placeholder="e.g. Web Development" /></div>
+        <div class="form-group"><label>Description</label><textarea id="fDesc" placeholder="Short description"></textarea></div>
+        <div class="form-group"><label>Order</label><input type="number" id="fOrder" value="0" /></div>
+        <div class="form-group"><label>Active</label><select id="fActive"><option value="true">Yes</option><option value="false">No</option></select></div>
+      `, async () => {
+        const name = $("fName").value.trim();
+        if (!name) return toast("Name is required", "error");
+        await addDoc(collection(db, "categories"), {
+          name, description: $("fDesc").value.trim(), order: Number($("fOrder").value) || 0,
+          isActive: $("fActive").value === "true", createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+        });
+        toast("Category created", "success");
+        closeModal();
+        loadCategories();
+        loadOverview();
+      });
+    });
+
+    // Courses
+    async function loadCourses() {
+      const tbody = $("coursesTable");
+      tbody.innerHTML = `<tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(collection(db, "courses"));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No courses yet.</p></div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => {
+          const c = d.data();
+          const status = c.status || "draft";
+          const badge = status === "published" ? "badge-success" : status === "archived" ? "badge-muted" : "badge-warning";
+          html += `<tr>
+            <td><strong>${escapeHtml(c.title || "Untitled")}</strong></td>
+            <td>${escapeHtml(c.categoryName || "—")}</td>
+            <td>${escapeHtml(c.difficulty || "All Levels")}</td>
+            <td><span class="badge ${badge}">${status}</span></td>
+            <td>${c.isFeatured ? "⭐" : "—"}</td>
+            <td class="actions">
+              <button class="btn btn-sm btn-outline btn-edit-course" data-id="${d.id}">Edit</button>
+              <button class="btn btn-sm btn-ghost btn-pub-course" data-id="${d.id}" data-status="${status}">${status === "published" ? "Unpublish" : "Publish"}</button>
+              <button class="btn btn-sm btn-danger btn-del-course" data-id="${d.id}">Delete</button>
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        bindCourseActions();
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6">Error loading courses.</td></tr>`;
+      }
+    }
+
+    async function getCategoryOptions(selectedId = "") {
+      const snap = await getDocs(collection(db, "categories"));
+      let opts = `<option value="">— Select —</option>`;
+      snap.forEach(d => {
+        const c = d.data();
+        opts += `<option value="${d.id}" data-name="${escapeHtml(c.name)}" ${d.id === selectedId ? "selected" : ""}>${escapeHtml(c.name)}</option>`;
+      });
+      return opts;
+    }
+
+    function bindCourseActions() {
+      document.querySelectorAll(".btn-edit-course").forEach(btn => {
+        btn.onclick = async () => {
+          const id = btn.dataset.id;
+          const snap = await getDoc(doc(db, "courses", id));
+          if (!snap.exists()) return;
+          const c = snap.data();
+          const catOpts = await getCategoryOptions(c.categoryId || "");
+          openModal("Edit Course", `
+            <div class="form-group"><label>Title *</label><input id="fTitle" value="${escapeHtml(c.title || "")}" /></div>
+            <div class="form-group"><label>Category</label><select id="fCat">${catOpts}</select></div>
+            <div class="form-group"><label>Short Description</label><textarea id="fShort">${escapeHtml(c.shortDescription || "")}</textarea></div>
+            <div class="form-group"><label>Description</label><textarea id="fDesc">${escapeHtml(c.description || "")}</textarea></div>
+            <div class="form-row">
+              <div class="form-group"><label>Difficulty</label><select id="fDiff"><option ${c.difficulty==="Beginner"?"selected":""}>Beginner</option><option ${c.difficulty==="Intermediate"?"selected":""}>Intermediate</option><option ${c.difficulty==="Advanced"?"selected":""}>Advanced</option><option ${!c.difficulty||c.difficulty==="All Levels"?"selected":""}>All Levels</option></select></div>
+              <div class="form-group"><label>Duration</label><input id="fDur" value="${escapeHtml(c.duration || "Self-paced")}" /></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Status</label><select id="fStatus"><option value="draft" ${c.status==="draft"?"selected":""}>Draft</option><option value="published" ${c.status==="published"?"selected":""}>Published</option><option value="archived" ${c.status==="archived"?"selected":""}>Archived</option></select></div>
+              <div class="form-group"><label>Featured</label><select id="fFeat"><option value="false" ${!c.isFeatured?"selected":""}>No</option><option value="true" ${c.isFeatured?"selected":""}>Yes</option></select></div>
+            </div>
+          `, async () => {
+            const title = $("fTitle").value.trim();
+            if (!title) return toast("Title required", "error");
+            const catSel = $("fCat");
+            const categoryId = catSel.value;
+            const categoryName = catSel.selectedOptions[0]?.dataset?.name || catSel.selectedOptions[0]?.text || "";
+            await updateDoc(doc(db, "courses", id), {
+              title, categoryId, categoryName,
+              shortDescription: $("fShort").value.trim(),
+              description: $("fDesc").value.trim(),
+              difficulty: $("fDiff").value, duration: $("fDur").value.trim(),
+              status: $("fStatus").value, isFeatured: $("fFeat").value === "true",
+              isPopular: c.isPopular || false, updatedAt: serverTimestamp()
+            });
+            toast("Course updated", "success");
+            closeModal();
+            loadCourses();
+          }, true);
+        };
+      });
+      document.querySelectorAll(".btn-pub-course").forEach(btn => {
+        btn.onclick = async () => {
+          const next = btn.dataset.status === "published" ? "draft" : "published";
+          await updateDoc(doc(db, "courses", btn.dataset.id), { status: next, updatedAt: serverTimestamp() });
+          toast(next === "published" ? "Published" : "Unpublished", "success");
+          loadCourses();
+          loadOverview();
+        };
+      });
+      document.querySelectorAll(".btn-del-course").forEach(btn => {
+        btn.onclick = async () => {
+          const ok = await confirmDialog("Delete Course", "Delete this course permanently?");
+          if (!ok) return;
+          await deleteDoc(doc(db, "courses", btn.dataset.id));
+          toast("Course deleted", "success");
+          loadCourses();
+        };
+      });
+    }
+
+    $("btnAddCourse").addEventListener("click", async () => {
+      const catOpts = await getCategoryOptions();
+      openModal("Add Course", `
+        <div class="form-group"><label>Title *</label><input id="fTitle" placeholder="Course title" /></div>
+        <div class="form-group"><label>Category</label><select id="fCat">${catOpts}</select></div>
+        <div class="form-group"><label>Short Description</label><textarea id="fShort"></textarea></div>
+        <div class="form-group"><label>Description</label><textarea id="fDesc"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Difficulty</label><select id="fDiff"><option>All Levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
+          <div class="form-group"><label>Duration</label><input id="fDur" value="Self-paced" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Status</label><select id="fStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
+          <div class="form-group"><label>Featured</label><select id="fFeat"><option value="false">No</option><option value="true">Yes</option></select></div>
+        </div>
+      `, async () => {
+        const title = $("fTitle").value.trim();
+        if (!title) return toast("Title required", "error");
+        const catSel = $("fCat");
+        await addDoc(collection(db, "courses"), {
+          title, categoryId: catSel.value || null,
+          categoryName: catSel.selectedOptions[0]?.dataset?.name || catSel.selectedOptions[0]?.text || "",
+          shortDescription: $("fShort").value.trim(), description: $("fDesc").value.trim(),
+          difficulty: $("fDiff").value, duration: $("fDur").value.trim(),
+          status: $("fStatus").value, isFeatured: $("fFeat").value === "true", isPopular: false,
+          createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+        });
+        toast("Course created", "success");
+        closeModal();
+        loadCourses();
+        loadOverview();
+      }, true);
+    });
+
+    // Students / Teachers
+    async function loadUsersByRole(role, tableId) {
+      const tbody = $(tableId);
+      tbody.innerHTML = `<tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(query(collection(db, "users"), where("role", "==", role)));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No ${role}s found.</p></div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => {
+          const u = d.data();
+          const status = (u.status || "active").toLowerCase();
+          const badge = status === "active" ? "badge-success" : "badge-danger";
+          html += `<tr>
+            <td><strong>${escapeHtml(u.fullName || "—")}</strong></td>
+            <td>${escapeHtml(u.email || "—")}</td>
+            <td><span class="badge ${badge}">${status}</span></td>
+            <td>${formatDate(u.createdAt)}</td>
+            <td class="actions">
+              <button class="btn btn-sm btn-outline btn-edit-user" data-id="${d.id}" data-role="${role}">Edit</button>
+              <button class="btn btn-sm btn-ghost btn-toggle-user" data-id="${d.id}" data-status="${status}">${status === "active" ? "Suspend" : "Activate"}</button>
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.querySelectorAll(".btn-edit-user").forEach(btn => {
+          btn.onclick = async () => {
+            const snap = await getDoc(doc(db, "users", btn.dataset.id));
+            if (!snap.exists()) return;
+            const u = snap.data();
+            openModal("Edit User", `
+              <div class="form-group"><label>Full Name</label><input id="fName" value="${escapeHtml(u.fullName || "")}" /></div>
+              <div class="form-group"><label>Email</label><input value="${escapeHtml(u.email || "")}" disabled /></div>
+              <div class="form-group"><label>Status</label><select id="fStatus"><option value="active" ${u.status!=="suspended"?"selected":""}>Active</option><option value="suspended" ${u.status==="suspended"?"selected":""}>Suspended</option></select></div>
+            `, async () => {
+              await updateDoc(doc(db, "users", btn.dataset.id), {
+                fullName: $("fName").value.trim(), status: $("fStatus").value, updatedAt: serverTimestamp()
+              });
+              toast("User updated", "success");
+              closeModal();
+              loadUsersByRole(btn.dataset.role, tableId);
+            });
+          };
+        });
+        document.querySelectorAll(".btn-toggle-user").forEach(btn => {
+          btn.onclick = async () => {
+            const next = btn.dataset.status === "active" ? "suspended" : "active";
+            const ok = await confirmDialog(next === "suspended" ? "Suspend User" : "Activate User", `Set status to ${next}?`);
+            if (!ok) return;
+            await updateDoc(doc(db, "users", btn.dataset.id), { status: next, updatedAt: serverTimestamp() });
+            toast("Status updated", "success");
+            loadUsersByRole(role, tableId);
+          };
+        });
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="5">Error: ${escapeHtml(e.message)}</td></tr>`;
+      }
+    }
+
+    $("btnAddStudent")?.addEventListener("click", () => openAddUserModal("student"));
+    $("btnAddTeacher")?.addEventListener("click", () => openAddUserModal("teacher"));
+
+    function openAddUserModal(role) {
+      openModal(`Add ${role === "student" ? "Student" : "Teacher"}`, `
+        <p class="form-hint" style="margin-bottom:12px;">Creates a profile record only. The user must still register/login via Firebase Auth (or you invite them).</p>
+        <div class="form-group"><label>Full Name *</label><input id="fName" /></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="fEmail" /></div>
+      `, async () => {
+        const fullName = $("fName").value.trim();
+        const email = $("fEmail").value.trim().toLowerCase();
+        if (!fullName || !email) return toast("Name and email required", "error");
+        await addDoc(collection(db, "users"), {
+          fullName, email, role, status: "active",
+          createdBy: currentUser?.uid || "admin",
+          createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+        });
+        toast(`${role} profile created`, "success");
+        closeModal();
+        loadUsersByRole(role, role === "student" ? "studentsTable" : "teachersTable");
+        loadOverview();
+      });
+    }
+
+    // Announcements
+    async function loadAnnouncements() {
+      const tbody = $("announcementsTable");
+      tbody.innerHTML = `<tr><td colspan="4" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(query(collection(db, "announcements"), orderBy("createdAt", "desc")));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><p>No announcements.</p></div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => {
+          const a = d.data();
+          html += `<tr>
+            <td><strong>${escapeHtml(a.title)}</strong></td>
+            <td><span class="badge ${a.isPublished ? "badge-success" : "badge-muted"}">${a.isPublished ? "Published" : "Draft"}</span></td>
+            <td>${formatDate(a.createdAt)}</td>
+            <td class="actions">
+              <button class="btn btn-sm btn-outline btn-edit-ann" data-id="${d.id}">Edit</button>
+              <button class="btn btn-sm btn-ghost btn-pub-ann" data-id="${d.id}" data-pub="${!!a.isPublished}">${a.isPublished ? "Unpublish" : "Publish"}</button>
+              <button class="btn btn-sm btn-danger btn-del-ann" data-id="${d.id}">Delete</button>
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.querySelectorAll(".btn-edit-ann").forEach(btn => {
+          btn.onclick = async () => {
+            const snap = await getDoc(doc(db, "announcements", btn.dataset.id));
+            const a = snap.data();
+            openModal("Edit Announcement", `
+              <div class="form-group"><label>Title *</label><input id="fTitle" value="${escapeHtml(a.title || "")}" /></div>
+              <div class="form-group"><label>Content *</label><textarea id="fContent" rows="5">${escapeHtml(a.content || "")}</textarea></div>
+              <div class="form-group"><label>Published</label><select id="fPub"><option value="true" ${a.isPublished?"selected":""}>Yes</option><option value="false" ${!a.isPublished?"selected":""}>No</option></select></div>
+            `, async () => {
+              const title = $("fTitle").value.trim();
+              if (!title) return toast("Title required", "error");
+              await updateDoc(doc(db, "announcements", btn.dataset.id), {
+                title, content: $("fContent").value.trim(), isPublished: $("fPub").value === "true", updatedAt: serverTimestamp()
+              });
+              toast("Updated", "success");
+              closeModal();
+              loadAnnouncements();
+            });
+          };
+        });
+        document.querySelectorAll(".btn-pub-ann").forEach(btn => {
+          btn.onclick = async () => {
+            await updateDoc(doc(db, "announcements", btn.dataset.id), { isPublished: btn.dataset.pub !== "true", updatedAt: serverTimestamp() });
+            toast("Updated", "success");
+            loadAnnouncements();
+          };
+        });
+        document.querySelectorAll(".btn-del-ann").forEach(btn => {
+          btn.onclick = async () => {
+            if (!(await confirmDialog("Delete", "Delete this announcement?"))) return;
+            await deleteDoc(doc(db, "announcements", btn.dataset.id));
+            toast("Deleted", "success");
+            loadAnnouncements();
+          };
+        });
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="4">Error loading.</td></tr>`;
+      }
+    }
+
+    $("btnAddAnnouncement").addEventListener("click", () => {
+      openModal("New Announcement", `
+        <div class="form-group"><label>Title *</label><input id="fTitle" /></div>
+        <div class="form-group"><label>Content *</label><textarea id="fContent" rows="5"></textarea></div>
+        <div class="form-group"><label>Publish now</label><select id="fPub"><option value="true">Yes</option><option value="false">No (draft)</option></select></div>
+      `, async () => {
+        const title = $("fTitle").value.trim();
+        const content = $("fContent").value.trim();
+        if (!title || !content) return toast("Title and content required", "error");
+        await addDoc(collection(db, "announcements"), {
+          title, content, isPublished: $("fPub").value === "true",
+          createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+        });
+        toast("Announcement created", "success");
+        closeModal();
+        loadAnnouncements();
+        loadOverview();
+      });
+    });
+
+    // Contact requests
+    async function loadContacts() {
+      const tbody = $("contactsTable");
+      tbody.innerHTML = `<tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(query(collection(db, "contactRequests"), orderBy("createdAt", "desc")));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No contact requests.</p></div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => {
+          const c = d.data();
+          const st = c.status || "new";
+          const badge = st === "new" ? "badge-info" : st === "replied" ? "badge-success" : "badge-muted";
+          html += `<tr>
+            <td>${escapeHtml(c.fullName)}</td>
+            <td>${escapeHtml(c.email)}</td>
+            <td>${escapeHtml(c.subject || "—")}</td>
+            <td><span class="badge ${badge}">${st}</span></td>
+            <td>${formatDate(c.createdAt)}</td>
+            <td class="actions">
+              <button class="btn btn-sm btn-outline btn-view-contact" data-id="${d.id}">View</button>
+              <button class="btn btn-sm btn-ghost btn-status-contact" data-id="${d.id}" data-status="replied">Mark Replied</button>
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.querySelectorAll(".btn-view-contact").forEach(btn => {
+          btn.onclick = async () => {
+            const snap = await getDoc(doc(db, "contactRequests", btn.dataset.id));
+            const c = snap.data();
+            openModal("Contact Request", `
+              <p><strong>From:</strong> ${escapeHtml(c.fullName)} &lt;${escapeHtml(c.email)}&gt;</p>
+              <p style="margin:8px 0;"><strong>Subject:</strong> ${escapeHtml(c.subject)}</p>
+              <p style="margin-top:12px;white-space:pre-wrap;">${escapeHtml(c.message)}</p>
+            `, async () => { closeModal(); }, false);
+            $("modalSave").textContent = "Close";
+          };
+        });
+        document.querySelectorAll(".btn-status-contact").forEach(btn => {
+          btn.onclick = async () => {
+            await updateDoc(doc(db, "contactRequests", btn.dataset.id), {
+              status: "replied", repliedAt: serverTimestamp(), repliedBy: currentUser?.uid || null
+            });
+            toast("Marked as replied", "success");
+            loadContacts();
+          };
+        });
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6">Error loading contacts.</td></tr>`;
+      }
+    }
+
+    // Question bank
+    async function loadQuestions() {
+      const tbody = $("questionsTable");
+      tbody.innerHTML = `<tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(query(collection(db, "questionBank"), limit(100)));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No questions in the bank yet.</p></div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => {
+          const q = d.data();
+          html += `<tr>
+            <td>${escapeHtml((q.question || "").substring(0, 80))}${(q.question || "").length > 80 ? "…" : ""}</td>
+            <td>${escapeHtml(q.categoryName || q.category || "—")}</td>
+            <td>${escapeHtml(q.type || "mcq")}</td>
+            <td>${escapeHtml(q.difficulty || "—")}</td>
+            <td class="actions">
+              <button class="btn btn-sm btn-outline btn-edit-q" data-id="${d.id}">Edit</button>
+              <button class="btn btn-sm btn-danger btn-del-q" data-id="${d.id}">Delete</button>
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.querySelectorAll(".btn-del-q").forEach(btn => {
+          btn.onclick = async () => {
+            if (!(await confirmDialog("Delete Question", "Delete this question?"))) return;
+            await deleteDoc(doc(db, "questionBank", btn.dataset.id));
+            toast("Deleted", "success");
+            loadQuestions();
+          };
+        });
+        document.querySelectorAll(".btn-edit-q").forEach(btn => {
+          btn.onclick = async () => {
+            const snap = await getDoc(doc(db, "questionBank", btn.dataset.id));
+            const q = snap.data();
+            openModal("Edit Question", `
+              <div class="form-group"><label>Question *</label><textarea id="fQ" rows="3">${escapeHtml(q.question || "")}</textarea></div>
+              <div class="form-row">
+                <div class="form-group"><label>Option A</label><input id="fA" value="${escapeHtml(q.optionA || q.options?.A || "")}" /></div>
+                <div class="form-group"><label>Option B</label><input id="fB" value="${escapeHtml(q.optionB || q.options?.B || "")}" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Option C</label><input id="fC" value="${escapeHtml(q.optionC || q.options?.C || "")}" /></div>
+                <div class="form-group"><label>Option D</label><input id="fD" value="${escapeHtml(q.optionD || q.options?.D || "")}" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Correct (A/B/C/D)</label><input id="fCorrect" value="${escapeHtml(q.correctAnswer || "")}" maxlength="1" /></div>
+                <div class="form-group"><label>Difficulty</label><select id="fDiff"><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
+              </div>
+            `, async () => {
+              const question = $("fQ").value.trim();
+              if (!question) return toast("Question required", "error");
+              await updateDoc(doc(db, "questionBank", btn.dataset.id), {
+                question, optionA: $("fA").value.trim(), optionB: $("fB").value.trim(),
+                optionC: $("fC").value.trim(), optionD: $("fD").value.trim(),
+                correctAnswer: $("fCorrect").value.trim().toUpperCase(),
+                difficulty: $("fDiff").value, updatedAt: serverTimestamp()
+              });
+              toast("Updated", "success");
+              closeModal();
+              loadQuestions();
+            }, true);
+          };
+        });
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="5">Error loading questions.</td></tr>`;
+      }
+    }
+
+    $("btnAddQuestion").addEventListener("click", async () => {
+      const catOpts = await getCategoryOptions();
+      openModal("Add Question", `
+        <div class="form-group"><label>Question *</label><textarea id="fQ" rows="3"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Option A</label><input id="fA" /></div>
+          <div class="form-group"><label>Option B</label><input id="fB" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Option C</label><input id="fC" /></div>
+          <div class="form-group"><label>Option D</label><input id="fD" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Correct (A/B/C/D)</label><input id="fCorrect" maxlength="1" /></div>
+          <div class="form-group"><label>Category</label><select id="fCat">${catOpts}</select></div>
+        </div>
+        <div class="form-group"><label>Difficulty</label><select id="fDiff"><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
+      `, async () => {
+        const question = $("fQ").value.trim();
+        if (!question) return toast("Question required", "error");
+        const catSel = $("fCat");
+        await addDoc(collection(db, "questionBank"), {
+          question, optionA: $("fA").value.trim(), optionB: $("fB").value.trim(),
+          optionC: $("fC").value.trim(), optionD: $("fD").value.trim(),
+          correctAnswer: $("fCorrect").value.trim().toUpperCase(),
+          categoryId: catSel.value || null,
+          categoryName: catSel.selectedOptions[0]?.text || "",
+          type: "mcq", difficulty: $("fDiff").value,
+          createdAt: serverTimestamp()
+        });
+        toast("Question added", "success");
+        closeModal();
+        loadQuestions();
+        loadOverview();
+      }, true);
+    });
+
+    // Bulk import
+    $("importFile").addEventListener("change", () => {
+      $("btnImport").disabled = !$("importFile").files.length;
+    });
+    (async () => {
+      const opts = await getCategoryOptions();
+      $("importCategory").innerHTML = opts;
+    })();
+    $("btnImport").addEventListener("click", async () => {
+      const file = $("importFile").files[0];
+      if (!file) return;
+      const text = await file.text();
+      const lines = text.split(/\r?\n/).filter(l => l.trim());
+      if (lines.length < 2) return toast("CSV needs a header and at least one row", "error");
+      const headers = lines[0].split(",").map(h => h.trim().toLowerCase().replace(/['"]/g, ""));
+      const idx = (name) => headers.indexOf(name);
+      let ok = 0, fail = 0;
+      $("btnImport").disabled = true;
+      $("btnImport").textContent = "Importing…";
+      for (let i = 1; i < lines.length; i++) {
+        const cols = lines[i].match(/("([^"]|"")*"|[^,]*)/g)?.map(c => c.replace(/^"|"$/g, "").replace(/""/g, '"').trim()) || lines[i].split(",");
+        try {
+          const question = cols[idx("question")] || cols[0];
+          if (!question) { fail++; continue; }
+          await addDoc(collection(db, "questionBank"), {
+            question,
+            optionA: cols[idx("optiona")] || cols[1] || "",
+            optionB: cols[idx("optionb")] || cols[2] || "",
+            optionC: cols[idx("optionc")] || cols[3] || "",
+            optionD: cols[idx("optiond")] || cols[4] || "",
+            correctAnswer: (cols[idx("correctanswer")] || cols[5] || "A").toUpperCase().charAt(0),
+            categoryName: cols[idx("category")] || $("importCategory").selectedOptions[0]?.text || "",
+            categoryId: $("importCategory").value || null,
+            difficulty: cols[idx("difficulty")] || "Medium",
+            type: (cols[idx("type")] || "mcq").toLowerCase(),
+            createdAt: serverTimestamp()
+          });
+          ok++;
+        } catch { fail++; }
+      }
+      $("btnImport").disabled = false;
+      $("btnImport").textContent = "Import Questions";
+      $("importResult").innerHTML = `<p class="badge badge-success">Imported: ${ok}</p> ${fail ? `<p class="badge badge-danger">Failed: ${fail}</p>` : ""}`;
+      toast(`Imported ${ok} questions`, "success");
+      loadOverview();
+    });
+
+    // Course access
+    async function loadAccess() {
+      const tbody = $("accessTable");
+      tbody.innerHTML = `<tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(collection(db, "courseAccess"));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No access records. Grant access to students.</p></div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => {
+          const a = d.data();
+          const st = a.status || "active";
+          const badge = st === "active" ? "badge-success" : st === "pending" ? "badge-warning" : "badge-danger";
+          html += `<tr>
+            <td>${escapeHtml(a.studentName || a.studentEmail || a.studentId || "—")}</td>
+            <td>${escapeHtml(a.courseTitle || a.courseId || "—")}</td>
+            <td><span class="badge ${badge}">${st}</span></td>
+            <td>${formatDate(a.grantedAt || a.createdAt)}</td>
+            <td class="actions">
+              ${st !== "active" ? `<button class="btn btn-sm btn-emerald btn-activate-access" data-id="${d.id}">Activate</button>` : ""}
+              ${st === "active" ? `<button class="btn btn-sm btn-danger btn-revoke-access" data-id="${d.id}">Revoke</button>` : ""}
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.querySelectorAll(".btn-activate-access").forEach(btn => {
+          btn.onclick = async () => {
+            await updateDoc(doc(db, "courseAccess", btn.dataset.id), { status: "active", grantedAt: serverTimestamp() });
+            toast("Access granted", "success");
+            loadAccess();
+          };
+        });
+        document.querySelectorAll(".btn-revoke-access").forEach(btn => {
+          btn.onclick = async () => {
+            if (!(await confirmDialog("Revoke Access", "Revoke this student's course access?"))) return;
+            await updateDoc(doc(db, "courseAccess", btn.dataset.id), { status: "revoked", revokedAt: serverTimestamp() });
+            toast("Access revoked", "success");
+            loadAccess();
+          };
+        });
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No access collection yet, or permission error. Use “Grant Access” to create the first record.</p></div></td></tr>`;
+      }
+    }
+
+    $("btnGrantAccess").addEventListener("click", async () => {
+      const users = await getDocs(query(collection(db, "users"), where("role", "==", "student")));
+      const courses = await getDocs(collection(db, "courses"));
+      let userOpts = `<option value="">— Select student —</option>`;
+      users.forEach(d => {
+        const u = d.data();
+        userOpts += `<option value="${d.id}" data-name="${escapeHtml(u.fullName || "")}" data-email="${escapeHtml(u.email || "")}">${escapeHtml(u.fullName || u.email)}</option>`;
+      });
+      let courseOpts = `<option value="">— Select course —</option>`;
+      courses.forEach(d => {
+        const c = d.data();
+        courseOpts += `<option value="${d.id}" data-title="${escapeHtml(c.title || "")}">${escapeHtml(c.title || "Untitled")}</option>`;
+      });
+      openModal("Grant Course Access", `
+        <div class="form-group"><label>Student *</label><select id="fStudent">${userOpts}</select></div>
+        <div class="form-group"><label>Course *</label><select id="fCourse">${courseOpts}</select></div>
+        <div class="form-group"><label>Status</label><select id="fStatus"><option value="active">Active</option><option value="pending">Pending</option></select></div>
+      `, async () => {
+        const studentId = $("fStudent").value;
+        const courseId = $("fCourse").value;
+        if (!studentId || !courseId) return toast("Select student and course", "error");
+        const st = $("fStudent").selectedOptions[0];
+        const cr = $("fCourse").selectedOptions[0];
+        await addDoc(collection(db, "courseAccess"), {
+          studentId, studentName: st.dataset.name, studentEmail: st.dataset.email,
+          courseId, courseTitle: cr.dataset.title,
+          status: $("fStatus").value, grantedBy: currentUser?.uid,
+          grantedAt: serverTimestamp(), createdAt: serverTimestamp()
+        });
+        toast("Access record created", "success");
+        closeModal();
+        loadAccess();
+      });
+    });
+
+    // Exams, lessons, subjects, assignments, certificates, payments, forum, nav, notifications — lightweight loaders
+    async function loadSimpleCollection(colName, tableId, cols, renderRow) {
+      const tbody = $(tableId);
+      if (!tbody) return;
+      tbody.innerHTML = `<tr><td colspan="${cols}" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(collection(db, colName));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="${cols}"><div class="empty-state"><p>No records yet. Use the add button to create the first one.</p></div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => { html += renderRow(d.id, d.data()); });
+        tbody.innerHTML = html;
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="${cols}"><div class="empty-state"><p>Collection not ready or empty. Create items to populate.</p></div></td></tr>`;
+      }
+    }
+
+    function loadExams() {
+      loadSimpleCollection("exams", "examsTable", 6, (id, e) => `<tr>
+        <td><strong>${escapeHtml(e.title || "—")}</strong></td>
+        <td>${escapeHtml(e.courseTitle || "—")}</td>
+        <td>${e.durationMinutes || "—"} min</td>
+        <td>${e.questionCount || e.questions?.length || "—"}</td>
+        <td><span class="badge ${e.status==="published"?"badge-success":"badge-warning"}">${e.status||"draft"}</span></td>
+        <td class="actions"><button class="btn btn-sm btn-danger btn-del-exam" data-id="${id}">Delete</button></td>
+      </tr>`);
+      setTimeout(() => {
+        document.querySelectorAll(".btn-del-exam").forEach(btn => {
+          btn.onclick = async () => {
+            if (!(await confirmDialog("Delete Exam", "Delete this exam?"))) return;
+            await deleteDoc(doc(db, "exams", btn.dataset.id));
+            toast("Deleted", "success");
+            loadExams();
+          };
+        });
+      }, 500);
+    }
+
+    $("btnAddExam").addEventListener("click", async () => {
+      const courses = await getDocs(collection(db, "courses"));
+      let opts = `<option value="">— Select —</option>`;
+      courses.forEach(d => { opts += `<option value="${d.id}" data-title="${escapeHtml(d.data().title||"")}">${escapeHtml(d.data().title||"")}</option>`; });
+      openModal("Create Exam", `
+        <div class="form-group"><label>Title *</label><input id="fTitle" /></div>
+        <div class="form-group"><label>Course</label><select id="fCourse">${opts}</select></div>
+        <div class="form-group"><label>Duration (minutes)</label><input type="number" id="fDur" value="60" /></div>
+        <div class="form-group"><label>Status</label><select id="fStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
+      `, async () => {
+        const title = $("fTitle").value.trim();
+        if (!title) return toast("Title required", "error");
+        const cr = $("fCourse").selectedOptions[0];
+        await addDoc(collection(db, "exams"), {
+          title, courseId: $("fCourse").value || null, courseTitle: cr?.dataset?.title || "",
+          durationMinutes: Number($("fDur").value) || 60, status: $("fStatus").value,
+          questionCount: 0, createdAt: serverTimestamp()
+        });
+        toast("Exam created", "success");
+        closeModal();
+        loadExams();
+      });
+    });
+
+    function loadLessons() {
+      loadSimpleCollection("lessons", "lessonsTable", 6, (id, l) => `<tr>
+        <td><strong>${escapeHtml(l.title || "—")}</strong></td>
+        <td>${escapeHtml(l.courseTitle || "—")}</td>
+        <td>${l.order ?? 0}</td>
+        <td>${escapeHtml(l.duration || "—")}</td>
+        <td><span class="badge ${l.isPublished!==false?"badge-success":"badge-muted"}">${l.isPublished!==false?"Published":"Draft"}</span></td>
+        <td class="actions"><button class="btn btn-sm btn-danger btn-del-lesson" data-id="${id}">Delete</button></td>
+      </tr>`);
+    }
+    $("btnAddLesson").addEventListener("click", async () => {
+      const courses = await getDocs(collection(db, "courses"));
+      let opts = `<option value="">—</option>`;
+      courses.forEach(d => { opts += `<option value="${d.id}" data-title="${escapeHtml(d.data().title||"")}">${escapeHtml(d.data().title||"")}</option>`; });
+      openModal("Add Lesson", `
+        <div class="form-group"><label>Title *</label><input id="fTitle" /></div>
+        <div class="form-group"><label>Course</label><select id="fCourse">${opts}</select></div>
+        <div class="form-group"><label>Order</label><input type="number" id="fOrder" value="1" /></div>
+        <div class="form-group"><label>Duration</label><input id="fDur" placeholder="e.g. 15 min" /></div>
+        <div class="form-group"><label>Content / Video URL</label><textarea id="fContent"></textarea></div>
+      `, async () => {
+        const title = $("fTitle").value.trim();
+        if (!title) return toast("Title required", "error");
+        const cr = $("fCourse").selectedOptions[0];
+        await addDoc(collection(db, "lessons"), {
+          title, courseId: $("fCourse").value || null, courseTitle: cr?.dataset?.title || "",
+          order: Number($("fOrder").value) || 1, duration: $("fDur").value.trim(),
+          content: $("fContent").value.trim(), isPublished: true, createdAt: serverTimestamp()
+        });
+        toast("Lesson added", "success");
+        closeModal();
+        loadLessons();
+      });
+    });
+
+    function loadSubjects() {
+      loadSimpleCollection("subjects", "subjectsTable", 5, (id, s) => `<tr>
+        <td><strong>${escapeHtml(s.name || "—")}</strong></td>
+        <td>${escapeHtml(s.courseTitle || "—")}</td>
+        <td>${s.topicCount ?? (s.topics?.length || 0)}</td>
+        <td><span class="badge badge-success">Active</span></td>
+        <td class="actions"><button class="btn btn-sm btn-danger" data-id="${id}" onclick="this.closest('tr').remove()">Delete</button></td>
+      </tr>`);
+    }
+    $("btnAddSubject").addEventListener("click", () => {
+      openModal("Add Subject", `
+        <div class="form-group"><label>Subject Name *</label><input id="fName" /></div>
+        <div class="form-group"><label>Course Title</label><input id="fCourse" /></div>
+        <div class="form-group"><label>Topics (comma-separated)</label><input id="fTopics" placeholder="Topic 1, Topic 2" /></div>
+      `, async () => {
+        const name = $("fName").value.trim();
+        if (!name) return toast("Name required", "error");
+        const topics = $("fTopics").value.split(",").map(t => t.trim()).filter(Boolean);
+        await addDoc(collection(db, "subjects"), {
+          name, courseTitle: $("fCourse").value.trim(), topics, topicCount: topics.length, createdAt: serverTimestamp()
+        });
+        toast("Subject added", "success");
+        closeModal();
+        loadSubjects();
+      });
+    });
+
+    function loadAssignments() {
+      loadSimpleCollection("assignments", "assignmentsTable", 5, (id, a) => `<tr>
+        <td><strong>${escapeHtml(a.title || "—")}</strong></td>
+        <td>${escapeHtml(a.courseTitle || "—")}</td>
+        <td>${formatDate(a.dueDate)}</td>
+        <td><span class="badge badge-info">${a.status || "open"}</span></td>
+        <td class="actions"><button class="btn btn-sm btn-danger btn-del-asg" data-id="${id}">Delete</button></td>
+      </tr>`);
+    }
+    $("btnAddAssignment").addEventListener("click", () => {
+      openModal("Add Assignment", `
+        <div class="form-group"><label>Title *</label><input id="fTitle" /></div>
+        <div class="form-group"><label>Course</label><input id="fCourse" /></div>
+        <div class="form-group"><label>Due Date</label><input type="date" id="fDue" /></div>
+        <div class="form-group"><label>Instructions</label><textarea id="fInst"></textarea></div>
+      `, async () => {
+        const title = $("fTitle").value.trim();
+        if (!title) return toast("Title required", "error");
+        await addDoc(collection(db, "assignments"), {
+          title, courseTitle: $("fCourse").value.trim(), dueDate: $("fDue").value || null,
+          instructions: $("fInst").value.trim(), status: "open", createdAt: serverTimestamp()
+        });
+        toast("Assignment created", "success");
+        closeModal();
+        loadAssignments();
+      });
+    });
+
+    function loadCertificates() {
+      loadSimpleCollection("certificates", "certificatesTable", 5, (id, c) => `<tr>
+        <td>${escapeHtml(c.studentName || "—")}</td>
+        <td>${escapeHtml(c.courseTitle || "—")}</td>
+        <td>${formatDate(c.issuedAt)}</td>
+        <td><code>${escapeHtml(c.certificateId || id.slice(0,8))}</code></td>
+        <td class="actions"><button class="btn btn-sm btn-ghost">View</button></td>
+      </tr>`);
+    }
+    $("btnIssueCert").addEventListener("click", () => {
+      openModal("Issue Certificate", `
+        <div class="form-group"><label>Student Name *</label><input id="fStudent" /></div>
+        <div class="form-group"><label>Course Title *</label><input id="fCourse" /></div>
+      `, async () => {
+        const studentName = $("fStudent").value.trim();
+        const courseTitle = $("fCourse").value.trim();
+        if (!studentName || !courseTitle) return toast("Both fields required", "error");
+        const certificateId = "ME-" + Date.now().toString(36).toUpperCase();
+        await addDoc(collection(db, "certificates"), {
+          studentName, courseTitle, certificateId, issuedAt: serverTimestamp(), issuedBy: currentUser?.uid
+        });
+        toast("Certificate issued: " + certificateId, "success");
+        closeModal();
+        loadCertificates();
+      });
+    });
+
+    function loadPayments() {
+      loadSimpleCollection("payments", "paymentsTable", 6, (id, p) => `<tr>
+        <td>${escapeHtml(p.studentName || p.studentEmail || "—")}</td>
+        <td>${escapeHtml(p.item || p.courseTitle || "—")}</td>
+        <td>${escapeHtml(String(p.amount ?? "—"))} ${escapeHtml(p.currency || "")}</td>
+        <td><span class="badge ${p.status==="completed"?"badge-success":p.status==="failed"?"badge-danger":"badge-warning"}">${p.status||"pending"}</span></td>
+        <td>${formatDate(p.createdAt)}</td>
+        <td class="actions">—</td>
+      </tr>`);
+    }
+
+    function loadForum() {
+      loadSimpleCollection("forumTopics", "forumTable", 5, (id, t) => `<tr>
+        <td><strong>${escapeHtml(t.title || "—")}</strong></td>
+        <td>${escapeHtml(t.authorName || "—")}</td>
+        <td>${t.replyCount ?? 0}</td>
+        <td><span class="badge ${t.isLocked?"badge-danger":"badge-success"}">${t.isLocked?"Locked":"Open"}</span></td>
+        <td class="actions">
+          <button class="btn btn-sm btn-ghost btn-lock-forum" data-id="${id}" data-locked="${!!t.isLocked}">${t.isLocked?"Unlock":"Lock"}</button>
+        </td>
+      </tr>`);
+    }
+
+    function loadNotifications() {
+      loadSimpleCollection("notifications", "notificationsTable", 4, (id, n) => `<tr>
+        <td><strong>${escapeHtml(n.title || "—")}</strong></td>
+        <td>${escapeHtml(n.audience || "all")}</td>
+        <td>${formatDate(n.createdAt)}</td>
+        <td class="actions"><button class="btn btn-sm btn-danger btn-del-notif" data-id="${id}">Delete</button></td>
+      </tr>`);
+    }
+    $("btnSendNotification").addEventListener("click", () => {
+      openModal("Send Notification", `
+        <div class="form-group"><label>Title *</label><input id="fTitle" /></div>
+        <div class="form-group"><label>Message *</label><textarea id="fMsg" rows="4"></textarea></div>
+        <div class="form-group"><label>Audience</label><select id="fAud"><option value="all">All users</option><option value="students">Students</option><option value="teachers">Teachers</option></select></div>
+      `, async () => {
+        const title = $("fTitle").value.trim();
+        const message = $("fMsg").value.trim();
+        if (!title || !message) return toast("Title and message required", "error");
+        await addDoc(collection(db, "notifications"), {
+          title, message, audience: $("fAud").value, createdAt: serverTimestamp(), createdBy: currentUser?.uid
+        });
+        toast("Notification sent", "success");
+        closeModal();
+        loadNotifications();
+      });
+    });
+
+    function loadNav() {
+      loadSimpleCollection("navigation", "navTable", 5, (id, n) => `<tr>
+        <td>${escapeHtml(n.label || "—")}</td>
+        <td>${escapeHtml(n.url || "—")}</td>
+        <td>${n.order ?? 0}</td>
+        <td>${n.visible !== false ? "Yes" : "No"}</td>
+        <td class="actions"><button class="btn btn-sm btn-danger btn-del-nav" data-id="${id}">Delete</button></td>
+      </tr>`);
+    }
+    $("btnAddNav").addEventListener("click", () => {
+      openModal("Add Nav Link", `
+        <div class="form-group"><label>Label *</label><input id="fLabel" /></div>
+        <div class="form-group"><label>URL / Anchor *</label><input id="fUrl" placeholder="#about or /page" /></div>
+        <div class="form-group"><label>Order</label><input type="number" id="fOrder" value="0" /></div>
+      `, async () => {
+        const label = $("fLabel").value.trim();
+        const url = $("fUrl").value.trim();
+        if (!label || !url) return toast("Label and URL required", "error");
+        await addDoc(collection(db, "navigation"), {
+          label, url, order: Number($("fOrder").value) || 0, visible: true, createdAt: serverTimestamp()
+        });
+        toast("Link added", "success");
+        closeModal();
+        loadNav();
+      });
+    });
+
+    // Roles
+    async function loadRoles() {
+      const tbody = $("rolesTable");
+      tbody.innerHTML = `<tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(collection(db, "users"));
+        let html = "";
+        snap.forEach(d => {
+          const u = d.data();
+          const role = (u.role || "student").toLowerCase();
+          if (role === "super_admin") {
+            html += `<tr><td>${escapeHtml(u.fullName||"—")}</td><td>${escapeHtml(u.email||"—")}</td><td><span class="badge badge-info">super_admin</span></td><td>—</td><td>—</td></tr>`;
+            return;
+          }
+          html += `<tr>
+            <td>${escapeHtml(u.fullName||"—")}</td>
+            <td>${escapeHtml(u.email||"—")}</td>
+            <td><span class="badge badge-muted">${role}</span></td>
+            <td>
+              <select class="filter-select role-select" data-id="${d.id}" style="min-width:120px;">
+                <option value="student" ${role==="student"?"selected":""}>student</option>
+                <option value="teacher" ${role==="teacher"?"selected":""}>teacher</option>
+                <option value="admin" ${role==="admin"?"selected":""}>admin</option>
+              </select>
+            </td>
+            <td><button class="btn btn-sm btn-primary btn-save-role" data-id="${d.id}">Save</button></td>
+          </tr>`;
+        });
+        tbody.innerHTML = html || `<tr><td colspan="5"><div class="empty-state"><p>No users.</p></div></td></tr>`;
+        document.querySelectorAll(".btn-save-role").forEach(btn => {
+          btn.onclick = async () => {
+            const sel = document.querySelector(`.role-select[data-id="${btn.dataset.id}"]`);
+            await updateDoc(doc(db, "users", btn.dataset.id), { role: sel.value, updatedAt: serverTimestamp() });
+            toast("Role updated", "success");
+            loadRoles();
+          };
+        });
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="5">Error loading users.</td></tr>`;
+      }
+    }
+
+    // Audit (placeholder from a collection if exists)
+    async function loadAudit() {
+      const tbody = $("auditTable");
+      try {
+        const snap = await getDocs(query(collection(db, "auditLogs"), orderBy("createdAt", "desc"), limit(50)));
+        if (snap.empty) throw new Error("empty");
+        let html = "";
+        snap.forEach(d => {
+          const a = d.data();
+          html += `<tr><td>${escapeHtml(a.userEmail || a.userId || "—")}</td><td>${escapeHtml(a.action || "—")}</td><td>${escapeHtml(a.ip || a.device || "—")}</td><td>${formatDate(a.createdAt)}</td></tr>`;
+        });
+        tbody.innerHTML = html;
+      } catch {
+        tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><p>No audit logs yet. Logs will appear when the system records login and admin actions.</p></div></td></tr>`;
+      }
+    }
+
+    // Settings loaders
+    async function loadSiteSettings() {
+      try {
+        const snap = await getDoc(doc(db, "system", "siteSettings"));
+        if (!snap.exists()) return;
+        const s = snap.data();
+        if (s.heroTitle) $("heroTitle").value = s.heroTitle;
+        if (s.heroSlogan) $("heroSlogan").value = s.heroSlogan;
+        if (s.heroDesc) $("heroDesc").value = s.heroDesc;
+        if (s.aboutText) $("aboutText").value = s.aboutText;
+        if (s.missionText) $("missionText").value = s.missionText;
+        if (s.visionText) $("visionText").value = s.visionText;
+        if (s.footerTagline) $("footerTagline").value = s.footerTagline;
+        if (s.footerEmail) $("footerEmail").value = s.footerEmail;
+        if (s.siteName) $("siteName").value = s.siteName;
+        if (s.defaultLang) $("defaultLang").value = s.defaultLang;
+      } catch (e) { console.warn(e); }
+    }
+
+    $("btnSaveHomepage").addEventListener("click", async () => {
+      await setDoc(doc(db, "system", "siteSettings"), {
+        heroTitle: $("heroTitle").value.trim(),
+        heroSlogan: $("heroSlogan").value.trim(),
+        heroDesc: $("heroDesc").value.trim(),
+        showFeatured: $("showFeatured").value === "true",
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      toast("Homepage settings saved", "success");
+    });
+    $("btnSaveContent").addEventListener("click", async () => {
+      await setDoc(doc(db, "system", "siteSettings"), {
+        aboutText: $("aboutText").value.trim(),
+        missionText: $("missionText").value.trim(),
+        visionText: $("visionText").value.trim(),
+        footerTagline: $("footerTagline").value.trim(),
+        footerEmail: $("footerEmail").value.trim(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      toast("Content saved", "success");
+    });
+    $("btnSaveBranding").addEventListener("click", async () => {
+      await setDoc(doc(db, "system", "siteSettings"), {
+        siteName: $("siteName").value.trim(),
+        colorPrimary: $("colorPrimary").value,
+        colorSecondary: $("colorSecondary").value,
+        colorEmerald: $("colorEmerald").value,
+        logoUrl: $("logoUrl").value.trim(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      toast("Branding saved", "success");
+    });
+    $("btnSaveLangs").addEventListener("click", async () => {
+      await setDoc(doc(db, "system", "siteSettings"), {
+        defaultLang: $("defaultLang").value, updatedAt: serverTimestamp()
+      }, { merge: true });
+      toast("Language settings saved", "success");
+    });
+    $("btnSaveSecurity").addEventListener("click", async () => {
+      await setDoc(doc(db, "system", "securitySettings"), {
+        requireEmailVerify: $("secEmailVerify").value === "true",
+        maxFailedAttempts: Number($("secMaxAttempts").value) || 5,
+        sessionTimeoutMinutes: Number($("secSessionTimeout").value) || 60,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      toast("Security settings saved", "success");
+    });
+    $("btnSaveProfile").addEventListener("click", async () => {
+      if (!currentUser) return;
+      const fullName = $("profileName").value.trim();
+      await setDoc(doc(db, "users", currentUser.uid), { fullName, updatedAt: serverTimestamp() }, { merge: true });
+      document.getElementById("adminName").textContent = fullName || currentUser.email;
+      toast("Profile updated", "success");
+    });
+
+    // Backup
+    async function backupCollection(name) {
+      const snap = await getDocs(collection(db, name));
+      const data = [];
+      snap.forEach(d => data.push({ id: d.id, ...d.data() }));
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `mmsayaya-${name}-backup-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      toast(`Downloaded ${data.length} ${name} records`, "success");
+    }
+    $("btnBackupCategories").onclick = () => backupCollection("categories");
+    $("btnBackupCourses").onclick = () => backupCollection("courses");
+    $("btnBackupQuestions").onclick = () => backupCollection("questionBank");
+
+    // Analytics export
+    $("btnExportUsers").onclick = async () => {
+      const snap = await getDocs(collection(db, "users"));
+      let csv = "fullName,email,role,status\n";
+      snap.forEach(d => {
+        const u = d.data();
+        csv += `"${(u.fullName||"").replace(/"/g,'""')}","${u.email||""}","${u.role||""}","${u.status||""}"\n`;
+      });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+      a.download = "users-export.csv";
+      a.click();
+    };
+    $("btnExportCourses").onclick = async () => {
+      const snap = await getDocs(collection(db, "courses"));
+      let csv = "title,category,status,difficulty\n";
+      snap.forEach(d => {
+        const c = d.data();
+        csv += `"${(c.title||"").replace(/"/g,'""')}","${c.categoryName||""}","${c.status||""}","${c.difficulty||""}"\n`;
+      });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+      a.download = "courses-export.csv";
+      a.click();
+    };
+
+    // Search filters (client-side simple)
+    function bindSearch(inputId, tableId) {
+      const input = $(inputId);
+      if (!input) return;
+      input.addEventListener("input", () => {
+        const q = input.value.toLowerCase();
+        $(tableId)?.querySelectorAll("tbody tr").forEach(tr => {
+          tr.style.display = tr.textContent.toLowerCase().includes(q) ? "" : "none";
+        });
+      });
+    }
+    ["catSearch","courseSearch","studentSearch","teacherSearch","qSearch","examSearch","accessSearch","paymentSearch","roleSearch","subjectSearch","lessonSearch"].forEach(id => {
+      const tableMap = {
+        catSearch: "categoriesTable", courseSearch: "coursesTable", studentSearch: "studentsTable",
+        teacherSearch: "teachersTable", qSearch: "questionsTable", examSearch: "examsTable",
+        accessSearch: "accessTable", paymentSearch: "paymentsTable", roleSearch: "rolesTable",
+        subjectSearch: "subjectsTable", lessonSearch: "lessonsTable"
+      };
+      bindSearch(id, tableMap[id]);
+    });
+
+    // View data router
+    function loadViewData(name) {
+      switch (name) {
+        case "overview": loadOverview(); break;
+        case "categories": loadCategories(); break;
+        case "courses": loadCourses(); break;
+        case "students": loadUsersByRole("student", "studentsTable"); break;
+        case "teachers": loadUsersByRole("teacher", "teachersTable"); break;
+        case "announcements": loadAnnouncements(); break;
+        case "contacts": loadContacts(); break;
+        case "questions": loadQuestions(); break;
+        case "access": loadAccess(); break;
+        case "exams": loadExams(); break;
+        case "lessons": loadLessons(); break;
+        case "subjects": loadSubjects(); break;
+        case "assignments": loadAssignments(); break;
+        case "certificates": loadCertificates(); break;
+        case "payments": loadPayments(); break;
+        case "forum": loadForum(); break;
+        case "notifications": loadNotifications(); break;
+        case "navigation": loadNav(); break;
+        case "roles": loadRoles(); break;
+        case "audit": loadAudit(); break;
+        case "homepage":
+        case "content":
+        case "branding":
+        case "languages": loadSiteSettings(); break;
+        case "analytics":
+          loadOverview().then(() => {
+            $("anTotalUsers").textContent = (Number($("statStudents").textContent)||0) + (Number($("statTeachers").textContent)||0);
+            $("anActiveStudents").textContent = $("statStudents").textContent;
+            $("anCompleted").textContent = "—";
+            $("anExams").textContent = "—";
+          });
+          break;
+        default: break;
+      }
+    }
+  
+  </script>
+</body>
+</html>
