@@ -484,6 +484,33 @@
       .topbar { padding:0 14px; }
     }
   
+
+    /* School & Branding modules */
+    .school-badge { display:inline-block; padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:600; background:#e3f2fd; color:#0D47A1; }
+    .lga-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px; max-height:220px; overflow:auto; padding:8px; border:1px solid var(--border); border-radius:10px; background:#fafbfc; }
+    .lga-chip { padding:6px 10px; border-radius:8px; border:1px solid var(--border); font-size:0.78rem; cursor:pointer; background:#fff; text-align:center; }
+    .lga-chip.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+    .upload-zone { border:2px dashed var(--border); border-radius:12px; padding:24px; text-align:center; background:#fafbfc; cursor:pointer; }
+    .upload-zone:hover { border-color:var(--primary); background:#f0f7ff; }
+    .upload-zone img { max-height:80px; margin-top:8px; border-radius:8px; }
+    .preview-bar { background:#fff8e1; border:1px solid #ffe082; border-radius:10px; padding:12px 16px; margin-bottom:16px; font-size:0.85rem; }
+    .role-pill { display:inline-block; padding:2px 8px; border-radius:12px; font-size:0.7rem; font-weight:600; background:#e8f5e9; color:#2e7d32; }
+    #schoolApp, #teacherSchoolApp, #formMasterApp { display:none !important; }
+    html.is-school #schoolApp { display:flex !important; }
+    html.is-school body > header.header,
+    html.is-school body > section,
+    html.is-school body > footer,
+    html.is-school #loginView,
+    html.is-school #adminApp { display:none !important; }
+    html.is-teacher-school #teacherSchoolApp { display:flex !important; }
+    html.is-teacher-school body > header.header,
+    html.is-teacher-school body > section,
+    html.is-teacher-school body > footer,
+    html.is-teacher-school #loginView,
+    html.is-teacher-school #adminApp,
+    html.is-teacher-school #schoolApp { display:none !important; }
+    .marks-table input[type="number"] { width:64px; padding:6px; border:1px solid var(--border); border-radius:6px; }
+
     /* Admin view: only when html.is-admin */
     #adminApp { display: none !important; }
     html.is-admin #adminApp { display: flex !important; }
@@ -503,6 +530,7 @@
         <a href="#categories">Explore Learning</a>
         <a href="#practice">Practice Questions</a>
         <a href="#announcements">Announcements</a>
+        <a href="#school-register">School Registration</a>
         <a href="#contact">Contact Us</a>
       </nav>
       <div class="header-actions">
@@ -518,6 +546,8 @@
     <div class="mobile-nav" id="mobileNav">
       <a href="index.html">Home</a><a href="#about">About Us</a><a href="#categories">Explore Learning</a>
       <a href="#practice">Practice Questions</a><a href="#announcements">Announcements</a>
+      <a href="#school-register">School Registration</a>
+        <a href="#school-register">School Registration</a>
       <a href="#contact">Contact Us</a><a href="#login">Login</a>
     </div>
   </header>
@@ -690,6 +720,40 @@
     </div>
   </section>
 
+  
+  <section class="section" id="school-register" style="background:#fff;">
+    <div class="container">
+      <div class="section-header">
+        <h2>Katsina State School Registration</h2>
+        <p>Primary and Secondary schools in Katsina State can request platform access. Admin verifies before activation.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>How it works</h3>
+          <div class="contact-item"><span>1.</span><span>Submit school details below</span></div>
+          <div class="contact-item"><span>2.</span><span>Platform Admin reviews & verifies</span></div>
+          <div class="contact-item"><span>3.</span><span>Choose a subscription plan & pay</span></div>
+          <div class="contact-item"><span>4.</span><span>Receive Headmaster/Principal login</span></div>
+          <p style="margin-top:16px;font-size:0.9rem;color:var(--text-muted);">All 34 LGAs of Katsina State are supported. No school is created until Admin approves your request.</p>
+        </div>
+        <div class="contact-form">
+          <div class="form-alert" id="schoolRegAlert"></div>
+          <div class="form-group"><label>School Name *</label><input type="text" id="srName" placeholder="Official school name" /></div>
+          <div class="form-group"><label>School Type *</label>
+            <select id="srType"><option value="">— Select —</option><option value="primary">Primary</option><option value="secondary">Secondary</option></select>
+          </div>
+          <div class="form-group"><label>Local Government Area *</label><select id="srLga"><option value="">— Select LGA —</option></select></div>
+          <div class="form-group"><label>School Address</label><input type="text" id="srAddress" /></div>
+          <div class="form-group"><label>Headmaster / Principal Name *</label><input type="text" id="srHeadName" /></div>
+          <div class="form-group"><label>Official Email *</label><input type="email" id="srEmail" /></div>
+          <div class="form-group"><label>Phone / WhatsApp *</label><input type="tel" id="srPhone" /></div>
+          <div class="form-group"><label>Additional notes</label><textarea id="srNotes" rows="3"></textarea></div>
+          <button class="btn btn-primary" id="srSubmitBtn" style="width:100%;">Submit Registration Request</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="contact">
     <div class="container">
       <div class="section-header"><h2>Get In Touch</h2><p>Have a question or want to request course access? Contact us.</p></div>
@@ -725,7 +789,8 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand"><h3>MMSAYAYA EDUVERSE</h3><p>Learn Today, Lead Tomorrow. A complete multi-disciplinary online learning management system.</p></div>
-        <div class="footer-col"><h4>Quick Links</h4><a href="index.html">Home</a><a href="#about">About Us</a><a href="#categories">Explore Learning</a><a href="#practice">Practice Questions</a><a href="#contact">Contact Us</a></div>
+        <div class="footer-col"><h4>Quick Links</h4><a href="index.html">Home</a><a href="#about">About Us</a><a href="#categories">Explore Learning</a><a href="#practice">Practice Questions</a><a href="#school-register">School Registration</a>
+        <a href="#contact">Contact Us</a></div>
         <div class="footer-col"><h4>Learning Categories</h4><a href="#categories">Computer Science</a><a href="#categories">Mathematics</a><a href="#categories">Web Development</a><a href="#categories">Islamic Studies</a><a href="#categories">More Categories</a></div>
         <div class="footer-col"><h4>Contact</h4><a href="mailto:info@mmsayaya.edu">info@mmsayaya.edu</a><a href="#contact">WhatsApp Support</a><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a></div>
       </div>
@@ -756,6 +821,7 @@
           <button class="nav-item" data-view="homepage"><span class="icon">🏠</span> Homepage</button>
           <button class="nav-item" data-view="content"><span class="icon">📝</span> Website Content</button>
           <button class="nav-item" data-view="branding"><span class="icon">🎨</span> Branding & Settings</button>
+          <button class="nav-item" data-view="appearance"><span class="icon">🖼️</span> Appearance & Media</button>
           <button class="nav-item" data-view="navigation"><span class="icon">🔗</span> Navigation</button>
           <button class="nav-item" data-view="languages"><span class="icon">🌐</span> Languages</button>
         </div>
@@ -785,6 +851,22 @@
           <button class="nav-item" data-view="notifications"><span class="icon">🔔</span> Notifications</button>
           <button class="nav-item" data-view="contacts"><span class="icon">✉️</span> Contact Requests</button>
           <button class="nav-item" data-view="forum"><span class="icon">💬</span> Discussion Forum</button>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Katsina Schools</div>
+          <button class="nav-item" data-view="ks-overview"><span class="icon">🏫</span> Schools Overview</button>
+          <button class="nav-item" data-view="ks-primary"><span class="icon">📘</span> Primary Schools</button>
+          <button class="nav-item" data-view="ks-secondary"><span class="icon">📗</span> Secondary Schools</button>
+          <button class="nav-item" data-view="ks-directory"><span class="icon">📋</span> School Directory</button>
+          <button class="nav-item" data-view="ks-registrations"><span class="icon">📝</span> Registration Requests</button>
+          <button class="nav-item" data-view="ks-verification"><span class="icon">✅</span> School Verification</button>
+          <button class="nav-item" data-view="ks-admins"><span class="icon">👤</span> School Administrators</button>
+          <button class="nav-item" data-view="ks-plans"><span class="icon">💳</span> Subscription Plans</button>
+          <button class="nav-item" data-view="ks-subscriptions"><span class="icon">📅</span> School Subscriptions</button>
+          <button class="nav-item" data-view="ks-payments"><span class="icon">💰</span> Payment Verification</button>
+          <button class="nav-item" data-view="ks-reports"><span class="icon">📊</span> Schools Reports</button>
+          <button class="nav-item" data-view="ks-import"><span class="icon">📥</span> Bulk School Import</button>
         </div>
         <div class="nav-section">
           <div class="nav-section-title">System</div>
@@ -1433,6 +1515,229 @@
         </div>
 
         <!-- ========== PROFILE ========== -->
+        
+        <!-- ========== APPEARANCE & MEDIA ========== -->
+        <div class="view" id="view-appearance">
+          <div class="card">
+            <div class="card-header"><h2>Website Appearance & Media</h2></div>
+            <div class="card-body">
+              <div class="preview-bar" id="appearancePreviewNote">Changes save to Firestore + Firebase Storage. Public site reads logo/name when wired.</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Website Logo</label>
+                  <div class="upload-zone" id="logoUploadZone">Click or drop logo image<input type="file" id="logoFile" accept="image/*" hidden /></div>
+                  <img id="logoPreview" alt="" style="max-height:64px;margin-top:8px;display:none;" />
+                </div>
+                <div class="form-group">
+                  <label>Favicon</label>
+                  <div class="upload-zone" id="faviconUploadZone">Click or drop favicon<input type="file" id="faviconFile" accept="image/*" hidden /></div>
+                  <img id="faviconPreview" alt="" style="max-height:32px;margin-top:8px;display:none;" />
+                </div>
+              </div>
+              <div class="form-group"><label>Homepage Banner</label>
+                <div class="upload-zone" id="bannerUploadZone">Click or drop banner<input type="file" id="bannerFile" accept="image/*" hidden /></div>
+                <img id="bannerPreview" alt="" style="max-width:100%;max-height:120px;margin-top:8px;display:none;" />
+              </div>
+              <div class="form-group"><label>About Us Image URL (or upload)</label>
+                <input type="url" id="aboutImageUrl" placeholder="https://…" />
+                <input type="file" id="aboutImageFile" accept="image/*" style="margin-top:8px;" />
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Site Name</label><input type="text" id="appSiteName" value="MMSAYAYA EDUVERSE" /></div>
+                <div class="form-group"><label>Slogan</label><input type="text" id="appSlogan" value="Learn Today, Lead Tomorrow." /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Primary Colour</label><input type="color" id="appColorPrimary" value="#0D47A1" /></div>
+                <div class="form-group"><label>Secondary</label><input type="color" id="appColorSecondary" value="#1976D2" /></div>
+                <div class="form-group"><label>Emerald</label><input type="color" id="appColorEmerald" value="#00796B" /></div>
+                <div class="form-group"><label>Gold accent</label><input type="color" id="appColorGold" value="#C9A227" /></div>
+              </div>
+              <button class="btn btn-primary" id="btnSaveAppearance">Save & Publish Appearance</button>
+              <button class="btn btn-outline" id="btnPreviewAppearance" type="button">Preview colours on this panel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== KATSINA SCHOOLS OVERVIEW ========== -->
+        <div class="view" id="view-ks-overview">
+          <div class="stats-grid" id="ksStats">
+            <div class="stat-card"><div class="label">Primary Schools</div><div class="value" id="ksStatPrimary">0</div></div>
+            <div class="stat-card emerald"><div class="label">Secondary Schools</div><div class="value" id="ksStatSecondary">0</div></div>
+            <div class="stat-card"><div class="label">Verified</div><div class="value" id="ksStatVerified">0</div></div>
+            <div class="stat-card gold"><div class="label">Pending Requests</div><div class="value" id="ksStatPending">0</div></div>
+            <div class="stat-card"><div class="label">Active Subscriptions</div><div class="value" id="ksStatSubs">0</div></div>
+            <div class="stat-card"><div class="label">LGAs Covered</div><div class="value" id="ksStatLgas">0</div></div>
+          </div>
+          <div class="card"><div class="card-header"><h2>Katsina State — 34 LGAs</h2></div>
+            <div class="card-body"><div class="lga-grid" id="ksLgaGrid"></div></div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-primary">
+          <div class="card">
+            <div class="card-header"><h2>Primary Schools</h2>
+              <button class="btn btn-primary" id="btnAddPrimarySchool">+ Add Primary School</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="primarySchoolSearch" placeholder="Search by name, code, LGA…" /></div>
+                <select class="filter-select" id="primaryLgaFilter"><option value="all">All LGAs</option></select>
+                <select class="filter-select" id="primaryStatusFilter"><option value="all">All status</option><option value="active">Active</option><option value="pending">Pending</option><option value="suspended">Suspended</option><option value="archived">Archived</option></select>
+              </div>
+              <div class="table-wrap"><table>
+                <thead><tr><th>School</th><th>Code</th><th>LGA</th><th>Status</th><th>Verified</th><th>Actions</th></tr></thead>
+                <tbody id="primarySchoolsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-secondary">
+          <div class="card">
+            <div class="card-header"><h2>Secondary Schools</h2>
+              <button class="btn btn-primary" id="btnAddSecondarySchool">+ Add Secondary School</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="secondarySchoolSearch" placeholder="Search…" /></div>
+                <select class="filter-select" id="secondaryLgaFilter"><option value="all">All LGAs</option></select>
+                <select class="filter-select" id="secondaryStatusFilter"><option value="all">All status</option><option value="active">Active</option><option value="pending">Pending</option><option value="suspended">Suspended</option><option value="archived">Archived</option></select>
+              </div>
+              <div class="table-wrap"><table>
+                <thead><tr><th>School</th><th>Code</th><th>LGA</th><th>Status</th><th>Verified</th><th>Actions</th></tr></thead>
+                <tbody id="secondarySchoolsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-directory">
+          <div class="card">
+            <div class="card-header"><h2>School Directory</h2></div>
+            <div class="card-body">
+              <div class="toolbar">
+                <div class="search-box"><input type="text" id="dirSearch" placeholder="Search all schools…" /></div>
+                <select class="filter-select" id="dirTypeFilter"><option value="all">All types</option><option value="primary">Primary</option><option value="secondary">Secondary</option></select>
+                <select class="filter-select" id="dirLgaFilter"><option value="all">All LGAs</option></select>
+              </div>
+              <div class="table-wrap"><table>
+                <thead><tr><th>Name</th><th>Type</th><th>LGA</th><th>Code</th><th>Status</th><th>Subscription</th></tr></thead>
+                <tbody id="directoryTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-registrations">
+          <div class="card">
+            <div class="card-header"><h2>School Registration Requests</h2></div>
+            <div class="card-body">
+              <div class="toolbar">
+                <select class="filter-select" id="regStatusFilter"><option value="all">All</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select>
+              </div>
+              <div class="table-wrap"><table>
+                <thead><tr><th>School</th><th>Type</th><th>LGA</th><th>Contact</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                <tbody id="registrationsTable"><tr><td colspan="7" class="loading"><div class="spinner"></div></td></tr></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-verification">
+          <div class="card">
+            <div class="card-header"><h2>School Verification</h2></div>
+            <div class="card-body">
+              <p style="color:var(--text-muted);margin-bottom:12px;font-size:0.9rem;">Verify schools after reviewing registration details. Only verified schools can activate subscriptions.</p>
+              <div class="table-wrap"><table>
+                <thead><tr><th>School</th><th>Type</th><th>LGA</th><th>Verified</th><th>Actions</th></tr></thead>
+                <tbody id="verificationTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-admins">
+          <div class="card">
+            <div class="card-header"><h2>School Administrators</h2>
+              <button class="btn btn-primary" id="btnLinkSchoolAdmin">+ Link Administrator</button>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap"><table>
+                <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>School</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="schoolAdminsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-plans">
+          <div class="card">
+            <div class="card-header"><h2>Subscription Plans</h2>
+              <button class="btn btn-primary" id="btnAddPlan">+ Add Plan</button>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap"><table>
+                <thead><tr><th>Name</th><th>Billing</th><th>Price (₦)</th><th>Duration</th><th>Features</th><th>Active</th><th>Actions</th></tr></thead>
+                <tbody id="plansTable"><tr><td colspan="7" class="loading"><div class="spinner"></div></td></tr></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-subscriptions">
+          <div class="card">
+            <div class="card-header"><h2>School Subscriptions</h2>
+              <button class="btn btn-primary" id="btnAssignSub">+ Assign Subscription</button>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap"><table>
+                <thead><tr><th>School</th><th>Plan</th><th>Start</th><th>End</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="subscriptionsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-payments">
+          <div class="card">
+            <div class="card-header"><h2>Payment Verification (Manual)</h2></div>
+            <div class="card-body">
+              <p style="color:var(--text-muted);margin-bottom:12px;font-size:0.9rem;">Confirm bank transfers / POS payments manually. Gateway-ready fields included.</p>
+              <div class="table-wrap"><table>
+                <thead><tr><th>School</th><th>Amount</th><th>Reference</th><th>Method</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                <tbody id="schoolPaymentsTable"><tr><td colspan="7" class="loading"><div class="spinner"></div></td></tr></tbody>
+              </table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-reports">
+          <div class="card">
+            <div class="card-header"><h2>Schools Reports & Analytics</h2></div>
+            <div class="card-body">
+              <div class="stats-grid">
+                <div class="stat-card"><div class="label">Schools by LGA (top)</div><div class="value" id="ksReportTopLga">—</div></div>
+                <div class="stat-card"><div class="label">Expiring in 30 days</div><div class="value" id="ksReportExpiring">—</div></div>
+              </div>
+              <button class="btn btn-outline" id="btnExportSchools">Export Schools CSV</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="view-ks-import">
+          <div class="card">
+            <div class="card-header"><h2>Bulk School Import (CSV)</h2></div>
+            <div class="card-body">
+              <p style="margin-bottom:12px;color:var(--text-muted);font-size:0.9rem;">
+                Columns: <strong>name, type, lga, code, address, phone, email, headName</strong>. Type must be <code>primary</code> or <code>secondary</code>. LGA must match Katsina list. No fake auto-fill — only rows you provide.
+              </p>
+              <div class="form-group"><label>CSV file</label><input type="file" id="schoolImportFile" accept=".csv,text/csv" /></div>
+              <button class="btn btn-primary" id="btnImportSchools" disabled>Import Schools</button>
+              <div id="schoolImportResult" style="margin-top:16px;"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="view" id="view-profile">
           <div class="card">
             <div class="card-header"><h2>Admin Profile & Settings</h2></div>
@@ -1444,6 +1749,156 @@
               <h3 style="font-size:0.95rem;margin-bottom:12px;">Change Password</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">Use Firebase “Forgot password” from the login page, or contact Super Admin.</p>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========== SCHOOL ADMIN DASHBOARD ========== -->
+  <div class="app" id="schoolApp">
+    <aside class="sidebar" id="schoolSidebar">
+      <div class="sidebar-brand">
+        <div class="logo">ME</div>
+        <div><span id="schoolBrandName">School</span><small>School Admin</small></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">School</div>
+          <button class="nav-item active" data-sview="s-overview"><span class="icon">📊</span> Overview</button>
+          <button class="nav-item" data-sview="s-profile"><span class="icon">🏫</span> Profile & Logo</button>
+          <button class="nav-item" data-sview="s-teachers"><span class="icon">👩‍🏫</span> Teachers</button>
+          <button class="nav-item" data-sview="s-formmasters"><span class="icon">📎</span> Form Masters</button>
+          <button class="nav-item" data-sview="s-students"><span class="icon">👨‍🎓</span> Students</button>
+          <button class="nav-item" data-sview="s-classes"><span class="icon">📚</span> Classes</button>
+          <button class="nav-item" data-sview="s-subjects"><span class="icon">📖</span> Subjects</button>
+          <button class="nav-item" data-sview="s-sessions"><span class="icon">📆</span> Sessions & Terms</button>
+          <button class="nav-item" data-sview="s-exams"><span class="icon">📋</span> Examinations</button>
+          <button class="nav-item" data-sview="s-results"><span class="icon">📝</span> Results</button>
+          <button class="nav-item" data-sview="s-reports"><span class="icon">📄</span> Report Cards</button>
+          <button class="nav-item" data-sview="s-attendance"><span class="icon">✓</span> Attendance</button>
+          <button class="nav-item" data-sview="s-announcements"><span class="icon">📢</span> Announcements</button>
+          <button class="nav-item" data-sview="s-billing"><span class="icon">💳</span> Subscription</button>
+          <button class="nav-item" data-sview="s-settings"><span class="icon">⚙️</span> Settings</button>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="avatar" id="schoolUserAvatar">S</div>
+          <div class="info"><div class="name" id="schoolUserName">Admin</div><div class="role" id="schoolUserRole">Headmaster</div></div>
+        </div>
+        <button class="btn-logout" id="schoolLogoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left"><h1 class="page-title" id="schoolPageTitle">Overview</h1></div>
+        <div class="topbar-right"><span class="topbar-badge" id="schoolSubBadge">Subscription</span></div>
+      </header>
+      <div class="content">
+        <div class="view active" id="sview-s-overview">
+          <div class="stats-grid">
+            <div class="stat-card"><div class="label">Teachers</div><div class="value" id="sStatTeachers">0</div></div>
+            <div class="stat-card"><div class="label">Students</div><div class="value" id="sStatStudents">0</div></div>
+            <div class="stat-card"><div class="label">Classes</div><div class="value" id="sStatClasses">0</div></div>
+            <div class="stat-card emerald"><div class="label">Subscription</div><div class="value" id="sStatSub" style="font-size:1rem;">—</div></div>
+          </div>
+          <div class="card"><div class="card-header"><h2>School Overview</h2></div>
+            <div class="card-body" id="schoolOverviewBody"><p class="empty-state">Load your school profile after login.</p></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-profile">
+          <div class="card"><div class="card-header"><h2>School Profile</h2></div>
+            <div class="card-body">
+              <div class="form-group"><label>School Name</label><input id="spName" /></div>
+              <div class="form-group"><label>Address</label><input id="spAddress" /></div>
+              <div class="form-group"><label>Phone</label><input id="spPhone" /></div>
+              <div class="form-group"><label>Logo</label><input type="file" id="spLogoFile" accept="image/*" /></div>
+              <button class="btn btn-primary" id="btnSaveSchoolProfile">Save Profile</button>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-teachers">
+          <div class="card"><div class="card-header"><h2>Teachers</h2><button class="btn btn-primary" id="btnAddSchoolTeacher">+ Add Teacher</button></div>
+            <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Subjects</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="schoolTeachersTable"><tr><td colspan="5"><div class="empty-state">No teachers yet.</div></td></tr></tbody></table></div></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-formmasters">
+          <div class="card"><div class="card-header"><h2>Form Masters</h2></div>
+            <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Class</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="formMastersTable"><tr><td colspan="4"><div class="empty-state">Assign form masters from teachers.</div></td></tr></tbody></table></div></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-students">
+          <div class="card"><div class="card-header"><h2>Students</h2><button class="btn btn-primary" id="btnAddSchoolStudent">+ Add Student</button></div>
+            <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Admission No</th><th>Class</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="schoolStudentsTable"><tr><td colspan="5"><div class="empty-state">No students yet.</div></td></tr></tbody></table></div></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-classes">
+          <div class="card"><div class="card-header"><h2>Classes</h2><button class="btn btn-primary" id="btnAddClass">+ Add Class</button></div>
+            <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Level</th><th>Form Master</th><th>Actions</th></tr></thead>
+              <tbody id="schoolClassesTable"><tr><td colspan="4"><div class="empty-state">No classes yet.</div></td></tr></tbody></table></div></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-subjects">
+          <div class="card"><div class="card-header"><h2>Subjects</h2><button class="btn btn-primary" id="btnAddSchoolSubject">+ Add Subject</button></div>
+            <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Subject</th><th>Code</th><th>Actions</th></tr></thead>
+              <tbody id="schoolSubjectsTable"><tr><td colspan="3"><div class="empty-state">No subjects yet.</div></td></tr></tbody></table></div></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-sessions">
+          <div class="card"><div class="card-header"><h2>Academic Sessions & Terms</h2><button class="btn btn-primary" id="btnAddSession">+ Session</button></div>
+            <div class="card-body" id="sessionsBody"><p class="empty-state">Define sessions (e.g. 2025/2026) and terms.</p></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-exams">
+          <div class="card"><div class="card-header"><h2>Examination Setup</h2></div>
+            <div class="card-body"><p class="empty-state">Configure CA1, CA2, Exam weights and grading scale for your school.</p>
+              <div class="form-row">
+                <div class="form-group"><label>CA1 max</label><input type="number" id="gradeCa1" value="20" /></div>
+                <div class="form-group"><label>CA2 max</label><input type="number" id="gradeCa2" value="20" /></div>
+                <div class="form-group"><label>Exam max</label><input type="number" id="gradeExam" value="60" /></div>
+              </div>
+              <button class="btn btn-primary" id="btnSaveGrading">Save Grading</button>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-results">
+          <div class="card"><div class="card-header"><h2>Results Management</h2></div>
+            <div class="card-body"><p class="empty-state">Review submitted subject marks. Approve class results before report cards.</p>
+              <div class="table-wrap"><table><thead><tr><th>Class</th><th>Subject</th><th>Term</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="schoolResultsTable"><tr><td colspan="5"><div class="empty-state">No submissions yet.</div></td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-reports">
+          <div class="card"><div class="card-header"><h2>Report Cards</h2></div>
+            <div class="card-body"><p class="empty-state">Generate individual report cards and class broadsheets after results are approved.</p>
+              <button class="btn btn-outline" id="btnGenBroadsheet">Generate Broadsheet (selected class)</button>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-attendance">
+          <div class="card"><div class="card-header"><h2>Attendance</h2></div>
+            <div class="card-body"><p class="empty-state">Record daily attendance per class.</p></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-announcements">
+          <div class="card"><div class="card-header"><h2>School Announcements</h2><button class="btn btn-primary" id="btnSchoolAnn">+ Post</button></div>
+            <div class="card-body"><div id="schoolAnnList" class="empty-state">No announcements.</div></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-billing">
+          <div class="card"><div class="card-header"><h2>Payment & Subscription</h2></div>
+            <div class="card-body" id="schoolBillingBody"><p class="empty-state">Subscription status and renewal.</p></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-settings">
+          <div class="card"><div class="card-header"><h2>Settings</h2></div>
+            <div class="card-body"><p class="empty-state">School-level preferences.</p></div>
           </div>
         </div>
       </div>
@@ -1602,7 +2057,14 @@
       student: "student-dashboard.html",
       teacher: "teacher-dashboard.html",
       admin: "#admin",
-      super_admin: "#admin"
+      super_admin: "#admin",
+      platform_admin: "#admin",
+      headmaster: "#school",
+      principal: "#school",
+      school_admin: "#school",
+      exam_officer: "#school",
+      form_master: "#school",
+      subject_teacher: "#school"
     };
     const ROLE_LABELS = { student:"Student", teacher:"Teacher", admin:"Admin", super_admin:"Super Admin" };
 
@@ -1619,10 +2081,12 @@
     function applyRoute(scroll) {
       const isLogin = location.hash === "#login";
       const isAdmin = location.hash === "#admin";
+      const isSchool = location.hash === "#school";
       document.documentElement.classList.toggle("is-login", isLogin);
       document.documentElement.classList.toggle("is-admin", isAdmin);
+      document.documentElement.classList.toggle("is-school", isSchool);
       byId("mobileNav").classList.remove("show");
-      if (isAdmin) { window.scrollTo(0, 0); return; }
+      if (isAdmin || isSchool) { window.scrollTo(0, 0); return; }
       if (isLogin) { window.scrollTo(0, 0); refreshSetupState(); }
       else if (scroll && location.hash.length > 1) {
         try { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); } catch (e) {}
@@ -3256,6 +3720,693 @@
       }
     }
   
+  </script>
+
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import {
+      getFirestore, collection, getDocs, getDoc, addDoc, setDoc, updateDoc, deleteDoc,
+      doc, query, where, orderBy, limit, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlEw1Pb5HzIePo5SlolYm9ofvCUSBS0wM",
+      authDomain: "mmsayaya-academy.firebaseapp.com",
+      projectId: "mmsayaya-academy",
+      storageBucket: "mmsayaya-academy.firebasestorage.app",
+      messagingSenderId: "261003419792",
+      appId: "1:261003419792:web:9710d497a942a92c10b815",
+      measurementId: "G-0N2Q1V11LG"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const KATSINA_LGAS = [
+      "Bakori","Batagarawa","Batsari","Baure","Bindawa","Charanchi","Dandume","Danja","Dan Musa",
+      "Daura","Dutsi","Dutsin-Ma","Faskari","Funtua","Ingawa","Jibia","Kafur","Kaita","Kankara",
+      "Kankia","Katsina","Kurfi","Kusada","Mai'Adua","Malumfashi","Mani","Mashi","Matazu","Musawa",
+      "Rimi","Sabuwa","Safana","Sandamu","Zango"
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    function toast(msg, type) {
+      const c = $("toastContainer");
+      if (!c) { console.log(msg); return; }
+      const el = document.createElement("div");
+      el.className = "toast " + (type || "info");
+      el.innerHTML = `<span class="msg">${msg}</span><button class="close">&times;</button>`;
+      el.querySelector(".close").onclick = () => el.remove();
+      c.appendChild(el);
+      setTimeout(() => el.remove(), 4500);
+    }
+    function escapeHtml(s) {
+      if (s == null) return "";
+      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+    function formatDate(ts) {
+      if (!ts) return "—";
+      try { const d = ts.toDate ? ts.toDate() : new Date(ts); return d.toLocaleDateString("en-GB", { day:"2-digit", month:"short", year:"numeric" }); }
+      catch { return "—"; }
+    }
+
+    // Fill LGA selects
+    function fillLgaSelects() {
+      ["srLga","primaryLgaFilter","secondaryLgaFilter","dirLgaFilter"].forEach(id => {
+        const el = $(id);
+        if (!el) return;
+        const keep = el.querySelector('option[value="all"],option[value=""]');
+        const first = keep ? keep.outerHTML : '<option value="all">All LGAs</option>';
+        el.innerHTML = first + KATSINA_LGAS.map(l => `<option value="${l}">${l}</option>`).join("");
+      });
+      const grid = $("ksLgaGrid");
+      if (grid) grid.innerHTML = KATSINA_LGAS.map(l => `<div class="lga-chip">${l}</div>`).join("");
+    }
+    fillLgaSelects();
+
+    // Public school registration
+    $("srSubmitBtn")?.addEventListener("click", async () => {
+      const name = $("srName")?.value.trim();
+      const type = $("srType")?.value;
+      const lga = $("srLga")?.value;
+      const headName = $("srHeadName")?.value.trim();
+      const email = $("srEmail")?.value.trim();
+      const phone = $("srPhone")?.value.trim();
+      const alertEl = $("schoolRegAlert");
+      if (!name || !type || !lga || !headName || !email || !phone) {
+        if (alertEl) { alertEl.textContent = "Fill all required fields."; alertEl.className = "form-alert error show"; }
+        return;
+      }
+      if (!KATSINA_LGAS.includes(lga)) {
+        if (alertEl) { alertEl.textContent = "Select a valid Katsina LGA."; alertEl.className = "form-alert error show"; }
+        return;
+      }
+      try {
+        await addDoc(collection(db, "schoolRegistrationRequests"), {
+          schoolName: name, schoolType: type, lga,
+          address: $("srAddress")?.value.trim() || "",
+          headName, email, phone,
+          notes: $("srNotes")?.value.trim() || "",
+          status: "pending",
+          createdAt: serverTimestamp()
+        });
+        if (alertEl) { alertEl.textContent = "Request submitted. Admin will review and contact you."; alertEl.className = "form-alert success show"; }
+        ["srName","srAddress","srHeadName","srEmail","srPhone","srNotes"].forEach(id => { if ($(id)) $(id).value = ""; });
+        if ($("srType")) $("srType").value = "";
+        if ($("srLga")) $("srLga").value = "";
+      } catch (e) {
+        if (alertEl) { alertEl.textContent = "Could not submit. Try again."; alertEl.className = "form-alert error show"; }
+      }
+    });
+
+    // Storage upload helper
+    async function uploadImage(file, path) {
+      const r = ref(storage, path);
+      await uploadBytes(r, file);
+      return getDownloadURL(r);
+    }
+
+    // Appearance
+    async function loadAppearance() {
+      try {
+        const snap = await getDoc(doc(db, "system", "appearance"));
+        if (!snap.exists()) return;
+        const a = snap.data();
+        if (a.siteName && $("appSiteName")) $("appSiteName").value = a.siteName;
+        if (a.slogan && $("appSlogan")) $("appSlogan").value = a.slogan;
+        if (a.colorPrimary && $("appColorPrimary")) $("appColorPrimary").value = a.colorPrimary;
+        if (a.colorSecondary && $("appColorSecondary")) $("appColorSecondary").value = a.colorSecondary;
+        if (a.colorEmerald && $("appColorEmerald")) $("appColorEmerald").value = a.colorEmerald;
+        if (a.colorGold && $("appColorGold")) $("appColorGold").value = a.colorGold;
+        if (a.logoUrl && $("logoPreview")) { $("logoPreview").src = a.logoUrl; $("logoPreview").style.display = "block"; }
+        if (a.faviconUrl && $("faviconPreview")) { $("faviconPreview").src = a.faviconUrl; $("faviconPreview").style.display = "block"; }
+        if (a.bannerUrl && $("bannerPreview")) { $("bannerPreview").src = a.bannerUrl; $("bannerPreview").style.display = "block"; }
+        if (a.aboutImageUrl && $("aboutImageUrl")) $("aboutImageUrl").value = a.aboutImageUrl;
+      } catch (e) { console.warn(e); }
+    }
+    function wireUpload(zoneId, fileId, previewId) {
+      const zone = $(zoneId), file = $(fileId), prev = $(previewId);
+      if (!zone || !file) return;
+      zone.onclick = () => file.click();
+      file.onchange = () => {
+        if (!file.files[0] || !prev) return;
+        prev.src = URL.createObjectURL(file.files[0]);
+        prev.style.display = "block";
+      };
+    }
+    wireUpload("logoUploadZone","logoFile","logoPreview");
+    wireUpload("faviconUploadZone","faviconFile","faviconPreview");
+    wireUpload("bannerUploadZone","bannerFile","bannerPreview");
+
+    $("btnSaveAppearance")?.addEventListener("click", async () => {
+      try {
+        const data = {
+          siteName: $("appSiteName")?.value.trim() || "MMSAYAYA EDUVERSE",
+          slogan: $("appSlogan")?.value.trim() || "",
+          colorPrimary: $("appColorPrimary")?.value,
+          colorSecondary: $("appColorSecondary")?.value,
+          colorEmerald: $("appColorEmerald")?.value,
+          colorGold: $("appColorGold")?.value,
+          aboutImageUrl: $("aboutImageUrl")?.value.trim() || "",
+          updatedAt: serverTimestamp()
+        };
+        const uid = auth.currentUser?.uid || "admin";
+        if ($("logoFile")?.files[0]) data.logoUrl = await uploadImage($("logoFile").files[0], `branding/${uid}/logo_${Date.now()}`);
+        if ($("faviconFile")?.files[0]) data.faviconUrl = await uploadImage($("faviconFile").files[0], `branding/${uid}/favicon_${Date.now()}`);
+        if ($("bannerFile")?.files[0]) data.bannerUrl = await uploadImage($("bannerFile").files[0], `branding/${uid}/banner_${Date.now()}`);
+        if ($("aboutImageFile")?.files[0]) data.aboutImageUrl = await uploadImage($("aboutImageFile").files[0], `branding/${uid}/about_${Date.now()}`);
+        await setDoc(doc(db, "system", "appearance"), data, { merge: true });
+        toast("Appearance saved", "success");
+      } catch (e) {
+        toast("Save failed: " + (e.message || "check Storage rules"), "error");
+      }
+    });
+    $("btnPreviewAppearance")?.addEventListener("click", () => {
+      document.documentElement.style.setProperty("--primary", $("appColorPrimary")?.value || "#0D47A1");
+      document.documentElement.style.setProperty("--secondary", $("appColorSecondary")?.value || "#1976D2");
+      document.documentElement.style.setProperty("--emerald", $("appColorEmerald")?.value || "#00796B");
+      toast("Preview applied to admin panel colours", "success");
+    });
+
+    // Schools CRUD
+    async function loadSchoolsByType(type, tableId) {
+      const tbody = $(tableId);
+      if (!tbody) return;
+      tbody.innerHTML = `<tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr>`;
+      try {
+        const snap = await getDocs(query(collection(db, "schools"), where("schoolType", "==", type)));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No ${type} schools yet. Add one or import CSV.</p></div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => {
+          const s = d.data();
+          const st = s.status || "pending";
+          const badge = st === "active" ? "badge-success" : st === "suspended" ? "badge-danger" : "badge-warning";
+          html += `<tr>
+            <td><strong>${escapeHtml(s.name)}</strong></td>
+            <td>${escapeHtml(s.code || "—")}</td>
+            <td>${escapeHtml(s.lga || "—")}</td>
+            <td><span class="badge ${badge}">${st}</span></td>
+            <td>${s.verified ? "Yes" : "No"}</td>
+            <td class="actions">
+              <button class="btn btn-sm btn-outline btn-edit-school" data-id="${d.id}">Edit</button>
+              <button class="btn btn-sm btn-ghost btn-toggle-school" data-id="${d.id}" data-status="${st}">${st==="active"?"Suspend":"Activate"}</button>
+              <button class="btn btn-sm btn-danger btn-archive-school" data-id="${d.id}">Archive</button>
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        bindSchoolRowActions(tableId);
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6">Error or empty. Create Firestore collection "schools".</td></tr>`;
+      }
+    }
+
+    function bindSchoolRowActions(tableId) {
+      document.querySelectorAll(`#${tableId} .btn-edit-school`).forEach(btn => {
+        btn.onclick = async () => {
+          const snap = await getDoc(doc(db, "schools", btn.dataset.id));
+          if (!snap.exists()) return;
+          const s = snap.data();
+          const lgaOpts = KATSINA_LGAS.map(l => `<option value="${l}" ${s.lga===l?"selected":""}>${l}</option>`).join("");
+          // reuse admin modal if present
+          const overlay = $("modalOverlay");
+          if (!overlay || !$("modalBody")) { toast("Open Edit from Admin modal unavailable", "error"); return; }
+          $("modalTitle").textContent = "Edit School";
+          $("modalBody").innerHTML = `
+            <div class="form-group"><label>Name *</label><input id="fSchName" value="${escapeHtml(s.name||"")}" /></div>
+            <div class="form-group"><label>Code</label><input id="fSchCode" value="${escapeHtml(s.code||"")}" /></div>
+            <div class="form-group"><label>LGA</label><select id="fSchLga">${lgaOpts}</select></div>
+            <div class="form-group"><label>Address</label><input id="fSchAddr" value="${escapeHtml(s.address||"")}" /></div>
+            <div class="form-group"><label>Status</label><select id="fSchStatus">
+              <option value="active" ${s.status==="active"?"selected":""}>Active</option>
+              <option value="pending" ${s.status==="pending"?"selected":""}>Pending</option>
+              <option value="suspended" ${s.status==="suspended"?"selected":""}>Suspended</option>
+              <option value="archived" ${s.status==="archived"?"selected":""}>Archived</option>
+            </select></div>`;
+          overlay.classList.add("show");
+          const save = $("modalSave");
+          const handler = async () => {
+            const name = $("fSchName").value.trim();
+            if (!name) return toast("Name required", "error");
+            await updateDoc(doc(db, "schools", btn.dataset.id), {
+              name, code: $("fSchCode").value.trim(), lga: $("fSchLga").value,
+              address: $("fSchAddr").value.trim(), status: $("fSchStatus").value, updatedAt: serverTimestamp()
+            });
+            toast("School updated", "success");
+            overlay.classList.remove("show");
+            loadSchoolsByType(s.schoolType, tableId);
+            loadKsOverview();
+          };
+          save.onclick = handler;
+        };
+      });
+      document.querySelectorAll(`#${tableId} .btn-toggle-school`).forEach(btn => {
+        btn.onclick = async () => {
+          const next = btn.dataset.status === "active" ? "suspended" : "active";
+          await updateDoc(doc(db, "schools", btn.dataset.id), { status: next, updatedAt: serverTimestamp() });
+          toast("Status updated", "success");
+          const type = tableId.includes("primary") ? "primary" : "secondary";
+          loadSchoolsByType(type, tableId);
+        };
+      });
+      document.querySelectorAll(`#${tableId} .btn-archive-school`).forEach(btn => {
+        btn.onclick = async () => {
+          await updateDoc(doc(db, "schools", btn.dataset.id), { status: "archived", updatedAt: serverTimestamp() });
+          toast("Archived", "success");
+          const type = tableId.includes("primary") ? "primary" : "secondary";
+          loadSchoolsByType(type, tableId);
+        };
+      });
+    }
+
+    function openAddSchool(type) {
+      const lgaOpts = KATSINA_LGAS.map(l => `<option value="${l}">${l}</option>`).join("");
+      const overlay = $("modalOverlay");
+      if (!overlay) return toast("Modal missing", "error");
+      $("modalTitle").textContent = type === "primary" ? "Add Primary School" : "Add Secondary School";
+      $("modalBody").innerHTML = `
+        <div class="form-group"><label>Official Name *</label><input id="fSchName" /></div>
+        <div class="form-group"><label>School Code</label><input id="fSchCode" placeholder="Optional unique code" /></div>
+        <div class="form-group"><label>LGA *</label><select id="fSchLga"><option value="">— Select —</option>${lgaOpts}</select></div>
+        <div class="form-group"><label>Address</label><input id="fSchAddr" /></div>
+        <div class="form-group"><label>Phone</label><input id="fSchPhone" /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="fSchEmail" /></div>
+        <div class="form-group"><label>Headmaster / Principal</label><input id="fSchHead" /></div>`;
+      overlay.classList.add("show");
+      $("modalSave").onclick = async () => {
+        const name = $("fSchName").value.trim();
+        const lga = $("fSchLga").value;
+        if (!name || !lga) return toast("Name and LGA required", "error");
+        if (!KATSINA_LGAS.includes(lga)) return toast("Invalid LGA", "error");
+        const schoolId = "KS-" + Date.now().toString(36).toUpperCase();
+        await addDoc(collection(db, "schools"), {
+          schoolId, name, code: $("fSchCode").value.trim() || schoolId,
+          schoolType: type, lga, address: $("fSchAddr").value.trim(),
+          phone: $("fSchPhone").value.trim(), email: $("fSchEmail").value.trim(),
+          headName: $("fSchHead").value.trim(),
+          status: "pending", verified: false,
+          createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+        });
+        toast("School added (pending verification)", "success");
+        overlay.classList.remove("show");
+        loadSchoolsByType(type, type === "primary" ? "primarySchoolsTable" : "secondarySchoolsTable");
+        loadKsOverview();
+      };
+    }
+    $("btnAddPrimarySchool")?.addEventListener("click", () => openAddSchool("primary"));
+    $("btnAddSecondarySchool")?.addEventListener("click", () => openAddSchool("secondary"));
+
+    async function loadKsOverview() {
+      try {
+        const snap = await getDocs(collection(db, "schools"));
+        let p = 0, s = 0, v = 0, lgas = new Set();
+        snap.forEach(d => {
+          const x = d.data();
+          if (x.schoolType === "primary") p++; else if (x.schoolType === "secondary") s++;
+          if (x.verified) v++;
+          if (x.lga) lgas.add(x.lga);
+        });
+        if ($("ksStatPrimary")) $("ksStatPrimary").textContent = p;
+        if ($("ksStatSecondary")) $("ksStatSecondary").textContent = s;
+        if ($("ksStatVerified")) $("ksStatVerified").textContent = v;
+        if ($("ksStatLgas")) $("ksStatLgas").textContent = lgas.size;
+        const req = await getDocs(query(collection(db, "schoolRegistrationRequests"), where("status", "==", "pending")));
+        if ($("ksStatPending")) $("ksStatPending").textContent = req.size;
+        const subs = await getDocs(query(collection(db, "schoolSubscriptions"), where("status", "==", "active")));
+        if ($("ksStatSubs")) $("ksStatSubs").textContent = subs.size;
+      } catch (e) { console.warn(e); }
+    }
+
+    async function loadRegistrations() {
+      const tbody = $("registrationsTable");
+      if (!tbody) return;
+      try {
+        const snap = await getDocs(query(collection(db, "schoolRegistrationRequests"), orderBy("createdAt", "desc")));
+        if (snap.empty) { tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">No registration requests.</div></td></tr>`; return; }
+        let html = "";
+        snap.forEach(d => {
+          const r = d.data();
+          html += `<tr>
+            <td>${escapeHtml(r.schoolName)}</td>
+            <td>${escapeHtml(r.schoolType)}</td>
+            <td>${escapeHtml(r.lga)}</td>
+            <td>${escapeHtml(r.headName)}<br><small>${escapeHtml(r.email)}</small></td>
+            <td><span class="badge badge-info">${escapeHtml(r.status||"pending")}</span></td>
+            <td>${formatDate(r.createdAt)}</td>
+            <td class="actions">
+              ${r.status==="pending"?`<button class="btn btn-sm btn-emerald btn-approve-reg" data-id="${d.id}">Approve</button>
+              <button class="btn btn-sm btn-danger btn-reject-reg" data-id="${d.id}">Reject</button>`:"—"}
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.querySelectorAll(".btn-approve-reg").forEach(btn => {
+          btn.onclick = async () => {
+            const snap = await getDoc(doc(db, "schoolRegistrationRequests", btn.dataset.id));
+            const r = snap.data();
+            const schoolId = "KS-" + Date.now().toString(36).toUpperCase();
+            await addDoc(collection(db, "schools"), {
+              schoolId, name: r.schoolName, code: schoolId, schoolType: r.schoolType, lga: r.lga,
+              address: r.address || "", phone: r.phone || "", email: r.email || "", headName: r.headName || "",
+              status: "active", verified: true, createdFromRequest: btn.dataset.id,
+              createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+            });
+            await updateDoc(doc(db, "schoolRegistrationRequests", btn.dataset.id), { status: "approved", reviewedAt: serverTimestamp() });
+            toast("Approved & school created", "success");
+            loadRegistrations(); loadKsOverview();
+          };
+        });
+        document.querySelectorAll(".btn-reject-reg").forEach(btn => {
+          btn.onclick = async () => {
+            await updateDoc(doc(db, "schoolRegistrationRequests", btn.dataset.id), { status: "rejected", reviewedAt: serverTimestamp() });
+            toast("Rejected", "success");
+            loadRegistrations();
+          };
+        });
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">No requests yet.</div></td></tr>`;
+      }
+    }
+
+    async function loadVerification() {
+      const tbody = $("verificationTable");
+      if (!tbody) return;
+      try {
+        const snap = await getDocs(collection(db, "schools"));
+        let html = "";
+        snap.forEach(d => {
+          const s = d.data();
+          if (s.status === "archived") return;
+          html += `<tr>
+            <td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.schoolType)}</td><td>${escapeHtml(s.lga)}</td>
+            <td>${s.verified ? "Verified" : "Not verified"}</td>
+            <td class="actions">
+              ${!s.verified?`<button class="btn btn-sm btn-emerald btn-verify-sch" data-id="${d.id}">Verify</button>`:
+              `<button class="btn btn-sm btn-ghost btn-unverify-sch" data-id="${d.id}">Revoke</button>`}
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html || `<tr><td colspan="5"><div class="empty-state">No schools.</div></td></tr>`;
+        document.querySelectorAll(".btn-verify-sch").forEach(btn => {
+          btn.onclick = async () => {
+            await updateDoc(doc(db, "schools", btn.dataset.id), { verified: true, verifiedAt: serverTimestamp() });
+            toast("Verified", "success"); loadVerification(); loadKsOverview();
+          };
+        });
+        document.querySelectorAll(".btn-unverify-sch").forEach(btn => {
+          btn.onclick = async () => {
+            await updateDoc(doc(db, "schools", btn.dataset.id), { verified: false });
+            toast("Verification revoked", "success"); loadVerification();
+          };
+        });
+      } catch (e) { tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">—</div></td></tr>`; }
+    }
+
+    async function loadDirectory() {
+      const tbody = $("directoryTable");
+      if (!tbody) return;
+      try {
+        const snap = await getDocs(collection(db, "schools"));
+        let html = "";
+        snap.forEach(d => {
+          const s = d.data();
+          html += `<tr>
+            <td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.schoolType)}</td><td>${escapeHtml(s.lga)}</td>
+            <td>${escapeHtml(s.code||"")}</td><td>${escapeHtml(s.status||"")}</td>
+            <td>${escapeHtml(s.subscriptionStatus||"—")}</td>
+          </tr>`;
+        });
+        tbody.innerHTML = html || `<tr><td colspan="6"><div class="empty-state">Directory empty.</div></td></tr>`;
+      } catch { tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">—</div></td></tr>`; }
+    }
+
+    // Plans
+    async function loadPlans() {
+      const tbody = $("plansTable");
+      if (!tbody) return;
+      try {
+        const snap = await getDocs(collection(db, "subscriptionPlans"));
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">No plans. Add Monthly / Quarterly / Annual.</div></td></tr>`;
+          return;
+        }
+        let html = "";
+        snap.forEach(d => {
+          const p = d.data();
+          html += `<tr>
+            <td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.billingCycle)}</td>
+            <td>${Number(p.priceNgn||0).toLocaleString()}</td>
+            <td>${p.durationDays||"—"} days</td>
+            <td>${escapeHtml((p.features||[]).join(", ")||"—")}</td>
+            <td>${p.active!==false?"Yes":"No"}</td>
+            <td class="actions"><button class="btn btn-sm btn-danger btn-del-plan" data-id="${d.id}">Delete</button></td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.querySelectorAll(".btn-del-plan").forEach(btn => {
+          btn.onclick = async () => { await deleteDoc(doc(db, "subscriptionPlans", btn.dataset.id)); loadPlans(); };
+        });
+      } catch { tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">—</div></td></tr>`; }
+    }
+    $("btnAddPlan")?.addEventListener("click", () => {
+      const overlay = $("modalOverlay");
+      if (!overlay) return;
+      $("modalTitle").textContent = "Add Subscription Plan";
+      $("modalBody").innerHTML = `
+        <div class="form-group"><label>Name *</label><input id="fPlanName" placeholder="Monthly Access" /></div>
+        <div class="form-group"><label>Billing cycle *</label>
+          <select id="fPlanCycle"><option value="monthly">Monthly</option><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select>
+        </div>
+        <div class="form-group"><label>Price (₦) *</label><input type="number" id="fPlanPrice" min="0" /></div>
+        <div class="form-group"><label>Duration (days)</label><input type="number" id="fPlanDays" value="30" /></div>
+        <div class="form-group"><label>Features (comma-separated)</label><input id="fPlanFeat" placeholder="Results, Attendance, Report cards" /></div>`;
+      overlay.classList.add("show");
+      $("modalSave").onclick = async () => {
+        const name = $("fPlanName").value.trim();
+        const cycle = $("fPlanCycle").value;
+        const price = Number($("fPlanPrice").value);
+        if (!name || !(price >= 0)) return toast("Name and price required", "error");
+        let days = Number($("fPlanDays").value) || 30;
+        if (cycle === "quarterly") days = days || 90;
+        if (cycle === "annual") days = days || 365;
+        await addDoc(collection(db, "subscriptionPlans"), {
+          name, billingCycle: cycle, priceNgn: price, durationDays: days,
+          features: $("fPlanFeat").value.split(",").map(x => x.trim()).filter(Boolean),
+          active: true, createdAt: serverTimestamp()
+        });
+        toast("Plan created", "success");
+        overlay.classList.remove("show");
+        loadPlans();
+      };
+    });
+
+    async function loadSubscriptions() {
+      const tbody = $("subscriptionsTable");
+      if (!tbody) return;
+      try {
+        const snap = await getDocs(collection(db, "schoolSubscriptions"));
+        if (snap.empty) { tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">No subscriptions assigned.</div></td></tr>`; return; }
+        let html = "";
+        snap.forEach(d => {
+          const s = d.data();
+          html += `<tr>
+            <td>${escapeHtml(s.schoolName||s.schoolId)}</td>
+            <td>${escapeHtml(s.planName||"")}</td>
+            <td>${formatDate(s.startAt)}</td><td>${formatDate(s.endAt)}</td>
+            <td><span class="badge ${s.status==="active"?"badge-success":"badge-warning"}">${escapeHtml(s.status||"")}</span></td>
+            <td class="actions">${s.status==="active"?`<button class="btn btn-sm btn-ghost btn-expire-sub" data-id="${d.id}">Mark expired</button>`:""}</td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.querySelectorAll(".btn-expire-sub").forEach(btn => {
+          btn.onclick = async () => {
+            await updateDoc(doc(db, "schoolSubscriptions", btn.dataset.id), { status: "expired", updatedAt: serverTimestamp() });
+            loadSubscriptions();
+          };
+        });
+      } catch { tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">—</div></td></tr>`; }
+    }
+
+    $("btnAssignSub")?.addEventListener("click", async () => {
+      const schools = await getDocs(collection(db, "schools"));
+      const plans = await getDocs(collection(db, "subscriptionPlans"));
+      let so = `<option value="">— School —</option>`;
+      schools.forEach(d => { const s = d.data(); so += `<option value="${d.id}" data-name="${escapeHtml(s.name)}">${escapeHtml(s.name)}</option>`; });
+      let po = `<option value="">— Plan —</option>`;
+      plans.forEach(d => { const p = d.data(); po += `<option value="${d.id}" data-name="${escapeHtml(p.name)}" data-days="${p.durationDays||30}">${escapeHtml(p.name)} (₦${p.priceNgn})</option>`; });
+      const overlay = $("modalOverlay");
+      if (!overlay) return;
+      $("modalTitle").textContent = "Assign Subscription";
+      $("modalBody").innerHTML = `
+        <div class="form-group"><label>School *</label><select id="fSubSch">${so}</select></div>
+        <div class="form-group"><label>Plan *</label><select id="fSubPlan">${po}</select></div>`;
+      overlay.classList.add("show");
+      $("modalSave").onclick = async () => {
+        const sid = $("fSubSch").value, pid = $("fSubPlan").value;
+        if (!sid || !pid) return toast("Select school and plan", "error");
+        const days = Number($("fSubPlan").selectedOptions[0].dataset.days) || 30;
+        const start = new Date();
+        const end = new Date(start.getTime() + days * 86400000);
+        await addDoc(collection(db, "schoolSubscriptions"), {
+          schoolDocId: sid, schoolName: $("fSubSch").selectedOptions[0].dataset.name,
+          planId: pid, planName: $("fSubPlan").selectedOptions[0].dataset.name,
+          status: "active", startAt: start, endAt: end, createdAt: serverTimestamp()
+        });
+        await updateDoc(doc(db, "schools", sid), { subscriptionStatus: "active", updatedAt: serverTimestamp() });
+        toast("Subscription assigned", "success");
+        overlay.classList.remove("show");
+        loadSubscriptions(); loadKsOverview();
+      };
+    });
+
+    async function loadSchoolPayments() {
+      const tbody = $("schoolPaymentsTable");
+      if (!tbody) return;
+      try {
+        const snap = await getDocs(collection(db, "schoolPayments"));
+        if (snap.empty) { tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">No payment records. Schools can submit references for manual verification.</div></td></tr>`; return; }
+        let html = "";
+        snap.forEach(d => {
+          const p = d.data();
+          html += `<tr>
+            <td>${escapeHtml(p.schoolName||"")}</td>
+            <td>₦${Number(p.amount||0).toLocaleString()}</td>
+            <td>${escapeHtml(p.reference||"")}</td>
+            <td>${escapeHtml(p.method||"manual")}</td>
+            <td>${escapeHtml(p.status||"pending")}</td>
+            <td>${formatDate(p.createdAt)}</td>
+            <td class="actions">${p.status==="pending"?`<button class="btn btn-sm btn-emerald btn-confirm-pay" data-id="${d.id}">Confirm</button>`:"—"}</td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.querySelectorAll(".btn-confirm-pay").forEach(btn => {
+          btn.onclick = async () => {
+            await updateDoc(doc(db, "schoolPayments", btn.dataset.id), { status: "confirmed", confirmedAt: serverTimestamp(), confirmedBy: auth.currentUser?.uid });
+            toast("Payment confirmed", "success");
+            loadSchoolPayments();
+          };
+        });
+      } catch { tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">—</div></td></tr>`; }
+    }
+
+    // Bulk school import
+    $("schoolImportFile")?.addEventListener("change", () => { if ($("btnImportSchools")) $("btnImportSchools").disabled = !$("schoolImportFile").files.length; });
+    $("btnImportSchools")?.addEventListener("click", async () => {
+      const file = $("schoolImportFile").files[0];
+      if (!file) return;
+      const text = await file.text();
+      const lines = text.split(/\r?\n/).filter(l => l.trim());
+      if (lines.length < 2) return toast("CSV needs header + rows", "error");
+      const headers = lines[0].split(",").map(h => h.trim().toLowerCase().replace(/['"]/g,""));
+      const idx = (n) => headers.indexOf(n);
+      let ok = 0, fail = 0;
+      const errors = [];
+      for (let i = 1; i < lines.length; i++) {
+        const cols = lines[i].split(",").map(c => c.trim().replace(/^"|"$/g,""));
+        try {
+          const name = cols[idx("name")] || cols[0];
+          const type = (cols[idx("type")] || cols[1] || "").toLowerCase();
+          const lga = cols[idx("lga")] || cols[2];
+          if (!name || !["primary","secondary"].includes(type)) { fail++; errors.push(`Row ${i+1}: invalid name/type`); continue; }
+          if (!KATSINA_LGAS.includes(lga)) { fail++; errors.push(`Row ${i+1}: invalid LGA "${lga}"`); continue; }
+          const schoolId = "KS-" + Date.now().toString(36).toUpperCase() + i;
+          await addDoc(collection(db, "schools"), {
+            schoolId, name, schoolType: type, lga,
+            code: cols[idx("code")] || schoolId,
+            address: cols[idx("address")] || "",
+            phone: cols[idx("phone")] || "",
+            email: cols[idx("email")] || "",
+            headName: cols[idx("headname")] || "",
+            status: "pending", verified: false,
+            createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+          });
+          ok++;
+        } catch { fail++; }
+      }
+      $("schoolImportResult").innerHTML = `<p class="badge badge-success">Imported: ${ok}</p> ${fail?`<p class="badge badge-danger">Failed: ${fail}</p>`:""}<pre style="font-size:0.75rem;margin-top:8px;">${escapeHtml(errors.slice(0,10).join("\\n"))}</pre>`;
+      toast(`Imported ${ok} schools`, "success");
+      loadKsOverview();
+    });
+
+    $("btnExportSchools")?.addEventListener("click", async () => {
+      const snap = await getDocs(collection(db, "schools"));
+      let csv = "name,type,lga,code,status,verified\\n";
+      snap.forEach(d => {
+        const s = d.data();
+        csv += `"${(s.name||"").replace(/"/g,'""')}",${s.schoolType},${s.lga},${s.code},${s.status},${!!s.verified}\\n`;
+      });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+      a.download = "katsina-schools.csv";
+      a.click();
+    });
+
+    // School admin nav
+    document.querySelectorAll("[data-sview]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#schoolApp .view").forEach(v => v.classList.remove("active"));
+        document.querySelectorAll("[data-sview]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const id = "sview-" + btn.dataset.sview;
+        const el = $(id);
+        if (el) el.classList.add("active");
+        if ($("schoolPageTitle")) $("schoolPageTitle").textContent = btn.textContent.trim();
+      });
+    });
+    $("schoolLogoutBtn")?.addEventListener("click", async () => {
+      try { await signOut(auth); } catch (e) {}
+      document.documentElement.classList.remove("is-school");
+      location.hash = "#login";
+    });
+
+    // Hook admin view loader
+    const origNav = document.querySelectorAll("#adminApp .nav-item[data-view]");
+    origNav.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const v = btn.dataset.view;
+        if (v === "appearance") loadAppearance();
+        if (v === "ks-overview") loadKsOverview();
+        if (v === "ks-primary") loadSchoolsByType("primary", "primarySchoolsTable");
+        if (v === "ks-secondary") loadSchoolsByType("secondary", "secondarySchoolsTable");
+        if (v === "ks-directory") loadDirectory();
+        if (v === "ks-registrations") loadRegistrations();
+        if (v === "ks-verification") loadVerification();
+        if (v === "ks-plans") loadPlans();
+        if (v === "ks-subscriptions") loadSubscriptions();
+        if (v === "ks-payments") loadSchoolPayments();
+        if (v === "ks-reports") loadKsOverview();
+      });
+    });
+
+    // titleMap extension via Mutation - pageTitle already set by admin script from data-view
+    const extraTitles = {
+      appearance: "Appearance & Media",
+      "ks-overview": "Katsina Schools Overview",
+      "ks-primary": "Primary Schools",
+      "ks-secondary": "Secondary Schools",
+      "ks-directory": "School Directory",
+      "ks-registrations": "Registration Requests",
+      "ks-verification": "School Verification",
+      "ks-admins": "School Administrators",
+      "ks-plans": "Subscription Plans",
+      "ks-subscriptions": "School Subscriptions",
+      "ks-payments": "Payment Verification",
+      "ks-reports": "Schools Reports",
+      "ks-import": "Bulk School Import"
+    };
+    document.querySelectorAll("#adminApp .nav-item[data-view]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (extraTitles[btn.dataset.view] && $("pageTitle")) $("pageTitle").textContent = extraTitles[btn.dataset.view];
+      });
+    });
+
+    console.log("MMSAYAYA Katsina Schools + Appearance module loaded");
   </script>
 </body>
 </html>
