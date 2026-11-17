@@ -2000,6 +2000,30 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           </div>
         </div>
 
+        
+        <div class="view" id="view-admin-create-user">
+          <div class="card">
+            <div class="card-header"><h2>Create Teacher / Student Account</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;">Admin assigns email + password. User can log in immediately — no forced password change. Password is stored only in Firebase Authentication.</p>
+              <form id="adminCreateUserForm">
+                <div class="form-group"><label>Full name</label><input id="acuName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email</label><input id="acuEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Password (give to user securely)</label><input id="acuPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Role</label>
+                  <select id="acuRole" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;">
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                  </select>
+                </div>
+                <div class="form-group"><label>Phone (optional)</label><input id="acuPhone" type="tel" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <button type="submit" class="btn btn-primary" id="btnAdminCreateUser">Create account</button>
+                <div id="acuStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+
         <div class="view" id="view-ks-primary">
           <div class="card">
             <div class="card-header"><h2>Primary Schools — Katsina State</h2>
@@ -2044,13 +2068,13 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             <div class="card-header"><h2>School Directory</h2></div>
             <div class="card-body">
               <div class="toolbar">
-                <div class="search-box"><input type="text" id="dirSearch" placeholder="Search all schools…" /></div>
+                <div class="search-box"><input type="text" id="dirSearch" placeholder="Search school or LGA…" /></div>
                 <select class="filter-select" id="dirTypeFilter"><option value="all">All types</option><option value="primary">Primary</option><option value="junior_secondary">Junior Secondary</option><option value="senior_secondary">Senior Secondary</option></select>
                 <select class="filter-select" id="dirLgaFilter"><option value="all">All LGAs</option></select>
               </div>
               <div class="table-wrap"><table>
-                <thead><tr><th>Name</th><th>Type</th><th>LGA</th><th>Code</th><th>Status</th><th>Subscription</th></tr></thead>
-                <tbody id="directoryTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+                <thead><tr><th>School Name</th><th>LGA</th></tr></thead>
+                <tbody id="directoryTable"><tr><td colspan="2" class="loading"><div class="spinner"></div></td></tr></tbody>
               </table></div>
             </div>
           </div>
@@ -4638,23 +4662,42 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       } catch (e) { tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">—</div></td></tr>`; }
     }
 
-    async function loadDirectory() {
+    function loadDirectory() {
       const tbody = $("directoryTable");
       if (!tbody) return;
-      try {
-        const snap = await getDocs(collection(db, "schools"));
-        let html = "";
-        snap.forEach(d => {
-          const s = d.data();
-          html += `<tr>
-            <td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.schoolType)}</td><td>${escapeHtml(s.lga)}</td>
-            <td>${escapeHtml(s.code||"")}</td><td>${escapeHtml(s.status||"")}</td>
-            <td>${escapeHtml(s.subscriptionStatus||"—")}</td>
-          </tr>`;
+      const data = window.KATSINA_SCHOOLS || {};
+      const q = ($("dirSearch")?.value || "").toLowerCase().trim();
+      const type = $("dirTypeFilter")?.value || "all";
+      const lga = $("dirLgaFilter")?.value || "all";
+      const lgas = (lga === "all" ? Object.keys(data) : [lga]).sort((x, y) => x.localeCompare(y));
+      let html = "", total = 0;
+      lgas.forEach(l => {
+        const d = data[l] || {};
+        let list = [];
+        if (type === "all" || type === "primary") if (type !== "junior_secondary" && type !== "senior_secondary") list = list.concat(d.primary || []);
+        if (type !== "primary") {
+          let sec = d.secondary || [];
+          if (type === "junior_secondary") sec = sec.filter(n => /junior/i.test(n));
+          if (type === "senior_secondary") sec = sec.filter(n => /senior/i.test(n));
+          list = list.concat(sec);
+        }
+        if (q) list = list.filter(n => n.toLowerCase().includes(q) || l.toLowerCase().includes(q));
+        list = list.slice().sort((x, y) => x.localeCompare(y));
+        if (!list.length) return;
+        total += list.length;
+        html += `<tr><td colspan="2" style="background:#e8f5e9;font-weight:700;color:#1b5e20;">${escapeHtml(l)} Local Government · ${list.length} school(s)</td></tr>`;
+        list.forEach(n => {
+          html += `<tr><td>${escapeHtml(n)}</td><td>${escapeHtml(l)}</td></tr>`;
         });
-        tbody.innerHTML = html || `<tr><td colspan="6"><div class="empty-state">Directory empty.</div></td></tr>`;
-      } catch { tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">—</div></td></tr>`; }
+      });
+      tbody.innerHTML = html || `<tr><td colspan="2"><div class="empty-state">No schools found.</div></td></tr>`;
+      const h = document.querySelector("#view-ks-directory .card-header h2");
+      if (h) h.textContent = "School Directory" + (total ? " (" + total + ")" : "");
     }
+    ["dirSearch", "dirTypeFilter", "dirLgaFilter"].forEach(id => {
+      const el = $(id);
+      if (el) { el.addEventListener("input", loadDirectory); el.addEventListener("change", loadDirectory); }
+    });
 
     // Plans
     async function loadPlans() {
@@ -6137,6 +6180,448 @@ if (document.readyState === "loading") {
   wireAdminMedia();
 }
 setTimeout(loadAppearance, 800);
+</script>
+
+
+<script type="module">
+/**
+ * MMSAYAYA EDUVERSE — Validation, RBAC helpers, Admin account creation,
+ * content routing filters, announcement audience, payment status helpers.
+ * Does NOT replace Firebase config. Extends existing behavior.
+ */
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  sendPasswordResetEmail, updatePassword, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, collection, query,
+  where, getDocs, serverTimestamp, limit, orderBy
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBlEw1Pb5HzIePo5SlolYm9ofvCUSBS0wM",
+  authDomain: "mmsayaya-academy.firebaseapp.com",
+  projectId: "mmsayaya-academy",
+  storageBucket: "mmsayaya-academy.firebasestorage.app",
+  messagingSenderId: "261003419792",
+  appId: "1:261003419792:web:9710d497a942a92c10b815",
+  measurementId: "G-0N2Q1V11LG"
+};
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const $ = (id) => document.getElementById(id);
+
+// ---------- Validation ----------
+const DISPOSABLE = /^(tempmail|guerrillamail|mailinator|10minutemail|yopmail|trashmail|fakeinbox)/i;
+
+window.MEV = {
+  normalizeEmail(email) {
+    return String(email || "").trim().toLowerCase();
+  },
+  isValidEmail(email) {
+    const e = this.normalizeEmail(email);
+    if (!e || e.length > 254) return false;
+    // Practical RFC-like check
+    const re = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i;
+    if (!re.test(e)) return false;
+    const [local, domain] = e.split("@");
+    if (!local || !domain || local.length > 64) return false;
+    if (domain.indexOf(".") < 1) return false;
+    return true;
+  },
+  isSuspiciousEmail(email) {
+    const e = this.normalizeEmail(email);
+    const domain = e.split("@")[1] || "";
+    return DISPOSABLE.test(domain.split(".")[0] || "");
+  },
+  isValidPhone(phone) {
+    const p = String(phone || "").replace(/[\s\-()]/g, "");
+    // Nigeria-focused + generic international
+    return /^(\+?234|0)[789]\d{9}$/.test(p) || /^\+?[1-9]\d{7,14}$/.test(p);
+  },
+  isValidName(name) {
+    const n = String(name || "").trim();
+    if (n.length < 2 || n.length > 80) return false;
+    return /^[a-zA-Z][a-zA-Z\s'.-]*$/.test(n);
+  },
+  isValidAge(age, min = 5, max = 100) {
+    if (age === "" || age === null || age === undefined) return false;
+    const n = Number(age);
+    return Number.isInteger(n) && n >= min && n <= max;
+  },
+  isValidPassword(pw) {
+    const p = String(pw || "");
+    // Min 8, at least one letter and one number
+    return p.length >= 8 && p.length <= 128 && /[A-Za-z]/.test(p) && /\d/.test(p);
+  },
+  isValidAmount(amount) {
+    const n = Number(amount);
+    return Number.isFinite(n) && n > 0 && n < 1e9;
+  },
+  isValidMarks(marks, max = 100) {
+    const n = Number(marks);
+    return Number.isFinite(n) && n >= 0 && n <= max;
+  },
+  isValidDOB(dateStr) {
+    if (!dateStr) return false;
+    const d = new Date(dateStr);
+    if (Number.isNaN(d.getTime())) return false;
+    const now = new Date();
+    if (d > now) return false;
+    const age = (now - d) / (365.25 * 24 * 3600 * 1000);
+    return age >= 3 && age <= 120;
+  },
+  fieldError(el, msg) {
+    if (!el) return;
+    el.setAttribute("aria-invalid", "true");
+    el.style.borderColor = "#c62828";
+    let h = el.parentElement && el.parentElement.querySelector(".mev-error");
+    if (!h && el.parentElement) {
+      h = document.createElement("div");
+      h.className = "mev-error";
+      h.style.cssText = "color:#c62828;font-size:0.8rem;margin-top:4px;";
+      el.parentElement.appendChild(h);
+    }
+    if (h) h.textContent = msg || "Invalid";
+  },
+  clearError(el) {
+    if (!el) return;
+    el.removeAttribute("aria-invalid");
+    el.style.borderColor = "";
+    const h = el.parentElement && el.parentElement.querySelector(".mev-error");
+    if (h) h.textContent = "";
+  }
+};
+
+// Attach live validation to common inputs
+function wireFormValidation() {
+  document.querySelectorAll('input[type="email"], input[name*="email" i], input[id*="email" i]').forEach((el) => {
+    if (el.dataset.mev) return;
+    el.dataset.mev = "1";
+    el.addEventListener("blur", () => {
+      const v = el.value;
+      if (!v) return MEV.clearError(el);
+      if (!MEV.isValidEmail(v)) MEV.fieldError(el, "Enter a valid email address");
+      else if (MEV.isSuspiciousEmail(v)) MEV.fieldError(el, "Disposable email domains are not allowed");
+      else MEV.clearError(el);
+    });
+  });
+  document.querySelectorAll('input[type="tel"], input[name*="phone" i], input[id*="phone" i]').forEach((el) => {
+    if (el.dataset.mev) return;
+    el.dataset.mev = "1";
+    el.addEventListener("blur", () => {
+      if (!el.value) return MEV.clearError(el);
+      if (!MEV.isValidPhone(el.value)) MEV.fieldError(el, "Enter a valid phone number");
+      else MEV.clearError(el);
+    });
+  });
+  document.querySelectorAll('input[type="number"][id*="age" i], input[name*="age" i]').forEach((el) => {
+    if (el.dataset.mev) return;
+    el.dataset.mev = "1";
+    el.addEventListener("blur", () => {
+      if (el.value === "") return MEV.clearError(el);
+      if (!MEV.isValidAge(el.value)) MEV.fieldError(el, "Enter a valid age (5–100)");
+      else MEV.clearError(el);
+    });
+  });
+}
+
+// ---------- RBAC helpers (client UX; real enforcement = Security Rules) ----------
+window.MEV_RBAC = {
+  async currentProfile() {
+    const u = auth.currentUser;
+    if (!u) return null;
+    try {
+      const snap = await getDoc(doc(db, "users", u.uid));
+      if (!snap.exists()) return { uid: u.uid, email: u.email, role: "student" };
+      return { uid: u.uid, email: u.email, ...snap.data() };
+    } catch {
+      return { uid: u.uid, email: u.email, role: "student" };
+    }
+  },
+  can(profile, action) {
+    if (!profile) return false;
+    const role = String(profile.role || "").toLowerCase();
+    const map = {
+      super_admin: ["*"],
+      superadmin: ["*"],
+      admin: ["manage_schools","manage_users","manage_content","manage_payments","manage_announcements","view_reports","create_teacher","create_student"],
+      teacher: ["view_assigned_courses","manage_assignments","view_students","grade","message"],
+      student: ["view_own","learn","exam","pay","message"]
+    };
+    const allowed = map[role] || [];
+    if (allowed.includes("*")) return true;
+    return allowed.includes(action);
+  },
+  assert(profile, action) {
+    if (!this.can(profile, action)) {
+      throw new Error("You do not have permission for this action.");
+    }
+  }
+};
+
+// ---------- Admin creates Teacher / Student (password assigned, NO forced change) ----------
+window.MEV_Accounts = {
+  /**
+   * Creates Auth user + users/{uid} profile.
+   * NOTE: Client-side createUser signs in as the new user — we re-login Admin if session email/password provided,
+   * or Admin should use a Cloud Function in production. Here we document and restore when possible.
+   */
+  async createByAdmin({ email, password, fullName, role, phone, schoolId, extra }) {
+    email = MEV.normalizeEmail(email);
+    role = String(role || "student").toLowerCase();
+    if (!["teacher", "student"].includes(role)) throw new Error("Role must be teacher or student");
+    if (!MEV.isValidEmail(email)) throw new Error("Invalid email address");
+    if (MEV.isSuspiciousEmail(email)) throw new Error("Disposable emails are not allowed");
+    if (!MEV.isValidPassword(password)) throw new Error("Password must be 8+ chars with letters and numbers");
+    if (!MEV.isValidName(fullName)) throw new Error("Enter a valid full name");
+    if (phone && !MEV.isValidPhone(phone)) throw new Error("Invalid phone number");
+
+    const adminUser = auth.currentUser;
+    if (!adminUser) throw new Error("Admin must be logged in");
+
+    // Check duplicate profile by email
+    const q = query(collection(db, "users"), where("email", "==", email), limit(1));
+    const existing = await getDocs(q);
+    if (!existing.empty) throw new Error("An account with this email already exists");
+
+    // Create auth account (this signs in as new user in client SDK)
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const uid = cred.user.uid;
+
+    // Profile — NEVER store password
+    await setDoc(doc(db, "users", uid), {
+      uid,
+      email,
+      fullName: fullName.trim(),
+      role,
+      phone: phone || "",
+      schoolId: schoolId || null,
+      status: "active",
+      createdBy: adminUser.uid,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      mustChangePassword: false, // explicit: Admin-assigned password stays valid
+      ...(extra || {})
+    }, { merge: true });
+
+    // Audit (no password)
+    try {
+      await addDoc(collection(db, "audit_logs"), {
+        action: "admin_create_user",
+        targetUid: uid,
+        targetEmail: email,
+        role,
+        by: adminUser.uid,
+        at: serverTimestamp()
+      });
+    } catch (_) {}
+
+    // Sign out new user — Admin must sign in again (client SDK limitation)
+    await signOut(auth);
+
+    return {
+      uid,
+      email,
+      role,
+      message: "Account created. Password is set in Firebase Auth only (not stored in Firestore). Sign in again as Admin. Give the user their email and password securely offline."
+    };
+  }
+};
+
+// Wire Admin create form if present
+function wireAdminCreateUser() {
+  const btn = $("btnAdminCreateUser") || $("btnCreateTeacher") || $("btnCreateStudentAccount");
+  const form = $("adminCreateUserForm");
+  async function handle() {
+    const email = ($("acuEmail") || $("createUserEmail"))?.value;
+    const password = ($("acuPassword") || $("createUserPassword"))?.value;
+    const fullName = ($("acuName") || $("createUserName"))?.value;
+    const role = ($("acuRole") || $("createUserRole"))?.value || "student";
+    const phone = ($("acuPhone") || $("createUserPhone"))?.value;
+    const status = $("acuStatus");
+    try {
+      if (status) status.textContent = "Creating account…";
+      const res = await MEV_Accounts.createByAdmin({ email, password, fullName, role, phone });
+      if (status) status.textContent = res.message;
+      alert(res.message + "\n\nEmail: " + res.email + "\n(Role: " + res.role + ")\nShare password securely — it is not saved in the database.");
+    } catch (e) {
+      if (status) status.textContent = e.message || String(e);
+      alert(e.message || String(e));
+    }
+  }
+  if (btn && !btn.dataset.mev) {
+    btn.dataset.mev = "1";
+    btn.addEventListener("click", (e) => { e.preventDefault(); handle(); });
+  }
+  if (form && !form.dataset.mev) {
+    form.dataset.mev = "1";
+    form.addEventListener("submit", (e) => { e.preventDefault(); handle(); });
+  }
+}
+
+// ---------- Practice questions / content routing ----------
+window.MEV_Content = {
+  /** Filter published items to the section Admin assigned */
+  filterPractice(items, { freeOnly, courseId, subjectId, topicId } = {}) {
+    return (items || []).filter((it) => {
+      if (it.published === false || it.status === "draft" || it.status === "archived") return false;
+      if (freeOnly) return it.access === "free" || it.isFree === true || it.section === "free_practice";
+      if (topicId) return it.topicId === topicId;
+      if (subjectId) return it.subjectId === subjectId;
+      if (courseId) return it.courseId === courseId;
+      return true;
+    });
+  },
+  filterAnnouncements(items, audience, userRole) {
+    const role = String(userRole || "public").toLowerCase();
+    return (items || []).filter((a) => {
+      if (a.published === false && a.status !== "published") return false;
+      const aud = String(a.audience || a.target || "everyone").toLowerCase();
+      if (aud === "everyone" || aud === "all" || aud === "public") return true;
+      if (aud === role) return true;
+      if (aud === "students" && role === "student") return true;
+      if (aud === "teachers" && role === "teacher") return true;
+      if (aud === "admins" && (role === "admin" || role === "super_admin")) return true;
+      return false;
+    });
+  }
+};
+
+// ---------- Payments: never grant access on button alone ----------
+window.MEV_Payments = {
+  async recordPending({ userId, courseId, amount, reference, method }) {
+    if (!MEV.isValidAmount(amount)) throw new Error("Invalid payment amount");
+    if (!reference || String(reference).length < 4) throw new Error("Transaction reference required");
+    // Duplicate reference check
+    const dq = query(collection(db, "payments"), where("reference", "==", String(reference)), limit(1));
+    const ds = await getDocs(dq);
+    if (!ds.empty) throw new Error("This transaction reference was already submitted");
+    const ref = await addDoc(collection(db, "payments"), {
+      userId,
+      courseId: courseId || null,
+      amount: Number(amount),
+      reference: String(reference),
+      method: method || "manual",
+      status: "pending", // access NOT granted
+      verified: false,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+    return ref.id;
+  },
+  /** Admin only — after real verification */
+  async verifyPayment(paymentId, approve, adminUid) {
+    const ref = doc(db, "payments", paymentId);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) throw new Error("Payment not found");
+    const p = snap.data();
+    if (approve) {
+      await updateDoc(ref, {
+        status: "successful",
+        verified: true,
+        verifiedBy: adminUid,
+        verifiedAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      // Separate access record
+      if (p.userId && p.courseId) {
+        await setDoc(doc(db, "course_access", `${p.userId}_${p.courseId}`), {
+          userId: p.userId,
+          courseId: p.courseId,
+          paymentId,
+          grantedAt: serverTimestamp(),
+          source: "payment_verified"
+        }, { merge: true });
+      }
+    } else {
+      await updateDoc(ref, {
+        status: "failed",
+        verified: false,
+        rejectedBy: adminUid,
+        updatedAt: serverTimestamp()
+      });
+    }
+  }
+};
+
+// ---------- Optional Change Password (Firebase reset email — no custom OTP without Cloud Functions) ----------
+window.MEV_Password = {
+  async sendResetToRegisteredEmail() {
+    const u = auth.currentUser;
+    if (!u || !u.email) throw new Error("You must be logged in");
+    await sendPasswordResetEmail(auth, u.email);
+    return "Password reset link sent to " + u.email + ". Check inbox/spam. This is optional — you can keep using your current password.";
+  },
+  async changeWhileLoggedIn(currentPassword, newPassword) {
+    const u = auth.currentUser;
+    if (!u || !u.email) throw new Error("You must be logged in");
+    if (!MEV.isValidPassword(newPassword)) throw new Error("New password must be 8+ characters with letters and numbers");
+    // Re-auth
+    await signInWithEmailAndPassword(auth, u.email, currentPassword);
+    await updatePassword(auth.currentUser, newPassword);
+    // Ensure no mustChangePassword flag
+    try {
+      await updateDoc(doc(db, "users", u.uid), { mustChangePassword: false, updatedAt: serverTimestamp() });
+    } catch (_) {}
+    return "Password updated successfully.";
+  }
+};
+
+// Wire optional change-password UI
+function wirePasswordUI() {
+  const sendBtn = $("btnSendPasswordReset") || $("btnRequestPasswordOtp");
+  if (sendBtn && !sendBtn.dataset.mev) {
+    sendBtn.dataset.mev = "1";
+    sendBtn.addEventListener("click", async () => {
+      try {
+        const msg = await MEV_Password.sendResetToRegisteredEmail();
+        alert(msg);
+      } catch (e) { alert(e.message || e); }
+    });
+  }
+  const changeBtn = $("btnChangePasswordSubmit");
+  if (changeBtn && !changeBtn.dataset.mev) {
+    changeBtn.dataset.mev = "1";
+    changeBtn.addEventListener("click", async () => {
+      const cur = $("currentPassword")?.value;
+      const nw = $("newPassword")?.value;
+      const nw2 = $("confirmNewPassword")?.value;
+      try {
+        if (nw !== nw2) throw new Error("New passwords do not match");
+        const msg = await MEV_Password.changeWhileLoggedIn(cur, nw);
+        alert(msg);
+      } catch (e) { alert(e.message || e); }
+    });
+  }
+}
+
+// ---------- Rate-limit public forms (client-side; pair with rules) ----------
+const _rl = new Map();
+window.MEV_rateLimit = function(key, max, windowMs) {
+  const now = Date.now();
+  let arr = _rl.get(key) || [];
+  arr = arr.filter((t) => now - t < windowMs);
+  if (arr.length >= max) return false;
+  arr.push(now);
+  _rl.set(key, arr);
+  return true;
+};
+
+// Boot
+function bootMEV() {
+  wireFormValidation();
+  wireAdminCreateUser();
+  wirePasswordUI();
+  // Re-scan forms opened later
+  setInterval(wireFormValidation, 3000);
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootMEV);
+else bootMEV();
+
+console.log("MEV validation/RBAC/accounts module loaded");
 </script>
 
 </body>
