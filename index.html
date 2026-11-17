@@ -1,6 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<script>
+/* ============================================================
+   MMSAYAYA EDUVERSE — PUBLIC IMAGE SLOTS
+   Upload these files to your GitHub repo (same folder as index.html
+   or inside /images/), then set the path in Admin → Appearance
+   OR keep defaults below.
+
+   Recommended GitHub paths:
+     images/logo.png              → Website logo
+     images/favicon.png           → Browser tab icon
+     images/hero-bg.jpg           → Public homepage background
+     images/about-banner.jpg      → About section image
+     images/og-cover.jpg          → Social share image
+
+   After push to GitHub Pages, hard-refresh (Ctrl+Shift+R).
+   Admin can also paste full https:// URL (Firebase Storage or any CDN).
+   ============================================================ */
+window.SITE_IMAGE_SLOTS = {
+  logo:        { key: "logoUrl",        path: "images/logo.png",        label: "Website Logo" },
+  favicon:     { key: "faviconUrl",     path: "images/favicon.png",     label: "Favicon" },
+  hero:        { key: "bannerUrl",      path: "images/hero-bg.jpg",     label: "Homepage Background" },
+  about:       { key: "aboutImageUrl",  path: "images/about-banner.jpg", label: "About Image" },
+  og:          { key: "ogImageUrl",     path: "images/og-cover.jpg",    label: "Social Cover" }
+};
+</script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MMSAYAYA EDUVERSE | Learn Today, Lead Tomorrow</title>
@@ -930,37 +957,116 @@
 
   <section class="section" id="schools-directory" style="background:#fff;">
     <div class="container">
-      <div class="section-header"><h2>Katsina Schools Directory</h2><p>Search verified Primary and Secondary schools across all 34 LGAs. Official list will be imported by Admin — no unverified names.</p></div>
-      <div class="toolbar" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;">
-        <div class="search-box" style="flex:1;min-width:180px;position:relative;">
-          <input type="text" id="pubSchoolSearch" placeholder="Search school name or code…" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;" />
-        </div>
-        <select id="pubSchoolTypeFilter" class="filter-select" style="padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);">
-          <option value="all">All types</option>
-          <option value="primary">Primary</option>
-          <option value="secondary">Secondary</option>
-        </select>
-        <select id="pubSchoolLgaFilter" class="filter-select" style="padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);">
-          <option value="all">All LGAs</option>
-        </select>
+      <div class="section-header"><h2>Katsina Schools Directory</h2>
+        <p>Select <strong>Primary</strong> or <strong>Secondary</strong>, then a <strong>Local Government</strong> — school names only.</p>
       </div>
-      <div class="table-wrap">
-        <table style="width:100%;background:#fff;border-radius:12px;overflow:hidden;">
-          <thead><tr>
-            <th style="text-align:left;padding:12px;">School Name</th>
-            <th style="text-align:left;padding:12px;">Type</th>
-            <th style="text-align:left;padding:12px;">LGA</th>
-            <th style="text-align:left;padding:12px;">Ownership</th>
-            <th style="text-align:left;padding:12px;">Code</th>
-          </tr></thead>
-          <tbody id="publicSchoolsDir"><tr><td colspan="5" style="padding:20px;text-align:center;color:#546e7a;">Loading schools…</td></tr></tbody>
+      <div style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+        <select id="pubSchoolTypeFilter" style="padding:12px 16px;border-radius:10px;border:1.5px solid #e2e8f0;min-width:180px;font-weight:600;">
+          <option value="">— School type —</option>
+          <option value="primary">Primary Schools</option>
+          <option value="secondary">Secondary Schools</option>
+        </select>
+        <select id="pubSchoolLgaFilter" style="padding:12px 16px;border-radius:10px;border:1.5px solid #e2e8f0;min-width:220px;font-weight:600;" disabled>
+          <option value="">— Select Local Government —</option>
+        </select>
+        <input type="text" id="pubSchoolSearch" placeholder="Search school name…" disabled
+          style="flex:1;min-width:160px;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:10px;" />
+      </div>
+      <div id="schoolDirMeta" style="font-size:0.9rem;color:#546e7a;margin-bottom:10px;">Choose school type, then Local Government.</div>
+      <div style="overflow-x:auto;border:1px solid #e2e8f0;border-radius:12px;">
+        <table style="width:100%;border-collapse:collapse;background:#fff;">
+          <thead>
+            <tr style="background:#e8f5e9;">
+              <th style="text-align:left;padding:12px;width:48px;">#</th>
+              <th style="text-align:left;padding:12px;">School Name</th>
+              <th style="text-align:left;padding:12px;">Local Government</th>
+            </tr>
+          </thead>
+          <tbody id="publicSchoolsDir">
+            <tr><td colspan="3" style="padding:24px;text-align:center;color:#546e7a;">Select Primary or Secondary, then a Local Government.</td></tr>
+          </tbody>
         </table>
       </div>
-      <p style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
-        School missing? <a href="#school-register" style="color:var(--primary);font-weight:600;">Request addition</a>
-      </p>
     </div>
   </section>
+
+
+<script>
+window.KATSINA_LGAS = ["Bakori", "Batagarawa", "Batsari", "Baure", "Bindawa", "Charanchi", "Dan Musa", "Dandume", "Danja", "Daura", "Dutsi", "Dutsin-Ma", "Faskari", "Funtua", "Ingawa", "Jibia", "Kafur", "Kaita", "Kankara", "Kankia", "Katsina", "Kurfi", "Kusada", "Mai'Adua", "Malumfashi", "Mani", "Mashi", "Matazu", "Musawa", "Rimi", "Sabuwa", "Safana", "Sandamu", "Zango"];
+window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary School", "Dr. Habibu Primary School", "Dr. Ibrahim Aminu Kurami Primary School", "Dutsen Reme 'A' Primary School", "Dutsen Reme 'B' Primary School", "Galadima Primary School", "Inclusive Special Education", "Kabomo Primary School", "Tsiga 'B' Primary School", "Tsiga Model Primary School", "Tukur Idris Nadabo Primary School"], "secondary": ["Comm. Girls' College, Bakori", "Govt. Day Secondary School Barde (Tsiga)", "Govt. Girls Arabic Junior Sec. Sch. Kabomo", "Govt. Girls Arabic Senior Sec. School Kabomo", "Govt. Junior Secondary School Bakori", "Govt. Junior Secondary School Kurami", "Govt. Junior Secondary School Tsiga", "Govt. Senior Secondary School Bakori", "Govt. Senior Secondary School Kurami", "Govt. Senior Secondary School Tsiga", "Kabomo Com. College (In Kabomo Pri. Sch.)"]}, "Batagarawa": {"primary": ["Ajiwa Islamiyya Primary School", "Ajiwa Model Primary School", "Almun Jama'a Primary School", "Autawa Primary School", "Babbar Ruga Primary School", "Bakiyawa Islamiyya Primary School", "Bakiyawa Model Primary School", "Bambami Primary School", "Barawa Primary School", "Barda Primary School", "Bargaja Primary School", "Barhim Estate Primary School", "Batagarawa Islamiyya Primary School", "Batagarawa Low-cost Primary School", "Batagarawa Model Primary School", "Batagarawa Pilot Primary School", "Dandagoro Islamiyya Primary School", "Dandagoro Model Primary School", "Girls Primary School Batagarawa", "Gwammatawa Gari Primary School", "Gwammatawa Primary School", "Jangafe Primary School", "Jilawa Nomadic Primary School", "Jino Primary School", "Kabukawa Primary School", "Kore Primary School", "Majen Abdu Primary School", "Majen Audu Bakiyawa Primary School", "Mohd Kabir Usman Memorial Primary School", "NYSC Camp. N/Layout Primary School", "Tsanni Model Primary School", "Unwala Jangefe Primary School", "Unwala L. Primary School", "Yan Shanya Primary School"], "secondary": ["Batlada Comm. Secondary School, Batagarawa", "Govt. Day Secondary School Tsanni", "Govt. Day Secondary School, Dandagoro", "Govt. Junior Secondary School Ajiwa", "Govt. Junior Secondary School Batagarawa", "Govt. Pilot Secondary School, Dabaibayawa", "Govt. Sci. Secondary School, Batagarawa", "Govt. Secondary School Bakiyawa", "Govt. Secondary School Tsanni", "Govt. Senior Secondary School Ajiwa", "Govt. Senior Secondary School Bakiyawa", "Govt. Senior Secondary School Batagarawa", "Grammar Comm. Sec. School, Dandagoro"]}, "Batsari": {"primary": ["Batsari Model Primary School", "Dan Waire Science Primary School", "Girls Day Primary School", "Leko Senior Pilot Primary School", "Wagini Model Primary School"], "secondary": ["Govt. Pilot Junior Secondary School Batsari", "Govt. Pilot Senior Secondary School Batsari"]}, "Baure": {"primary": ["Aya Primary School", "Babban Mutum II Primary School", "Babban Mutum, I Model Primary School", "Baure I Primary School", "Baure II Primary School", "Girls Education Programme Primary School", "Haruna Babba Primary School", "Magaji Primary School", "Pilot Primary School", "Unguwar Turaki Primary School"], "secondary": ["Govt. Girls Arabic Junior Sec. School, Fago", "Govt. Girls Junior Secondary School, Rogogo", "Govt. Girls Science Secondary School, Baure", "Govt. Girls Senior Secondary School, Rogogo", "Govt. Junior Secondary School Babban Mutum", "Govt. Junior Secondary School, Baure", "Govt. Junior Secondary School, Fago", "Govt. Junior Secondary School, Karkarku", "Govt. Pilot Junior Sec. School, Unguwar Rai", "Govt. Pilot Junior Secondary School, Kagare", "Govt. Pilot Junior Secondary School, Tsodoji", "Govt. Pilot Secondary School, Garni", "Govt. Pilot Secondary School, Kawari Gyada", "Govt. Pilot Secondary School, Kawarin Kudi", "Govt. Pilot Senior Sec. School, Kawari Gyada", "Govt. Pilot Senior Secondary School, Garni", "Govt. Pilot Senior Secondary School, Unguwar Rai", "Govt. Secondary School Karkarku", "Govt. Secondary School Kawarin Malamai", "Govt. Secondary School, Dankum", "Govt. Secondary School, Garki", "Govt. Secondary School, Hui", "Govt. Secondary School, Katsayal", "Govt. Secondary School, Kwasarawa", "Govt. Secondary School, Rijiyar Tsamiya", "Govt. Secondary School, Rogogo Masauka", "Govt. Secondary School, Yanduna", "Govt. Secondary School, Yanmaulu", "Govt. Secondary School, Yardaje", "Govt. Secondary School, Zugai", "Govt. Senior Secondary School Kawarin Malamai", "Govt. Senior Secondary School, Babban Mutum", "Govt. Senior Secondary School, Baure", "Govt. Senior Secondary School, Fago", "Govt. Senior Secondary School, Garki", "Govt. Senior Secondary School, Hui", "Govt. Senior Secondary School, Karkarku", "Govt. Senior Secondary School, Katsayal", "Govt. Senior Secondary School, Kwasarawa", "Govt. Senior Secondary School, Rijiyar Tsamiya", "Govt. Senior Secondary School, Yanduna", "Govt. Senior Secondary School, Yardaje"]}, "Bindawa": {"primary": ["Bindawa Model Primary School", "Community Primary School", "Dallaje Primary School", "Dan Iya Primary School", "Girls Primary School", "Pilot Primary School", "Tafashiya Primary School", "Tama Model Primary School", "Wali Primary School"], "secondary": ["Govt. Day Secondary School Dallaje, Bindawa", "Govt. Day Secondary School Giremawa, Bindawa", "Govt. Secondary School Bindawa", "Ummarun Dallaje. Com. Sec. Sch. Sararin Kuka"]}, "Charanchi": {"primary": ["Abdullahi Ahmadu Primary School", "Banye Primary School", "Charanchi Girls Primary School", "Charanchi Model Primary School", "Charanchi Pilot Primary School", "Radda Model Primary School"], "secondary": ["Comm. Arabic Secondary School, Charanchi", "Govt. Day Secondary School Radda", "Govt. Day Secondary School, Charanchi", "Govt. Secondary School Banye", "Govt. Senior Secondary School Banye"]}, "Dan Musa": {"primary": ["Danmusa Model Primary School", "Girls Day Primary School", "Magajin Malam Primary School", "Yantumaki Model Primary School", "Yarima Pilot Primary School"], "secondary": ["Govt. Secondary School, Yantumaki"]}, "Dandume": {"primary": ["Dandume Model Primary School", "Dandume Pilot Primary School", "Danmayakin Tsoho Primary School", "Dantankari Model Primary School", "Mahuta Model Primary School"], "secondary": ["Govt. Day Secondary School Dantankari", "Govt. Day Secondary School Mahuta G", "Govt. Junior Secondary School Dandume", "Govt. Junior Secondary School Mahuta 'D'", "Govt. Senior Secondary School Dandume", "Govt. Senior Secondary School Mahuta 'D'"]}, "Danja": {"primary": ["Abubakar Primary School", "Dabai Model Primary School", "Danja Model Primary School", "Dr. Sani Abu Primary School", "Model Qur'an Primary School", "Pilot Primary School"], "secondary": ["Comm. Girls Secondary School, Danja", "Deda Comm. Secondary School, Danja", "Government Pilot Sec. Sch. Almakiyayi Danjanku", "Govt. Junior Secondary School Danja", "Govt. Secondary School Dabai", "Govt. Senior Secondary School Dabai", "Govt. Senior Secondary School Danja"]}, "Daura": {"primary": ["Bayajidda Model Nursery & Primary School", "Dan Nakola Primary School", "Daurama Nursery & Primary School", "Dunu Primary School", "Gen. Muhd Buhari Nursery & Primary School", "Girls Pilot Primary School", "Govt School For the Deaf", "Gurjiya Primary School", "Kalgo Primary School", "Madawaki Abubakar Primary School", "Magaji Sa'idu Nursery & Primary School", "Magaji Umaru Pilot Primary School", "Magajiya Primary School", "Matawalle Ahmadu Primary School", "Nasarawa Nursery & Primary School", "Sarkin Fada Abdu Primary School", "Shadambu Low-cost Primary School", "Suduji Primary School"], "secondary": ["ABGM5 Durnurkol", "Family Support Programme Daura", "Family Support Programme Sec. Sch. Daura", "Federal Govt. College Daura", "Govt. Girls Junior Secondary School Daura", "Govt. Girls Secondary School Shargalle", "Govt. Girls Senior Secondary School Daura", "Govt. Junior Secondary School Daura", "Govt. Junior Secondary School Ganga", "Govt. Junior Secondary School Shargalle", "Govt. Pilot Junior Sec. Sch. Matawalle Amadu", "Govt. Pilot Junior Sec. School Sukwanawa", "Govt. Pilot Junior Secondary School Maigari", "Govt. Pilot Senior Sec. School Matawalle Amadu", "Govt. Pilot Senior Secondary School Maigari", "Govt. Pilot Senior Secondary School Sukwanawa", "Govt. Secondary School Bumbum", "Govt. Secondary School Dan Aune", "Govt. Secondary School Dan Nakola", "Govt. Secondary School Gurjiya", "Govt. Secondary School Jirdede", "Govt. Secondary School Kalgo", "Govt. Secondary School Kangolan", "Govt. Secondary School Kayawa", "Govt. Secondary School Koza", "Govt. Secondary School Suduji", "Govt. Secondary School Yar Yandi", "Govt. Senior Secondary School Daura", "Govt. Senior Secondary School Ganga", "Govt. Senior Secondary School Shargalle", "GRISS Dagura", "GRISS Minawa", "Police Day Secondary School Daura", "Police Day Senior Sec. School Daura"]}, "Dutsi": {"primary": ["Dutsi Model Primary School", "Dutsi Pilot Primary School", "Fatima Shema G. Primary School", "Shargalle M. Primary School", "Sirika N. Primary School"], "secondary": ["Govt. Secondary School Dutsi", "GRISS Sirika"]}, "Dutsin-Ma": {"primary": ["Girls Primary School", "Makera Primary School", "Na' Alhaji Primary School", "Qur'anic Model Primary School", "Sabon Garin Safana Primary School", "Sada Primary School", "Sheikh Abubakar Gumi Primary School", "Tsangaya Model Primary School", "Yandaka Model Primary School", "Yarima D Primary School", "Zubairu M. Pilot Primary School"], "secondary": ["Govt. Girls Arabic Junior Sec. School D/Ma", "Govt. Girls Arabic Senior Secondary School D/Ma", "Govt. Girls Junior Secondary School D/Ma", "Govt. Girls Senior Secondary School D/Ma", "Govt. Junior Secondary School 'D' Dutsin-ma", "Govt. Junior Secondary School Karofi", "Govt. Junior Secondary School Makera", "Govt. Pilot Junior Secondary School D/Ma", "Govt. Pilot Senior Secondary School D/Ma", "Govt. Secondary School Dabawa", "Govt. Secondary School Kuki", "Govt. Secondary School Makera", "Govt. Senior Secondary School 'D' Dutsin-ma", "Govt. Senior Secondary School Karofi", "Govt. Senior Secondary School Makera"]}, "Faskari": {"primary": ["Adamu Zagami M. Primary School Yankara", "Ahmad Mohammad Bawa M. Primary School", "Alhaji Yahaya Model Qur'an Primary School", "Balan Dawa Primary School", "Garba Baballe Model Primary School Daudawa", "Girls Day Primary School", "Hajiya Turai Yar'adua Primary School", "Madawaki Abdullahi M. Primary School Mairua", "Shehu Inuwa Pilot Primary School", "Sheme Primary School"], "secondary": ["Govt. Day Secondary School Daudawa", "Govt. Day Secondary School Faskari", "Govt. Day Secondary School Maigora", "Govt. Day Secondary School Ruwan Godiya", "Govt. Day Secondary School Sheme", "Govt. Day Secondary School Yankara", "Govt. Day Secondary School Yar Malamai", "Govt. Day Secondary School Yarmalamai", "Govt. Junior Secondary School Mairua", "Govt. Senior Secondary School Mairua"]}, "Funtua": {"primary": ["Aya Primary School", "Bala Abdullahi Primary School", "Bala Mai Doki Primary School", "Bisije Primary School", "Girls Day Primary School", "Idris Girls Primary School", "Jabiri Primary School", "Kakumi B Primary School", "Low-cost Primary School", "Magaji Abdullahi Primary School", "Magaji Nuhu Primary School", "Makera Primary School", "Sambo Idris Sambo Primary School"], "secondary": ["Dutsen Reme Comm. Secondary School, Funtua", "Govt. College Junior, Funtua", "Govt. College Senior Funtua", "Govt. Day Secondary School Barde", "Govt. Day Secondary School Guga", "Govt. Day Secondary School Jargaba", "Govt. Day Secondary School Kahutu", "Govt. Day Secondary School Kakumi", "Govt. Day Secondary School Kokami", "Govt. Day Secondary School Tandama", "Govt. Day Secondary School Tudun Iya", "Govt. Girls Junior Secondary School Funtua", "Govt. Girls Senior Secondary School Funtua", "Govt. Junior Secondary School Funtua", "Govt. Secondary School Maska", "Govt. Senior Secondary School Funtua", "Govt. Senior Secondary School Maska"]}, "Ingawa": {"primary": ["Dambo Abu Primary School", "Dambo Tukur Model Primary School", "Ingawa Girls Primary School", "Ingawa Pilot Primary School"], "secondary": ["Binta Abdullahi Maimaje Govt. Day Sec. Sch. Ingawa", "Govt. Sci. Secondary School, Ingawa", "Govt. Secondary School Ingawa", "Govt. Secondary School Yandoma"]}, "Jibia": {"primary": ["Army Children School", "Daddara Liman Primary School", "Girls Day Primary School", "Muhammadu Rabiu Model Primary School", "Pilot Senior Primary School"], "secondary": ["Govt. Girls Unity Junior Secondary School Jibia", "Govt. Girls Unity Sec. School, Jibia", "Govt. Secondary School Daddara", "Govt. Secondary School Magama Jibia"]}, "Kafur": {"primary": ["Bala Primary School", "Girls Day Primary School", "Gozaki Model Primary School", "Kafur Model Primary School", "Masari Primary School"], "secondary": ["Government Pilot Secondary School, Kafur", "Govt. Girls' Day Secondary School, Kafur", "Govt. Junior Secondary School Gozaki", "Govt. Senior Secondary School Gozaki"]}, "Kaita": {"primary": ["Girls Primary School", "Isah Kaita M. Primary School", "Kaura Ama Primary School", "Pilot Primary School"], "secondary": ["Govt. Secondary School Kaita"]}, "Kankara": {"primary": ["Girls Vocational Primary School", "Justice A Bello Primary School", "Lawal Primary School", "Pilot Science Primary School", "Sheik Gumi Primary School"], "secondary": ["College of Arabic and Islamic Studies, Kankara", "Comm. Girls Secondary School, Kankara", "Govt. Day Junior Secondary School Kankara", "Govt. Day Pilot Sec. Sch. Nuhu Model Kankara", "Govt. Day Pilot Sec. School Nuhu Model Kankara", "Govt. Day Pilot Sec. School Wawar Kaza", "Govt. Day Pilot Secondary School Wawar Kaza", "Govt. Day Secondary School Gatakawa Kankara", "Govt. Day Secondary School Ketare, Kankara", "Govt. Day Senior Secondary School Kankara", "Govt. Pilot Sec. School Sabon Layi, Kankara", "Govt. Pilot Secondary School Sabon Layi, Kankara"]}, "Kankia": {"primary": ["Gyaza M. Primary School", "Hassan Usman M. Primary School", "Hassu Iro Inko G. D. Primary School", "Kafin Soli M. Primary School", "Kankia Pilot Primary School", "Musa Dangiwa Primary School", "Nuhu M. Primary School", "Sada Primary School"], "secondary": ["Dan Isa Yakubu Com. Arabic Sec. Sch. Rimaye", "Govt. Girls Junior Secondary School Kankia", "Govt. Girls Secondary School Kaikai", "Govt. Girls Secondary School Rimaye", "Govt. Girls Senior Secondary School Kankia", "Govt. Junior Secondary School Kankia", "Govt. Junior Secondary School Kanti Kankia", "Govt. Secondary School Gyaza", "Govt. Secondary School Kafin Soli", "Govt. Secondary School Rimaye", "Govt. Senior Secondary School Gyaza", "Govt. Senior Secondary School Kankia", "Govt. Senior Secondary School Kanti Kankia"]}, "Katsina": {"primary": ["Ahmadu Coomassie M Sci. Primary School", "Anas Mukaddas Primary School", "Bi Lingual Primary School", "Dallatu Aminu Primary School", "Danmarna Pilot Jun. Sec School", "Danmarna Primary School", "Danmasani Bala Saulawa Primary School", "Dikko Memorial Primary School", "Dr. Abdulmumini K. U. Model Primary School", "Dr. Ibrahim Shehu Shema Primary School", "Dr. Kabir Usman Primary School", "Family Support", "Farin Yaro Primary School", "Fatima Baika Girls", "Fatima Ibrahim Shema Sc. G Primary School", "Garba Kaita Memorial Primary School", "Gidado Primary School", "Hamza Maigoro Primary School", "Hassan Usman Sci. Mod. Primary School", "Hassu Iro Inko Primary School", "Isah Kaita Qur. Primary School", "Jabiru Abdullahi Primary School", "Kambarawa Primary School", "Kukar Gesa Primary School", "Mamman Barda Primary School", "Mannir Yakubu Primary School", "Muhammadu Buhari Primary School", "Muhammadu Dodo Primary School", "Musa Yar'adua Qur'an Primary School", "Nagogo Sci. Model Primary School", "Pilot Nagogo Senior Primary School", "Sa'i Amadu Na Funtua Primary School", "Sabon Gida Primary School", "Sabuwar Ung. New Extension Primary School", "Sani Danlami Primary School", "School For the Blind", "Senator Ibrahim Ida Primary School", "Sir Usman Nagogo N. A", "Talba Ibrahim Primary School", "Tudun Muntsira Primary School", "Ummarun Dallaje Primary School", "Waziri Zayyana Sci. Mod. Primary School"], "secondary": ["Al-Kanz Comm. Secondary School, Katsina", "Amadu Coomassie Comm. Sec. School Kayalwa", "Barhim Comm. Secondary School, Katsina", "Comm. Day Secondary School Kwado, Katsina", "EDUCON Comm. Secondary School Filin Samji", "El-Ladan Comm. Secondary School Dan Marina", "Family Support Programme Katsina", "Family Support Secondary School Katsina", "Girls Pilot Secondary School Dan Marina, Katsina", "Gobarau Comm. Sec. Sch. Tsohuwar Kasuwa", "Govt. College Katsina Junior", "Govt. College Katsina Senior", "Govt. Day Junior Secondary School K/Yandaka", "Govt. Day Secondary School Dankama", "Govt. Day Secondary School for the Blind, Katsina", "Govt. Day Secondary School Tudun Wada, Katsina", "Govt. Day Senior Secondary School K/Yandaka", "Govt. Girls Pilot Sec. School Dan Marna", "Govt. Girls Pilot Secondary School Danmarna", "Govt. Girls Secondary School D/Safe", "Govt. Girls Secondary School Dutsen Safe", "Govt. Junior Secondary School K/Kaura", "Govt. Pilot Junior Secondary School K/Sauri", "Govt. Pilot Secondary School D/Safe", "Govt. Pilot Secondary School Dutsen Safe", "Govt. Pilot Senior Secondary School K/Sauri", "Govt. Secondary School D/Safe Low-Cost", "Govt. Secondary School Natsinta Junior", "Govt. Senior Secondary School D/Safe Low-Cost", "Govt. Senior Secondary School Kofar Kaura", "Govt. Senior Secondary School Natsinta", "Hassu Iro Inko Comm. Sec. Sch. Kofar Sauri", "Hassu Iro Inko Girls College (Former WTC Senior)", "Hassu Iro Inko Girls College (WTC Junior)", "Jabiru Abdullahi Comm. Sec. Sch. Kofar Kaura", "Katsina Bilingual School (in SUNCAIS)", "Katsina Bilingual School (In SUNCAIS), Katsina", "Katsina College Katsina Junior", "Katsina College Katsina Senior", "Kofar Kaura Comm. Day Sec. School, Katsina", "Lami Abba Secondary School Gra, Katsina", "Liwa'ul Islam Comm. Sec. Sch. Kofar Kaura", "Modoji Comm. Secondary School, Katsina", "Muh'd Dodo I. Comm. Day Sec. Sch. Katsina", "Muh'd Dodo I. Comm. Day Sec. Sch. Kofar Kaura", "Muh'd Dodo Pilot Secondary School", "Nagogo Comm. Day Sec. School Kofar Keke", "Rafin Dadi Comm. Secondary School, Katsina", "Sir Emeka O. Junior Sec. School Kambarawa", "Sir Emeka O. Senior Sec. School Kambarawa", "SMYSS Jifatu", "SUNCAIS (Senior)", "SUNCAIS Junior (Former ATC)", "Turai Yar'adua Comm. Sec. Sch. (NARTO Park)", "UMYU Staff School, Katsina", "Waziri Zayyana Comm. Sec. Sch. Rafin Dadi"]}, "Kurfi": {"primary": ["Amadi Kurfi Quranic Primary School Kurfi", "Birchi Model Primary School", "Girls Primary School", "Kofar Yamma Primary School Kurfi", "Maradi Amadu Model Primary School Kurfi", "Samaila Mamman Pilot Primary School Kurfi", "Tsauri Model Primary School"], "secondary": ["Aisha Indo Abdulkadir Govt. Girls Sec. Sch. Kurfi", "Govt. Girls Secondary School Kurfi", "Govt. Pilot Secondary School Kurfi", "Govt. Pilot Senior Secondary School Kurfi", "Govt. Secondary School Tsauri"]}, "Kusada": {"primary": ["Gidan Mutun Daya Primary School", "Girls Vocational Primary School", "Kofa Primary School", "Kusada Model Primary School", "Kusada Pilot Primary School"], "secondary": ["Govt. Junior Secondary School Kusada", "Govt. Senior Secondary School Kusada"]}, "Mai'Adua": {"primary": ["Ahmad Garzali Primary School", "Amadu Primary School", "Girls Pilot Primary School", "Hamza Abdullahi Primary School", "Ya'u Umar Pilot Primary School", "Yusuf Bello Primary School"], "secondary": ["Comm. Girls Sec. School Kantin Dawa, Mai Adua", "Govt. Junior Secondary School Mai'adua", "Govt. Senior Secondary School Mai'adua"]}, "Malumfashi": {"primary": ["Aliyu Primary School", "Dan-Sarai Primary School", "Dan-Yari Primary School", "Dayi Model Primary School", "Dudi Primary School, Malumfashi", "Galadima Model Primary School", "Girls Day Primary School", "Karfi Model Primary School", "Mararrabar Kankara Primary School", "Pilot Primary School", "Sambo Primary School Kofar Kudu", "Tsangaya Model Primary School"], "secondary": ["Comm. Day Sec. Sch. Layin Minister, Malumfashi", "Community Model Arabic College, Malumfashi", "Foundations Comm. Science Sec. Sch. M/Fashi", "Foundations Community Science Sec. Sch. M/Fashi", "Government Girls Secondary School, Malumfashi", "Government Pilot Secondary School Kuringafa", "Govt Day Secondary School Burdugau K", "Govt. Day Junior Sec. Sch. Danrimi", "Govt. Day Junior Sec. Sch. Malumfashi", "Govt. Day Secondary School Dayi", "Govt. Day Secondary School Tudu", "Govt. Day Secondary School, Dayi", "Govt. Day Senior Sec. School Danrimi Malumfashi", "Govt. Day Senior Secondary School Malumfashi", "Govt. Girls Secondary School Malumfashi", "Govt. Junior Secondary School Karfi", "Govt. School for the Deaf, Malumfashi", "Govt. Senior Secondary School Karfi", "Govt. Unity Secondary School Malumfashi"]}, "Mani": {"primary": ["Central Model Primary School", "Girls Primary School", "Muhd Dikko Primary School", "Yantakori Primary School"], "secondary": ["Comm. Day Secondary School Magami, Mani", "Govt. Girls Secondary School K/Arewa Mani", "Govt. Junior Secondary School Muduru", "Govt. Pilot Junior Secondary School Mani", "Govt. Pilot Secondary School Mani", "Govt. Secondary School Doguru", "Govt. Secondary School Doro", "Govt. Secondary School Duwan", "Govt. Secondary School Jani", "Govt. Secondary School Randawa", "Govt. Senior Secondary School Muduru"]}, "Mashi": {"primary": ["Dokawa Primary School", "Hamis Primary School", "Mashi Model Primary School", "Pilot Primary School Mashi"], "secondary": ["Govt. Girls Secondary School Mashi", "Govt. Pilot Junior Secondary School Mashi", "Govt. Pilot Senior Secondary School Mashi"]}, "Matazu": {"primary": ["Adamu Primary School", "Matazu Girls Day Primary School", "Matazu Model Primary School", "Matazu Pilot Primary School"], "secondary": ["Comm. Girls Secondary School, Matazu", "Govt. Girls Secondary School Matazu", "Govt. Junior Secondary School Jikamshi", "Govt. Junior Secondary School Matazu", "Govt. Senior Secondary School Jikamshi", "Govt. Senior Secondary School Matazu"]}, "Musawa": {"primary": ["Girls Day Primary School", "Inde Primary School", "Usman Liman Primary School", "Yero Primary School"], "secondary": ["Govt. Day Secondary School Musawa", "Govt. Girls Secondary School Musawa"]}, "Rimi": {"primary": ["Girls Primary School Rimi", "Kaim Primary School Rimi", "Kofar Kudu Conv. Primary School", "Kofar Yamma Rimi Primary School", "Lambar Rimi Primary School", "Rimi Pilot Primary School"], "secondary": ["Comm. Girls Secondary School Rimi", "Govt. Day Secondary School Ganuwa", "Govt. Day Secondary School Iyatawa", "Govt. Junior Secondary School Kuraye", "Govt. Junior Secondary School Makurda", "Govt. Junior Secondary School Rimi", "Govt. Junior Secondary School Tsagero", "Govt. Secondary School Abukur", "Govt. Secondary School Kuraye", "Govt. Secondary School Majen-Wayya", "Govt. Senior Secondary School Abukur", "Govt. Senior Secondary School Kuraye", "Govt. Senior Secondary School Majen-Wayya", "Govt. Senior Secondary School Makurda", "Govt. Senior Secondary School Rimi", "Govt. Senior Secondary School Tsagero"]}, "Sabuwa": {"primary": ["Hamida S. Primary School", "Sabuwa Girls Primary School", "Sabuwa Model Primary School", "Sabuwa Pilot Primary School", "Shehu Primary School Damari"], "secondary": ["Govt. Day Secondary School Sabua 'A'", "Govt. Day Secondary School Sabua 'B'"]}, "Safana": {"primary": ["Dallaje Pilot Primary School", "Girls Primary School", "Magaji Primary School", "Yarima Abdulkadir Model Primary School"], "secondary": ["Govt. Pilot Junior Secondary School Safana", "Govt. Pilot Senior Secondary School Safana"]}, "Sandamu": {"primary": ["Fatima Shema Girls Primary School", "Kofar Ruwa Primary School", "Pilot Primary School", "Sandamu II Primary School"], "secondary": ["Govt. Junior Secondary School, Sandamu", "Govt. Senior Secondary School, Sandamu"]}, "Zango": {"primary": ["Abdulkuddus Primary School", "Adamu Primary School", "Girls Primary School", "Hussaini Primary School", "Kofar Arewa Primary School", "Mamman Zango Primary School", "Nuhu Makeri Primary School", "Pilot Primary School"], "secondary": ["Comm. Secondary School, Zango", "Govt. Pilot Junior Secondary School, Zango", "Govt. Pilot Senior Secondary School, Zango"]}};
+(function() {
+  function esc(s) {
+    return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function names(type, lga) {
+    var d = window.KATSINA_SCHOOLS || {};
+    if (!type || !lga || !d[lga]) return [];
+    var arr = d[lga][type === "primary" ? "primary" : "secondary"] || [];
+    return arr.slice().sort(function(a,b){ return a.localeCompare(b); });
+  }
+  function fillLga() {
+    var sel = document.getElementById("pubSchoolLgaFilter");
+    if (!sel) return;
+    var lgas = window.KATSINA_LGAS || Object.keys(window.KATSINA_SCHOOLS||{}).sort();
+    sel.innerHTML = '<option value="">— Select Local Government —</option>' +
+      lgas.map(function(l){ return '<option value="'+esc(l)+'">'+esc(l)+'</option>'; }).join("");
+  }
+  function render() {
+    var typeEl = document.getElementById("pubSchoolTypeFilter");
+    var lgaEl = document.getElementById("pubSchoolLgaFilter");
+    var qEl = document.getElementById("pubSchoolSearch");
+    var tbody = document.getElementById("publicSchoolsDir");
+    var meta = document.getElementById("schoolDirMeta");
+    if (!tbody) return;
+    var type = typeEl ? typeEl.value : "";
+    var lga = lgaEl ? lgaEl.value : "";
+    var q = (qEl && qEl.value || "").toLowerCase().trim();
+    if (!type) {
+      if (lgaEl) { lgaEl.disabled = true; lgaEl.value = ""; }
+      if (qEl) { qEl.disabled = true; qEl.value = ""; }
+      tbody.innerHTML = '<tr><td colspan="3" style="padding:24px;text-align:center;color:#546e7a;">Select <strong>Primary</strong> or <strong>Secondary</strong>.</td></tr>';
+      if (meta) meta.textContent = "Choose school type, then Local Government.";
+      return;
+    }
+    if (lgaEl) lgaEl.disabled = false;
+    if (!lga) {
+      if (qEl) { qEl.disabled = true; qEl.value = ""; }
+      tbody.innerHTML = '<tr><td colspan="3" style="padding:24px;text-align:center;color:#546e7a;">Select a <strong>Local Government</strong>.</td></tr>';
+      if (meta) meta.textContent = (type==="primary"?"Primary":"Secondary") + " — choose Local Government.";
+      return;
+    }
+    if (qEl) qEl.disabled = false;
+    var list = names(type, lga);
+    if (q) list = list.filter(function(n){ return n.toLowerCase().indexOf(q) !== -1; });
+    if (!list.length) {
+      tbody.innerHTML = '<tr><td colspan="3" style="padding:24px;text-align:center;color:#546e7a;">No schools in this Local Government.</td></tr>';
+      if (meta) meta.textContent = lga + " · 0";
+      return;
+    }
+    var h = "";
+    for (var i=0;i<list.length;i++) {
+      h += "<tr><td style='padding:10px 12px;'>"+(i+1)+"</td><td style='padding:10px 12px;'><strong>"+esc(list[i])+"</strong></td><td style='padding:10px 12px;'>"+esc(lga)+"</td></tr>";
+    }
+    tbody.innerHTML = h;
+    if (meta) meta.textContent = lga + " · " + (type==="primary"?"Primary":"Secondary") + " · " + list.length + " school(s)";
+  }
+  function bind() {
+    fillLga();
+    var typeEl = document.getElementById("pubSchoolTypeFilter");
+    var lgaEl = document.getElementById("pubSchoolLgaFilter");
+    var qEl = document.getElementById("pubSchoolSearch");
+    if (typeEl) typeEl.onchange = function(){ if(lgaEl) lgaEl.value=""; if(qEl) qEl.value=""; render(); };
+    if (lgaEl) lgaEl.onchange = render;
+    if (qEl) qEl.oninput = render;
+    render();
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+  else bind();
+  setTimeout(bind, 300);
+  setTimeout(bind, 1000);
+})();
+</script>
+
 
   <section class="section" id="edu-news">
     <div class="container">
@@ -1835,7 +1941,45 @@
                 <div id="publicBgStatus" style="margin-top:8px;font-size:0.85rem;"></div>
               </div>
 
-              <button class="btn btn-primary" id="btnSaveAppearance">Save & Publish Appearance</button>
+              
+              <div class="card" style="margin-top:16px;border:1px solid var(--border);border-radius:12px;padding:16px;">
+                <h3 style="margin:0 0 8px;color:var(--primary);">Image paths (GitHub or full URL)</h3>
+                <p style="font-size:0.85rem;color:#546e7a;margin:0 0 12px;">
+                  <strong>Method A (recommended if Storage upload fails):</strong> Put files in your GitHub repo under <code>images/</code>,
+                  then paste the path (example <code>images/logo.png</code>) and Save.<br>
+                  <strong>Method B:</strong> Upload file here if Firebase Storage rules allow Admin write.
+                </p>
+                <div class="form-group"><label>Logo path / URL</label>
+                  <input type="text" id="apLogoUrl" placeholder="images/logo.png or https://..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                  <input type="file" id="apLogoFile" accept="image/*" style="margin-top:6px;" />
+                  <button type="button" class="btn btn-outline" id="btnUpload_logoUrl" style="margin-top:6px;">Upload logo to Storage</button>
+                  <div id="apLogoStatus" style="font-size:0.8rem;margin-top:4px;"></div>
+                </div>
+                <div class="form-group"><label>Favicon path / URL</label>
+                  <input type="text" id="apFaviconUrl" placeholder="images/favicon.png" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                  <input type="file" id="apFaviconFile" accept="image/*" style="margin-top:6px;" />
+                  <button type="button" class="btn btn-outline" id="btnUpload_faviconUrl" style="margin-top:6px;">Upload favicon</button>
+                  <div id="apFavStatus" style="font-size:0.8rem;margin-top:4px;"></div>
+                </div>
+                <div class="form-group"><label>Homepage background path / URL</label>
+                  <input type="text" id="apBannerUrl" placeholder="images/hero-bg.jpg" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                  <input type="file" id="apBannerFile" accept="image/*" style="margin-top:6px;" />
+                  <button type="button" class="btn btn-outline" id="btnUpload_bannerUrl" style="margin-top:6px;">Upload background</button>
+                  <div id="apBannerStatus" style="font-size:0.8rem;margin-top:4px;"></div>
+                </div>
+                <div class="form-group"><label>About image path / URL</label>
+                  <input type="text" id="apAboutUrl" placeholder="images/about-banner.jpg" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                </div>
+                <div class="form-group"><label>Website name</label>
+                  <input type="text" id="apSiteName" placeholder="MMSAYAYA EDUVERSE" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                </div>
+                <div class="form-group"><label>Slogan</label>
+                  <input type="text" id="apSlogan" placeholder="Learn Today, Lead Tomorrow" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                </div>
+                <button type="button" class="btn btn-primary" id="btnSaveImagePaths">Save image paths &amp; text</button>
+              </div>
+
+<button class="btn btn-primary" id="btnSaveAppearance">Save & Publish Appearance</button>
               <button class="btn btn-outline" id="btnPreviewAppearance" type="button">Preview colours on this panel</button>
             </div>
           </div>
@@ -1858,18 +2002,19 @@
 
         <div class="view" id="view-ks-primary">
           <div class="card">
-            <div class="card-header"><h2>Primary Schools</h2>
+            <div class="card-header"><h2>Primary Schools — Katsina State</h2>
               <button class="btn btn-primary" id="btnAddPrimarySchool">+ Add Primary School</button>
             </div>
             <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:12px;">All primary schools by Local Government (A–Z). School name and LGA only.</p>
               <div class="toolbar">
-                <div class="search-box"><input type="text" id="primarySchoolSearch" placeholder="Search by name, code, LGA…" /></div>
+                <div class="search-box"><input type="text" id="primarySchoolSearch" placeholder="Search by school name or LGA…" /></div>
                 <select class="filter-select" id="primaryLgaFilter"><option value="all">All LGAs</option></select>
-                <select class="filter-select" id="primaryStatusFilter"><option value="all">All status</option><option value="active">Active</option><option value="pending">Pending</option><option value="suspended">Suspended</option><option value="archived">Archived</option></select>
               </div>
+              <div id="primarySchoolMeta" style="font-size:0.85rem;color:#546e7a;margin:8px 0;"></div>
               <div class="table-wrap"><table>
-                <thead><tr><th>School</th><th>Code</th><th>LGA</th><th>Status</th><th>Verified</th><th>Actions</th></tr></thead>
-                <tbody id="primarySchoolsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+                <thead><tr><th style="width:48px;">#</th><th>School Name</th><th>Local Government</th><th>Status</th></tr></thead>
+                <tbody id="primarySchoolsTable"><tr><td colspan="4" class="loading"><div class="spinner"></div></td></tr></tbody>
               </table></div>
             </div>
           </div>
@@ -1877,18 +2022,18 @@
 
         <div class="view" id="view-ks-secondary">
           <div class="card">
-            <div class="card-header"><h2>Secondary Schools</h2>
+            <div class="card-header"><h2>Secondary Schools — Katsina State</h2>
               <button class="btn btn-primary" id="btnAddSecondarySchool">+ Add Secondary School</button>
             </div>
             <div class="card-body">
               <div class="toolbar">
-                <div class="search-box"><input type="text" id="secondarySchoolSearch" placeholder="Search…" /></div>
+                <div class="search-box"><input type="text" id="secondarySchoolSearch" placeholder="Search by school name or LGA…" /></div>
                 <select class="filter-select" id="secondaryLgaFilter"><option value="all">All LGAs</option></select>
                 <select class="filter-select" id="secondaryStatusFilter"><option value="all">All status</option><option value="active">Active</option><option value="pending">Pending</option><option value="suspended">Suspended</option><option value="archived">Archived</option></select>
               </div>
               <div class="table-wrap"><table>
-                <thead><tr><th>School</th><th>Code</th><th>LGA</th><th>Status</th><th>Verified</th><th>Actions</th></tr></thead>
-                <tbody id="secondarySchoolsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+                <thead><tr><th style="width:48px;">#</th><th>School Name</th><th>Local Government</th><th>Status</th></tr></thead>
+                <tbody id="secondarySchoolsTable"><tr><td colspan="4" class="loading"><div class="spinner"></div></td></tr></tbody>
               </table></div>
             </div>
           </div>
@@ -5015,7 +5160,7 @@
     async function loadPublicSchools() {
       const tbody = $("publicSchoolsDir");
       if (!tbody) return;
-      if (window.KATSINA_SCHOOLS) return; // embedded directory owns public table
+      if (true) return; // public directory uses embedded list only
       try {
         const snap = await getDocs(query(collection(db, "schools"), where("verified", "==", true), limit(50)));
         if (snap.empty) {
@@ -5386,7 +5531,7 @@
     function renderPublicDirectory() {
       const tbody = $("publicSchoolsDir");
       if (!tbody) return;
-      if (window.KATSINA_SCHOOLS && window.KATSINA_SCHOOLS_FLAT) return;
+      if (true) return;
       const q = ($("pubSchoolSearch")?.value || "").toLowerCase().trim();
       const type = $("pubSchoolTypeFilter")?.value || "all";
       const lga = $("pubSchoolLgaFilter")?.value || "all";
@@ -5657,994 +5802,341 @@
   </script>
 
 
-  <script>
-    /* Katsina schools directory embedded from official TP list — by Local Government */
-    window.KATSINA_LGAS = ["Bakori", "Batagarawa", "Batsari", "Baure", "Bindawa", "Charanchi", "Dan Musa", "Dandume", "Danja", "Daura", "Dutsi", "Dutsin-Ma", "Faskari", "Funtua", "Ingawa", "Jibia", "Kafur", "Kaita", "Kankara", "Kankia", "Katsina", "Kurfi", "Kusada", "Mai'Adua", "Malumfashi", "Mani", "Mashi", "Matazu", "Musawa", "Rimi", "Sabuwa", "Safana", "Sandamu", "Zango"];
-    window.KATSINA_SCHOOLS = {
-  "Bakori": {
-    "primary": [
-      "Abdulkadir Barau Primary School",
-      "Dr. Habibu Primary School",
-      "Dr. Ibrahim Aminu Kurami Primary School",
-      "Dutsen Reme 'A' Primary School",
-      "Dutsen Reme 'B' Primary School",
-      "Galadima Primary School",
-      "Inclusive Special Education",
-      "Kabomo Primary School",
-      "Tsiga 'B' Primary School",
-      "Tsiga Model Primary School",
-      "Tukur Idris Nadabo Primary School"
-    ],
-    "secondary": [
-      "Comm. Girls' College, Bakori",
-      "Govt. Day Secondary School Barde (Tsiga)",
-      "Govt. Girls Arabic Junior Sec. Sch. Kabomo",
-      "Govt. Girls Arabic Senior Sec. School Kabomo",
-      "Govt. Junior Secondary School Bakori",
-      "Govt. Junior Secondary School Kurami",
-      "Govt. Junior Secondary School Tsiga",
-      "Govt. Senior Secondary School Bakori",
-      "Govt. Senior Secondary School Kurami",
-      "Govt. Senior Secondary School Tsiga",
-      "Kabomo Com. College (In Kabomo Pri. Sch.)"
-    ]
-  },
-  "Batagarawa": {
-    "primary": [
-      "Ajiwa Islamiyya Primary School",
-      "Ajiwa Model Primary School",
-      "Almun Jama'a Primary School",
-      "Autawa Primary School",
-      "Babbar Ruga Primary School",
-      "Bakiyawa Islamiyya Primary School",
-      "Bakiyawa Model Primary School",
-      "Bambami Primary School",
-      "Barawa Primary School",
-      "Barda Primary School",
-      "Bargaja Primary School",
-      "Barhim Estate Primary School",
-      "Batagarawa Islamiyya Primary School",
-      "Batagarawa Low-cost Primary School",
-      "Batagarawa Model Primary School",
-      "Batagarawa Pilot Primary School",
-      "Dandagoro Islamiyya Primary School",
-      "Dandagoro Model Primary School",
-      "Girls Primary School Batagarawa",
-      "Gwammatawa Gari Primary School",
-      "Gwammatawa Primary School",
-      "Jangafe Primary School",
-      "Jilawa Nomadic Primary School",
-      "Jino Primary School",
-      "Kabukawa Primary School",
-      "Kore Primary School",
-      "Majen Abdu Primary School",
-      "Majen Audu Bakiyawa Primary School",
-      "Mohd Kabir Usman Memorial Primary School",
-      "NYSC Camp. N/Layout Primary School",
-      "Tsanni Model Primary School",
-      "Unwala Jangefe Primary School",
-      "Unwala L. Primary School",
-      "Yan Shanya Primary School"
-    ],
-    "secondary": [
-      "Batlada Comm. Secondary School, Batagarawa",
-      "Govt. Day Secondary School Tsanni",
-      "Govt. Day Secondary School, Dandagoro",
-      "Govt. Junior Secondary School Ajiwa",
-      "Govt. Junior Secondary School Batagarawa",
-      "Govt. Pilot Secondary School, Dabaibayawa",
-      "Govt. Sci. Secondary School, Batagarawa",
-      "Govt. Secondary School Bakiyawa",
-      "Govt. Secondary School Tsanni",
-      "Govt. Senior Secondary School Ajiwa",
-      "Govt. Senior Secondary School Bakiyawa",
-      "Govt. Senior Secondary School Batagarawa",
-      "Grammar Comm. Sec. School, Dandagoro"
-    ]
-  },
-  "Batsari": {
-    "primary": [
-      "Batsari Model Primary School",
-      "Dan Waire Science Primary School",
-      "Girls Day Primary School",
-      "Leko Senior Pilot Primary School",
-      "Wagini Model Primary School"
-    ],
-    "secondary": [
-      "Govt. Pilot Junior Secondary School Batsari",
-      "Govt. Pilot Senior Secondary School Batsari"
-    ]
-  },
-  "Baure": {
-    "primary": [
-      "Aya Primary School",
-      "Babban Mutum II Primary School",
-      "Babban Mutum, I Model Primary School",
-      "Baure I Primary School",
-      "Baure II Primary School",
-      "Girls Education Programme Primary School",
-      "Haruna Babba Primary School",
-      "Magaji Primary School",
-      "Pilot Primary School",
-      "Unguwar Turaki Primary School"
-    ],
-    "secondary": [
-      "Govt. Girls Arabic Junior Sec. School, Fago",
-      "Govt. Girls Junior Secondary School, Rogogo",
-      "Govt. Girls Science Secondary School, Baure",
-      "Govt. Girls Senior Secondary School, Rogogo",
-      "Govt. Junior Secondary School Babban Mutum",
-      "Govt. Junior Secondary School, Baure",
-      "Govt. Junior Secondary School, Fago",
-      "Govt. Junior Secondary School, Karkarku",
-      "Govt. Pilot Junior Sec. School, Unguwar Rai",
-      "Govt. Pilot Junior Secondary School, Kagare",
-      "Govt. Pilot Junior Secondary School, Tsodoji",
-      "Govt. Pilot Secondary School, Garni",
-      "Govt. Pilot Secondary School, Kawari Gyada",
-      "Govt. Pilot Secondary School, Kawarin Kudi",
-      "Govt. Pilot Senior Sec. School, Kawari Gyada",
-      "Govt. Pilot Senior Secondary School, Garni",
-      "Govt. Pilot Senior Secondary School, Unguwar Rai",
-      "Govt. Secondary School Karkarku",
-      "Govt. Secondary School Kawarin Malamai",
-      "Govt. Secondary School, Dankum",
-      "Govt. Secondary School, Garki",
-      "Govt. Secondary School, Hui",
-      "Govt. Secondary School, Katsayal",
-      "Govt. Secondary School, Kwasarawa",
-      "Govt. Secondary School, Rijiyar Tsamiya",
-      "Govt. Secondary School, Rogogo Masauka",
-      "Govt. Secondary School, Yanduna",
-      "Govt. Secondary School, Yanmaulu",
-      "Govt. Secondary School, Yardaje",
-      "Govt. Secondary School, Zugai",
-      "Govt. Senior Secondary School Kawarin Malamai",
-      "Govt. Senior Secondary School, Babban Mutum",
-      "Govt. Senior Secondary School, Baure",
-      "Govt. Senior Secondary School, Fago",
-      "Govt. Senior Secondary School, Garki",
-      "Govt. Senior Secondary School, Hui",
-      "Govt. Senior Secondary School, Karkarku",
-      "Govt. Senior Secondary School, Katsayal",
-      "Govt. Senior Secondary School, Kwasarawa",
-      "Govt. Senior Secondary School, Rijiyar Tsamiya",
-      "Govt. Senior Secondary School, Yanduna",
-      "Govt. Senior Secondary School, Yardaje"
-    ]
-  },
-  "Bindawa": {
-    "primary": [
-      "Bindawa Model Primary School",
-      "Community Primary School",
-      "Dallaje Primary School",
-      "Dan Iya Primary School",
-      "Girls Primary School",
-      "Pilot Primary School",
-      "Tafashiya Primary School",
-      "Tama Model Primary School",
-      "Wali Primary School"
-    ],
-    "secondary": [
-      "Govt. Day Secondary School Dallaje, Bindawa",
-      "Govt. Day Secondary School Giremawa, Bindawa",
-      "Govt. Secondary School Bindawa",
-      "Ummarun Dallaje. Com. Sec. Sch. Sararin Kuka"
-    ]
-  },
-  "Charanchi": {
-    "primary": [
-      "Abdullahi Ahmadu Primary School",
-      "Banye Primary School",
-      "Charanchi Girls Primary School",
-      "Charanchi Model Primary School",
-      "Charanchi Pilot Primary School",
-      "Radda Model Primary School"
-    ],
-    "secondary": [
-      "Comm. Arabic Secondary School, Charanchi",
-      "Govt. Day Secondary School Radda",
-      "Govt. Day Secondary School, Charanchi",
-      "Govt. Secondary School Banye",
-      "Govt. Senior Secondary School Banye"
-    ]
-  },
-  "Dan Musa": {
-    "primary": [
-      "Danmusa Model Primary School",
-      "Girls Day Primary School",
-      "Magajin Malam Primary School",
-      "Yantumaki Model Primary School",
-      "Yarima Pilot Primary School"
-    ],
-    "secondary": [
-      "Govt. Secondary School, Yantumaki"
-    ]
-  },
-  "Dandume": {
-    "primary": [
-      "Dandume Model Primary School",
-      "Dandume Pilot Primary School",
-      "Danmayakin Tsoho Primary School",
-      "Dantankari Model Primary School",
-      "Mahuta Model Primary School"
-    ],
-    "secondary": [
-      "Govt. Day Secondary School Dantankari",
-      "Govt. Day Secondary School Mahuta G",
-      "Govt. Junior Secondary School Dandume",
-      "Govt. Junior Secondary School Mahuta 'D'",
-      "Govt. Senior Secondary School Dandume",
-      "Govt. Senior Secondary School Mahuta 'D'"
-    ]
-  },
-  "Danja": {
-    "primary": [
-      "Abubakar Primary School",
-      "Dabai Model Primary School",
-      "Danja Model Primary School",
-      "Dr. Sani Abu Primary School",
-      "Model Qur'an Primary School",
-      "Pilot Primary School"
-    ],
-    "secondary": [
-      "Comm. Girls Secondary School, Danja",
-      "Deda Comm. Secondary School, Danja",
-      "Government Pilot Sec. Sch. Almakiyayi Danjanku",
-      "Govt. Junior Secondary School Danja",
-      "Govt. Secondary School Dabai",
-      "Govt. Senior Secondary School Dabai",
-      "Govt. Senior Secondary School Danja"
-    ]
-  },
-  "Daura": {
-    "primary": [
-      "Bayajidda Model Nursery & Primary School",
-      "Dan Nakola Primary School",
-      "Daurama Nursery & Primary School",
-      "Dunu Primary School",
-      "Gen. Muhd Buhari Nursery & Primary School",
-      "Girls Pilot Primary School",
-      "Govt School For the Deaf",
-      "Gurjiya Primary School",
-      "Kalgo Primary School",
-      "Madawaki Abubakar Primary School",
-      "Magaji Sa'idu Nursery & Primary School",
-      "Magaji Umaru Pilot Primary School",
-      "Magajiya Primary School",
-      "Matawalle Ahmadu Primary School",
-      "Nasarawa Nursery & Primary School",
-      "Sarkin Fada Abdu Primary School",
-      "Shadambu Low-cost Primary School",
-      "Suduji Primary School"
-    ],
-    "secondary": [
-      "ABGM5 Durnurkol",
-      "Family Support Programme Daura",
-      "Family Support Programme Sec. Sch. Daura",
-      "Federal Govt. College Daura",
-      "Govt. Girls Junior Secondary School Daura",
-      "Govt. Girls Secondary School Shargalle",
-      "Govt. Girls Senior Secondary School Daura",
-      "Govt. Junior Secondary School Daura",
-      "Govt. Junior Secondary School Ganga",
-      "Govt. Junior Secondary School Shargalle",
-      "Govt. Pilot Junior Sec. Sch. Matawalle Amadu",
-      "Govt. Pilot Junior Sec. School Sukwanawa",
-      "Govt. Pilot Junior Secondary School Maigari",
-      "Govt. Pilot Senior Sec. School Matawalle Amadu",
-      "Govt. Pilot Senior Secondary School Maigari",
-      "Govt. Pilot Senior Secondary School Sukwanawa",
-      "Govt. Secondary School Bumbum",
-      "Govt. Secondary School Dan Aune",
-      "Govt. Secondary School Dan Nakola",
-      "Govt. Secondary School Gurjiya",
-      "Govt. Secondary School Jirdede",
-      "Govt. Secondary School Kalgo",
-      "Govt. Secondary School Kangolan",
-      "Govt. Secondary School Kayawa",
-      "Govt. Secondary School Koza",
-      "Govt. Secondary School Suduji",
-      "Govt. Secondary School Yar Yandi",
-      "Govt. Senior Secondary School Daura",
-      "Govt. Senior Secondary School Ganga",
-      "Govt. Senior Secondary School Shargalle",
-      "GRISS Dagura",
-      "GRISS Minawa",
-      "Police Day Secondary School Daura",
-      "Police Day Senior Sec. School Daura"
-    ]
-  },
-  "Dutsi": {
-    "primary": [
-      "Dutsi Model Primary School",
-      "Dutsi Pilot Primary School",
-      "Fatima Shema G. Primary School",
-      "Shargalle M. Primary School",
-      "Sirika N. Primary School"
-    ],
-    "secondary": [
-      "Govt. Secondary School Dutsi",
-      "GRISS Sirika"
-    ]
-  },
-  "Dutsin-Ma": {
-    "primary": [
-      "Girls Primary School",
-      "Makera Primary School",
-      "Na' Alhaji Primary School",
-      "Qur'anic Model Primary School",
-      "Sabon Garin Safana Primary School",
-      "Sada Primary School",
-      "Sheikh Abubakar Gumi Primary School",
-      "Tsangaya Model Primary School",
-      "Yandaka Model Primary School",
-      "Yarima D Primary School",
-      "Zubairu M. Pilot Primary School"
-    ],
-    "secondary": [
-      "Govt. Girls Arabic Junior Sec. School D/Ma",
-      "Govt. Girls Arabic Senior Secondary School D/Ma",
-      "Govt. Girls Junior Secondary School D/Ma",
-      "Govt. Girls Senior Secondary School D/Ma",
-      "Govt. Junior Secondary School 'D' Dutsin-ma",
-      "Govt. Junior Secondary School Karofi",
-      "Govt. Junior Secondary School Makera",
-      "Govt. Pilot Junior Secondary School D/Ma",
-      "Govt. Pilot Senior Secondary School D/Ma",
-      "Govt. Secondary School Dabawa",
-      "Govt. Secondary School Kuki",
-      "Govt. Secondary School Makera",
-      "Govt. Senior Secondary School 'D' Dutsin-ma",
-      "Govt. Senior Secondary School Karofi",
-      "Govt. Senior Secondary School Makera"
-    ]
-  },
-  "Faskari": {
-    "primary": [
-      "Adamu Zagami M. Primary School Yankara",
-      "Ahmad Mohammad Bawa M. Primary School",
-      "Alhaji Yahaya Model Qur'an Primary School",
-      "Balan Dawa Primary School",
-      "Garba Baballe Model Primary School Daudawa",
-      "Girls Day Primary School",
-      "Hajiya Turai Yar'adua Primary School",
-      "Madawaki Abdullahi M. Primary School Mairua",
-      "Shehu Inuwa Pilot Primary School",
-      "Sheme Primary School"
-    ],
-    "secondary": [
-      "Govt. Day Secondary School Daudawa",
-      "Govt. Day Secondary School Faskari",
-      "Govt. Day Secondary School Maigora",
-      "Govt. Day Secondary School Ruwan Godiya",
-      "Govt. Day Secondary School Sheme",
-      "Govt. Day Secondary School Yankara",
-      "Govt. Day Secondary School Yar Malamai",
-      "Govt. Day Secondary School Yarmalamai",
-      "Govt. Junior Secondary School Mairua",
-      "Govt. Senior Secondary School Mairua"
-    ]
-  },
-  "Funtua": {
-    "primary": [
-      "Aya Primary School",
-      "Bala Abdullahi Primary School",
-      "Bala Mai Doki Primary School",
-      "Bisije Primary School",
-      "Girls Day Primary School",
-      "Idris Girls Primary School",
-      "Jabiri Primary School",
-      "Kakumi B Primary School",
-      "Low-cost Primary School",
-      "Magaji Abdullahi Primary School",
-      "Magaji Nuhu Primary School",
-      "Makera Primary School",
-      "Sambo Idris Sambo Primary School"
-    ],
-    "secondary": [
-      "Dutsen Reme Comm. Secondary School, Funtua",
-      "Govt. College Junior, Funtua",
-      "Govt. College Senior Funtua",
-      "Govt. Day Secondary School Barde",
-      "Govt. Day Secondary School Guga",
-      "Govt. Day Secondary School Jargaba",
-      "Govt. Day Secondary School Kahutu",
-      "Govt. Day Secondary School Kakumi",
-      "Govt. Day Secondary School Kokami",
-      "Govt. Day Secondary School Tandama",
-      "Govt. Day Secondary School Tudun Iya",
-      "Govt. Girls Junior Secondary School Funtua",
-      "Govt. Girls Senior Secondary School Funtua",
-      "Govt. Junior Secondary School Funtua",
-      "Govt. Secondary School Maska",
-      "Govt. Senior Secondary School Funtua",
-      "Govt. Senior Secondary School Maska"
-    ]
-  },
-  "Ingawa": {
-    "primary": [
-      "Dambo Abu Primary School",
-      "Dambo Tukur Model Primary School",
-      "Ingawa Girls Primary School",
-      "Ingawa Pilot Primary School"
-    ],
-    "secondary": [
-      "Binta Abdullahi Maimaje Govt. Day Sec. Sch. Ingawa",
-      "Govt. Sci. Secondary School, Ingawa",
-      "Govt. Secondary School Ingawa",
-      "Govt. Secondary School Yandoma"
-    ]
-  },
-  "Jibia": {
-    "primary": [
-      "Army Children School",
-      "Daddara Liman Primary School",
-      "Girls Day Primary School",
-      "Muhammadu Rabiu Model Primary School",
-      "Pilot Senior Primary School"
-    ],
-    "secondary": [
-      "Govt. Girls Unity Junior Secondary School Jibia",
-      "Govt. Girls Unity Sec. School, Jibia",
-      "Govt. Secondary School Daddara",
-      "Govt. Secondary School Magama Jibia"
-    ]
-  },
-  "Kafur": {
-    "primary": [
-      "Bala Primary School",
-      "Girls Day Primary School",
-      "Gozaki Model Primary School",
-      "Kafur Model Primary School",
-      "Masari Primary School"
-    ],
-    "secondary": [
-      "Government Pilot Secondary School, Kafur",
-      "Govt. Girls' Day Secondary School, Kafur",
-      "Govt. Junior Secondary School Gozaki",
-      "Govt. Senior Secondary School Gozaki"
-    ]
-  },
-  "Kaita": {
-    "primary": [
-      "Girls Primary School",
-      "Isah Kaita M. Primary School",
-      "Kaura Ama Primary School",
-      "Pilot Primary School"
-    ],
-    "secondary": [
-      "Govt. Secondary School Kaita"
-    ]
-  },
-  "Kankara": {
-    "primary": [
-      "Girls Vocational Primary School",
-      "Justice A Bello Primary School",
-      "Lawal Primary School",
-      "Pilot Science Primary School",
-      "Sheik Gumi Primary School"
-    ],
-    "secondary": [
-      "College of Arabic and Islamic Studies, Kankara",
-      "Comm. Girls Secondary School, Kankara",
-      "Govt. Day Junior Secondary School Kankara",
-      "Govt. Day Pilot Sec. Sch. Nuhu Model Kankara",
-      "Govt. Day Pilot Sec. School Nuhu Model Kankara",
-      "Govt. Day Pilot Sec. School Wawar Kaza",
-      "Govt. Day Pilot Secondary School Wawar Kaza",
-      "Govt. Day Secondary School Gatakawa Kankara",
-      "Govt. Day Secondary School Ketare, Kankara",
-      "Govt. Day Senior Secondary School Kankara",
-      "Govt. Pilot Sec. School Sabon Layi, Kankara",
-      "Govt. Pilot Secondary School Sabon Layi, Kankara"
-    ]
-  },
-  "Kankia": {
-    "primary": [
-      "Gyaza M. Primary School",
-      "Hassan Usman M. Primary School",
-      "Hassu Iro Inko G. D. Primary School",
-      "Kafin Soli M. Primary School",
-      "Kankia Pilot Primary School",
-      "Musa Dangiwa Primary School",
-      "Nuhu M. Primary School",
-      "Sada Primary School"
-    ],
-    "secondary": [
-      "Dan Isa Yakubu Com. Arabic Sec. Sch. Rimaye",
-      "Govt. Girls Junior Secondary School Kankia",
-      "Govt. Girls Secondary School Kaikai",
-      "Govt. Girls Secondary School Rimaye",
-      "Govt. Girls Senior Secondary School Kankia",
-      "Govt. Junior Secondary School Kankia",
-      "Govt. Junior Secondary School Kanti Kankia",
-      "Govt. Secondary School Gyaza",
-      "Govt. Secondary School Kafin Soli",
-      "Govt. Secondary School Rimaye",
-      "Govt. Senior Secondary School Gyaza",
-      "Govt. Senior Secondary School Kankia",
-      "Govt. Senior Secondary School Kanti Kankia"
-    ]
-  },
-  "Katsina": {
-    "primary": [
-      "Ahmadu Coomassie M Sci. Primary School",
-      "Anas Mukaddas Primary School",
-      "Bi Lingual Primary School",
-      "Dallatu Aminu Primary School",
-      "Danmarna Pilot Jun. Sec School",
-      "Danmarna Primary School",
-      "Danmasani Bala Saulawa Primary School",
-      "Dikko Memorial Primary School",
-      "Dr. Abdulmumini K. U. Model Primary School",
-      "Dr. Ibrahim Shehu Shema Primary School",
-      "Dr. Kabir Usman Primary School",
-      "Family Support",
-      "Farin Yaro Primary School",
-      "Fatima Baika Girls",
-      "Fatima Ibrahim Shema Sc. G Primary School",
-      "Garba Kaita Memorial Primary School",
-      "Gidado Primary School",
-      "Hamza Maigoro Primary School",
-      "Hassan Usman Sci. Mod. Primary School",
-      "Hassu Iro Inko Primary School",
-      "Isah Kaita Qur. Primary School",
-      "Jabiru Abdullahi Primary School",
-      "Kambarawa Primary School",
-      "Kukar Gesa Primary School",
-      "Mamman Barda Primary School",
-      "Mannir Yakubu Primary School",
-      "Muhammadu Buhari Primary School",
-      "Muhammadu Dodo Primary School",
-      "Musa Yar'adua Qur'an Primary School",
-      "Nagogo Sci. Model Primary School",
-      "Pilot Nagogo Senior Primary School",
-      "Sa'i Amadu Na Funtua Primary School",
-      "Sabon Gida Primary School",
-      "Sabuwar Ung. New Extension Primary School",
-      "Sani Danlami Primary School",
-      "School For the Blind",
-      "Senator Ibrahim Ida Primary School",
-      "Sir Usman Nagogo N. A",
-      "Talba Ibrahim Primary School",
-      "Tudun Muntsira Primary School",
-      "Ummarun Dallaje Primary School",
-      "Waziri Zayyana Sci. Mod. Primary School"
-    ],
-    "secondary": [
-      "Al-Kanz Comm. Secondary School, Katsina",
-      "Amadu Coomassie Comm. Sec. School Kayalwa",
-      "Barhim Comm. Secondary School, Katsina",
-      "Comm. Day Secondary School Kwado, Katsina",
-      "EDUCON Comm. Secondary School Filin Samji",
-      "El-Ladan Comm. Secondary School Dan Marina",
-      "Family Support Programme Katsina",
-      "Family Support Secondary School Katsina",
-      "Girls Pilot Secondary School Dan Marina, Katsina",
-      "Gobarau Comm. Sec. Sch. Tsohuwar Kasuwa",
-      "Govt. College Katsina Junior",
-      "Govt. College Katsina Senior",
-      "Govt. Day Junior Secondary School K/Yandaka",
-      "Govt. Day Secondary School Dankama",
-      "Govt. Day Secondary School for the Blind, Katsina",
-      "Govt. Day Secondary School Tudun Wada, Katsina",
-      "Govt. Day Senior Secondary School K/Yandaka",
-      "Govt. Girls Pilot Sec. School Dan Marna",
-      "Govt. Girls Pilot Secondary School Danmarna",
-      "Govt. Girls Secondary School D/Safe",
-      "Govt. Girls Secondary School Dutsen Safe",
-      "Govt. Junior Secondary School K/Kaura",
-      "Govt. Pilot Junior Secondary School K/Sauri",
-      "Govt. Pilot Secondary School D/Safe",
-      "Govt. Pilot Secondary School Dutsen Safe",
-      "Govt. Pilot Senior Secondary School K/Sauri",
-      "Govt. Secondary School D/Safe Low-Cost",
-      "Govt. Secondary School Natsinta Junior",
-      "Govt. Senior Secondary School D/Safe Low-Cost",
-      "Govt. Senior Secondary School Kofar Kaura",
-      "Govt. Senior Secondary School Natsinta",
-      "Hassu Iro Inko Comm. Sec. Sch. Kofar Sauri",
-      "Hassu Iro Inko Girls College (Former WTC Senior)",
-      "Hassu Iro Inko Girls College (WTC Junior)",
-      "Jabiru Abdullahi Comm. Sec. Sch. Kofar Kaura",
-      "Katsina Bilingual School (in SUNCAIS)",
-      "Katsina Bilingual School (In SUNCAIS), Katsina",
-      "Katsina College Katsina Junior",
-      "Katsina College Katsina Senior",
-      "Kofar Kaura Comm. Day Sec. School, Katsina",
-      "Lami Abba Secondary School Gra, Katsina",
-      "Liwa'ul Islam Comm. Sec. Sch. Kofar Kaura",
-      "Modoji Comm. Secondary School, Katsina",
-      "Muh'd Dodo I. Comm. Day Sec. Sch. Katsina",
-      "Muh'd Dodo I. Comm. Day Sec. Sch. Kofar Kaura",
-      "Muh'd Dodo Pilot Secondary School",
-      "Nagogo Comm. Day Sec. School Kofar Keke",
-      "Rafin Dadi Comm. Secondary School, Katsina",
-      "Sir Emeka O. Junior Sec. School Kambarawa",
-      "Sir Emeka O. Senior Sec. School Kambarawa",
-      "SMYSS Jifatu",
-      "SUNCAIS (Senior)",
-      "SUNCAIS Junior (Former ATC)",
-      "Turai Yar'adua Comm. Sec. Sch. (NARTO Park)",
-      "UMYU Staff School, Katsina",
-      "Waziri Zayyana Comm. Sec. Sch. Rafin Dadi"
-    ]
-  },
-  "Kurfi": {
-    "primary": [
-      "Amadi Kurfi Quranic Primary School Kurfi",
-      "Birchi Model Primary School",
-      "Girls Primary School",
-      "Kofar Yamma Primary School Kurfi",
-      "Maradi Amadu Model Primary School Kurfi",
-      "Samaila Mamman Pilot Primary School Kurfi",
-      "Tsauri Model Primary School"
-    ],
-    "secondary": [
-      "Aisha Indo Abdulkadir Govt. Girls Sec. Sch. Kurfi",
-      "Govt. Girls Secondary School Kurfi",
-      "Govt. Pilot Secondary School Kurfi",
-      "Govt. Pilot Senior Secondary School Kurfi",
-      "Govt. Secondary School Tsauri"
-    ]
-  },
-  "Kusada": {
-    "primary": [
-      "Gidan Mutun Daya Primary School",
-      "Girls Vocational Primary School",
-      "Kofa Primary School",
-      "Kusada Model Primary School",
-      "Kusada Pilot Primary School"
-    ],
-    "secondary": [
-      "Govt. Junior Secondary School Kusada",
-      "Govt. Senior Secondary School Kusada"
-    ]
-  },
-  "Mai'Adua": {
-    "primary": [
-      "Ahmad Garzali Primary School",
-      "Amadu Primary School",
-      "Girls Pilot Primary School",
-      "Hamza Abdullahi Primary School",
-      "Ya'u Umar Pilot Primary School",
-      "Yusuf Bello Primary School"
-    ],
-    "secondary": [
-      "Comm. Girls Sec. School Kantin Dawa, Mai Adua",
-      "Govt. Junior Secondary School Mai'adua",
-      "Govt. Senior Secondary School Mai'adua"
-    ]
-  },
-  "Malumfashi": {
-    "primary": [
-      "Aliyu Primary School",
-      "Dan-Sarai Primary School",
-      "Dan-Yari Primary School",
-      "Dayi Model Primary School",
-      "Dudi Primary School, Malumfashi",
-      "Galadima Model Primary School",
-      "Girls Day Primary School",
-      "Karfi Model Primary School",
-      "Mararrabar Kankara Primary School",
-      "Pilot Primary School",
-      "Sambo Primary School Kofar Kudu",
-      "Tsangaya Model Primary School"
-    ],
-    "secondary": [
-      "Comm. Day Sec. Sch. Layin Minister, Malumfashi",
-      "Community Model Arabic College, Malumfashi",
-      "Foundations Comm. Science Sec. Sch. M/Fashi",
-      "Foundations Community Science Sec. Sch. M/Fashi",
-      "Government Girls Secondary School, Malumfashi",
-      "Government Pilot Secondary School Kuringafa",
-      "Govt Day Secondary School Burdugau K",
-      "Govt. Day Junior Sec. Sch. Danrimi",
-      "Govt. Day Junior Sec. Sch. Malumfashi",
-      "Govt. Day Secondary School Dayi",
-      "Govt. Day Secondary School Tudu",
-      "Govt. Day Secondary School, Dayi",
-      "Govt. Day Senior Sec. School Danrimi Malumfashi",
-      "Govt. Day Senior Secondary School Malumfashi",
-      "Govt. Girls Secondary School Malumfashi",
-      "Govt. Junior Secondary School Karfi",
-      "Govt. School for the Deaf, Malumfashi",
-      "Govt. Senior Secondary School Karfi",
-      "Govt. Unity Secondary School Malumfashi"
-    ]
-  },
-  "Mani": {
-    "primary": [
-      "Central Model Primary School",
-      "Girls Primary School",
-      "Muhd Dikko Primary School",
-      "Yantakori Primary School"
-    ],
-    "secondary": [
-      "Comm. Day Secondary School Magami, Mani",
-      "Govt. Girls Secondary School K/Arewa Mani",
-      "Govt. Junior Secondary School Muduru",
-      "Govt. Pilot Junior Secondary School Mani",
-      "Govt. Pilot Secondary School Mani",
-      "Govt. Secondary School Doguru",
-      "Govt. Secondary School Doro",
-      "Govt. Secondary School Duwan",
-      "Govt. Secondary School Jani",
-      "Govt. Secondary School Randawa",
-      "Govt. Senior Secondary School Muduru"
-    ]
-  },
-  "Mashi": {
-    "primary": [
-      "Dokawa Primary School",
-      "Hamis Primary School",
-      "Mashi Model Primary School",
-      "Pilot Primary School Mashi"
-    ],
-    "secondary": [
-      "Govt. Girls Secondary School Mashi",
-      "Govt. Pilot Junior Secondary School Mashi",
-      "Govt. Pilot Senior Secondary School Mashi"
-    ]
-  },
-  "Matazu": {
-    "primary": [
-      "Adamu Primary School",
-      "Matazu Girls Day Primary School",
-      "Matazu Model Primary School",
-      "Matazu Pilot Primary School"
-    ],
-    "secondary": [
-      "Comm. Girls Secondary School, Matazu",
-      "Govt. Girls Secondary School Matazu",
-      "Govt. Junior Secondary School Jikamshi",
-      "Govt. Junior Secondary School Matazu",
-      "Govt. Senior Secondary School Jikamshi",
-      "Govt. Senior Secondary School Matazu"
-    ]
-  },
-  "Musawa": {
-    "primary": [
-      "Girls Day Primary School",
-      "Inde Primary School",
-      "Usman Liman Primary School",
-      "Yero Primary School"
-    ],
-    "secondary": [
-      "Govt. Day Secondary School Musawa",
-      "Govt. Girls Secondary School Musawa"
-    ]
-  },
-  "Rimi": {
-    "primary": [
-      "Girls Primary School Rimi",
-      "Kaim Primary School Rimi",
-      "Kofar Kudu Conv. Primary School",
-      "Kofar Yamma Rimi Primary School",
-      "Lambar Rimi Primary School",
-      "Rimi Pilot Primary School"
-    ],
-    "secondary": [
-      "Comm. Girls Secondary School Rimi",
-      "Govt. Day Secondary School Ganuwa",
-      "Govt. Day Secondary School Iyatawa",
-      "Govt. Junior Secondary School Kuraye",
-      "Govt. Junior Secondary School Makurda",
-      "Govt. Junior Secondary School Rimi",
-      "Govt. Junior Secondary School Tsagero",
-      "Govt. Secondary School Abukur",
-      "Govt. Secondary School Kuraye",
-      "Govt. Secondary School Majen-Wayya",
-      "Govt. Senior Secondary School Abukur",
-      "Govt. Senior Secondary School Kuraye",
-      "Govt. Senior Secondary School Majen-Wayya",
-      "Govt. Senior Secondary School Makurda",
-      "Govt. Senior Secondary School Rimi",
-      "Govt. Senior Secondary School Tsagero"
-    ]
-  },
-  "Sabuwa": {
-    "primary": [
-      "Hamida S. Primary School",
-      "Sabuwa Girls Primary School",
-      "Sabuwa Model Primary School",
-      "Sabuwa Pilot Primary School",
-      "Shehu Primary School Damari"
-    ],
-    "secondary": [
-      "Govt. Day Secondary School Sabua 'A'",
-      "Govt. Day Secondary School Sabua 'B'"
-    ]
-  },
-  "Safana": {
-    "primary": [
-      "Dallaje Pilot Primary School",
-      "Girls Primary School",
-      "Magaji Primary School",
-      "Yarima Abdulkadir Model Primary School"
-    ],
-    "secondary": [
-      "Govt. Pilot Junior Secondary School Safana",
-      "Govt. Pilot Senior Secondary School Safana"
-    ]
-  },
-  "Sandamu": {
-    "primary": [
-      "Fatima Shema Girls Primary School",
-      "Kofar Ruwa Primary School",
-      "Pilot Primary School",
-      "Sandamu II Primary School"
-    ],
-    "secondary": [
-      "Govt. Junior Secondary School, Sandamu",
-      "Govt. Senior Secondary School, Sandamu"
-    ]
-  },
-  "Zango": {
-    "primary": [
-      "Abdulkuddus Primary School",
-      "Adamu Primary School",
-      "Girls Primary School",
-      "Hussaini Primary School",
-      "Kofar Arewa Primary School",
-      "Mamman Zango Primary School",
-      "Nuhu Makeri Primary School",
-      "Pilot Primary School"
-    ],
-    "secondary": [
-      "Comm. Secondary School, Zango",
-      "Govt. Pilot Junior Secondary School, Zango",
-      "Govt. Pilot Senior Secondary School, Zango"
-    ]
-  }
-};
-    /** Flat list helper: { name, type, lga } */
-    window.KATSINA_SCHOOLS_FLAT = (function() {
-      var out = [], d = window.KATSINA_SCHOOLS, lga, i, arr;
-      for (lga in d) {
-        if (!d.hasOwnProperty(lga)) continue;
-        arr = d[lga].primary || [];
-        for (i = 0; i < arr.length; i++) out.push({ name: arr[i], type: "primary", lga: lga });
-        arr = d[lga].secondary || [];
-        for (i = 0; i < arr.length; i++) out.push({ name: arr[i], type: "secondary", lga: lga });
-      }
-      return out;
-    })();
-  </script>
+  
 
 
   
 
 
+
+
+
+
+
+
+
+
+
 <script>
 (function() {
   function esc(s) {
-    return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   }
-  function flatList() {
-    if (Array.isArray(window.KATSINA_SCHOOLS_FLAT) && window.KATSINA_SCHOOLS_FLAT.length)
-      return window.KATSINA_SCHOOLS_FLAT;
-    var out = [], d = window.KATSINA_SCHOOLS || {}, lga, i;
+  function statusBadge(st) {
+    st = (st || "active").toLowerCase();
+    var colors = {
+      active: "background:#e8f5e9;color:#2e7d32;",
+      pending: "background:#fff8e1;color:#f57f17;",
+      suspended: "background:#ffebee;color:#c62828;",
+      archived: "background:#eceff1;color:#546e7a;"
+    };
+    var style = colors[st] || colors.active;
+    return '<span style="display:inline-block;padding:4px 10px;border-radius:999px;font-size:0.75rem;font-weight:600;' + style + '">' + esc(st) + '</span>';
+  }
+  function listByType(type) {
+    var d = window.KATSINA_SCHOOLS || {};
+    var out = [];
     Object.keys(d).sort(function(a,b){ return a.localeCompare(b); }).forEach(function(lga) {
-      (d[lga].primary || []).forEach(function(n) {
-        out.push({ name: n, type: "primary", lga: lga });
-      });
-      (d[lga].secondary || []).forEach(function(n) {
-        out.push({ name: n, type: "secondary", lga: lga });
+      var arr = (d[lga] && d[lga][type]) ? d[lga][type] : [];
+      arr.slice().sort(function(a,b){ return a.localeCompare(b); }).forEach(function(name) {
+        out.push({ name: name, lga: lga, status: "active" });
       });
     });
-    window.KATSINA_SCHOOLS_FLAT = out;
     return out;
   }
-  function fillLga(sel) {
+  function fillLgaSelect(selId) {
+    var sel = document.getElementById(selId);
     if (!sel) return;
-    var keep = sel.querySelector('option[value="all"],option[value=""]');
-    var first = keep ? keep.outerHTML : '<option value="all">All LGAs</option>';
-    var lgas = window.KATSINA_LGAS;
-    if (!lgas || !lgas.length) {
-      lgas = Object.keys(window.KATSINA_SCHOOLS || {}).sort();
-    }
-    sel.innerHTML = first + lgas.map(function(l) {
-      return '<option value="' + esc(l) + '">' + esc(l) + '</option>';
+    var lgas = window.KATSINA_LGAS || Object.keys(window.KATSINA_SCHOOLS || {}).sort();
+    var cur = sel.value || "all";
+    sel.innerHTML = '<option value="all">All LGAs</option>' + lgas.map(function(l) {
+      return '<option value="'+esc(l)+'">'+esc(l)+'</option>';
     }).join("");
+    try { sel.value = cur; } catch(e) {}
   }
-  function renderDir() {
-    var tbody = document.getElementById("publicSchoolsDir");
+  function renderAdminList(type) {
+    var tbodyId = type === "primary" ? "primarySchoolsTable" : "secondarySchoolsTable";
+    var searchId = type === "primary" ? "primarySchoolSearch" : "secondarySchoolSearch";
+    var lgaId = type === "primary" ? "primaryLgaFilter" : "secondaryLgaFilter";
+    var metaId = type === "primary" ? "primarySchoolMeta" : "secondarySchoolMeta";
+    var tbody = document.getElementById(tbodyId);
     if (!tbody) return;
-    var qEl = document.getElementById("pubSchoolSearch");
-    var tEl = document.getElementById("pubSchoolTypeFilter");
-    var lEl = document.getElementById("pubSchoolLgaFilter");
-    var q = (qEl && qEl.value || "").toLowerCase().trim();
-    var type = (tEl && tEl.value) || "all";
-    var lga = (lEl && lEl.value) || "all";
-    var rows = flatList();
-    if (type === "primary") rows = rows.filter(function(s) { return s.type === "primary"; });
-    if (type === "secondary") rows = rows.filter(function(s) { return s.type === "secondary"; });
-    if (lga && lga !== "all") rows = rows.filter(function(s) { return s.lga === lga; });
-    if (q) rows = rows.filter(function(s) {
-      return s.name.toLowerCase().indexOf(q) !== -1 || s.lga.toLowerCase().indexOf(q) !== -1;
-    });
-    rows.sort(function(a, b) {
-      var c = a.lga.localeCompare(b.lga);
-      return c !== 0 ? c : a.name.localeCompare(b.name);
-    });
-    if (!rows.length) {
-      tbody.innerHTML = '<tr><td colspan="5" style="padding:20px;text-align:center;color:#546e7a;">No schools match.</td></tr>';
+    if (!window.KATSINA_SCHOOLS) {
+      tbody.innerHTML = '<tr><td colspan="4" style="padding:20px;text-align:center;">School data not loaded.</td></tr>';
       return;
     }
-    var html = "";
-    for (var i = 0; i < rows.length; i++) {
-      var s = rows[i];
-      html += "<tr>" +
-        "<td style='padding:10px 12px;'><strong>" + esc(s.name) + "</strong></td>" +
-        "<td style='padding:10px 12px;'>" + esc(s.type === "primary" ? "Primary" : "Secondary") + "</td>" +
-        "<td style='padding:10px 12px;'>" + esc(s.lga) + "</td>" +
-        "<td style='padding:10px 12px;'>—</td>" +
-        "<td style='padding:10px 12px;'>—</td></tr>";
-    }
-    tbody.innerHTML = html;
-  }
-  function fillReg(q) {
-    var sel = document.getElementById("srSchoolSelect");
-    if (!sel) return;
-    var qq = (q || "").toLowerCase();
-    var list = flatList();
-    if (qq) list = list.filter(function(s) {
-      return s.name.toLowerCase().indexOf(qq) !== -1 || s.lga.toLowerCase().indexOf(qq) !== -1;
+    var q = (document.getElementById(searchId) && document.getElementById(searchId).value || "").toLowerCase().trim();
+    var lga = (document.getElementById(lgaId) && document.getElementById(lgaId).value) || "all";
+    var rows = listByType(type);
+    if (lga && lga !== "all") rows = rows.filter(function(r){ return r.lga === lga; });
+    if (q) rows = rows.filter(function(r){
+      return r.name.toLowerCase().indexOf(q) !== -1 || r.lga.toLowerCase().indexOf(q) !== -1;
     });
-    list = list.slice(0, 60);
-    if (!list.length) { sel.style.display = "none"; return; }
-    sel.style.display = "block";
-    sel.innerHTML = '<option value="">— Select school —</option>' + list.map(function(s) {
-      return '<option value="' + esc(s.name) + '" data-name="' + esc(s.name) +
-        '" data-type="' + esc(s.type) + '" data-lga="' + esc(s.lga) + '">' +
-        esc(s.name) + " — " + esc(s.lga) + "</option>";
-    }).join("");
+    var meta = document.getElementById(metaId);
+    if (meta) meta.textContent = rows.length + " school(s)" + (lga && lga !== "all" ? " in " + lga : " — whole Katsina State");
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="4" style="padding:20px;text-align:center;color:#546e7a;">No schools match.</td></tr>';
+      return;
+    }
+    var h = "", n = 0, lastLga = null;
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      if (r.lga !== lastLga) {
+        lastLga = r.lga;
+        h += '<tr style="background:#e8f5e9;"><td colspan="4" style="padding:10px 12px;font-weight:700;color:#00796B;">Local Government: ' + esc(r.lga) + '</td></tr>';
+      }
+      n++;
+      h += '<tr>' +
+        '<td style="padding:10px 12px;">' + n + '</td>' +
+        '<td style="padding:10px 12px;"><strong style="color:#0D47A1;">' + esc(r.name) + '</strong></td>' +
+        '<td style="padding:10px 12px;">' + esc(r.lga) + '</td>' +
+        '<td style="padding:10px 12px;">' + statusBadge(r.status) + '</td>' +
+        '</tr>';
+    }
+    tbody.innerHTML = h;
+  }
+  function bindAdmin() {
+    if (!window.KATSINA_SCHOOLS) return;
+    fillLgaSelect("primaryLgaFilter");
+    fillLgaSelect("secondaryLgaFilter");
+    renderAdminList("primary");
+    renderAdminList("secondary");
+    function bind(id, type, ev) {
+      var el = document.getElementById(id);
+      if (el && !el.dataset.boundKt) {
+        el.dataset.boundKt = "1";
+        el.addEventListener(ev, function(){ renderAdminList(type); });
+      }
+    }
+    bind("primarySchoolSearch", "primary", "input");
+    bind("primaryLgaFilter", "primary", "change");
+    bind("secondarySchoolSearch", "secondary", "input");
+    bind("secondaryLgaFilter", "secondary", "change");
   }
   function boot() {
-    if (!window.KATSINA_SCHOOLS) {
-      console.error("KATSINA_SCHOOLS missing");
-      var tb = document.getElementById("publicSchoolsDir");
-      if (tb) tb.innerHTML = '<tr><td colspan="5" style="padding:20px;text-align:center;">School data not loaded.</td></tr>';
-      return;
-    }
-    fillLga(document.getElementById("pubSchoolLgaFilter"));
-    fillLga(document.getElementById("srLga"));
-    renderDir();
-    var a = document.getElementById("pubSchoolSearch");
-    var b = document.getElementById("pubSchoolTypeFilter");
-    var c = document.getElementById("pubSchoolLgaFilter");
-    if (a) a.oninput = renderDir;
-    if (b) b.onchange = renderDir;
-    if (c) c.onchange = renderDir;
-    var rs = document.getElementById("srSchoolSearch");
-    if (rs) {
-      rs.oninput = function() { fillReg(rs.value); };
-      rs.onfocus = function() { fillReg(rs.value); };
-    }
-    var sel = document.getElementById("srSchoolSelect");
-    if (sel) sel.onchange = function() {
-      var opt = sel.selectedOptions[0];
-      if (!opt || !opt.value) return;
-      var n = document.getElementById("srName");
-      var t = document.getElementById("srType");
-      var l = document.getElementById("srLga");
-      if (n) n.value = opt.getAttribute("data-name") || opt.value;
-      if (t) t.value = opt.getAttribute("data-type") === "primary" ? "primary" : "secondary";
-      if (l) l.value = opt.getAttribute("data-lga") || "";
-    };
-    console.log("Directory ready:", flatList().length, "schools,", (window.KATSINA_LGAS || []).length, "LGAs");
+    bindAdmin();
+    setTimeout(bindAdmin, 400);
+    setTimeout(bindAdmin, 1200);
   }
-  // Run now and again after other scripts finish
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-  setTimeout(boot, 500);
-  setTimeout(boot, 1500);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+  document.addEventListener("click", function(e) {
+    var t = e.target.closest("[data-view],[href]");
+    if (!t) return;
+    var v = (t.getAttribute("data-view") || t.getAttribute("href") || "");
+    if (v.indexOf("primary") >= 0) setTimeout(function(){ renderAdminList("primary"); }, 80);
+    if (v.indexOf("secondary") >= 0) setTimeout(function(){ renderAdminList("secondary"); }, 80);
+  });
 })();
+</script>
+
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBlEw1Pb5HzIePo5SlolYm9ofvCUSBS0wM",
+  authDomain: "mmsayaya-academy.firebaseapp.com",
+  projectId: "mmsayaya-academy",
+  storageBucket: "mmsayaya-academy.firebasestorage.app",
+  messagingSenderId: "261003419792",
+  appId: "1:261003419792:web:9710d497a942a92c10b815",
+  measurementId: "G-0N2Q1V11LG"
+};
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const $ = (id) => document.getElementById(id);
+
+function resolveUrl(u) {
+  if (!u) return "";
+  u = String(u).trim();
+  if (!u) return "";
+  // absolute
+  if (/^https?:\/\//i.test(u) || u.startsWith("data:")) return u;
+  // relative to site root (GitHub Pages)
+  if (u.startsWith("/")) return u;
+  return u; // e.g. images/logo.png
+}
+
+function applyLogo(url) {
+  url = resolveUrl(url);
+  const img = $("siteLogoImg");
+  const icon = $("siteLogoIcon");
+  if (!url) return;
+  if (img) {
+    img.onload = () => { img.classList.add("show"); img.style.display = "block"; if (icon) icon.style.display = "none"; };
+    img.onerror = () => { /* keep icon if file missing on GitHub yet */ };
+    img.src = url;
+  }
+}
+function applyFavicon(url) {
+  url = resolveUrl(url);
+  if (!url) return;
+  let link = document.querySelector("link[rel*='icon']");
+  if (!link) { link = document.createElement("link"); link.rel = "icon"; document.head.appendChild(link); }
+  link.href = url;
+}
+function applyHero(url) {
+  url = resolveUrl(url);
+  const hero = document.querySelector(".hero");
+  if (!hero) return;
+  if (url) {
+    hero.classList.add("has-bg");
+    hero.style.backgroundImage = 'url("' + url + '")';
+    hero.style.backgroundSize = "cover";
+    hero.style.backgroundPosition = "center";
+  }
+}
+function applyAbout(url) {
+  url = resolveUrl(url);
+  const el = document.querySelector(".about-image img, #aboutImage, [data-about-image]");
+  if (el && url) el.src = url;
+}
+
+async function loadAppearance() {
+  let a = {};
+  try {
+    const snap = await getDoc(doc(db, "system", "appearance"));
+    if (snap.exists()) a = snap.data() || {};
+  } catch (e) { console.warn("appearance", e); }
+
+  // Fallback to GitHub default paths if Admin has not set URLs yet
+  const slots = window.SITE_IMAGE_SLOTS || {};
+  const logo = a.logoUrl || (slots.logo && slots.logo.path) || "";
+  const fav = a.faviconUrl || (slots.favicon && slots.favicon.path) || "";
+  const hero = a.bannerUrl || (slots.hero && slots.hero.path) || "";
+  const about = a.aboutImageUrl || (slots.about && slots.about.path) || "";
+
+  applyLogo(logo);
+  applyFavicon(fav);
+  applyHero(hero);
+  applyAbout(about);
+
+  if (a.siteName && $("siteLogoText")) $("siteLogoText").textContent = a.siteName;
+  if (a.slogan) {
+    const s = document.querySelector(".hero .slogan, #heroSlogan");
+    if (s) s.textContent = a.slogan;
+  }
+
+  // Fill admin path inputs if present
+  const map = [
+    ["apLogoUrl", logo], ["apFaviconUrl", fav], ["apBannerUrl", hero],
+    ["apAboutUrl", about], ["apSiteName", a.siteName || ""], ["apSlogan", a.slogan || ""]
+  ];
+  map.forEach(([id, val]) => { if ($(id) && val != null) $(id).value = val; });
+
+  // Previews
+  [["logoPreview", logo], ["bannerPreview", hero], ["publicBgPreview", hero], ["faviconPreview", fav]].forEach(([id, u]) => {
+    const el = $(id);
+    if (el && u) { el.src = resolveUrl(u); el.style.display = "block"; }
+  });
+}
+
+async function saveAppearanceFields() {
+  const payload = {
+    logoUrl: ($("apLogoUrl") && $("apLogoUrl").value.trim()) || "",
+    faviconUrl: ($("apFaviconUrl") && $("apFaviconUrl").value.trim()) || "",
+    bannerUrl: ($("apBannerUrl") && $("apBannerUrl").value.trim()) || "",
+    aboutImageUrl: ($("apAboutUrl") && $("apAboutUrl").value.trim()) || "",
+    siteName: ($("apSiteName") && $("apSiteName").value.trim()) || "",
+    slogan: ($("apSlogan") && $("apSlogan").value.trim()) || "",
+    updatedAt: serverTimestamp(),
+    updatedBy: (auth.currentUser && auth.currentUser.uid) || null
+  };
+  await setDoc(doc(db, "system", "appearance"), payload, { merge: true });
+  await loadAppearance();
+  return payload;
+}
+
+async function uploadToSlot(file, storagePath, fieldKey, statusId) {
+  const st = statusId ? $(statusId) : null;
+  if (!file) { if (st) st.textContent = "Choose a file first."; return; }
+  if (!file.type.startsWith("image/")) { if (st) st.textContent = "Images only."; return; }
+  if (file.size > 3 * 1024 * 1024) { if (st) st.textContent = "Max 3MB."; return; }
+  if (!auth.currentUser) { if (st) st.textContent = "Login as Admin."; return; }
+  if (st) st.textContent = "Uploading to Firebase Storage…";
+  try {
+    const r = ref(storage, storagePath);
+    await uploadBytes(r, file);
+    const url = await getDownloadURL(r);
+    const patch = { updatedAt: serverTimestamp(), updatedBy: auth.currentUser.uid };
+    patch[fieldKey] = url;
+    await setDoc(doc(db, "system", "appearance"), patch, { merge: true });
+    await loadAppearance();
+    if (st) st.textContent = "Saved. Everyone will see this image after refresh.";
+    return url;
+  } catch (e) {
+    console.error(e);
+    let msg = e.message || "Upload failed";
+    if (e.code === "storage/unauthorized") {
+      msg = "Storage blocked. Use GitHub path method: upload file to images/ on GitHub, paste path (e.g. images/hero-bg.jpg) in the URL field, Save.";
+    }
+    if (st) st.textContent = msg;
+    throw e;
+  }
+}
+
+// Wire admin controls
+function wireAdminMedia() {
+  $("btnSaveAppearance")?.addEventListener("click", async () => {
+    try {
+      await saveAppearanceFields();
+      alert("Appearance saved. Public site will show updates after refresh.");
+    } catch (e) {
+      alert("Save failed: " + (e.message || e));
+    }
+  });
+
+  // Path-save only buttons
+  $("btnSaveImagePaths")?.addEventListener("click", async () => {
+    try {
+      await saveAppearanceFields();
+      alert("Image paths saved.");
+    } catch (e) { alert(e.message || e); }
+  });
+
+  $("btnSavePublicBg")?.addEventListener("click", async () => {
+    const f = $("publicBgFile")?.files[0];
+    if (f) {
+      await uploadToSlot(f, "branding/hero_" + Date.now() + ".jpg", "bannerUrl", "publicBgStatus");
+    } else if ($("apBannerUrl")?.value) {
+      await setDoc(doc(db, "system", "appearance"), { bannerUrl: $("apBannerUrl").value.trim(), updatedAt: serverTimestamp() }, { merge: true });
+      await loadAppearance();
+      if ($("publicBgStatus")) $("publicBgStatus").textContent = "Background path saved.";
+    } else {
+      if ($("publicBgStatus")) $("publicBgStatus").textContent = "Choose a file OR paste a path/URL.";
+    }
+  });
+
+  // Generic file inputs
+  const uploads = [
+    ["apLogoFile", "branding/logo_", "logoUrl", "apLogoStatus"],
+    ["apFaviconFile", "branding/favicon_", "faviconUrl", "apFavStatus"],
+    ["apBannerFile", "branding/banner_", "bannerUrl", "apBannerStatus"],
+  ];
+  uploads.forEach(([inputId, prefix, field, statusId]) => {
+    const btn = $("btnUpload_" + field);
+    if (btn) {
+      btn.addEventListener("click", async () => {
+        const f = $(inputId)?.files[0];
+        await uploadToSlot(f, prefix + Date.now() + "_" + (f?.name || "img"), field, statusId);
+      });
+    }
+  });
+}
+
+loadAppearance();
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => { loadAppearance(); wireAdminMedia(); });
+} else {
+  wireAdminMedia();
+}
+setTimeout(loadAppearance, 800);
 </script>
 
 </body>
