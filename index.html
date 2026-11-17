@@ -20,9 +20,10 @@
     a { text-decoration:none; color:inherit; }
     .container { max-width:1200px; margin:0 auto; padding:0 20px; }
 
-    .header { background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.06); position:sticky; top:0; z-index:100; }
+    .header { background:#008751; box-shadow:0 1px 3px rgba(0,0,0,0.12); position:sticky; top:0; z-index:100; }
     .header-inner { display:flex; align-items:center; justify-content:space-between; height:70px; }
-    .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.2rem; color:var(--primary); }
+    .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.15rem; color:#fff; font-family:'Inter',system-ui,sans-serif; letter-spacing:0.04em; text-transform:uppercase; }
+    .logo span, #siteLogoText { color:#fff !important; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; }
     .logo-icon { width:38px; height:38px; background:linear-gradient(135deg,var(--primary),var(--secondary)); border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; }
     .nav { display:flex; align-items:center; gap:22px; }
     .nav a { font-size:0.875rem; font-weight:500; color:var(--text-muted); }
@@ -38,8 +39,8 @@
     .btn-white:hover { background:#f0f7ff; }
     .btn-emerald { background:var(--emerald); color:#fff; }
     .mobile-menu-btn { display:none; background:none; border:none; cursor:pointer; padding:8px; flex-direction:column; gap:5px; }
-    .mobile-menu-btn span { display:block; width:24px; height:2.5px; background:var(--primary); border-radius:2px; }
-    .mobile-nav { display:none; background:#fff; border-top:1px solid var(--border); padding:12px 20px 20px; }
+    .mobile-menu-btn span { display:block; width:24px; height:2.5px; background:#fff; border-radius:2px; }
+    /* hide legacy mobile-nav */ .mobile-nav { display:none !important; background:#fff; border-top:1px solid var(--border); padding:12px 20px 20px; }
     .mobile-nav.show { display:block; }
     .mobile-nav a { display:block; padding:12px 0; font-size:0.95rem; font-weight:500; border-bottom:1px solid var(--border); }
 
@@ -486,6 +487,60 @@
   
 
 
+
+
+
+    /* hero bg image */
+    .hero.has-bg {
+      background-size: cover !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
+    }
+    .hero.has-bg::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,135,81,0.75), rgba(13,71,161,0.72));
+      z-index: 0;
+    }
+    .hero { position: relative; }
+    .hero > * { position: relative; z-index: 1; }
+
+    /* note-style headings */
+    .section-header h2 {
+      display: inline-block;
+      position: relative;
+      padding: 8px 18px;
+      background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
+      border-left: 4px solid #008751;
+      border-radius: 0 10px 10px 0;
+      color: #0D47A1;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      box-shadow: 0 2px 8px rgba(13,71,161,0.06);
+    }
+    .section-header { text-align: center; }
+    .section-header h2 { text-align: left; }
+    .section-header p {
+      margin-top: 12px;
+      padding: 0 8px;
+    }
+    .page-title {
+      padding: 6px 14px;
+      background: #e8f5e9;
+      border-left: 3px solid #008751;
+      border-radius: 0 8px 8px 0;
+      display: inline-block;
+    }
+
+    /* single public menu */
+    .header .nav { display: none !important; }
+    .header-actions .btn-primary[href="#login"] { display: none !important; }
+    .mobile-menu-btn { display: flex !important; }
+    .header-actions .lang-select { display: none; }
+    @media(min-width:901px) {
+      .header-actions .lang-select { display: none !important; }
+    }
+
     /* Public hamburger / drawer */
     .public-drawer-overlay {
       display:none; position:fixed; inset:0; background:rgba(10,22,40,0.45); z-index:250;
@@ -606,7 +661,7 @@
           <option value="ha">Hausa</option>
           <option value="ar">العربية</option>
         </select>
-        <a href="#login" class="btn btn-primary" style="padding:9px 18px;">Login</a>
+        
         <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -625,19 +680,19 @@
       <strong>Menu</strong>
       <button type="button" class="drawer-close" id="publicDrawerClose" aria-label="Close">&times;</button>
     </div>
-    <a href="#home" data-nav>Home</a>
-    <a href="#about" data-nav>About Us</a>
-    <a href="#founder" data-nav>Meet the Founder</a>
-    <a href="#categories" data-nav>Explore Courses</a>
-    <a href="#categories" data-nav>Learning Categories</a>
-    <a href="#practice" data-nav>Practice Questions</a>
-    <a href="#digital-library" data-nav>Digital Library</a>
-    <a href="#schools-directory" data-nav>Schools Directory</a>
-    <a href="#edu-news" data-nav>Educational News</a>
-    <a href="#cert-verify" data-nav>Certificates Verification</a>
-    <a href="#school-register" data-nav>School Registration</a>
-    <a href="#contact" data-nav>Contact Us</a>
-    <a href="#login" data-nav>Universal Login</a>
+    <a href="#home" data-nav="1">Home</a>
+    <a href="#about" data-nav="1">About Us</a>
+    <a href="#founder" data-nav="1">Meet the Founder</a>
+    <a href="#categories" data-nav="1">Explore Courses</a>
+    <a href="#categories" data-nav="1">Learning Categories</a>
+    <a href="#practice" data-nav="1">Practice Questions</a>
+    <a href="#digital-library" data-nav="1">Digital Library</a>
+    <a href="#schools-directory" data-nav="1">Schools Directory</a>
+    <a href="#edu-news" data-nav="1">Educational News</a>
+    <a href="#cert-verify" data-nav="1">Certificates Verification</a>
+    <a href="#school-register" data-nav="1">School Registration</a>
+    <a href="#contact" data-nav="1">Contact Us</a>
+    <a href="#login" data-nav="1">Universal Login</a>
   </nav>
 
   <div id="loginView">
@@ -875,13 +930,36 @@
 
   <section class="section" id="schools-directory" style="background:#fff;">
     <div class="container">
-      <div class="section-header"><h2>Katsina Schools Directory</h2><p>Verified schools on the platform (public list).</p></div>
+      <div class="section-header"><h2>Katsina Schools Directory</h2><p>Search verified Primary and Secondary schools across all 34 LGAs. Official list will be imported by Admin — no unverified names.</p></div>
+      <div class="toolbar" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;">
+        <div class="search-box" style="flex:1;min-width:180px;position:relative;">
+          <input type="text" id="pubSchoolSearch" placeholder="Search school name or code…" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;" />
+        </div>
+        <select id="pubSchoolTypeFilter" class="filter-select" style="padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);">
+          <option value="all">All types</option>
+          <option value="primary">Primary</option>
+          <option value="junior_secondary">Junior Secondary</option>
+          <option value="senior_secondary">Senior Secondary</option>
+        </select>
+        <select id="pubSchoolLgaFilter" class="filter-select" style="padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);">
+          <option value="all">All LGAs</option>
+        </select>
+      </div>
       <div class="table-wrap">
         <table style="width:100%;background:#fff;border-radius:12px;overflow:hidden;">
-          <thead><tr><th style="text-align:left;padding:12px;">School</th><th style="text-align:left;padding:12px;">Type</th><th style="text-align:left;padding:12px;">LGA</th></tr></thead>
-          <tbody id="publicSchoolsDir"><tr><td colspan="3" style="padding:20px;text-align:center;color:#546e7a;">Loading…</td></tr></tbody>
+          <thead><tr>
+            <th style="text-align:left;padding:12px;">School Name</th>
+            <th style="text-align:left;padding:12px;">Type</th>
+            <th style="text-align:left;padding:12px;">LGA</th>
+            <th style="text-align:left;padding:12px;">Ownership</th>
+            <th style="text-align:left;padding:12px;">Code</th>
+          </tr></thead>
+          <tbody id="publicSchoolsDir"><tr><td colspan="5" style="padding:20px;text-align:center;color:#546e7a;">No schools imported yet. Admin will load the official list.</td></tr></tbody>
         </table>
       </div>
+      <p style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+        School missing? <a href="#school-register" style="color:var(--primary);font-weight:600;">Request addition</a>
+      </p>
     </div>
   </section>
 
@@ -920,6 +998,15 @@
         </div>
         <div class="contact-form">
           <div class="form-alert" id="schoolRegAlert"></div>
+          
+          <div class="form-group"><label>Select school from directory (if listed)</label>
+            <input type="text" id="srSchoolSearch" placeholder="Type to search directory…" autocomplete="off" />
+            <select id="srSchoolSelect" size="5" style="width:100%;margin-top:6px;display:none;">
+              <option value="">— Search above —</option>
+            </select>
+            <p class="form-hint" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Leave empty if your school is not listed yet — use the name field below and submit a request.</p>
+          </div>
+
           <div class="form-group"><label>School Name *</label><input type="text" id="srName" placeholder="Official school name" /></div>
           <div class="form-group"><label>School Type *</label>
             <select id="srType"><option value="">— Select —</option><option value="primary">Primary</option><option value="secondary">Secondary</option></select>
@@ -1736,6 +1823,19 @@
                 <div class="form-group"><label>Emerald</label><input type="color" id="appColorEmerald" value="#00796B" /></div>
                 <div class="form-group"><label>Gold accent</label><input type="color" id="appColorGold" value="#C9A227" /></div>
               </div>
+              
+              <div class="form-group" style="margin-top:20px;padding:16px;border:1px solid var(--border);border-radius:12px;background:#f8fafc;">
+                <label style="font-weight:700;color:var(--primary);">Public Homepage Background Photo</label>
+                <p style="font-size:0.8rem;color:var(--text-muted);margin:6px 0 10px;">Upload a photo for the public homepage hero/background. Keep file under 3MB (JPG/PNG/WebP).</p>
+                <input type="file" id="publicBgFile" accept="image/jpeg,image/png,image/webp" />
+                <img id="publicBgPreview" alt="" style="max-width:100%;max-height:140px;margin-top:10px;display:none;border-radius:10px;" />
+                <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+                  <button type="button" class="btn btn-primary" id="btnSavePublicBg">Upload & Set Background</button>
+                  <button type="button" class="btn btn-outline" id="btnClearPublicBg">Remove Background</button>
+                </div>
+                <div id="publicBgStatus" style="margin-top:8px;font-size:0.85rem;"></div>
+              </div>
+
               <button class="btn btn-primary" id="btnSaveAppearance">Save & Publish Appearance</button>
               <button class="btn btn-outline" id="btnPreviewAppearance" type="button">Preview colours on this panel</button>
             </div>
@@ -1801,7 +1901,7 @@
             <div class="card-body">
               <div class="toolbar">
                 <div class="search-box"><input type="text" id="dirSearch" placeholder="Search all schools…" /></div>
-                <select class="filter-select" id="dirTypeFilter"><option value="all">All types</option><option value="primary">Primary</option><option value="secondary">Secondary</option></select>
+                <select class="filter-select" id="dirTypeFilter"><option value="all">All types</option><option value="primary">Primary</option><option value="junior_secondary">Junior Secondary</option><option value="senior_secondary">Senior Secondary</option></select>
                 <select class="filter-select" id="dirLgaFilter"><option value="all">All LGAs</option></select>
               </div>
               <div class="table-wrap"><table>
@@ -1913,7 +2013,7 @@
             <div class="card-header"><h2>Bulk School Import (CSV)</h2></div>
             <div class="card-body">
               <p style="margin-bottom:12px;color:var(--text-muted);font-size:0.9rem;">
-                Columns: <strong>name, type, lga, code, address, phone, email, headName</strong>. Type must be <code>primary</code> or <code>secondary</code>. LGA must match Katsina list. No fake auto-fill — only rows you provide.
+                Columns: <strong>name, type, lga, code, ownership, lgea_code, address, phone, email, headName</strong>. Type: <code>primary</code>, <code>junior_secondary</code>, or <code>senior_secondary</code>. LGA must match Katsina list. Official TP list CSV: katsina_schools_tp_2026_2027.csv No fake auto-fill — only rows you provide.
               </p>
               <div class="form-group"><label>CSV file</label><input type="file" id="schoolImportFile" accept=".csv,text/csv" /></div>
               <button class="btn btn-primary" id="btnImportSchools" disabled>Import Schools</button>
@@ -1933,7 +2033,7 @@
                 <select id="imgDestination">
                   <option value="logo">Website Logo (Header)</option>
                   <option value="favicon">Favicon (Browser tab)</option>
-                  <option value="banner">Homepage Banner / Hero</option>
+                  <option value="banner">Public Homepage Background / Hero</option>
                   <option value="about">About Us Image</option>
                   <option value="founder_photo">Founder Profile Photo</option>
                   <option value="course">Course Image (enter course id below)</option>
@@ -4579,17 +4679,22 @@
           const name = cols[idx("name")] || cols[0];
           const type = (cols[idx("type")] || cols[1] || "").toLowerCase();
           const lga = cols[idx("lga")] || cols[2];
-          if (!name || !["primary","secondary"].includes(type)) { fail++; errors.push(`Row ${i+1}: invalid name/type`); continue; }
+          if (!name || !["primary","secondary","junior_secondary","senior_secondary"].includes(type)) { fail++; errors.push(`Row ${i+1}: invalid name/type`); continue; }
           if (!KATSINA_LGAS.includes(lga)) { fail++; errors.push(`Row ${i+1}: invalid LGA "${lga}"`); continue; }
           const schoolId = "KS-" + Date.now().toString(36).toUpperCase() + i;
+          const ownership = cols[idx("ownership")] || "";
+          const lgeaCode = cols[idx("lgea_code")] || cols[idx("lgea")] || "";
           await addDoc(collection(db, "schools"), {
             schoolId, name, schoolType: type, lga,
             code: cols[idx("code")] || schoolId,
+            ownership, lgeaCode,
             address: cols[idx("address")] || "",
             phone: cols[idx("phone")] || "",
             email: cols[idx("email")] || "",
             headName: cols[idx("headname")] || "",
-            status: "pending", verified: false,
+            status: "active", verified: true,
+            source: cols[idx("source")] || "CSV import",
+            state: "Katsina",
             createdAt: serverTimestamp(), updatedAt: serverTimestamp()
           });
           ok++;
@@ -4816,8 +4921,23 @@
         }
         if (a.bannerUrl) {
           const hero = document.querySelector(".hero");
-          if (hero) hero.style.backgroundImage = `linear-gradient(135deg,rgba(13,71,161,0.88),rgba(25,118,210,0.85)),url(${a.bannerUrl})`;
-          hero && (hero.style.backgroundSize = "cover");
+          if (hero) {
+            hero.classList.add("has-bg");
+            hero.style.backgroundImage = `url("${a.bannerUrl}")`;
+            hero.style.backgroundSize = "cover";
+            hero.style.backgroundPosition = "center";
+          }
+        }
+        if (a.logoUrl) {
+          const img = document.getElementById("siteLogoImg");
+          const icon = document.getElementById("siteLogoIcon");
+          if (img) { img.src = a.logoUrl; img.classList.add("show"); img.style.display = "block"; }
+          if (icon) icon.style.display = "none";
+        }
+        if (a.faviconUrl) {
+          let link = document.querySelector("link[rel*='icon']");
+          if (!link) { link = document.createElement("link"); link.rel = "icon"; document.head.appendChild(link); }
+          link.href = a.faviconUrl;
         }
         if (a.colorPrimary) document.documentElement.style.setProperty("--primary", a.colorPrimary);
         if (a.colorSecondary) document.documentElement.style.setProperty("--secondary", a.colorSecondary);
@@ -5151,5 +5271,389 @@
 
     console.log("UX: drawer, history, founder, images loaded");
   </script>
+
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import {
+      getFirestore, collection, getDocs, getDoc, query, where, limit, orderBy
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlEw1Pb5HzIePo5SlolYm9ofvCUSBS0wM",
+      authDomain: "mmsayaya-academy.firebaseapp.com",
+      projectId: "mmsayaya-academy",
+      storageBucket: "mmsayaya-academy.firebasestorage.app",
+      messagingSenderId: "261003419792",
+      appId: "1:261003419792:web:9710d497a942a92c10b815",
+      measurementId: "G-0N2Q1V11LG"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const $ = (id) => document.getElementById(id);
+
+    const KATSINA_LGAS = [
+      "Bakori","Batagarawa","Batsari","Baure","Bindawa","Charanchi","Dandume","Danja","Dan Musa",
+      "Daura","Dutsi","Dutsin-Ma","Faskari","Funtua","Ingawa","Jibia","Kafur","Kaita","Kankara",
+      "Kankia","Katsina","Kurfi","Kusada","Mai'Adua","Malumfashi","Mani","Mashi","Matazu","Musawa",
+      "Rimi","Sabuwa","Safana","Sandamu","Zango"
+    ];
+
+    // Fill public LGA filter
+    (function() {
+      const sel = $("pubSchoolLgaFilter");
+      if (!sel) return;
+      KATSINA_LGAS.forEach(l => {
+        const o = document.createElement("option");
+        o.value = l; o.textContent = l;
+        sel.appendChild(o);
+      });
+    })();
+
+    // Single menu: only mobileMenuBtn opens drawer
+    function openDrawer() {
+      $("publicDrawer")?.classList.add("open");
+      $("publicDrawerOverlay")?.classList.add("show");
+    }
+    function closeDrawer() {
+      $("publicDrawer")?.classList.remove("open");
+      $("publicDrawerOverlay")?.classList.remove("show");
+    }
+    // Remove duplicate listeners by cloning menu button
+    const menuBtn = $("mobileMenuBtn");
+    if (menuBtn) {
+      const nb = menuBtn.cloneNode(true);
+      menuBtn.parentNode.replaceChild(nb, menuBtn);
+      nb.id = "mobileMenuBtn";
+      nb.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openDrawer(); });
+    }
+    $("publicDrawerClose")?.addEventListener("click", closeDrawer);
+    $("publicDrawerOverlay")?.addEventListener("click", closeDrawer);
+
+    // One handler for all drawer links
+    document.querySelectorAll("#publicDrawer a[data-nav]").forEach(a => {
+      a.addEventListener("click", (e) => {
+        const href = a.getAttribute("href") || "";
+        closeDrawer();
+        if (href === "#login") {
+          location.hash = "login";
+          return;
+        }
+        if (href.startsWith("#")) {
+          e.preventDefault();
+          const id = href.slice(1) || "home";
+          const el = id === "home" ? (document.getElementById("home") || document.querySelector(".hero")) : document.getElementById(id);
+          if (el) {
+            history.pushState({ section: id }, "", href === "#home" ? location.pathname : href);
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+      });
+    });
+
+    // Hide legacy mobile nav toggle side effects
+    const legacyNav = $("mobileNav");
+    if (legacyNav) legacyNav.classList.remove("show");
+
+    // ---- School directory (empty until official import) ----
+    let schoolCache = [];
+    async function loadSchoolCache() {
+      try {
+        const snap = await getDocs(collection(db, "schools"));
+        schoolCache = [];
+        snap.forEach(d => {
+          const s = d.data();
+          // Only list non-archived; prefer verified for public
+          if (s.status === "archived") return;
+          schoolCache.push({
+            id: d.id,
+            name: s.name || "",
+            schoolType: s.schoolType || "",
+            lga: s.lga || "",
+            ownership: s.ownership || s.ownerType || "",
+            code: s.code || s.schoolId || "",
+            verified: !!s.verified
+          });
+        });
+      } catch (e) {
+        schoolCache = [];
+      }
+      renderPublicDirectory();
+      fillRegSchoolSelect("");
+    }
+
+    function renderPublicDirectory() {
+      const tbody = $("publicSchoolsDir");
+      if (!tbody) return;
+      const q = ($("pubSchoolSearch")?.value || "").toLowerCase().trim();
+      const type = $("pubSchoolTypeFilter")?.value || "all";
+      const lga = $("pubSchoolLgaFilter")?.value || "all";
+      // Public: show verified only; if none, show empty message (no fake data)
+      let rows = schoolCache.filter(s => s.verified);
+      if (type !== "all") rows = rows.filter(s => s.schoolType === type);
+      if (lga !== "all") rows = rows.filter(s => s.lga === lga);
+      if (q) rows = rows.filter(s =>
+        s.name.toLowerCase().includes(q) ||
+        String(s.code).toLowerCase().includes(q)
+      );
+      if (!rows.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="padding:20px;text-align:center;color:#546e7a;">No schools match. Official directory is empty until Admin imports the approved list.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = rows.map(s => `<tr>
+        <td style="padding:10px 12px;">${esc(s.name)}</td>
+        <td style="padding:10px 12px;">${esc(s.schoolType)}</td>
+        <td style="padding:10px 12px;">${esc(s.lga)}</td>
+        <td style="padding:10px 12px;">${esc(s.ownership || "—")}</td>
+        <td style="padding:10px 12px;">${esc(s.code)}</td>
+      </tr>`).join("");
+    }
+    function esc(s) {
+      return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+    $("pubSchoolSearch")?.addEventListener("input", renderPublicDirectory);
+    $("pubSchoolTypeFilter")?.addEventListener("change", renderPublicDirectory);
+    $("pubSchoolLgaFilter")?.addEventListener("change", renderPublicDirectory);
+
+    // Searchable dropdown for registration
+    function fillRegSchoolSelect(q) {
+      const sel = $("srSchoolSelect");
+      if (!sel) return;
+      const qq = (q || "").toLowerCase();
+      let list = schoolCache.slice();
+      if (qq) list = list.filter(s => s.name.toLowerCase().includes(qq) || String(s.code).toLowerCase().includes(qq));
+      list = list.slice(0, 40);
+      if (!list.length) {
+        sel.style.display = "none";
+        sel.innerHTML = `<option value="">No match in directory</option>`;
+        return;
+      }
+      sel.style.display = "block";
+      sel.innerHTML = `<option value="">— Select school —</option>` +
+        list.map(s => `<option value="${s.id}" data-name="${esc(s.name)}" data-type="${esc(s.schoolType)}" data-lga="${esc(s.lga)}">${esc(s.name)} (${esc(s.lga)})</option>`).join("");
+    }
+    $("srSchoolSearch")?.addEventListener("input", (e) => fillRegSchoolSelect(e.target.value));
+    $("srSchoolSearch")?.addEventListener("focus", () => fillRegSchoolSelect($("srSchoolSearch").value));
+    $("srSchoolSelect")?.addEventListener("change", () => {
+      const opt = $("srSchoolSelect").selectedOptions[0];
+      if (!opt || !opt.value) return;
+      if ($("srName")) $("srName").value = opt.dataset.name || opt.textContent;
+      if ($("srType") && opt.dataset.type) $("srType").value = opt.dataset.type;
+      if ($("srLga") && opt.dataset.lga) $("srLga").value = opt.dataset.lga;
+    });
+
+    loadSchoolCache();
+
+    // ---- Admin Preview Public Website (new tab, keep session) ----
+    $("btnPreviewPublic")?.addEventListener("click", () => {
+      // Same origin public home without #admin — session stays in this tab
+      const url = location.pathname + location.search + "#home";
+      window.open(url, "_blank", "noopener");
+    });
+
+    // ---- Admin Logout (hard sign-out) ----
+    async function hardLogout() {
+      try { await signOut(auth); } catch (e) {}
+      try { sessionStorage.clear(); localStorage.removeItem("adminPreview"); } catch (e) {}
+      document.documentElement.classList.remove("is-admin", "is-school", "is-login");
+      // Force leave protected views
+      location.hash = "";
+      location.reload();
+    }
+    const logoutBtn = $("logoutBtn");
+    if (logoutBtn) {
+      const lb = logoutBtn.cloneNode(true);
+      logoutBtn.parentNode.replaceChild(lb, logoutBtn);
+      lb.id = "logoutBtn";
+      lb.addEventListener("click", (e) => { e.preventDefault(); hardLogout(); });
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        if (location.hash === "#admin" || location.hash === "#school") {
+          document.documentElement.classList.remove("is-admin", "is-school");
+          location.hash = "login";
+        }
+      }
+    });
+
+    console.log("Corrections module: single menu, directory, preview, logout");
+  </script>
+
+
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlEw1Pb5HzIePo5SlolYm9ofvCUSBS0wM",
+      authDomain: "mmsayaya-academy.firebaseapp.com",
+      projectId: "mmsayaya-academy",
+      storageBucket: "mmsayaya-academy.firebasestorage.app",
+      messagingSenderId: "261003419792",
+      appId: "1:261003419792:web:9710d497a942a92c10b815",
+      measurementId: "G-0N2Q1V11LG"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+    const $ = (id) => document.getElementById(id);
+
+    function toast(msg, type) {
+      const c = $("toastContainer");
+      if (!c) { console.log(msg); return; }
+      const el = document.createElement("div");
+      el.className = "toast " + (type || "info");
+      el.innerHTML = `<span class="msg">${msg}</span><button class="close">&times;</button>`;
+      el.querySelector(".close").onclick = () => el.remove();
+      c.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+
+    function applyHeroBackground(url) {
+      const hero = document.querySelector(".hero");
+      if (!hero) return;
+      if (url) {
+        hero.classList.add("has-bg");
+        hero.style.backgroundImage = `url("${url}")`;
+        hero.style.backgroundSize = "cover";
+        hero.style.backgroundPosition = "center";
+      } else {
+        hero.classList.remove("has-bg");
+        hero.style.backgroundImage = "";
+      }
+    }
+
+    function applyLogo(url) {
+      const img = $("siteLogoImg");
+      const icon = $("siteLogoIcon");
+      if (url && img) {
+        img.src = url;
+        img.classList.add("show");
+        img.style.display = "block";
+        if (icon) icon.style.display = "none";
+      }
+    }
+
+    async function loadAndApplyAppearance() {
+      try {
+        const snap = await getDoc(doc(db, "system", "appearance"));
+        if (!snap.exists()) return;
+        const a = snap.data();
+        if (a.bannerUrl) applyHeroBackground(a.bannerUrl);
+        if (a.logoUrl) applyLogo(a.logoUrl);
+        if (a.faviconUrl) {
+          let link = document.querySelector("link[rel*='icon']");
+          if (!link) { link = document.createElement("link"); link.rel = "icon"; document.head.appendChild(link); }
+          link.href = a.faviconUrl;
+        }
+        if (a.siteName && $("siteLogoText")) $("siteLogoText").textContent = a.siteName;
+        if (a.slogan) {
+          const s = document.querySelector(".hero .slogan");
+          if (s) s.textContent = a.slogan;
+        }
+        // Admin preview fields
+        if (a.bannerUrl && $("publicBgPreview")) {
+          $("publicBgPreview").src = a.bannerUrl;
+          $("publicBgPreview").style.display = "block";
+        }
+        if (a.bannerUrl && $("bannerPreview")) {
+          $("bannerPreview").src = a.bannerUrl;
+          $("bannerPreview").style.display = "block";
+        }
+        if (a.logoUrl && $("logoPreview")) {
+          $("logoPreview").src = a.logoUrl;
+          $("logoPreview").style.display = "block";
+        }
+      } catch (e) {
+        console.warn("appearance load", e);
+      }
+    }
+
+    // Load on every page open
+    loadAndApplyAppearance();
+
+    // Preview local file before upload
+    $("publicBgFile")?.addEventListener("change", () => {
+      const f = $("publicBgFile").files[0];
+      if (!f || !$("publicBgPreview")) return;
+      $("publicBgPreview").src = URL.createObjectURL(f);
+      $("publicBgPreview").style.display = "block";
+    });
+
+    $("btnSavePublicBg")?.addEventListener("click", async () => {
+      const file = $("publicBgFile")?.files[0];
+      const st = $("publicBgStatus");
+      if (!file) {
+        if (st) st.textContent = "Choose an image first.";
+        toast("Choose a background image", "error");
+        return;
+      }
+      if (file.size > 3 * 1024 * 1024) {
+        toast("Max 3MB — use a lighter photo", "error");
+        return;
+      }
+      if (!file.type.startsWith("image/")) {
+        toast("Images only", "error");
+        return;
+      }
+      if (st) st.textContent = "Uploading…";
+      try {
+        if (!auth.currentUser) {
+          toast("Login as Admin first", "error");
+          if (st) st.textContent = "Not logged in.";
+          return;
+        }
+        const path = `branding/public_bg_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;
+        const r = ref(storage, path);
+        await uploadBytes(r, file);
+        const url = await getDownloadURL(r);
+        await setDoc(doc(db, "system", "appearance"), {
+          bannerUrl: url,
+          updatedAt: serverTimestamp(),
+          updatedBy: auth.currentUser.uid
+        }, { merge: true });
+        applyHeroBackground(url);
+        if ($("publicBgPreview")) { $("publicBgPreview").src = url; $("publicBgPreview").style.display = "block"; }
+        if (st) st.textContent = "Background saved. Open public site or Preview to see it.";
+        toast("Background uploaded and applied", "success");
+      } catch (e) {
+        console.error(e);
+        const msg = e.code === "storage/unauthorized"
+          ? "Storage permission denied — enable Storage rules for authenticated users."
+          : (e.message || "Upload failed");
+        if (st) st.textContent = msg;
+        toast(msg, "error");
+      }
+    });
+
+    $("btnClearPublicBg")?.addEventListener("click", async () => {
+      try {
+        await setDoc(doc(db, "system", "appearance"), {
+          bannerUrl: "",
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        applyHeroBackground("");
+        if ($("publicBgPreview")) { $("publicBgPreview").removeAttribute("src"); $("publicBgPreview").style.display = "none"; }
+        if ($("publicBgFile")) $("publicBgFile").value = "";
+        toast("Background removed", "success");
+      } catch (e) {
+        toast("Could not clear", "error");
+      }
+    });
+
+    // Also fix logo upload path reliability when saving appearance
+    const saveApp = $("btnSaveAppearance");
+    if (saveApp && !saveApp.dataset.bgFixed) {
+      saveApp.dataset.bgFixed = "1";
+    }
+
+    console.log("Public background + appearance apply fixed");
+  </script>
+
 </body>
 </html>
