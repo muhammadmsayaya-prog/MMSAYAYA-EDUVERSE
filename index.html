@@ -747,6 +747,18 @@ window.SITE_IMAGE_SLOTS = {
             <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
             <span>Continue with Google</span>
           </button>
+          <button type="button" class="link-btn" id="inviteToggleBtn">Have an invitation? Activate your account</button>
+          <div id="inviteForm" hidden>
+            <p class="login-hint">Use the email address your school or the platform invited. Choose your own password and verify your email; your account is then created with the role it was invited for.</p>
+            <div class="form-group"><label for="inviteEmail">Invited Email Address</label><input type="email" id="inviteEmail" autocomplete="email" maxlength="200" /></div>
+            <div class="form-group"><label for="invitePassword">Choose a Password</label>
+              <div class="pw-wrap"><input type="password" id="invitePassword" autocomplete="new-password" maxlength="128" /><button type="button" class="pw-toggle" data-target="invitePassword">Show</button></div>
+            </div>
+            <div class="form-group"><label for="inviteConfirm">Confirm Password</label>
+              <div class="pw-wrap"><input type="password" id="inviteConfirm" autocomplete="new-password" maxlength="128" /><button type="button" class="pw-toggle" data-target="inviteConfirm">Show</button></div>
+            </div>
+            <button class="btn btn-primary" id="inviteActivateBtn" style="width:100%;">Activate Account</button>
+          </div>
         </div>
 
         <div id="verifyPanel" hidden>
@@ -2028,14 +2040,14 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
               <p style="font-size:0.9rem;color:#546e7a;">Cloud Functions and Security Rules must run on Firebase's servers, not in the browser. This page holds their complete code so this one HTML file contains everything. Copy each block to the place shown.</p>
               <ol style="font-size:0.9rem;color:#37474f;line-height:1.7;padding-left:20px;">
                 <li>Firebase Console &gt; Authentication &gt; Sign-in method: enable <strong>Email/Password</strong> and <strong>Google</strong>; add your website domain under Settings &gt; Authorized domains.</li>
-                <li>Upgrade the project to the <strong>Blaze</strong> plan (needed for Cloud Functions).</li>
-                <li>Save the two <strong>functions</strong> files below, then run: <code>npm install -g firebase-tools</code>, <code>firebase login</code>, <code>firebase use mmsayaya-academy</code>, <code>cd functions &amp;&amp; npm install</code>, <code>cd ..</code>, <code>firebase deploy --only functions</code>.</li>
-                <li>Paste the two <strong>rules</strong> into the Console (or deploy them with <code>firebase deploy --only firestore:rules,storage</code>).</li>
+                <li><strong>Spark plan:</strong> do NOT upgrade. Cloud Functions need Blaze, so the <code>functions</code> files below are an <em>optional, future</em> reference and are <strong>not used</strong>. Accounts are created through invitations and every permission is enforced by the Firestore rules.</li>
+                <li>Skip the functions deployment on Spark. Do not run <code>firebase deploy --only functions</code>.</li>
+                <li>Paste the two <strong>rules</strong> into the Console and Publish (or run <code>firebase deploy --only firestore:rules,storage</code>, which works on Spark). <strong>Publish the new Firestore rules before anyone uses the invitation login.</strong></li>
                 <li>Existing users must verify their email once. If an old account's email cannot receive mail, add the boolean field <code>verificationBypass = true</code> to its <code>users/&lt;uid&gt;</code> document in Firestore.</li>
               </ol>
               <div style="margin-top:22px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-                  <h3 style="margin:0;font-size:1rem;">functions/index.js</h3>
+                  <h3 style="margin:0;font-size:1rem;">functions/index.js <span style="font-weight:400;color:#b45309;">(optional - needs Blaze, not used on Spark)</span></h3>
                   <button class="btn btn-sm btn-primary bs-copy" data-target="bsFunctions">Copy</button>
                 </div>
                 <p style="margin:6px 0 8px;font-size:0.85rem;color:#546e7a;">Create a folder named functions in your Firebase project and save this as functions/index.js.</p>
@@ -2665,10 +2677,9 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       principal: "#school",
       school_admin: "#school",
       exam_officer: "#school",
-      form_master: "#school",
       subject_teacher: "#school"
     };
-    const ROLE_LABELS = { student:"Student", teacher:"Teacher", admin:"Admin", super_admin:"Super Admin" };
+    const ROLE_LABELS = { student:"Student", teacher:"Teacher", admin:"Admin", super_admin:"Super Admin", headmaster:"Headmaster", principal:"Principal" };
 
     const byId = (id) => document.getElementById(id);
     const loginAlert = byId("loginAlert");
@@ -2803,6 +2814,18 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       }
 
       if (!profile) {
+        // Spark plan: the first VERIFIED login of an invited person creates their profile exactly as invited
+        // (role/school come from the invitation, never from the browser). See js/school-backend.js.
+        try {
+          const B = window.MMSAYAYA_BACKEND;
+          if (B && await B.invitations.claim()) {
+            const s2 = await getDoc(doc(db, "users", user.uid));
+            if (s2.exists()) profile = s2.data();
+          }
+        } catch (e) { console.warn("Invitation claim:", e && e.message); }
+      }
+
+      if (!profile) {
         await signOut(auth);
         const err = new Error("No MMSAYAYA EDUVERSE account was found for this login. Ask your administrator to create your account."); err.custom = true; throw err;
       }
@@ -2821,9 +2844,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
 
       const url = DASHBOARDS[role];
       if (url && String(url).startsWith("#")) {
+        const mode = String(url).slice(1) === "school" ? "school" : "admin";   // Headmaster/Principal -> school shell
         document.documentElement.classList.remove("is-login");
-        document.documentElement.classList.add("is-admin");
-        if (location.hash !== "#admin") location.hash = "admin";
+        document.documentElement.classList.add("is-" + mode);
+        if (location.hash !== "#" + mode) location.hash = mode;
         window.scrollTo(0, 0);
         return;
       }
@@ -2890,6 +2914,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       const isNew = (() => { try { return getAdditionalUserInfo(result).isNewUser === true; } catch (e) { return false; } })();
       let hasProfile = false;
       try { const s0 = await getDoc(doc(db, "users", user.uid)); hasProfile = s0.exists(); } catch (e) { hasProfile = false; }
+      if (!hasProfile && user.emailVerified) {          // invited person signing in with Google: claim the invitation
+        try { const B = window.MMSAYAYA_BACKEND; if (B && await B.invitations.claim()) hasProfile = true; }
+        catch (e) { console.warn("Invitation claim:", e && e.message); }
+      }
       if (!hasProfile) {
         try { if (isNew) await user.delete(); else await signOut(auth); } catch (e) { try { await signOut(auth); } catch (_) {} }
         return setAlert("error", "No MMSAYAYA EDUVERSE account is linked to this Google account. Ask your administrator to create your account using this email address.");
@@ -3006,6 +3034,28 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       try { await routeUser(cred.user); } catch (e) { setAlert("error", authError(e)); }
     });
 
+    // ---------- Activate an invited account (Spark replacement for Admin-created accounts) ----------
+    byId("inviteToggleBtn").addEventListener("click", () => { byId("inviteForm").hidden = !byId("inviteForm").hidden; });
+    byId("inviteActivateBtn").addEventListener("click", async () => {
+      const email = byId("inviteEmail").value.trim().toLowerCase();
+      const password = byId("invitePassword").value;
+      const confirm = byId("inviteConfirm").value;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return setAlert("error", "Enter the email address you were invited with.");
+      if (password.length < 8 || !/[A-Za-z]/.test(password) || !/\d/.test(password)) return setAlert("error", "Password must be 8+ characters with letters and numbers.");
+      if (password !== confirm) return setAlert("error", "Passwords do not match.");
+      const btn = byId("inviteActivateBtn");
+      btn.disabled = true; btn.textContent = "Creating…"; clearAlert();
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        byId("invitePassword").value = ""; byId("inviteConfirm").value = ""; byId("inviteForm").hidden = true;
+        await routeUser(cred.user);          // sends the verification email; the profile is created after verification
+      } catch (e) {
+        setAlert("error", (e && e.code === "auth/email-already-in-use")
+          ? "This email already has a sign-in. Use the Login form with your password - your invitation is applied automatically after you verify your email."
+          : authError(e));
+      } finally { btn.disabled = false; btn.textContent = "Activate Account"; }
+    });
+
     applyRoute(false);
   </script>
 
@@ -3035,6 +3085,13 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     const functions = getFunctions(app, "us-central1");
     // Every privileged action goes through a trusted Cloud Function (it re-checks the caller on the server).
     async function callFn(name, data) {
+      // SPARK PLAN: Cloud Functions are NOT deployed. Calls go to the rules-enforced client backend
+      // (js/school-backend.js). Set window.MMSAYAYA_USE_CLOUD_FUNCTIONS = true only after upgrading to
+      // Blaze AND deploying functions/ yourself.
+      if (!window.MMSAYAYA_USE_CLOUD_FUNCTIONS && window.MMSAYAYA_BACKEND) {
+        try { return await window.MMSAYAYA_BACKEND.legacyCall(name, data || {}); }
+        catch (e) { throw new Error((e && e.message) ? e.message : "Request failed."); }
+      }
       try { const r = await httpsCallable(functions, name)(data || {}); return r.data; }
       catch (e) { throw new Error((e && e.message) ? e.message : "Request failed."); }
     }
@@ -3669,9 +3726,9 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         if (!payload.fullName || !payload.email || !payload.password) return toast("Name, email and password are required", "error");
         try {
           const res = await callFn("createUserByAdmin", payload);
-          toast(res.verificationEmailSent
+          toast(res.notice ? res.notice : (res.verificationEmailSent
             ? `${role} account created. Verification email sent.`
-            : `${role} account created. The verification email is sent when the user first logs in.`, "success");
+            : `${role} account created. The verification email is sent when the user first logs in.`), "success");
           closeModal();
           loadUsersByRole(role, role === "student" ? "studentsTable" : "teachersTable");
           loadOverview();
@@ -4903,7 +4960,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         if (!name || !lga) return toast("Name and LGA required", "error");
         if (!KATSINA_LGAS.includes(lga)) return toast("Invalid LGA", "error");
         const schoolId = "KS-" + Date.now().toString(36).toUpperCase();
-        await addDoc(collection(db, "schools"), {
+        await setDoc(doc(db, "schools", schoolId), {
           schoolId, name, code: $("fSchCode").value.trim() || schoolId,
           schoolType: type, lga, address: $("fSchAddr").value.trim(),
           phone: $("fSchPhone").value.trim(), email: $("fSchEmail").value.trim(),
@@ -4969,7 +5026,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             const snap = await getDoc(doc(db, "schoolRegistrationRequests", btn.dataset.id));
             const r = snap.data();
             const schoolId = "KS-" + Date.now().toString(36).toUpperCase();
-            await addDoc(collection(db, "schools"), {
+            await setDoc(doc(db, "schools", schoolId), {
               schoolId, name: r.schoolName, code: schoolId, schoolType: r.schoolType, lga: r.lga,
               address: r.address || "", phone: r.phone || "", email: r.email || "", headName: r.headName || "",
               status: "active", verified: true, createdFromRequest: btn.dataset.id,
@@ -5235,7 +5292,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           const schoolId = "KS-" + Date.now().toString(36).toUpperCase() + i;
           const ownership = cols[idx("ownership")] || "";
           const lgeaCode = cols[idx("lgea_code")] || cols[idx("lgea")] || "";
-          await addDoc(collection(db, "schools"), {
+          await setDoc(doc(db, "schools", schoolId), {
             schoolId, name, schoolType: type, lga,
             code: cols[idx("code")] || schoolId,
             ownership, lgeaCode,
@@ -6744,6 +6801,10 @@ window.MEV_Accounts = {
     if (phone && !MEV.isValidPhone(phone)) throw new Error("Invalid phone number");
     if (!auth.currentUser) throw new Error("Admin must be logged in");
     try {
+      if (!window.MMSAYAYA_USE_CLOUD_FUNCTIONS && window.MMSAYAYA_BACKEND) {       // Spark: invitation, not account creation
+        const r = await window.MMSAYAYA_BACKEND.legacyCall("createUserByAdmin", { email, fullName, role, phone, schoolId, assignedCourses, assignedSubjects });
+        return { uid: null, email: r.email, role: r.role, invited: true, message: r.notice };
+      }
       const fn = httpsCallable(getFunctions(app, "us-central1"), "createUserByAdmin");
       const r = (await fn({ email, password, fullName, role, phone, schoolId, assignedCourses, assignedSubjects })).data;
       return {
@@ -6771,7 +6832,7 @@ function wireAdminCreateUser() {
       if (status) status.textContent = "Creating account…";
       const res = await MEV_Accounts.createByAdmin({ email, password, fullName, role, phone });
       if (status) status.textContent = res.message;
-      alert(res.message + "\n\nEmail: " + res.email + "\n(Role: " + res.role + ")\nGive the user the password you assigned. It is not stored in the database.");
+      alert(res.invited ? res.message + "\n\nEmail: " + res.email + "\n(Role: " + res.role + ")" : res.message + "\n\nEmail: " + res.email + "\n(Role: " + res.role + ")\nGive the user the password you assigned. It is not stored in the database.");
     } catch (e) {
       if (status) status.textContent = e.message || String(e);
       alert(e.message || String(e));
@@ -6945,6 +7006,577 @@ else bootMEV();
 console.log("MEV validation/RBAC/accounts module loaded");
 </script>
 
+<script type="module" id="schoolBackendModule">
+/* MMSAYAYA EDUVERSE - school backend foundation (Spark). Source of truth: js/school-backend.js */
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { getFirestore, doc, collection, getDoc, getDocs, query, where, writeBatch, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+const firebaseConfig = {
+      apiKey: "AIzaSyBlEw1Pb5HzIePo5SlolYm9ofvCUSBS0wM",
+      authDomain: "mmsayaya-academy.firebaseapp.com",
+      projectId: "mmsayaya-academy",
+      storageBucket: "mmsayaya-academy.firebasestorage.app",
+      messagingSenderId: "261003419792",
+      appId: "1:261003419792:web:9710d497a942a92c10b815",
+      measurementId: "G-0N2Q1V11LG"
+    };
+const __app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+/**
+ * MMSAYAYA EDUVERSE - School backend foundation (Stage 1, Firebase SPARK plan).
+ *
+ * No Cloud Functions, no Admin SDK. Every privileged rule is enforced by firestore.rules;
+ * this module is the typed, validated client API that matches those rules exactly.
+ *
+ * It is dependency-injected so it can run in the browser (Firebase web SDK) and in Node tests
+ * (in-memory fake): createSchoolBackend({ db, auth, fs }) where fs = { doc, collection, getDoc,
+ * getDocs, query, where, writeBatch, serverTimestamp, Timestamp }.
+ */
+
+// ------------------------------------------------------------------ roles & permissions
+export const ROLES = Object.freeze({
+  SUPER_ADMIN: "super_admin", ADMIN: "admin", HEADMASTER: "headmaster",
+  PRINCIPAL: "principal", TEACHER: "teacher", STUDENT: "student"
+});
+export const ROLE_LIST = Object.freeze(Object.values(ROLES));
+/** Roles that can only ever be granted by a Super Admin. */
+export const PRIVILEGED_ROLES = Object.freeze(["admin", "headmaster", "principal", "super_admin"]);
+export const SCHOOL_BOUND_ROLES = Object.freeze(["admin", "headmaster", "principal", "teacher", "student"]);
+export const SCHOOL_TYPES = Object.freeze({ PRIMARY: "primary", SECONDARY: "secondary" });
+/** Which school type each leader role belongs to. */
+export const LEADER_SCHOOL_TYPE = Object.freeze({ headmaster: "primary", principal: "secondary" });
+
+export const ADMIN_PERMS = Object.freeze([
+  "manage_users", "create_student", "create_teacher", "manage_permissions", "suspend_users",
+  "reset_passwords", "manage_content", "manage_payments", "manage_schools",
+  "manage_announcements", "manage_access", "view_reports"
+]);
+export const TEACHER_PERMS = Object.freeze(["manage_lessons", "manage_assignments", "create_questions", "grade", "view_students", "message"]);
+export const STUDENT_PERMS = Object.freeze(["view_courses", "take_exams", "view_results", "download_certificates", "message", "practice_questions"]);
+/** Granted ONLY explicitly by a Super Admin - never part of any default list. */
+export const EXPLICIT_ONLY_PERMS = Object.freeze(["view_students", "manage_results", "manage_report_cards"]);
+/** Catalogue for Admin / Headmaster / Principal. Headmaster & Principal get NONE by default (configured later). */
+export const STAFF_PERMS = Object.freeze([...ADMIN_PERMS, ...EXPLICIT_ONLY_PERMS]);
+
+export const DEFAULT_PERMS = Object.freeze({
+  admin: ADMIN_PERMS, teacher: TEACHER_PERMS, student: STUDENT_PERMS, headmaster: Object.freeze([]), principal: Object.freeze([])
+});
+export const CATALOGUE = Object.freeze({
+  admin: STAFF_PERMS, headmaster: STAFF_PERMS, principal: STAFF_PERMS, teacher: TEACHER_PERMS, student: STUDENT_PERMS
+});
+
+/** Which permission authorises which school operation (mirrors firestore.rules). */
+export const OPERATION_PERMS = Object.freeze({
+  manageStructure: "manage_schools",            // classes, subjects, academic sessions, school details
+  manageAssignments: "manage_users",            // teacherAssignments, formMasterAssignments
+  inviteTeacher: "create_teacher",
+  inviteStudent: "create_student",
+  manageStudents: "create_student",             // (manage_users also accepted)
+  setUserStatus: "suspend_users",
+  setUserPermissions: "manage_permissions",
+  editUserProfile: "manage_users",
+  announce: "manage_announcements",
+  viewReports: "view_reports",
+  manageResults: "manage_results",
+  manageReportCards: "manage_report_cards"
+});
+
+// ------------------------------------------------------------------ pure helpers
+export function normRole(r) {
+  r = String(r || "").toLowerCase().replace(/[\s-]+/g, "_");
+  return r === "superadmin" ? "super_admin" : r;
+}
+export function normalizeEmail(e) { return String(e || "").trim().toLowerCase(); }
+export function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e) && e.length <= 254; }
+export function isValidName(n) { n = String(n || "").trim(); return n.length >= 2 && n.length <= 80; }
+export function slug(s, max = 60) {
+  return String(s || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, max);
+}
+export const Ids = Object.freeze({
+  class: (schoolId, name) => `${schoolId}_${slug(name)}`,
+  subject: (schoolId, codeOrName) => `${schoolId}_${slug(codeOrName)}`,
+  session: (schoolId, name) => `${schoolId}_${slug(name)}`,
+  student: (schoolId, admissionNo) => `${schoolId}_${slug(admissionNo)}`,
+  teacherAssignment: (sessionId, classId, teacherId) => `${sessionId}_${classId}_${teacherId}`,
+  formMasterAssignment: (sessionId, classId) => `${sessionId}_${classId}`,
+  /** marks/{schoolId}_{session}_{term}_{class}_{subject}_{student} using the school-local parts */
+  mark: (schoolId, sessionId, term, classId, subjectId, studentId) => {
+    const loc = (id) => String(id).startsWith(schoolId + "_") ? String(id).slice(schoolId.length + 1) : String(id);
+    return [schoolId, loc(sessionId), slug(term), loc(classId), loc(subjectId), loc(studentId)].join("_");
+  }
+});
+
+/** Effective permission list for a profile (explicit list wins, else role default). Super Admin => ["*"]. */
+export function effectivePerms(profile) {
+  const role = normRole(profile && profile.role);
+  if (role === ROLES.SUPER_ADMIN) return ["*"];
+  if (profile && Array.isArray(profile.permissions)) return profile.permissions;
+  return Array.from(DEFAULT_PERMS[role] || []);
+}
+/**
+ * Reusable permission check (client-side mirror of firestore.rules::schoolCan).
+ * - Super Admin: every school, every permission.
+ * - Admin / Headmaster / Principal: only inside their OWN schoolId, and only for held permissions.
+ * - Teacher / Student: never pass staff permissions.
+ */
+export function can(profile, perm, schoolId) {
+  if (!profile || (profile.status || "active") !== "active") return false;
+  const role = normRole(profile.role);
+  if (role === ROLES.SUPER_ADMIN) return true;
+  if (!["admin", "headmaster", "principal"].includes(role)) return false;
+  if (!schoolId || profile.schoolId !== schoolId) return false;
+  const perms = effectivePerms(profile);
+  return perms.includes(perm);
+}
+export function canTeacher(profile, perm) {
+  if (!profile || normRole(profile.role) !== "teacher" || (profile.status || "active") !== "active") return false;
+  return effectivePerms(profile).includes(perm);
+}
+export function sameSchool(profile, schoolId) { return !!profile && !!schoolId && profile.schoolId === schoolId; }
+/** Which roles a given actor may invite (rules enforce the same). */
+export function invitableRoles(actor) {
+  const role = normRole(actor && actor.role);
+  if (role === ROLES.SUPER_ADMIN) return ["admin", "headmaster", "principal", "teacher", "student"];
+  if (role === ROLES.ADMIN) {
+    const out = [];
+    if (can(actor, "create_teacher", actor.schoolId)) out.push("teacher");
+    if (can(actor, "create_student", actor.schoolId)) out.push("student");
+    return out;
+  }
+  return [];
+}
+export function roleMatchesSchoolType(role, schoolType) {
+  if (role === "headmaster") return schoolType === "primary";
+  if (role === "principal") return ["secondary", "junior_secondary", "senior_secondary"].includes(schoolType);
+  return true;
+}
+export function cleanPerms(role, perms) {
+  if (!Array.isArray(perms)) throw new Error("Permissions must be a list.");
+  const cat = CATALOGUE[normRole(role)];
+  if (!cat) throw new Error("This role has no permissions.");
+  const bad = perms.filter((p) => !cat.includes(p));
+  if (bad.length) throw new Error("Unknown permission for " + role + ": " + bad.join(", "));
+  return Array.from(new Set(perms));
+}
+
+// ------------------------------------------------------------------ backend factory
+export function createSchoolBackend({ db, auth, fs }) {
+  const { doc, collection, getDoc, getDocs, query, where, writeBatch, serverTimestamp, Timestamp } = fs;
+  const ts = () => serverTimestamp();
+  const fail = (m) => { throw new Error(m); };
+
+  // ---------- current actor (trusted data = Firestore profile; email must be verified)
+  async function loadActor() {
+    const u = auth.currentUser;
+    if (!u) fail("Sign in first.");
+    if (u.emailVerified !== true) fail("Verify your email address first.");
+    const snap = await getDoc(doc(db, "users", u.uid));
+    if (!snap.exists()) fail("No profile for this account.");
+    const p = snap.data();
+    if ((p.status || "active") !== "active") fail("This account is not active.");
+    return { uid: u.uid, email: u.email || "", ...p, role: normRole(p.role) };
+  }
+  function need(actor, perm, schoolId) {
+    if (!schoolId) fail("schoolId is required.");
+    if (!can(actor, perm, schoolId)) fail("You do not have the '" + perm + "' permission for this school.");
+  }
+
+  // ---------- audit: ALWAYS part of the same batch as the action it records
+  function addAudit(batch, actor, { action, schoolId = null, targetType = "", targetId = "", summary = {} }) {
+    const ref = doc(collection(db, "auditLogs"));
+    batch.set(ref, {
+      action, actorId: actor.uid, actorRole: actor.role, actorEmail: actor.email || "",
+      schoolId: schoolId || null, targetType, targetId, summary: sanitizeSummary(summary), createdAt: ts()
+    });
+    return ref.id;
+  }
+  function sanitizeSummary(o) {
+    const out = {};
+    Object.keys(o || {}).forEach((k) => {
+      if (/pass|secret|token|key/i.test(k)) return;      // never log anything secret-looking
+      const v = o[k];
+      out[k] = (typeof v === "string") ? v.slice(0, 200) : (typeof v === "number" || typeof v === "boolean" || v === null) ? v : Array.isArray(v) ? v.slice(0, 40) : String(v).slice(0, 200);
+    });
+    return out;
+  }
+
+  // ---------- generic school-scoped reads (always filtered by schoolId)
+  async function listBySchool(coll, schoolId, extra = []) {
+    if (!schoolId) fail("schoolId is required.");
+    const q = query(collection(db, coll), where("schoolId", "==", schoolId), ...extra);
+    const s = await getDocs(q);
+    return s.docs.map((d) => ({ id: d.id, ...d.data() }));
+  }
+
+  // ================================================================== schools
+  const schools = {
+    async get(schoolId) { const s = await getDoc(doc(db, "schools", schoolId)); return s.exists() ? { id: s.id, ...s.data() } : null; },
+    /** School details a school Admin may edit (rules enforce the allowed fields). */
+    async updateDetails(schoolId, patch) {
+      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
+      const allowed = ["name", "address", "phone", "email", "headName", "logoUrl"];
+      const data = {}; allowed.forEach((k) => { if (patch[k] !== undefined) data[k] = String(patch[k]).slice(0, 300); });
+      const b = writeBatch(db);
+      b.update(doc(db, "schools", schoolId), { ...data, updatedAt: ts() });
+      addAudit(b, actor, { action: "school_update", schoolId, targetType: "school", targetId: schoolId, summary: { fields: Object.keys(data) } });
+      await b.commit();
+    }
+  };
+
+  // ================================================================== classes / subjects (dynamic)
+  function structureService({ coll, label, idFn, nameKey }) {
+    return {
+      list: (schoolId, { includeArchived = false } = {}) => listBySchool(coll, schoolId).then((r) =>
+        r.filter((x) => includeArchived || x.status === "active").sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || String(a.name).localeCompare(String(b.name)))),
+      async create(schoolId, input) {
+        const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
+        const name = String(input.name || "").trim();
+        if (!name || name.length > 80) fail(label + " name is required (max 80 characters).");
+        const base = coll === "subjects" ? (input.code || name) : name;
+        const id = idFn(schoolId, base);
+        if (id === schoolId + "_") fail("Invalid " + label + " name.");
+        const ref = doc(db, coll, id);
+        if ((await getDoc(ref)).exists()) fail("A " + label + " with this name already exists in this school.");
+        const data = coll === "classes"
+          ? { schoolId, name, key: slug(name), level: String(input.level || "").slice(0, 40), order: Number(input.order) || 0, status: "active", createdBy: actor.uid, createdAt: ts(), updatedAt: ts() }
+          : { schoolId, name, code: String(input.code || "").slice(0, 20), key: slug(base), level: String(input.level || "").slice(0, 40), status: "active", createdBy: actor.uid, createdAt: ts(), updatedAt: ts() };
+        const b = writeBatch(db);
+        b.set(ref, data);
+        addAudit(b, actor, { action: label + "_create", schoolId, targetType: coll, targetId: id, summary: { name } });
+        await b.commit();
+        return id;
+      },
+      async update(id, patch) {
+        const ref = doc(db, coll, id); const snap = await getDoc(ref);
+        if (!snap.exists()) fail(label + " not found.");
+        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, cur.schoolId);
+        const data = {};
+        ["name", "level", "order", "code"].forEach((k) => { if (patch[k] !== undefined && (k !== "code" || coll === "subjects") && (k !== "order" || coll === "classes")) data[k] = patch[k]; });
+        if (data.name !== undefined && !String(data.name).trim()) fail("Name cannot be empty.");
+        const b = writeBatch(db);
+        b.update(ref, { ...data, name: data.name !== undefined ? String(data.name).trim() : cur.name, updatedAt: ts() });
+        addAudit(b, actor, { action: label + "_update", schoolId: cur.schoolId, targetType: coll, targetId: id, summary: { fields: Object.keys(data) } });
+        await b.commit();
+      },
+      async setArchived(id, archived) {
+        const ref = doc(db, coll, id); const snap = await getDoc(ref);
+        if (!snap.exists()) fail(label + " not found.");
+        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, cur.schoolId);
+        const b = writeBatch(db);
+        b.update(ref, { status: archived ? "archived" : "active", updatedAt: ts() });
+        addAudit(b, actor, { action: label + (archived ? "_archive" : "_restore"), schoolId: cur.schoolId, targetType: coll, targetId: id });
+        await b.commit();
+      }
+    };
+  }
+  const classes = structureService({ coll: "classes", label: "class", idFn: Ids.class });
+  const subjects = structureService({ coll: "subjects", label: "subject", idFn: Ids.subject });
+
+  // ================================================================== academic sessions
+  const academicSessions = {
+    list: (schoolId) => listBySchool("academicSessions", schoolId),
+    async create(schoolId, input) {
+      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
+      const name = String(input.name || "").trim(); if (!name) fail("Session name is required (e.g. 2026/2027).");
+      const id = Ids.session(schoolId, name); const ref = doc(db, "academicSessions", id);
+      if ((await getDoc(ref)).exists()) fail("This academic session already exists.");
+      const terms = Array.isArray(input.terms) ? input.terms.slice(0, 8).map((t, i) => ({
+        key: slug(t.key || t.name || "term-" + (i + 1)), name: String(t.name || "Term " + (i + 1)).slice(0, 40),
+        startDate: t.startDate || null, endDate: t.endDate || null })) : [];
+      const b = writeBatch(db);
+      b.set(ref, { schoolId, name, startDate: input.startDate || null, endDate: input.endDate || null, terms, status: "active", isCurrent: false, createdBy: actor.uid, createdAt: ts(), updatedAt: ts() });
+      addAudit(b, actor, { action: "session_create", schoolId, targetType: "academicSessions", targetId: id, summary: { name } });
+      await b.commit(); return id;
+    },
+    /** Makes one session current (updates schools/{id}.currentSessionId + flags) in ONE batch. */
+    async setCurrent(schoolId, sessionId) {
+      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
+      const all = await listBySchool("academicSessions", schoolId);
+      const target = all.find((s) => s.id === sessionId);
+      if (!target) fail("Session not found in this school.");
+      if (target.status !== "active") fail("Only an active session can be made current.");
+      const b = writeBatch(db);
+      all.forEach((s) => { if (s.isCurrent && s.id !== sessionId) b.update(doc(db, "academicSessions", s.id), { isCurrent: false, updatedAt: ts() }); });
+      b.update(doc(db, "academicSessions", sessionId), { isCurrent: true, updatedAt: ts() });
+      b.update(doc(db, "schools", schoolId), { currentSessionId: sessionId, updatedAt: ts() });
+      addAudit(b, actor, { action: "session_set_current", schoolId, targetType: "academicSessions", targetId: sessionId });
+      await b.commit();
+    },
+    async setStatus(sessionId, status) {
+      if (!["active", "closed", "archived"].includes(status)) fail("Invalid status.");
+      const ref = doc(db, "academicSessions", sessionId); const snap = await getDoc(ref); if (!snap.exists()) fail("Session not found.");
+      const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, cur.schoolId);
+      const b = writeBatch(db);
+      b.update(ref, { status, isCurrent: status === "active" ? !!cur.isCurrent : false, updatedAt: ts() });
+      addAudit(b, actor, { action: "session_status", schoolId: cur.schoolId, targetType: "academicSessions", targetId: sessionId, summary: { status } });
+      await b.commit();
+    }
+  };
+
+  // ================================================================== students (records)
+  const students = {
+    list: (schoolId, classId) => listBySchool("students", schoolId, classId ? [where("classId", "==", classId)] : []),
+    async create(schoolId, input) {
+      const actor = await loadActor();
+      if (!can(actor, OPERATION_PERMS.manageStudents, schoolId) && !can(actor, "manage_users", schoolId)) fail("You do not have permission to add students.");
+      const admissionNo = String(input.admissionNo || "").trim(); const fullName = String(input.fullName || "").trim();
+      if (!admissionNo) fail("Admission number is required."); if (!isValidName(fullName)) fail("Enter the student's full name.");
+      if (!input.classId) fail("A student must be assigned to a class.");
+      const id = Ids.student(schoolId, admissionNo); const ref = doc(db, "students", id);
+      if ((await getDoc(ref)).exists()) fail("A student with this admission number already exists.");
+      const b = writeBatch(db);
+      b.set(ref, { schoolId, studentId: id, admissionNo, fullName, classId: input.classId, gender: input.gender || null, dateOfBirth: input.dateOfBirth || null, userId: null, status: "active", createdBy: actor.uid, createdAt: ts(), updatedAt: ts() });
+      addAudit(b, actor, { action: "student_create", schoolId, targetType: "students", targetId: id, summary: { classId: input.classId } });
+      await b.commit(); return id;
+    },
+    async update(studentId, patch) {
+      const ref = doc(db, "students", studentId); const snap = await getDoc(ref); if (!snap.exists()) fail("Student not found.");
+      const cur = snap.data(); const actor = await loadActor();
+      if (!can(actor, OPERATION_PERMS.manageStudents, cur.schoolId) && !can(actor, "manage_users", cur.schoolId)) fail("You do not have permission to edit students.");
+      const data = {}; ["fullName", "classId", "gender", "dateOfBirth", "status"].forEach((k) => { if (patch[k] !== undefined) data[k] = patch[k]; });
+      const b = writeBatch(db); b.update(ref, { ...data, updatedAt: ts() });
+      addAudit(b, actor, { action: "student_update", schoolId: cur.schoolId, targetType: "students", targetId: studentId, summary: { fields: Object.keys(data) } });
+      await b.commit();
+    }
+  };
+
+  // ================================================================== teacher assignments & form master
+  const teacherAssignments = {
+    list: (schoolId, sessionId) => listBySchool("teacherAssignments", schoolId, sessionId ? [where("academicSessionId", "==", sessionId)] : []),
+    /** A teacher may hold SEVERAL class assignments; each one lists the subjects taught in that class. */
+    async assign(schoolId, { teacherId, classId, academicSessionId, subjectIds }) {
+      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageAssignments, schoolId);
+      if (!Array.isArray(subjectIds) || !subjectIds.length) fail("Choose at least one subject for this class.");
+      const subs = await Promise.all(subjectIds.map((s) => getDoc(doc(db, "subjects", s))));
+      subs.forEach((s, i) => { if (!s.exists() || s.data().schoolId !== schoolId || s.data().status !== "active") fail("Subject '" + subjectIds[i] + "' is not an active subject of this school."); });
+      const id = Ids.teacherAssignment(academicSessionId, classId, teacherId); const ref = doc(db, "teacherAssignments", id);
+      const exists = (await getDoc(ref)).exists();
+      const b = writeBatch(db);
+      const auditId = addAudit(b, actor, { action: "teacher_assignment", schoolId, targetType: "teacherAssignments", targetId: id, summary: { teacherId, classId, subjects: subjectIds.length } });
+      if (exists) b.update(ref, { subjectIds: Array.from(new Set(subjectIds)), status: "active", updatedAt: ts(), auditId });
+      else b.set(ref, { schoolId, teacherId, classId, academicSessionId, subjectIds: Array.from(new Set(subjectIds)), status: "active", createdBy: actor.uid, createdAt: ts(), updatedAt: ts(), auditId });
+      await b.commit(); return id;
+    },
+    async end(assignmentId) {
+      const ref = doc(db, "teacherAssignments", assignmentId); const snap = await getDoc(ref); if (!snap.exists()) fail("Assignment not found.");
+      const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageAssignments, cur.schoolId);
+      const b = writeBatch(db);
+      const auditId = addAudit(b, actor, { action: "teacher_assignment", schoolId: cur.schoolId, targetType: "teacherAssignments", targetId: assignmentId, summary: { ended: true } });
+      b.update(ref, { status: "ended", updatedAt: ts(), auditId }); await b.commit();
+    },
+    forTeacher: async (teacherId, schoolId) => listBySchool("teacherAssignments", schoolId, [where("teacherId", "==", teacherId)])
+  };
+  const formMasters = {
+    list: (schoolId, sessionId) => listBySchool("formMasterAssignments", schoolId, sessionId ? [where("academicSessionId", "==", sessionId)] : []),
+    /** Position on an EXISTING teacher account - no new account, no duplicate teacher. */
+    async assign(schoolId, { teacherId, classId, academicSessionId }) {
+      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageAssignments, schoolId);
+      const id = Ids.formMasterAssignment(academicSessionId, classId); const ref = doc(db, "formMasterAssignments", id);
+      const exists = (await getDoc(ref)).exists(); const b = writeBatch(db);
+      const auditId = addAudit(b, actor, { action: "form_master_assignment", schoolId, targetType: "formMasterAssignments", targetId: id, summary: { teacherId, classId } });
+      if (exists) b.update(ref, { teacherId, status: "active", updatedAt: ts(), auditId });
+      else b.set(ref, { schoolId, teacherId, classId, academicSessionId, position: "form_master", status: "active", createdBy: actor.uid, createdAt: ts(), updatedAt: ts(), auditId });
+      await b.commit(); return id;
+    },
+    async end(assignmentId) {
+      const ref = doc(db, "formMasterAssignments", assignmentId); const snap = await getDoc(ref); if (!snap.exists()) fail("Assignment not found.");
+      const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageAssignments, cur.schoolId);
+      const b = writeBatch(db);
+      const auditId = addAudit(b, actor, { action: "form_master_assignment", schoolId: cur.schoolId, targetType: "formMasterAssignments", targetId: assignmentId, summary: { ended: true } });
+      b.update(ref, { status: "ended", teacherId: cur.teacherId, updatedAt: ts(), auditId }); await b.commit();
+    },
+    /** A teacher's positions, derived from assignments (Form Master is a position, not a role). */
+    async positionsOf(teacherId, schoolId) {
+      const list = await listBySchool("formMasterAssignments", schoolId, [where("teacherId", "==", teacherId)]);
+      return list.filter((x) => x.status === "active").map((x) => ({ position: "form_master", classId: x.classId, academicSessionId: x.academicSessionId }));
+    }
+  };
+
+  // ================================================================== invitations (Spark replacement for account creation)
+  const invitations = {
+    list: (schoolId) => listBySchool("invitations", schoolId),
+    /** Creates an invitation. The invited person later signs up + verifies e-mail + claims it. */
+    async create({ email, fullName, role, schoolId, permissions, studentId, days = 14 }) {
+      const actor = await loadActor();
+      role = normRole(role); email = normalizeEmail(email); fullName = String(fullName || "").trim();
+      if (!ROLE_LIST.includes(role) || role === ROLES.SUPER_ADMIN) fail("That role cannot be invited.");
+      if (!invitableRoles(actor).includes(role)) fail("You are not allowed to invite a " + role + ".");
+      if (!isValidEmail(email)) fail("Enter a valid email address."); if (!isValidName(fullName)) fail("Enter a valid full name.");
+      const school = await schools.get(schoolId); if (!school) fail("School not found.");
+      if (!roleMatchesSchoolType(role, school.schoolType)) fail(role === "headmaster" ? "A Headmaster belongs to a Primary school." : "A Principal belongs to a Secondary school.");
+      if (role !== "super_admin" && actor.role !== ROLES.SUPER_ADMIN) need(actor, role === "teacher" ? OPERATION_PERMS.inviteTeacher : OPERATION_PERMS.inviteStudent, schoolId);
+      const ref = doc(db, "invitations", email);
+      const prev = await getDoc(ref);
+      if (prev.exists() && prev.data().status === "claimed") fail("This email already has an account.");
+      if (prev.exists() && prev.data().status === "pending" && prev.data().expiresAt.toMillis() > Date.now()) fail("A pending invitation already exists for this email. Revoke it first.");
+      if (role === "student") {
+        if (!studentId) fail("Choose the student record to link this account to.");
+        const st = await getDoc(doc(db, "students", studentId));
+        if (!st.exists() || st.data().schoolId !== schoolId) fail("Student record not found in this school.");
+        if (st.data().userId) fail("This student already has an account.");
+      }
+      const data = { email, fullName, role, schoolId, status: "pending", invitedBy: actor.uid, expiresAt: Timestamp.fromMillis(Date.now() + Math.min(30, days) * 864e5 - 6e4), createdAt: ts(), updatedAt: ts() };
+      if (permissions !== undefined) { need(actor, OPERATION_PERMS.setUserPermissions, schoolId); data.permissions = cleanPerms(role, permissions); }
+      if (role === "student") data.studentId = studentId;
+      const b = writeBatch(db);
+      data.auditId = addAudit(b, actor, { action: "invitation_create", schoolId, targetType: "invitations", targetId: email, summary: { role } });
+      if (prev.exists()) { // re-issue: drop stale revoke markers by overwriting
+        b.set(ref, data);
+      } else b.set(ref, data);
+      await b.commit();
+      return { email, role, schoolId, expiresInDays: days };
+    },
+    async revoke(email) {
+      email = normalizeEmail(email); const ref = doc(db, "invitations", email); const snap = await getDoc(ref);
+      if (!snap.exists() || snap.data().status !== "pending") fail("No pending invitation for this email.");
+      const actor = await loadActor(); const sid = snap.data().schoolId;
+      if (actor.role !== ROLES.SUPER_ADMIN) need(actor, snap.data().role === "teacher" ? OPERATION_PERMS.inviteTeacher : OPERATION_PERMS.inviteStudent, sid);
+      const b = writeBatch(db);
+      const auditId = addAudit(b, actor, { action: "invitation_revoke", schoolId: sid, targetType: "invitations", targetId: email });
+      b.update(ref, { status: "revoked", revokedBy: actor.uid, revokedAt: ts(), updatedAt: ts(), auditId }); await b.commit();
+    },
+    /** The invited person's own pending invitation (null if none). Requires verified e-mail. */
+    async mine() {
+      const u = auth.currentUser; if (!u || u.emailVerified !== true) return null;
+      const snap = await getDoc(doc(db, "invitations", normalizeEmail(u.email)));
+      if (!snap.exists()) return null; const d = snap.data();
+      if (d.status !== "pending" || d.expiresAt.toMillis() <= Date.now()) return null;
+      return { id: snap.id, ...d };
+    },
+    /**
+     * Claims the signed-in user's invitation: ONE atomic batch creates users/{uid} exactly as invited,
+     * marks the invitation claimed, links the student record (students) and writes the audit entry.
+     * Returns the created profile, or null when there is nothing to claim.
+     */
+    async claim() {
+      const u = auth.currentUser; if (!u) fail("Sign in first.");
+      if (u.emailVerified !== true) fail("Verify your email address first.");
+      const inv = await invitations.mine(); if (!inv) return null;
+      const prof = { uid: u.uid, email: inv.email, fullName: inv.fullName, role: inv.role, schoolId: inv.schoolId, status: "active", createdBy: inv.invitedBy, source: "invitation", createdAt: ts(), updatedAt: ts() };
+      if (inv.permissions !== undefined) prof.permissions = inv.permissions;
+      if (inv.studentId) prof.studentId = inv.studentId;
+      const b = writeBatch(db);
+      b.set(doc(db, "users", u.uid), prof);
+      b.update(doc(db, "invitations", inv.id), { status: "claimed", claimedBy: u.uid, claimedAt: ts(), updatedAt: ts() });
+      if (inv.studentId) b.update(doc(db, "students", inv.studentId), { userId: u.uid, updatedAt: ts() });
+      b.set(doc(collection(db, "auditLogs")), { action: "invitation_claimed", actorId: u.uid, actorRole: inv.role, actorEmail: inv.email, schoolId: inv.schoolId, targetType: "invitations", targetId: inv.id, summary: { role: inv.role }, createdAt: ts() });
+      await b.commit();
+      return { uid: u.uid, role: inv.role, schoolId: inv.schoolId, fullName: inv.fullName };
+    }
+  };
+
+  // ================================================================== user governance (Spark replacement for Cloud Function admin tools)
+  const users = {
+    listBySchool: (schoolId, role) => listBySchool("users", schoolId, role ? [where("role", "==", role)] : []),
+    /** status: active | inactive | suspended. Takes effect at once for protected data (rules check status). */
+    async setStatus(uid, status) {
+      if (!["active", "inactive", "suspended"].includes(status)) fail("Invalid status.");
+      const actor = await loadActor(); const ref = doc(db, "users", uid); const snap = await getDoc(ref); if (!snap.exists()) fail("User not found.");
+      const cur = snap.data(); if (uid === actor.uid) fail("You cannot change your own status.");
+      if (actor.role !== ROLES.SUPER_ADMIN) { if (!["teacher", "student"].includes(normRole(cur.role))) fail("Only a Super Admin can manage this account."); need(actor, OPERATION_PERMS.setUserStatus, cur.schoolId); }
+      else if (normRole(cur.role) === ROLES.SUPER_ADMIN) fail("A Super Admin account cannot be changed here.");
+      const b = writeBatch(db);
+      const auditId = addAudit(b, actor, { action: "user_update", schoolId: cur.schoolId || null, targetType: "users", targetId: uid, summary: { status } });
+      b.update(ref, { status, updatedAt: ts(), lastAuditId: auditId }); await b.commit();
+    },
+    async setPermissions(uid, permissions) {
+      const actor = await loadActor(); const ref = doc(db, "users", uid); const snap = await getDoc(ref); if (!snap.exists()) fail("User not found.");
+      const cur = snap.data(); const r = normRole(cur.role); if (uid === actor.uid) fail("You cannot change your own permissions.");
+      if (r === ROLES.SUPER_ADMIN) fail("Super Admin permissions cannot be changed.");
+      if (actor.role !== ROLES.SUPER_ADMIN) { if (!["teacher", "student"].includes(r)) fail("Only a Super Admin can change this account's permissions."); need(actor, OPERATION_PERMS.setUserPermissions, cur.schoolId); }
+      const perms = cleanPerms(r, permissions); const b = writeBatch(db);
+      const auditId = addAudit(b, actor, { action: "user_update", schoolId: cur.schoolId || null, targetType: "users", targetId: uid, summary: { permissions: perms.length } });
+      b.update(ref, { permissions: perms, updatedAt: ts(), lastAuditId: auditId }); await b.commit();
+    },
+    /** Super Admin only: move an account to another role/school (never to/from super_admin). */
+    async setRoleAndSchool(uid, role, schoolId) {
+      const actor = await loadActor(); if (actor.role !== ROLES.SUPER_ADMIN) fail("Only a Super Admin can change a role or school.");
+      role = normRole(role); if (!ROLE_LIST.includes(role) || role === ROLES.SUPER_ADMIN) fail("That role cannot be assigned here.");
+      if (uid === actor.uid) fail("You cannot change your own role.");
+      const school = await schools.get(schoolId); if (!school) fail("School not found.");
+      if (!roleMatchesSchoolType(role, school.schoolType)) fail(role === "headmaster" ? "A Headmaster belongs to a Primary school." : "A Principal belongs to a Secondary school.");
+      const ref = doc(db, "users", uid); const snap = await getDoc(ref); if (!snap.exists()) fail("User not found.");
+      if (normRole(snap.data().role) === ROLES.SUPER_ADMIN) fail("A Super Admin account cannot be changed here.");
+      const b = writeBatch(db);
+      const auditId = addAudit(b, actor, { action: "user_update", schoolId, targetType: "users", targetId: uid, summary: { role } });
+      b.update(ref, { role, schoolId, permissions: Array.from(DEFAULT_PERMS[role]), updatedAt: ts(), lastAuditId: auditId }); await b.commit();
+    }
+  };
+
+  // ================================================================== marks (teacher, own class + subject only)
+  const marks = {
+    async save(schoolId, { academicSessionId, term, classId, subjectId, studentId, scores, status = "draft" }) {
+      const actor = await loadActor();
+      if (!canTeacher(actor, "grade") || actor.schoolId !== schoolId) fail("Only a teacher of this school with the 'grade' permission can enter marks.");
+      if (!["draft", "submitted"].includes(status)) fail("Teachers can save drafts or submit marks only.");
+      const vals = Object.values(scores || {}); if (vals.some((v) => typeof v !== "number" || !isFinite(v) || v < 0)) fail("Scores must be non-negative numbers.");
+      const total = vals.reduce((a, c) => a + c, 0); if (total > 1000) fail("Total is out of range.");
+      const ta = await getDoc(doc(db, "teacherAssignments", Ids.teacherAssignment(academicSessionId, classId, actor.uid)));
+      if (!ta.exists() || ta.data().status !== "active" || !(ta.data().subjectIds || []).includes(subjectId)) fail("You are not assigned to teach this subject in this class.");
+      const id = Ids.mark(schoolId, academicSessionId, term, classId, subjectId, studentId); const ref = doc(db, "marks", id);
+      const prev = await getDoc(ref); const b = writeBatch(db);
+      if (prev.exists()) b.update(ref, { scores, total, status, updatedAt: ts() });
+      else b.set(ref, { schoolId, academicSessionId, term, classId, subjectId, studentId, teacherId: actor.uid, scores, total, status, createdAt: ts(), updatedAt: ts() });
+      await b.commit(); return id;
+    },
+    list: (schoolId, classId, subjectId, academicSessionId) => listBySchool("marks", schoolId, [where("classId", "==", classId), where("subjectId", "==", subjectId), where("academicSessionId", "==", academicSessionId)])
+  };
+
+  // ================================================================== Spark replacements for the legacy Cloud Function names
+  /**
+   * The Admin dashboard still calls the old Blaze-only Cloud Functions through callFn(name, data).
+   * On Spark those functions do not exist, so callFn routes them here. NOTHING here ever lets the
+   * browser choose a privileged role: the rules decide, and account creation is an invitation.
+   */
+  const SPARK_UNSUPPORTED = {
+    adminSetUserPassword: "Setting another user's password needs a server (Blaze plan). Use 'Send password-reset email instead' - the user chooses their own password.",
+    getUsersAuthStatus: null
+  };
+  async function legacyCall(name, data) {
+    data = data || {};
+    switch (name) {
+      case "createUserByAdmin": {
+        const actor = await loadActor();
+        const schoolId = data.schoolId || actor.schoolId;
+        if (!schoolId) fail("Your account is not linked to a school yet. A Super Admin must assign your school first.");
+        const studentId = data.studentId;
+        await invitations.create({ email: data.email, fullName: data.fullName, role: data.role, schoolId, studentId, permissions: data.permissions });
+        return { uid: null, email: normalizeEmail(data.email), role: normRole(data.role), verificationEmailSent: false, invited: true,
+          notice: "Invitation created. The person must open the login page, choose 'Activate invited account', sign up with this email, verify it, and the account is then created with the role you set. No password is set by an Admin on the Spark plan." };
+      }
+      case "setUserStatus": await users.setStatus(data.uid, data.status); return { ok: true, status: data.status };
+      case "setUserPermissions": await users.setPermissions(data.uid, data.permissions); return { ok: true, permissions: data.permissions };
+      case "setUserRole": {
+        const actor = await loadActor(); const snap = await getDoc(doc(db, "users", data.uid));
+        await users.setRoleAndSchool(data.uid, data.role, snap.exists() ? snap.data().schoolId || actor.schoolId : actor.schoolId); return { ok: true, role: normRole(data.role) };
+      }
+      case "updateUserByAdmin": {
+        const actor = await loadActor(); const ref = doc(db, "users", data.uid); const snap = await getDoc(ref); if (!snap.exists()) fail("User not found.");
+        const cur = snap.data(); if (actor.role !== ROLES.SUPER_ADMIN) { if (!["teacher", "student"].includes(normRole(cur.role))) fail("Only a Super Admin can manage this account."); need(actor, OPERATION_PERMS.editUserProfile, cur.schoolId); }
+        if (data.fullName !== undefined && !isValidName(data.fullName)) fail("Enter a valid full name.");
+        const patch = {}; if (data.fullName !== undefined) patch.fullName = String(data.fullName).trim(); if (data.phone !== undefined) patch.phone = String(data.phone || "").trim().slice(0, 20);
+        const b = writeBatch(db); const auditId = addAudit(b, actor, { action: "user_update", schoolId: cur.schoolId || null, targetType: "users", targetId: data.uid, summary: { fields: Object.keys(patch) } });
+        b.update(ref, { ...patch, updatedAt: ts(), lastAuditId: auditId }); await b.commit(); return { ok: true };
+      }
+      case "adminInitiatePasswordReset": { const snap = await getDoc(doc(db, "users", data.uid)); if (!snap.exists()) fail("User not found."); return { ok: true, email: snap.data().email }; }
+      case "getUsersAuthStatus": return { users: {} };         // needs Admin SDK (Blaze): badges simply stay hidden
+      case "adminSetUserPassword": fail(SPARK_UNSUPPORTED.adminSetUserPassword); break;
+      default: fail("This action needs a server function (Blaze plan) and is not available on the Spark plan.");
+    }
+  }
+
+  return { loadActor, schools, classes, subjects, academicSessions, students, teacherAssignments, formMasters, invitations, users, marks, legacyCall, audit: { add: addAudit },
+    helpers: { can, canTeacher, effectivePerms, invitableRoles, Ids, slug } };
+}
+
+// ---- expose to the dashboards that will be built in the next stages ----
+window.MMSAYAYA_BACKEND = Object.assign(
+  createSchoolBackend({ db: getFirestore(__app), auth: getAuth(__app),
+    fs: { doc, collection, getDoc, getDocs, query, where, writeBatch, serverTimestamp, Timestamp } }),
+  { ROLES, CATALOGUE, DEFAULT_PERMS, OPERATION_PERMS, can, canTeacher, effectivePerms, invitableRoles, Ids, slug }
+);
+window.MMSAYAYA_USE_CLOUD_FUNCTIONS = window.MMSAYAYA_USE_CLOUD_FUNCTIONS === true;   // stays false on Spark
+</script>
 <script type="text/plain" id="bsFunctionsSrc">/**
  * MMSAYAYA EDUVERSE - Trusted backend (Cloud Functions, Node 20, 2nd gen).
  *
@@ -7364,8 +7996,21 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // =====================================================================
-    // Identity helpers
+    // MMSAYAYA EDUVERSE - Firestore Security Rules (Stage 1, Spark plan)
+    //
+    // These rules are the ONLY server-side authority on the Spark plan (there are no
+    // Cloud Functions). Everything privileged is therefore decided here:
+    //   * Accounts are created only by (a) the one-time first Super Admin setup or
+    //     (b) CLAIMING an invitation that a Super Admin / school Admin created.
+    //     The claimed profile must match the invitation exactly (role, schoolId, ...).
+    //   * Nobody can change their own role, schoolId, permissions or status.
+    //   * Every school-scoped document carries schoolId and is only reachable by
+    //     members of that school (Super Admin: all schools).
     // =====================================================================
+
+    // ---------------------------------------------------------------------
+    // Identity helpers
+    // ---------------------------------------------------------------------
     function hasAuth() { return request.auth != null; }
     function uid() { return request.auth.uid; }
     function profilePath() { return /databases/$(database)/documents/users/$(request.auth.uid); }
@@ -7373,7 +8018,7 @@ service cloud.firestore {
     function userDoc() { return get(profilePath()).data; }
 
     // Protected-data gate: signed in + email verified + account active.
-    // "verificationBypass" can only be set from the Firebase Console / Admin SDK (never by clients).
+    // "verificationBypass" can only be set from the Firebase Console (never by clients).
     function emailOk() {
       return request.auth.token.email_verified == true
         || (hasProfile() && userDoc().get('verificationBypass', false) == true);
@@ -7388,9 +8033,14 @@ service cloud.firestore {
     function isAdmin() { return role() in ['admin', 'super_admin', 'superadmin']; }
     function isTeacher() { return role() == 'teacher'; }
     function isStudent() { return role() == 'student'; }
+    function isSchoolLeader() { return role() in ['headmaster', 'principal']; }
+    function isSchoolStaff() { return role() in ['admin', 'headmaster', 'principal']; }
     function isOwner(userId) { return hasAuth() && uid() == userId; }
+    function mySchool() { return authed() ? userDoc().get('schoolId', null) : null; }
 
-    // ---------------- Permission checks (enforced here, not only in the UI) ----------------
+    // ---------------------------------------------------------------------
+    // Permission catalogues (keep in sync with js/school-backend.js)
+    // ---------------------------------------------------------------------
     function defaultAdminPerms() {
       return ['manage_users','create_student','create_teacher','manage_permissions','suspend_users',
               'reset_passwords','manage_content','manage_payments','manage_schools',
@@ -7399,30 +8049,137 @@ service cloud.firestore {
     function defaultTeacherPerms() {
       return ['manage_lessons','manage_assignments','create_questions','grade','view_students','message'];
     }
-    // Admin permission (Super Admin always passes)
-    function can(p) {
-      return isSuperAdmin()
-        || (isAdmin() && ('permissions' in userDoc() ? p in userDoc().permissions : p in defaultAdminPerms()));
+    function teacherPermCatalogue() { return defaultTeacherPerms(); }
+    function studentPermCatalogue() {
+      return ['view_courses','take_exams','view_results','download_certificates','message','practice_questions'];
     }
-    // Teacher permission
+    // Admin / Headmaster / Principal. The last three are NEVER granted by default;
+    // a Super Admin must switch them on explicitly.
+    function staffPermCatalogue() {
+      return ['manage_users','create_student','create_teacher','manage_permissions','suspend_users',
+              'reset_passwords','manage_content','manage_payments','manage_schools',
+              'manage_announcements','manage_access','view_reports',
+              'view_students','manage_results','manage_report_cards'];
+    }
+    function permsValidFor(r, perms) {
+      return perms is list && perms.size() <= 30
+        && (r in ['admin','headmaster','principal'] ? perms.hasOnly(staffPermCatalogue())
+            : (r == 'teacher' ? perms.hasOnly(teacherPermCatalogue())
+               : (r == 'student' ? perms.hasOnly(studentPermCatalogue()) : false)));
+    }
+
+    // Does the signed-in user hold permission p (explicit list, else role default)?
+    function explicitPerm(p) {
+      return 'permissions' in userDoc() && userDoc().permissions is list && p in userDoc().permissions;
+    }
+    function adminHolds(p) {
+      return 'permissions' in userDoc() ? explicitPerm(p) : p in defaultAdminPerms();
+    }
+
+    // LEGACY / PLATFORM scope. An "admin" account that has NO schoolId is a legacy platform
+    // admin (created before school scoping). It keeps the old behaviour on platform data
+    // (website content, courses, ...). Admin accounts created from now on always carry a schoolId.
+    function legacyAdmin() { return role() == 'admin' && mySchool() == null; }
+    // Platform-level permission: Super Admin, or a legacy (school-less) admin who holds p.
+    function can(p) { return isSuperAdmin() || (legacyAdmin() && adminHolds(p)); }
     function teacherCan(p) {
       return isTeacher()
-        && ('permissions' in userDoc() ? p in userDoc().permissions : p in defaultTeacherPerms());
+        && ('permissions' in userDoc() ? explicitPerm(p) : p in defaultTeacherPerms());
     }
     function assignedCourses() { return userDoc().get('assignedCourses', []); }
+
+    // SCHOOL scope. True for: Super Admin (every school); a school Admin holding p (defaults apply when
+    // no explicit list); a Headmaster/Principal ONLY when p was explicitly granted to them.
+    function schoolCan(p, sid) {
+      return isSuperAdmin()
+        || (sid != null && mySchool() == sid
+            && ((role() == 'admin' && adminHolds(p))
+                || (isSchoolLeader() && explicitPerm(p))));
+    }
+    function memberOf(sid) {
+      return isSuperAdmin() || (authed() && sid != null && mySchool() == sid);
+    }
 
     function validEmail(e) {
       return e is string && e.size() > 4 && e.size() < 255 && e.matches('.*@.*\\..*');
     }
 
-    // Student has an active course-access record for this course (document id = uid_courseId)
-    function hasCourseAccess(courseId) {
-      return courseId is string && (
-        assignedCourses().hasAny([courseId])
-        || (exists(/databases/$(database)/documents/courseAccess/$(uid() + '_' + courseId))
-            && get(/databases/$(database)/documents/courseAccess/$(uid() + '_' + courseId)).data.get('status', '') == 'active')
-        || exists(/databases/$(database)/documents/course_access/$(uid() + '_' + courseId))
-      );
+    // ---------------------------------------------------------------------
+    // School lookups
+    // ---------------------------------------------------------------------
+    function schoolPath(sid) { return /databases/$(database)/documents/schools/$(sid); }
+    function schoolOk(sid) {
+      return sid is string && exists(schoolPath(sid))
+        && !(get(schoolPath(sid)).data.get('status', 'active') in ['suspended', 'archived', 'deleted']);
+    }
+    function schoolTypeOf(sid) { return get(schoolPath(sid)).data.get('schoolType', ''); }
+    // Headmaster -> Primary school, Principal -> Secondary school, Admin -> any
+    function roleMatchesSchool(r, sid) {
+      return r in ['admin', 'teacher', 'student']
+        || (r == 'headmaster' && schoolTypeOf(sid) == 'primary')
+        || (r == 'principal' && schoolTypeOf(sid) in ['secondary', 'junior_secondary', 'senior_secondary']);
+    }
+    function currentSession(sid) { return get(schoolPath(sid)).data.get('currentSessionId', null); }
+
+    function idPrefixOk(docId, sid) { return sid is string && docId.matches(sid + '_.*'); }
+
+    function classPath(cid) { return /databases/$(database)/documents/classes/$(cid); }
+    function classOk(cid, sid) {
+      return cid is string && exists(classPath(cid))
+        && get(classPath(cid)).data.get('schoolId', null) == sid
+        && get(classPath(cid)).data.get('status', 'active') == 'active';
+    }
+    function sessionPath(xid) { return /databases/$(database)/documents/academicSessions/$(xid); }
+    function sessionOk(xid, sid) {
+      return xid is string && exists(sessionPath(xid))
+        && get(sessionPath(xid)).data.get('schoolId', null) == sid
+        && get(sessionPath(xid)).data.get('status', 'active') == 'active';
+    }
+    function userPath(xid) { return /databases/$(database)/documents/users/$(xid); }
+    function teacherOk(tid, sid) {
+      return tid is string && exists(userPath(tid))
+        && get(userPath(tid)).data.get('role', '') == 'teacher'
+        && get(userPath(tid)).data.get('schoolId', null) == sid
+        && get(userPath(tid)).data.get('status', 'active') == 'active';
+    }
+
+    // Audit enforcement: a governed write must be accompanied (same batch) by an auditLogs entry.
+    function auditPath(aid) { return /databases/$(database)/documents/auditLogs/$(aid); }
+    function auditedAfter(aid, action) {
+      return aid is string && aid.size() > 0 && existsAfter(auditPath(aid))
+        && getAfter(auditPath(aid)).data.action == action;
+    }
+
+    // ---------------------------------------------------------------------
+    // Teacher <-> class relationships (deterministic ids make these checkable)
+    //   teacherAssignments/{sessionId}_{classId}_{teacherUid}
+    //   formMasterAssignments/{sessionId}_{classId}
+    // ---------------------------------------------------------------------
+    function taPath(xid, cid) {
+      return /databases/$(database)/documents/teacherAssignments/$(xid + '_' + cid + '_' + request.auth.uid);
+    }
+    function fmPath(xid, cid) {
+      return /databases/$(database)/documents/formMasterAssignments/$(xid + '_' + cid);
+    }
+    function isFormMasterOf(sid, xid, cid) {
+      return isTeacher() && mySchool() == sid && xid is string && cid is string
+        && exists(fmPath(xid, cid))
+        && get(fmPath(xid, cid)).data.teacherId == uid()
+        && get(fmPath(xid, cid)).data.get('status', 'active') == 'active';
+    }
+    function teachesSubject(sid, xid, cid, subjectId) {
+      return isTeacher() && mySchool() == sid && xid is string && cid is string && subjectId is string
+        && exists(taPath(xid, cid))
+        && get(taPath(xid, cid)).data.get('status', 'active') == 'active'
+        && get(taPath(xid, cid)).data.subjectIds.hasAny([subjectId]);
+    }
+    // Teacher belongs to the class in the school's CURRENT academic session
+    function teachesClass(sid, cid) {
+      return isTeacher() && mySchool() == sid && cid is string
+        && currentSession(sid) != null
+        && ((exists(taPath(currentSession(sid), cid))
+             && get(taPath(currentSession(sid), cid)).data.get('status', 'active') == 'active')
+            || isFormMasterOf(sid, currentSession(sid), cid));
     }
 
     // =====================================================================
@@ -7441,26 +8198,187 @@ service cloud.firestore {
     }
 
     // =====================================================================
+    // Invitation CLAIM (replaces Cloud-Function account creation on Spark).
+    //   1. A Super Admin / school Admin writes invitations/{email} (validated below).
+    //   2. The invited person signs up with Firebase Auth using that email and VERIFIES it.
+    //   3. They claim it: ONE batch creates users/{uid} + marks the invitation claimed.
+    // The new profile must equal the invitation, so the claimant can never pick a role/school.
+    // =====================================================================
+    function invPathFor(email) { return /databases/$(database)/documents/invitations/$(email); }
+    function claimKeys() {
+      return ['uid','email','fullName','role','schoolId','status','permissions','studentId',
+              'createdBy','source','createdAt','updatedAt'];
+    }
+    function claimCreateOk(userId) {
+      return isOwner(userId)
+        && request.auth.token.email_verified == true
+        && request.auth.token.email != null
+        && exists(invPathFor(request.auth.token.email.lower()))
+        && claimMatches(request.resource.data, get(invPathFor(request.auth.token.email.lower())).data, userId)
+        && getAfter(invPathFor(request.auth.token.email.lower())).data.status == 'claimed'
+        && getAfter(invPathFor(request.auth.token.email.lower())).data.claimedBy == userId;
+    }
+    function claimMatches(d, inv, userId) {
+      return d.keys().hasOnly(claimKeys())
+        && inv.status == 'pending'
+        && inv.expiresAt > request.time
+        && d.uid == userId
+        && d.email == request.auth.token.email.lower()
+        && d.email == inv.email
+        && d.role == inv.role
+        && d.role in ['admin','headmaster','principal','teacher','student']
+        && d.schoolId == inv.schoolId
+        && d.fullName == inv.fullName
+        && d.get('permissions', null) == inv.get('permissions', null)
+        && d.get('studentId', null) == inv.get('studentId', null)
+        && d.status == 'active'
+        && d.createdBy == inv.invitedBy
+        && d.source == 'invitation'
+        && d.createdAt == request.time && d.updatedAt == request.time
+        && schoolOk(d.schoolId)
+        && roleMatchesSchool(d.role, d.schoolId);
+    }
+
+    // =====================================================================
     // Users
-    //  - Accounts are created ONLY by trusted Cloud Functions (Admin SDK) or the one-time setup.
-    //  - Roles, permissions, status and assignments can be changed ONLY by Cloud Functions.
+    //  - Created ONLY by first-setup or invitation claim.
+    //  - role / schoolId / permissions / status are changed ONLY by a Super Admin (any non-super
+    //    account) or by a school Admin for Teachers/Students of the SAME school (status, permissions,
+    //    name, phone). Every such change must come with an audit log entry in the same batch.
     //  - A user can edit only harmless profile fields of their own document.
     // =====================================================================
-    match /users/{userId} {
-      allow read: if (isOwner(userId) && authed())
-        || can('manage_users')
-        || (isTeacher() && teacherCan('view_students')
-            && resource.data.role == 'student'
-            && resource.data.get('assignedCourses', []).hasAny(assignedCourses()));
-      allow create: if isFirstSetup(userId);
-      allow update: if isOwner(userId) && authed()
+    function adminUserPatchKeys() {
+      return ['role','schoolId','permissions','status','fullName','phone','updatedAt','lastAuditId'];
+    }
+    function superUpdatesUser(userId) {
+      return isSuperAdmin() && userId != uid()
+        && resource.data.role != 'super_admin'
+        && request.resource.data.role in ['admin','headmaster','principal','teacher','student']
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(adminUserPatchKeys())
+        && request.resource.data.get('status', 'active') in ['active','inactive','suspended']
+        && ((request.resource.data.get('schoolId', null) == null
+             && resource.data.get('schoolId', null) == null
+             && request.resource.data.role == resource.data.role)      // legacy school-less account: status/name only
+            || (schoolOk(request.resource.data.get('schoolId', null))
+                && roleMatchesSchool(request.resource.data.role, request.resource.data.schoolId)))
+        && (!('permissions' in request.resource.data)
+            || permsValidFor(request.resource.data.role, request.resource.data.permissions))
+        && auditedAfter(request.resource.data.get('lastAuditId', null), 'user_update');
+    }
+    function schoolStaffUpdatesUser(userId) {
+      return isSchoolStaff() && mySchool() != null && userId != uid()
+        && resource.data.get('schoolId', null) == mySchool()
+        && resource.data.role in ['teacher', 'student']
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(['fullName','phone','photoURL','updatedAt','lastLoginAt']);
+             .hasOnly(['status','permissions','fullName','phone','updatedAt','lastAuditId'])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status'])
+            || (schoolCan('suspend_users', mySchool())
+                && request.resource.data.status in ['active','inactive','suspended']))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['permissions'])
+            || (schoolCan('manage_permissions', mySchool())
+                && permsValidFor(resource.data.role, request.resource.data.permissions)))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['fullName','phone'])
+            || schoolCan('manage_users', mySchool()))
+        && auditedAfter(request.resource.data.get('lastAuditId', null), 'user_update');
+    }
+    function canReadUser(d) {
+      return schoolCan('manage_users', d.get('schoolId', null))
+        || (legacyAdmin() && adminHolds('manage_users'))
+        || (isTeacher() && teacherCan('view_students')
+            && d.role == 'student'
+            && d.get('schoolId', null) == mySchool()
+            && d.get('assignedCourses', []).hasAny(assignedCourses()));
+    }
+    match /users/{userId} {
+      allow read: if (isOwner(userId) && authed()) || canReadUser(resource.data);
+      allow create: if isFirstSetup(userId) || claimCreateOk(userId);
+      allow update: if (isOwner(userId) && authed()
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['fullName','phone','photoURL','updatedAt','lastLoginAt']))
+        || superUpdatesUser(userId)
+        || schoolStaffUpdatesUser(userId);
       allow delete: if false;
     }
 
     // =====================================================================
-    // Public site settings / setup state
+    // Invitations (document id = invited e-mail address, lower-case)
+    // =====================================================================
+    function inviteKeys() {
+      return ['email','fullName','role','schoolId','permissions','studentId','status','invitedBy',
+              'expiresAt','auditId','createdAt','updatedAt','revokedBy','revokedAt'];
+    }
+    function inviteStudentLinkOk(d) {
+      return d.studentId is string
+        && exists(/databases/$(database)/documents/students/$(d.studentId))
+        && get(/databases/$(database)/documents/students/$(d.studentId)).data.schoolId == d.schoolId
+        && get(/databases/$(database)/documents/students/$(d.studentId)).data.get('userId', null) == null
+        && get(/databases/$(database)/documents/students/$(d.studentId)).data.get('status', 'active') == 'active';
+    }
+    function invitePermsOk(d) {
+      return !('permissions' in d)
+        || (schoolCan('manage_permissions', d.schoolId) && permsValidFor(d.role, d.permissions));
+    }
+    function inviteRoleAllowed(d) {
+      return (d.role in ['admin','headmaster','principal']
+              && isSuperAdmin() && roleMatchesSchool(d.role, d.schoolId) && invitePermsOk(d))
+        || (d.role == 'teacher' && schoolCan('create_teacher', d.schoolId) && invitePermsOk(d))
+        || (d.role == 'student' && schoolCan('create_student', d.schoolId) && invitePermsOk(d)
+            && inviteStudentLinkOk(d));
+    }
+    function inviteNewOk(inviteId, d) {
+      return d.keys().hasOnly(inviteKeys())
+        && d.email is string && d.email == inviteId && d.email == d.email.lower()
+        && validEmail(d.email)
+        && d.status == 'pending' && d.invitedBy == uid()
+        && d.fullName is string && d.fullName.size() >= 2 && d.fullName.size() <= 80
+        && d.role in ['admin','headmaster','principal','teacher','student']
+        && schoolOk(d.schoolId)
+        && d.expiresAt is timestamp && d.expiresAt > request.time
+        && d.expiresAt <= request.time + duration.value(30, 'd')
+        && d.createdAt == request.time && d.updatedAt == request.time
+        && inviteRoleAllowed(d)
+        && auditedAfter(d.get('auditId', null), 'invitation_create');
+    }
+    function canSeeInvites(sid) {
+      return schoolCan('create_teacher', sid) || schoolCan('create_student', sid);
+    }
+    match /invitations/{inviteId} {
+      // The invited person (verified e-mail) may read ONLY their own invitation.
+      allow get: if (hasAuth() && request.auth.token.email_verified == true
+                     && request.auth.token.email != null
+                     && inviteId == request.auth.token.email.lower())
+        || (authed() && canSeeInvites(resource.data.get('schoolId', null)));
+      allow list: if authed() && canSeeInvites(resource.data.get('schoolId', null));
+      allow create: if authed() && inviteNewOk(inviteId, request.resource.data);
+      allow update: if
+        // (a) inviter revokes a pending invitation
+        (authed() && resource.data.status == 'pending'
+           && canSeeInvites(resource.data.get('schoolId', null))
+           && request.resource.data.status == 'revoked'
+           && request.resource.data.diff(resource.data).affectedKeys()
+                .hasOnly(['status','revokedBy','revokedAt','updatedAt','auditId'])
+           && request.resource.data.revokedBy == uid()
+           && auditedAfter(request.resource.data.get('auditId', null), 'invitation_revoke'))
+        // (b) re-issue after revoked / expired / (claimed account no longer exists is NOT allowed)
+        || (authed() && (resource.data.status in ['revoked','expired']
+                         || (resource.data.status == 'pending' && resource.data.expiresAt <= request.time))
+            && inviteNewOk(inviteId, request.resource.data))
+        // (c) the invited, verified person claims it (the users/{uid} create in the same batch is validated above)
+        || (hasAuth() && request.auth.token.email_verified == true
+            && request.auth.token.email != null
+            && inviteId == request.auth.token.email.lower()
+            && resource.data.status == 'pending'
+            && resource.data.expiresAt > request.time
+            && request.resource.data.status == 'claimed'
+            && request.resource.data.claimedBy == uid()
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['status','claimedBy','claimedAt','updatedAt'])
+            && existsAfter(userPath(uid())));
+      allow delete: if false;
+    }
+
+    // =====================================================================
+    // Public site settings / setup state (PLATFORM scope)
     // =====================================================================
     match /system/{docId} {
       allow read: if true;
@@ -7475,11 +8393,22 @@ service cloud.firestore {
     }
 
     // =====================================================================
-    // Schools
+    // Schools  (document id = canonical schoolId)
+    //  - public read (school directory) - unchanged
+    //  - create / delete / status / schoolType : Super Admin (or legacy platform admin, as before)
+    //  - a school Admin may edit ONLY basic details of THEIR OWN school
     // =====================================================================
+    function schoolSelfEditKeys() {
+      return ['name','address','phone','email','headName','logoUrl','currentSessionId','updatedAt'];
+    }
     match /schools/{id} {
       allow read: if true;
-      allow write: if can('manage_schools');
+      allow create, delete: if can('manage_schools');
+      allow update: if can('manage_schools')
+        || (isSchoolStaff() && mySchool() == id && schoolCan('manage_schools', id)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(schoolSelfEditKeys())
+            && (request.resource.data.get('currentSessionId', null) == resource.data.get('currentSessionId', null)
+                || sessionOk(request.resource.data.currentSessionId, id)));
     }
     match /schoolRegistrationRequests/{id} {
       allow create: if request.resource.data.status == 'pending'
@@ -7494,7 +8423,304 @@ service cloud.firestore {
     match /schoolPayments/{id} { allow read, write: if can('manage_payments'); }
 
     // =====================================================================
-    // Catalogue (public listing) and learning content
+    // SCHOOL STRUCTURE (per school; nothing is hard-coded)
+    // =====================================================================
+    match /classes/{classId} {
+      allow read: if memberOf(resource.data.get('schoolId', null));
+      allow create: if schoolCan('manage_schools', request.resource.data.get('schoolId', null))
+        && idPrefixOk(classId, request.resource.data.schoolId)
+        && schoolOk(request.resource.data.schoolId)
+        && request.resource.data.keys().hasOnly(['schoolId','name','key','level','order','status','createdBy','createdAt','updatedAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 60
+        && request.resource.data.status == 'active'
+        && request.resource.data.createdBy == uid();
+      allow update: if schoolCan('manage_schools', resource.data.get('schoolId', null))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','level','order','status','updatedAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 60
+        && request.resource.data.status in ['active', 'archived'];
+      allow delete: if false;                       // archive instead of delete
+    }
+
+    // "subjects" ALREADY EXISTS as the global course-subject catalogue (no schoolId). Both kinds live
+    // side by side: documents WITHOUT schoolId keep the old rules, documents WITH schoolId are school-scoped.
+    match /subjects/{id} {
+      allow read: if resource.data.get('schoolId', null) == null
+        || memberOf(resource.data.schoolId)
+        || (legacyAdmin() && adminHolds('manage_content'));
+      allow create: if (request.resource.data.get('schoolId', null) == null
+                        && (can('manage_content') || teacherCan('manage_lessons')))
+        || (schoolCan('manage_schools', request.resource.data.get('schoolId', null))
+            && idPrefixOk(id, request.resource.data.schoolId)
+            && schoolOk(request.resource.data.schoolId)
+            && request.resource.data.keys().hasOnly(['schoolId','name','code','key','level','status','createdBy','createdAt','updatedAt'])
+            && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 80
+            && request.resource.data.status == 'active'
+            && request.resource.data.createdBy == uid());
+      allow update: if (resource.data.get('schoolId', null) == null
+                        && request.resource.data.get('schoolId', null) == null
+                        && (can('manage_content') || teacherCan('manage_lessons')))
+        || (schoolCan('manage_schools', resource.data.get('schoolId', null))
+            && request.resource.data.schoolId == resource.data.schoolId
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','code','level','status','updatedAt'])
+            && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 80
+            && request.resource.data.status in ['active', 'archived']);
+      allow delete: if resource.data.get('schoolId', null) == null
+        && (can('manage_content') || teacherCan('manage_lessons'));
+    }
+
+    match /academicSessions/{sessionId} {
+      allow read: if memberOf(resource.data.get('schoolId', null));
+      allow create: if schoolCan('manage_schools', request.resource.data.get('schoolId', null))
+        && idPrefixOk(sessionId, request.resource.data.schoolId)
+        && schoolOk(request.resource.data.schoolId)
+        && request.resource.data.keys().hasOnly(['schoolId','name','startDate','endDate','terms','status','isCurrent','createdBy','createdAt','updatedAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 60
+        && request.resource.data.terms is list && request.resource.data.terms.size() <= 8
+        && request.resource.data.status == 'active'
+        && request.resource.data.createdBy == uid();
+      allow update: if schoolCan('manage_schools', resource.data.get('schoolId', null))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','startDate','endDate','terms','status','isCurrent','updatedAt'])
+        && request.resource.data.terms is list && request.resource.data.terms.size() <= 8
+        && request.resource.data.status in ['active', 'closed', 'archived'];
+      allow delete: if false;
+    }
+
+    // Teacher -> class (+ the subjects taught in that class) for one academic session
+    match /teacherAssignments/{assignmentId} {
+      allow read: if schoolCan('manage_users', resource.data.get('schoolId', null))
+        || schoolCan('view_reports', resource.data.get('schoolId', null))
+        || (authed() && resource.data.teacherId == uid());
+      allow create: if schoolCan('manage_users', request.resource.data.get('schoolId', null))
+        && request.resource.data.keys().hasOnly(['schoolId','teacherId','classId','academicSessionId','subjectIds','status','createdBy','createdAt','updatedAt','auditId'])
+        && assignmentId == request.resource.data.academicSessionId + '_' + request.resource.data.classId + '_' + request.resource.data.teacherId
+        && teacherOk(request.resource.data.teacherId, request.resource.data.schoolId)
+        && classOk(request.resource.data.classId, request.resource.data.schoolId)
+        && sessionOk(request.resource.data.academicSessionId, request.resource.data.schoolId)
+        && request.resource.data.subjectIds is list
+        && request.resource.data.subjectIds.size() > 0 && request.resource.data.subjectIds.size() <= 40
+        && request.resource.data.status == 'active'
+        && request.resource.data.createdBy == uid()
+        && auditedAfter(request.resource.data.get('auditId', null), 'teacher_assignment');
+      allow update: if schoolCan('manage_users', resource.data.get('schoolId', null))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && request.resource.data.teacherId == resource.data.teacherId
+        && request.resource.data.classId == resource.data.classId
+        && request.resource.data.academicSessionId == resource.data.academicSessionId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['subjectIds','status','updatedAt','auditId'])
+        && request.resource.data.subjectIds is list && request.resource.data.subjectIds.size() <= 40
+        && request.resource.data.status in ['active', 'ended']
+        && auditedAfter(request.resource.data.get('auditId', null), 'teacher_assignment');
+      allow delete: if false;
+    }
+
+    // Form Master = an existing TEACHER given the Form Master position for ONE class in ONE session.
+    // (Not an account type: no extra login, no duplicate teacher.)
+    match /formMasterAssignments/{assignmentId} {
+      allow read: if schoolCan('manage_users', resource.data.get('schoolId', null))
+        || schoolCan('view_reports', resource.data.get('schoolId', null))
+        || memberOf(resource.data.get('schoolId', null)) && authed() && isTeacher();
+      allow create: if schoolCan('manage_users', request.resource.data.get('schoolId', null))
+        && request.resource.data.keys().hasOnly(['schoolId','teacherId','classId','academicSessionId','position','status','createdBy','createdAt','updatedAt','auditId'])
+        && assignmentId == request.resource.data.academicSessionId + '_' + request.resource.data.classId
+        && request.resource.data.position == 'form_master'
+        && teacherOk(request.resource.data.teacherId, request.resource.data.schoolId)
+        && classOk(request.resource.data.classId, request.resource.data.schoolId)
+        && sessionOk(request.resource.data.academicSessionId, request.resource.data.schoolId)
+        && request.resource.data.status == 'active'
+        && request.resource.data.createdBy == uid()
+        && auditedAfter(request.resource.data.get('auditId', null), 'form_master_assignment');
+      allow update: if schoolCan('manage_users', resource.data.get('schoolId', null))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && request.resource.data.classId == resource.data.classId
+        && request.resource.data.academicSessionId == resource.data.academicSessionId
+        && request.resource.data.position == 'form_master'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['teacherId','status','updatedAt','auditId'])
+        && teacherOk(request.resource.data.teacherId, resource.data.schoolId)
+        && request.resource.data.status in ['active', 'ended']
+        && auditedAfter(request.resource.data.get('auditId', null), 'form_master_assignment');
+      allow delete: if false;
+    }
+
+    // Student records (school-isolated; connected to a class). document id = {schoolId}_{admissionNo}
+    function canManageStudents(sid) {
+      return schoolCan('create_student', sid) || schoolCan('manage_users', sid);
+    }
+    match /students/{studentId} {
+      allow read: if (authed() && resource.data.get('userId', null) == uid())
+        || canManageStudents(resource.data.get('schoolId', null))
+        || schoolCan('view_students', resource.data.get('schoolId', null))
+        || schoolCan('view_reports', resource.data.get('schoolId', null))
+        || (teacherCan('view_students') && teachesClass(resource.data.get('schoolId', null), resource.data.get('classId', null)));
+      allow create: if canManageStudents(request.resource.data.get('schoolId', null))
+        && idPrefixOk(studentId, request.resource.data.schoolId)
+        && schoolOk(request.resource.data.schoolId)
+        && request.resource.data.keys().hasOnly(['schoolId','studentId','admissionNo','fullName','classId','gender','dateOfBirth','userId','status','createdBy','createdAt','updatedAt'])
+        && request.resource.data.studentId == studentId
+        && request.resource.data.fullName is string && request.resource.data.fullName.size() > 1 && request.resource.data.fullName.size() <= 100
+        && request.resource.data.get('userId', null) == null
+        && classOk(request.resource.data.classId, request.resource.data.schoolId)
+        && request.resource.data.status == 'active'
+        && request.resource.data.createdBy == uid();
+      allow update: if
+        (canManageStudents(resource.data.get('schoolId', null))
+          && request.resource.data.schoolId == resource.data.schoolId
+          && request.resource.data.get('userId', null) == resource.data.get('userId', null)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fullName','classId','gender','dateOfBirth','status','updatedAt'])
+          && classOk(request.resource.data.classId, resource.data.schoolId)
+          && request.resource.data.status in ['active','inactive','graduated','transferred','archived'])
+        // the student's own account links to the record while claiming the invitation
+        || (hasAuth() && request.auth.token.email_verified == true
+            && resource.data.get('userId', null) == null
+            && request.resource.data.userId == uid()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['userId','updatedAt'])
+            && existsAfter(userPath(uid()))
+            && getAfter(userPath(uid())).data.get('studentId', null) == studentId
+            && getAfter(userPath(uid())).data.get('schoolId', null) == resource.data.schoolId);
+      allow delete: if false;
+    }
+
+    // =====================================================================
+    // MARKS / RESULTS / REPORT CARDS (school-scoped)
+    //   marks: a teacher writes ONLY for a class+subject+session they are assigned to
+    // =====================================================================
+    function validScores(s) {
+      return s is map && s.size() <= 12;
+    }
+    match /marks/{markId} {
+      allow read: if schoolCan('view_reports', resource.data.get('schoolId', null))
+        || schoolCan('manage_results', resource.data.get('schoolId', null))
+        || (isTeacher()
+            && (isFormMasterOf(resource.data.get('schoolId', null), resource.data.get('academicSessionId', null), resource.data.get('classId', null))
+                || teachesSubject(resource.data.get('schoolId', null), resource.data.get('academicSessionId', null),
+                                  resource.data.get('classId', null), resource.data.get('subjectId', null))));
+      allow create: if teacherCan('grade')
+        && request.resource.data.keys().hasOnly(['schoolId','academicSessionId','term','classId','subjectId','studentId','teacherId','scores','total','status','createdAt','updatedAt'])
+        && request.resource.data.schoolId == mySchool()
+        && request.resource.data.teacherId == uid()
+        && idPrefixOk(markId, request.resource.data.schoolId)
+        && teachesSubject(request.resource.data.schoolId, request.resource.data.academicSessionId,
+                          request.resource.data.classId, request.resource.data.subjectId)
+        && sessionOk(request.resource.data.academicSessionId, request.resource.data.schoolId)
+        && get(/databases/$(database)/documents/students/$(request.resource.data.studentId)).data.classId == request.resource.data.classId
+        && get(/databases/$(database)/documents/students/$(request.resource.data.studentId)).data.schoolId == request.resource.data.schoolId
+        && request.resource.data.status in ['draft', 'submitted']
+        && validScores(request.resource.data.scores)
+        && request.resource.data.total is number && request.resource.data.total >= 0 && request.resource.data.total <= 1000;
+      allow update: if (teacherCan('grade')
+            && resource.data.teacherId == uid()
+            && resource.data.status in ['draft', 'submitted']
+            && request.resource.data.schoolId == resource.data.schoolId
+            && request.resource.data.classId == resource.data.classId
+            && request.resource.data.subjectId == resource.data.subjectId
+            && request.resource.data.studentId == resource.data.studentId
+            && request.resource.data.academicSessionId == resource.data.academicSessionId
+            && request.resource.data.teacherId == resource.data.teacherId
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scores','total','status','updatedAt'])
+            && request.resource.data.status in ['draft', 'submitted']
+            && teachesSubject(resource.data.schoolId, resource.data.academicSessionId, resource.data.classId, resource.data.subjectId)
+            && sessionOk(resource.data.academicSessionId, resource.data.schoolId)
+            && validScores(request.resource.data.scores)
+            && request.resource.data.total is number && request.resource.data.total >= 0 && request.resource.data.total <= 1000)
+        || (schoolCan('manage_results', resource.data.get('schoolId', null))
+            && request.resource.data.schoolId == resource.data.schoolId
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scores','total','status','updatedAt'])
+            && request.resource.data.status in ['draft', 'submitted', 'approved', 'locked']);
+      allow delete: if false;
+    }
+
+    // "results" already exists (legacy, flat exam results without schoolId). Same dual-mode as subjects.
+    match /results/{id} {
+      allow read: if (resource.data.get('schoolId', null) == null
+                      && authed() && (resource.data.get('userId', '') == uid() || can('view_reports') || teacherCan('grade')))
+        || (resource.data.get('schoolId', null) != null
+            && (schoolCan('view_reports', resource.data.schoolId)
+                || schoolCan('manage_results', resource.data.schoolId)
+                || (isTeacher() && teachesClass(resource.data.schoolId, resource.data.get('classId', null)))
+                || (isStudent() && resource.data.get('status', '') == 'published'
+                    && userDoc().get('studentId', null) == resource.data.get('studentId', '-'))))
+        || (legacyAdmin() && adminHolds('view_reports'));
+      allow create: if (request.resource.data.get('schoolId', null) == null && (can('manage_content') || teacherCan('grade')))
+        || (schoolCan('manage_results', request.resource.data.get('schoolId', null))
+            && idPrefixOk(id, request.resource.data.schoolId)
+            && schoolOk(request.resource.data.schoolId)
+            && request.resource.data.status in ['draft', 'published']
+            && classOk(request.resource.data.get('classId', null), request.resource.data.schoolId));
+      allow update: if (resource.data.get('schoolId', null) == null && request.resource.data.get('schoolId', null) == null
+                        && (can('manage_content') || teacherCan('grade')))
+        || (schoolCan('manage_results', resource.data.get('schoolId', null))
+            && request.resource.data.schoolId == resource.data.schoolId
+            && request.resource.data.status in ['draft', 'published']);
+      allow delete: if resource.data.get('schoolId', null) == null && (can('manage_content') || teacherCan('grade'));
+    }
+
+    match /reportCards/{id} {
+      allow read: if schoolCan('view_reports', resource.data.get('schoolId', null))
+        || schoolCan('manage_report_cards', resource.data.get('schoolId', null))
+        || (isTeacher() && isFormMasterOf(resource.data.get('schoolId', null), resource.data.get('academicSessionId', null), resource.data.get('classId', null)))
+        || (isStudent() && resource.data.get('status', '') == 'published'
+            && userDoc().get('studentId', null) == resource.data.get('studentId', '-')
+            && userDoc().get('schoolId', null) == resource.data.get('schoolId', '-'));
+      allow create: if schoolCan('manage_report_cards', request.resource.data.get('schoolId', null))
+        && idPrefixOk(id, request.resource.data.schoolId)
+        && schoolOk(request.resource.data.schoolId)
+        && request.resource.data.status in ['draft', 'published']
+        && classOk(request.resource.data.get('classId', null), request.resource.data.schoolId);
+      allow update: if schoolCan('manage_report_cards', resource.data.get('schoolId', null))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && request.resource.data.studentId == resource.data.studentId
+        && request.resource.data.status in ['draft', 'published'];
+      allow delete: if false;
+    }
+
+    // =====================================================================
+    // Announcements / notifications (dual-mode: legacy site-wide docs have no schoolId)
+    // =====================================================================
+    match /announcements/{id} {
+      allow read: if (resource.data.get('schoolId', null) == null
+                      && (resource.data.get('isPublished', false) == true
+                          || resource.data.get('status', 'published') == 'published'
+                          || resource.data.get('published', true) == true
+                          || can('manage_announcements')))
+        || (resource.data.get('schoolId', null) != null
+            && (schoolCan('manage_announcements', resource.data.schoolId)
+                || (memberOf(resource.data.schoolId) && resource.data.get('status', '') == 'published'
+                    && resource.data.get('audience', ['all']).hasAny(['all', role()]))))
+        || (legacyAdmin() && adminHolds('manage_announcements'));
+      allow create: if (request.resource.data.get('schoolId', null) == null && can('manage_announcements'))
+        || (schoolCan('manage_announcements', request.resource.data.get('schoolId', null))
+            && schoolOk(request.resource.data.schoolId)
+            && request.resource.data.authorId == uid()
+            && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 200
+            && request.resource.data.status in ['draft', 'published', 'archived']);
+      allow update: if (resource.data.get('schoolId', null) == null && request.resource.data.get('schoolId', null) == null && can('manage_announcements'))
+        || (schoolCan('manage_announcements', resource.data.get('schoolId', null))
+            && request.resource.data.schoolId == resource.data.schoolId
+            && request.resource.data.status in ['draft', 'published', 'archived']);
+      allow delete: if (resource.data.get('schoolId', null) == null && can('manage_announcements'))
+        || schoolCan('manage_announcements', resource.data.get('schoolId', null));
+    }
+    match /notifications/{id} {
+      allow read: if (authed() && resource.data.get('userId', '') == uid())
+        || (resource.data.get('schoolId', null) == null && can('manage_announcements'))
+        || schoolCan('manage_announcements', resource.data.get('schoolId', null));
+      allow create: if (request.resource.data.get('schoolId', null) == null && can('manage_announcements'))
+        || (schoolCan('manage_announcements', request.resource.data.get('schoolId', null))
+            && request.resource.data.userId is string
+            && get(userPath(request.resource.data.userId)).data.get('schoolId', null) == request.resource.data.schoolId);
+      allow update: if (authed() && resource.data.get('userId', '') == uid()
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead','readAt','updatedAt']))
+        || (resource.data.get('schoolId', null) == null && can('manage_announcements'))
+        || (schoolCan('manage_announcements', resource.data.get('schoolId', null))
+            && request.resource.data.schoolId == resource.data.schoolId);
+      allow delete: if (authed() && resource.data.get('userId', '') == uid())
+        || (resource.data.get('schoolId', null) == null && can('manage_announcements'))
+        || schoolCan('manage_announcements', resource.data.get('schoolId', null));
+    }
+
+    // =====================================================================
+    // Catalogue (public listing) and learning content (PLATFORM scope, unchanged semantics)
     // =====================================================================
     match /categories/{id} {
       allow read: if true;
@@ -7506,15 +8732,18 @@ service cloud.firestore {
         || can('manage_content') || isTeacher();
       allow write: if can('manage_content');
     }
-    match /subjects/{id} {
-      allow read: if true;
-      allow write: if can('manage_content') || teacherCan('manage_lessons');
-    }
     match /topics/{id} {
       allow read: if true;
       allow write: if can('manage_content') || teacherCan('manage_lessons');
     }
-    // Lessons: students only for courses they were given access to; teachers only their assigned courses
+    function hasCourseAccess(courseId) {
+      return courseId is string && (
+        assignedCourses().hasAny([courseId])
+        || (exists(/databases/$(database)/documents/courseAccess/$(uid() + '_' + courseId))
+            && get(/databases/$(database)/documents/courseAccess/$(uid() + '_' + courseId)).data.get('status', '') == 'active')
+        || exists(/databases/$(database)/documents/course_access/$(uid() + '_' + courseId))
+      );
+    }
     match /lessons/{id} {
       allow read: if can('manage_content')
         || (isTeacher() && resource.data.get('courseId', '') in assignedCourses())
@@ -7544,15 +8773,8 @@ service cloud.firestore {
     }
 
     // =====================================================================
-    // Announcements, contact form, navigation, images
+    // Contact form, navigation, images (PLATFORM scope)
     // =====================================================================
-    match /announcements/{id} {
-      allow read: if resource.data.isPublished == true
-        || resource.data.get('status', 'published') == 'published'
-        || resource.data.get('published', true) == true
-        || can('manage_announcements');
-      allow write: if can('manage_announcements');
-    }
     match /contactRequests/{id} {
       allow create: if request.resource.data.status == 'new'
         && request.resource.data.fullName is string
@@ -7572,14 +8794,8 @@ service cloud.firestore {
     match /imageAssets/{id} { allow read, write: if can('manage_content'); }
 
     // =====================================================================
-    // Notifications & messages (own records only)
+    // Messages (own records only)
     // =====================================================================
-    match /notifications/{id} {
-      allow read: if authed() && (resource.data.get('userId', '') == uid() || can('manage_announcements'));
-      allow create: if can('manage_announcements');
-      allow update: if authed() && (resource.data.get('userId', '') == uid() || can('manage_announcements'));
-      allow delete: if can('manage_announcements') || (authed() && resource.data.get('userId', '') == uid());
-    }
     match /messages/{id} {
       allow read: if authed() &&
         (uid() in resource.data.get('participants', [])
@@ -7594,7 +8810,7 @@ service cloud.firestore {
     }
 
     // =====================================================================
-    // Payments & course access (own records; Admin verifies)
+    // Payments & course access (own records; platform Admin verifies)
     // =====================================================================
     match /payments/{id} {
       allow read: if authed() && (resource.data.get('userId', '') == uid() || can('manage_payments'));
@@ -7615,7 +8831,7 @@ service cloud.firestore {
     }
 
     // =====================================================================
-    // Exams / results / assignments
+    // Exams / assignments (legacy, platform scope)
     // =====================================================================
     match /exams/{id} {
       allow read: if authed();
@@ -7623,10 +8839,6 @@ service cloud.firestore {
         || (teacherCan('manage_assignments') && request.resource.data.get('courseId', '') in assignedCourses());
       allow update, delete: if can('manage_content')
         || (teacherCan('manage_assignments') && resource.data.get('courseId', '') in assignedCourses());
-    }
-    match /results/{id} {
-      allow read: if authed() && (resource.data.get('userId', '') == uid() || can('view_reports') || teacherCan('grade'));
-      allow write: if can('manage_content') || teacherCan('grade');
     }
     match /assignments/{id} {
       allow read: if authed();
@@ -7644,18 +8856,41 @@ service cloud.firestore {
     }
 
     // =====================================================================
-    // Audit logs (written by Cloud Functions; Admin with report permission can read)
+    // AUDIT LOGS - append-only.
+    //   * the entry must name the signed-in user as actor and be stamped with the server time
+    //   * a school staff member can only log for their OWN school
+    //   * nobody can edit or delete an entry
+    // On Spark there is no server to write these, so the rules above also REQUIRE a matching
+    // entry (same batch) for invitations, role/status/permission changes and teacher assignments.
     // =====================================================================
-    match /audit_logs/{id} {
-      allow read: if can('view_reports');
-      allow write: if false;
+    function auditEntryOk(d) {
+      return d.keys().hasOnly(['action','actorId','actorRole','actorEmail','schoolId','targetType','targetId','summary','createdAt'])
+        && d.actorId == uid()
+        && d.createdAt == request.time
+        && d.action is string && d.action.size() > 0 && d.action.size() <= 60;
     }
     match /auditLogs/{id} {
+      allow read: if isSuperAdmin()
+        || schoolCan('view_reports', resource.data.get('schoolId', null))
+        || (legacyAdmin() && adminHolds('view_reports'));
+      allow create: if hasAuth() && auditEntryOk(request.resource.data)
+        && (
+          (authed() && isSuperAdmin())
+          || (authed() && isSchoolStaff() && request.resource.data.get('schoolId', null) == mySchool() && mySchool() != null)
+          || (authed() && isTeacher() && request.resource.data.get('schoolId', null) == mySchool() && mySchool() != null)
+          // the person claiming an invitation has no profile yet: allowed only together with that profile
+          || (request.resource.data.action == 'invitation_claimed'
+              && existsAfter(userPath(uid()))
+              && getAfter(userPath(uid())).data.get('schoolId', null) == request.resource.data.get('schoolId', null))
+        );
+      allow update, delete: if false;
+    }
+    match /audit_logs/{id} {                      // legacy name (kept readable)
       allow read: if can('view_reports');
       allow write: if false;
     }
 
-    // Server-side rate-limit counters (Cloud Functions only)
+    // Server-side rate-limit counters (no longer used on Spark; locked)
     match /_rateLimits/{id} { allow read, write: if false; }
 
     // =====================================================================
@@ -7680,10 +8915,13 @@ service firebase.storage {
         && profile().get('status', 'active') == 'active'
         && profile().role in ['admin', 'super_admin', 'superadmin'];
     }
+    // Site-wide media: Super Admin, or a legacy platform admin that has NO schoolId.
+    // A school-scoped Admin (schoolId set) can never change platform images.
     function adminCan(p) {
       return activeAdmin() && (profile().role in ['super_admin', 'superadmin']
-        || ('permissions' in profile() ? p in profile().permissions
-            : p in ['manage_users','manage_content','manage_payments','manage_schools','manage_announcements','manage_access','view_reports']));
+        || (profile().get('schoolId', null) == null
+            && ('permissions' in profile() ? p in profile().permissions
+                : p in ['manage_users','manage_content','manage_payments','manage_schools','manage_announcements','manage_access','view_reports'])));
     }
     function isImage() { return request.resource.contentType.matches('image/.*'); }
 
