@@ -664,6 +664,15 @@ window.SITE_IMAGE_SLOTS = {
     html.is-teacher-school #loginView,
     html.is-teacher-school #adminApp,
     html.is-teacher-school #schoolApp { display:none !important; }
+    html.is-student-dash #studentApp { display:flex !important; }
+    html.is-student-dash body > header.header,
+    html.is-student-dash body > section,
+    html.is-student-dash body > footer,
+    html.is-student-dash #loginView,
+    html.is-student-dash #adminApp,
+    html.is-student-dash #schoolApp,
+    html.is-student-dash #teacherSchoolApp { display:none !important; }
+    #studentApp, #teacherSchoolApp { display:none; }
     .marks-table input[type="number"] { width:64px; padding:6px; border:1px solid var(--border); border-radius:6px; }
 
     /* Admin view: only when html.is-admin */
@@ -1007,7 +1016,7 @@ window.SITE_IMAGE_SLOTS = {
 
 <script>
 window.KATSINA_LGAS = ["Bakori", "Batagarawa", "Batsari", "Baure", "Bindawa", "Charanchi", "Dan Musa", "Dandume", "Danja", "Daura", "Dutsi", "Dutsin-Ma", "Faskari", "Funtua", "Ingawa", "Jibia", "Kafur", "Kaita", "Kankara", "Kankia", "Katsina", "Kurfi", "Kusada", "Mai'Adua", "Malumfashi", "Mani", "Mashi", "Matazu", "Musawa", "Rimi", "Sabuwa", "Safana", "Sandamu", "Zango"];
-window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary School", "Dr. Habibu Primary School", "Dr. Ibrahim Aminu Kurami Primary School", "Dutsen Reme 'A' Primary School", "Dutsen Reme 'B' Primary School", "Galadima Primary School", "Inclusive Special Education", "Kabomo Primary School", "Tsiga 'B' Primary School", "Tsiga Model Primary School", "Tukur Idris Nadabo Primary School"], "secondary": ["Comm. Girls' College, Bakori", "Govt. Day Secondary School Barde (Tsiga)", "Govt. Girls Arabic Junior Sec. Sch. Kabomo", "Govt. Girls Arabic Senior Sec. School Kabomo", "Govt. Junior Secondary School Bakori", "Govt. Junior Secondary School Kurami", "Govt. Junior Secondary School Tsiga", "Govt. Senior Secondary School Bakori", "Govt. Senior Secondary School Kurami", "Govt. Senior Secondary School Tsiga", "Kabomo Com. College (In Kabomo Pri. Sch.)"]}, "Batagarawa": {"primary": ["Ajiwa Islamiyya Primary School", "Ajiwa Model Primary School", "Almun Jama'a Primary School", "Autawa Primary School", "Babbar Ruga Primary School", "Bakiyawa Islamiyya Primary School", "Bakiyawa Model Primary School", "Bambami Primary School", "Barawa Primary School", "Barda Primary School", "Bargaja Primary School", "Barhim Estate Primary School", "Batagarawa Islamiyya Primary School", "Batagarawa Low-cost Primary School", "Batagarawa Model Primary School", "Batagarawa Pilot Primary School", "Dandagoro Islamiyya Primary School", "Dandagoro Model Primary School", "Girls Primary School Batagarawa", "Gwammatawa Gari Primary School", "Gwammatawa Primary School", "Jangafe Primary School", "Jilawa Nomadic Primary School", "Jino Primary School", "Kabukawa Primary School", "Kore Primary School", "Majen Abdu Primary School", "Majen Audu Bakiyawa Primary School", "Mohd Kabir Usman Memorial Primary School", "NYSC Camp. N/Layout Primary School", "Tsanni Model Primary School", "Unwala Jangefe Primary School", "Unwala L. Primary School", "Yan Shanya Primary School"], "secondary": ["Batlada Comm. Secondary School, Batagarawa", "Govt. Day Secondary School Tsanni", "Govt. Day Secondary School, Dandagoro", "Govt. Junior Secondary School Ajiwa", "Govt. Junior Secondary School Batagarawa", "Govt. Pilot Secondary School, Dabaibayawa", "Govt. Sci. Secondary School, Batagarawa", "Govt. Secondary School Bakiyawa", "Govt. Secondary School Tsanni", "Govt. Senior Secondary School Ajiwa", "Govt. Senior Secondary School Bakiyawa", "Govt. Senior Secondary School Batagarawa", "Grammar Comm. Sec. School, Dandagoro"]}, "Batsari": {"primary": ["Batsari Model Primary School", "Dan Waire Science Primary School", "Girls Day Primary School", "Leko Senior Pilot Primary School", "Wagini Model Primary School"], "secondary": ["Govt. Pilot Junior Secondary School Batsari", "Govt. Pilot Senior Secondary School Batsari"]}, "Baure": {"primary": ["Aya Primary School", "Babban Mutum II Primary School", "Babban Mutum, I Model Primary School", "Baure I Primary School", "Baure II Primary School", "Girls Education Programme Primary School", "Haruna Babba Primary School", "Magaji Primary School", "Pilot Primary School", "Unguwar Turaki Primary School"], "secondary": ["Govt. Girls Arabic Junior Sec. School, Fago", "Govt. Girls Junior Secondary School, Rogogo", "Govt. Girls Science Secondary School, Baure", "Govt. Girls Senior Secondary School, Rogogo", "Govt. Junior Secondary School Babban Mutum", "Govt. Junior Secondary School, Baure", "Govt. Junior Secondary School, Fago", "Govt. Junior Secondary School, Karkarku", "Govt. Pilot Junior Sec. School, Unguwar Rai", "Govt. Pilot Junior Secondary School, Kagare", "Govt. Pilot Junior Secondary School, Tsodoji", "Govt. Pilot Secondary School, Garni", "Govt. Pilot Secondary School, Kawari Gyada", "Govt. Pilot Secondary School, Kawarin Kudi", "Govt. Pilot Senior Sec. School, Kawari Gyada", "Govt. Pilot Senior Secondary School, Garni", "Govt. Pilot Senior Secondary School, Unguwar Rai", "Govt. Secondary School Karkarku", "Govt. Secondary School Kawarin Malamai", "Govt. Secondary School, Dankum", "Govt. Secondary School, Garki", "Govt. Secondary School, Hui", "Govt. Secondary School, Katsayal", "Govt. Secondary School, Kwasarawa", "Govt. Secondary School, Rijiyar Tsamiya", "Govt. Secondary School, Rogogo Masauka", "Govt. Secondary School, Yanduna", "Govt. Secondary School, Yanmaulu", "Govt. Secondary School, Yardaje", "Govt. Secondary School, Zugai", "Govt. Senior Secondary School Kawarin Malamai", "Govt. Senior Secondary School, Babban Mutum", "Govt. Senior Secondary School, Baure", "Govt. Senior Secondary School, Fago", "Govt. Senior Secondary School, Garki", "Govt. Senior Secondary School, Hui", "Govt. Senior Secondary School, Karkarku", "Govt. Senior Secondary School, Katsayal", "Govt. Senior Secondary School, Kwasarawa", "Govt. Senior Secondary School, Rijiyar Tsamiya", "Govt. Senior Secondary School, Yanduna", "Govt. Senior Secondary School, Yardaje"]}, "Bindawa": {"primary": ["Bindawa Model Primary School", "Community Primary School", "Dallaje Primary School", "Dan Iya Primary School", "Girls Primary School", "Pilot Primary School", "Tafashiya Primary School", "Tama Model Primary School", "Wali Primary School"], "secondary": ["Govt. Day Secondary School Dallaje, Bindawa", "Govt. Day Secondary School Giremawa, Bindawa", "Govt. Secondary School Bindawa", "Ummarun Dallaje. Com. Sec. Sch. Sararin Kuka"]}, "Charanchi": {"primary": ["Abdullahi Ahmadu Primary School", "Banye Primary School", "Charanchi Girls Primary School", "Charanchi Model Primary School", "Charanchi Pilot Primary School", "Radda Model Primary School"], "secondary": ["Comm. Arabic Secondary School, Charanchi", "Govt. Day Secondary School Radda", "Govt. Day Secondary School, Charanchi", "Govt. Secondary School Banye", "Govt. Senior Secondary School Banye"]}, "Dan Musa": {"primary": ["Danmusa Model Primary School", "Girls Day Primary School", "Magajin Malam Primary School", "Yantumaki Model Primary School", "Yarima Pilot Primary School"], "secondary": ["Govt. Secondary School, Yantumaki"]}, "Dandume": {"primary": ["Dandume Model Primary School", "Dandume Pilot Primary School", "Danmayakin Tsoho Primary School", "Dantankari Model Primary School", "Mahuta Model Primary School"], "secondary": ["Govt. Day Secondary School Dantankari", "Govt. Day Secondary School Mahuta G", "Govt. Junior Secondary School Dandume", "Govt. Junior Secondary School Mahuta 'D'", "Govt. Senior Secondary School Dandume", "Govt. Senior Secondary School Mahuta 'D'"]}, "Danja": {"primary": ["Abubakar Primary School", "Dabai Model Primary School", "Danja Model Primary School", "Dr. Sani Abu Primary School", "Model Qur'an Primary School", "Pilot Primary School"], "secondary": ["Comm. Girls Secondary School, Danja", "Deda Comm. Secondary School, Danja", "Government Pilot Sec. Sch. Almakiyayi Danjanku", "Govt. Junior Secondary School Danja", "Govt. Secondary School Dabai", "Govt. Senior Secondary School Dabai", "Govt. Senior Secondary School Danja"]}, "Daura": {"primary": ["Bayajidda Model Nursery & Primary School", "Dan Nakola Primary School", "Daurama Nursery & Primary School", "Dunu Primary School", "Gen. Muhd Buhari Nursery & Primary School", "Girls Pilot Primary School", "Govt School For the Deaf", "Gurjiya Primary School", "Kalgo Primary School", "Madawaki Abubakar Primary School", "Magaji Sa'idu Nursery & Primary School", "Magaji Umaru Pilot Primary School", "Magajiya Primary School", "Matawalle Ahmadu Primary School", "Nasarawa Nursery & Primary School", "Sarkin Fada Abdu Primary School", "Shadambu Low-cost Primary School", "Suduji Primary School"], "secondary": ["ABGM5 Durnurkol", "Family Support Programme Daura", "Family Support Programme Sec. Sch. Daura", "Federal Govt. College Daura", "Govt. Girls Junior Secondary School Daura", "Govt. Girls Secondary School Shargalle", "Govt. Girls Senior Secondary School Daura", "Govt. Junior Secondary School Daura", "Govt. Junior Secondary School Ganga", "Govt. Junior Secondary School Shargalle", "Govt. Pilot Junior Sec. Sch. Matawalle Amadu", "Govt. Pilot Junior Sec. School Sukwanawa", "Govt. Pilot Junior Secondary School Maigari", "Govt. Pilot Senior Sec. School Matawalle Amadu", "Govt. Pilot Senior Secondary School Maigari", "Govt. Pilot Senior Secondary School Sukwanawa", "Govt. Secondary School Bumbum", "Govt. Secondary School Dan Aune", "Govt. Secondary School Dan Nakola", "Govt. Secondary School Gurjiya", "Govt. Secondary School Jirdede", "Govt. Secondary School Kalgo", "Govt. Secondary School Kangolan", "Govt. Secondary School Kayawa", "Govt. Secondary School Koza", "Govt. Secondary School Suduji", "Govt. Secondary School Yar Yandi", "Govt. Senior Secondary School Daura", "Govt. Senior Secondary School Ganga", "Govt. Senior Secondary School Shargalle", "GRISS Dagura", "GRISS Minawa", "Police Day Secondary School Daura", "Police Day Senior Sec. School Daura"]}, "Dutsi": {"primary": ["Dutsi Model Primary School", "Dutsi Pilot Primary School", "Fatima Shema G. Primary School", "Shargalle M. Primary School", "Sirika N. Primary School"], "secondary": ["Govt. Secondary School Dutsi", "GRISS Sirika"]}, "Dutsin-Ma": {"primary": ["Girls Primary School", "Makera Primary School", "Na' Alhaji Primary School", "Qur'anic Model Primary School", "Sabon Garin Safana Primary School", "Sada Primary School", "Sheikh Abubakar Gumi Primary School", "Tsangaya Model Primary School", "Yandaka Model Primary School", "Yarima D Primary School", "Zubairu M. Pilot Primary School"], "secondary": ["Govt. Girls Arabic Junior Sec. School D/Ma", "Govt. Girls Arabic Senior Secondary School D/Ma", "Govt. Girls Junior Secondary School D/Ma", "Govt. Girls Senior Secondary School D/Ma", "Govt. Junior Secondary School 'D' Dutsin-ma", "Govt. Junior Secondary School Karofi", "Govt. Junior Secondary School Makera", "Govt. Pilot Junior Secondary School D/Ma", "Govt. Pilot Senior Secondary School D/Ma", "Govt. Secondary School Dabawa", "Govt. Secondary School Kuki", "Govt. Secondary School Makera", "Govt. Senior Secondary School 'D' Dutsin-ma", "Govt. Senior Secondary School Karofi", "Govt. Senior Secondary School Makera"]}, "Faskari": {"primary": ["Adamu Zagami M. Primary School Yankara", "Ahmad Mohammad Bawa M. Primary School", "Alhaji Yahaya Model Qur'an Primary School", "Balan Dawa Primary School", "Garba Baballe Model Primary School Daudawa", "Girls Day Primary School", "Hajiya Turai Yar'adua Primary School", "Madawaki Abdullahi M. Primary School Mairua", "Shehu Inuwa Pilot Primary School", "Sheme Primary School"], "secondary": ["Govt. Day Secondary School Daudawa", "Govt. Day Secondary School Faskari", "Govt. Day Secondary School Maigora", "Govt. Day Secondary School Ruwan Godiya", "Govt. Day Secondary School Sheme", "Govt. Day Secondary School Yankara", "Govt. Day Secondary School Yar Malamai", "Govt. Day Secondary School Yarmalamai", "Govt. Junior Secondary School Mairua", "Govt. Senior Secondary School Mairua"]}, "Funtua": {"primary": ["Aya Primary School", "Bala Abdullahi Primary School", "Bala Mai Doki Primary School", "Bisije Primary School", "Girls Day Primary School", "Idris Girls Primary School", "Jabiri Primary School", "Kakumi B Primary School", "Low-cost Primary School", "Magaji Abdullahi Primary School", "Magaji Nuhu Primary School", "Makera Primary School", "Sambo Idris Sambo Primary School"], "secondary": ["Dutsen Reme Comm. Secondary School, Funtua", "Govt. College Junior, Funtua", "Govt. College Senior Funtua", "Govt. Day Secondary School Barde", "Govt. Day Secondary School Guga", "Govt. Day Secondary School Jargaba", "Govt. Day Secondary School Kahutu", "Govt. Day Secondary School Kakumi", "Govt. Day Secondary School Kokami", "Govt. Day Secondary School Tandama", "Govt. Day Secondary School Tudun Iya", "Govt. Girls Junior Secondary School Funtua", "Govt. Girls Senior Secondary School Funtua", "Govt. Junior Secondary School Funtua", "Govt. Secondary School Maska", "Govt. Senior Secondary School Funtua", "Govt. Senior Secondary School Maska"]}, "Ingawa": {"primary": ["Dambo Abu Primary School", "Dambo Tukur Model Primary School", "Ingawa Girls Primary School", "Ingawa Pilot Primary School"], "secondary": ["Binta Abdullahi Maimaje Govt. Day Sec. Sch. Ingawa", "Govt. Sci. Secondary School, Ingawa", "Govt. Secondary School Ingawa", "Govt. Secondary School Yandoma"]}, "Jibia": {"primary": ["Army Children School", "Daddara Liman Primary School", "Girls Day Primary School", "Muhammadu Rabiu Model Primary School", "Pilot Senior Primary School"], "secondary": ["Govt. Girls Unity Junior Secondary School Jibia", "Govt. Girls Unity Sec. School, Jibia", "Govt. Secondary School Daddara", "Govt. Secondary School Magama Jibia"]}, "Kafur": {"primary": ["Bala Primary School", "Girls Day Primary School", "Gozaki Model Primary School", "Kafur Model Primary School", "Masari Primary School"], "secondary": ["Government Pilot Secondary School, Kafur", "Govt. Girls' Day Secondary School, Kafur", "Govt. Junior Secondary School Gozaki", "Govt. Senior Secondary School Gozaki"]}, "Kaita": {"primary": ["Girls Primary School", "Isah Kaita M. Primary School", "Kaura Ama Primary School", "Pilot Primary School"], "secondary": ["Govt. Secondary School Kaita"]}, "Kankara": {"primary": ["Girls Vocational Primary School", "Justice A Bello Primary School", "Lawal Primary School", "Pilot Science Primary School", "Sheik Gumi Primary School"], "secondary": ["College of Arabic and Islamic Studies, Kankara", "Comm. Girls Secondary School, Kankara", "Govt. Day Junior Secondary School Kankara", "Govt. Day Pilot Sec. Sch. Nuhu Model Kankara", "Govt. Day Pilot Sec. School Nuhu Model Kankara", "Govt. Day Pilot Sec. School Wawar Kaza", "Govt. Day Pilot Secondary School Wawar Kaza", "Govt. Day Secondary School Gatakawa Kankara", "Govt. Day Secondary School Ketare, Kankara", "Govt. Day Senior Secondary School Kankara", "Govt. Pilot Sec. School Sabon Layi, Kankara", "Govt. Pilot Secondary School Sabon Layi, Kankara"]}, "Kankia": {"primary": ["Gyaza M. Primary School", "Hassan Usman M. Primary School", "Hassu Iro Inko G. D. Primary School", "Kafin Soli M. Primary School", "Kankia Pilot Primary School", "Musa Dangiwa Primary School", "Nuhu M. Primary School", "Sada Primary School"], "secondary": ["Dan Isa Yakubu Com. Arabic Sec. Sch. Rimaye", "Govt. Girls Junior Secondary School Kankia", "Govt. Girls Secondary School Kaikai", "Govt. Girls Secondary School Rimaye", "Govt. Girls Senior Secondary School Kankia", "Govt. Junior Secondary School Kankia", "Govt. Junior Secondary School Kanti Kankia", "Govt. Secondary School Gyaza", "Govt. Secondary School Kafin Soli", "Govt. Secondary School Rimaye", "Govt. Senior Secondary School Gyaza", "Govt. Senior Secondary School Kankia", "Govt. Senior Secondary School Kanti Kankia"]}, "Katsina": {"primary": ["Ahmadu Coomassie M Sci. Primary School", "Anas Mukaddas Primary School", "Bi Lingual Primary School", "Dallatu Aminu Primary School", "Danmarna Pilot Jun. Sec School", "Danmarna Primary School", "Danmasani Bala Saulawa Primary School", "Dikko Memorial Primary School", "Dr. Abdulmumini K. U. Model Primary School", "Dr. Ibrahim Shehu Shema Primary School", "Dr. Kabir Usman Primary School", "Family Support", "Farin Yaro Primary School", "Fatima Baika Girls", "Fatima Ibrahim Shema Sc. G Primary School", "Garba Kaita Memorial Primary School", "Gidado Primary School", "Hamza Maigoro Primary School", "Hassan Usman Sci. Mod. Primary School", "Hassu Iro Inko Primary School", "Isah Kaita Qur. Primary School", "Jabiru Abdullahi Primary School", "Kambarawa Primary School", "Kukar Gesa Primary School", "Mamman Barda Primary School", "Mannir Yakubu Primary School", "Muhammadu Buhari Primary School", "Muhammadu Dodo Primary School", "Musa Yar'adua Qur'an Primary School", "Nagogo Sci. Model Primary School", "Pilot Nagogo Senior Primary School", "Sa'i Amadu Na Funtua Primary School", "Sabon Gida Primary School", "Sabuwar Ung. New Extension Primary School", "Sani Danlami Primary School", "School For the Blind", "Senator Ibrahim Ida Primary School", "Sir Usman Nagogo N. A", "Talba Ibrahim Primary School", "Tudun Muntsira Primary School", "Ummarun Dallaje Primary School", "Waziri Zayyana Sci. Mod. Primary School"], "secondary": ["Al-Kanz Comm. Secondary School, Katsina", "Amadu Coomassie Comm. Sec. School Kayalwa", "Barhim Comm. Secondary School, Katsina", "Comm. Day Secondary School Kwado, Katsina", "EDUCON Comm. Secondary School Filin Samji", "El-Ladan Comm. Secondary School Dan Marina", "Family Support Programme Katsina", "Family Support Secondary School Katsina", "Girls Pilot Secondary School Dan Marina, Katsina", "Gobarau Comm. Sec. Sch. Tsohuwar Kasuwa", "Govt. College Katsina Junior", "Govt. College Katsina Senior", "Govt. Day Junior Secondary School K/Yandaka", "Govt. Day Secondary School Dankama", "Govt. Day Secondary School for the Blind, Katsina", "Govt. Day Secondary School Tudun Wada, Katsina", "Govt. Day Senior Secondary School K/Yandaka", "Govt. Girls Pilot Sec. School Dan Marna", "Govt. Girls Pilot Secondary School Danmarna", "Govt. Girls Secondary School D/Safe", "Govt. Girls Secondary School Dutsen Safe", "Govt. Junior Secondary School K/Kaura", "Govt. Pilot Junior Secondary School K/Sauri", "Govt. Pilot Secondary School D/Safe", "Govt. Pilot Secondary School Dutsen Safe", "Govt. Pilot Senior Secondary School K/Sauri", "Govt. Secondary School D/Safe Low-Cost", "Govt. Secondary School Natsinta Junior", "Govt. Senior Secondary School D/Safe Low-Cost", "Govt. Senior Secondary School Kofar Kaura", "Govt. Senior Secondary School Natsinta", "Hassu Iro Inko Comm. Sec. Sch. Kofar Sauri", "Hassu Iro Inko Girls College (Former WTC Senior)", "Hassu Iro Inko Girls College (WTC Junior)", "Jabiru Abdullahi Comm. Sec. Sch. Kofar Kaura", "Katsina Bilingual School (in SUNCAIS)", "Katsina Bilingual School (In SUNCAIS), Katsina", "Katsina College Katsina Junior", "Katsina College Katsina Senior", "Kofar Kaura Comm. Day Sec. School, Katsina", "Lami Abba Secondary School Gra, Katsina", "Liwa'ul Islam Comm. Sec. Sch. Kofar Kaura", "Modoji Comm. Secondary School, Katsina", "Muh'd Dodo I. Comm. Day Sec. Sch. Katsina", "Muh'd Dodo I. Comm. Day Sec. Sch. Kofar Kaura", "Muh'd Dodo Pilot Secondary School", "Nagogo Comm. Day Sec. School Kofar Keke", "Rafin Dadi Comm. Secondary School, Katsina", "Sir Emeka O. Junior Sec. School Kambarawa", "Sir Emeka O. Senior Sec. School Kambarawa", "SMYSS Jifatu", "SUNCAIS (Senior)", "SUNCAIS Junior (Former ATC)", "Turai Yar'adua Comm. Sec. Sch. (NARTO Park)", "UMYU Staff School, Katsina", "Waziri Zayyana Comm. Sec. Sch. Rafin Dadi"]}, "Kurfi": {"primary": ["Amadi Kurfi Quranic Primary School Kurfi", "Birchi Model Primary School", "Girls Primary School", "Kofar Yamma Primary School Kurfi", "Maradi Amadu Model Primary School Kurfi", "Samaila Mamman Pilot Primary School Kurfi", "Tsauri Model Primary School"], "secondary": ["Aisha Indo Abdulkadir Govt. Girls Sec. Sch. Kurfi", "Govt. Girls Secondary School Kurfi", "Govt. Pilot Secondary School Kurfi", "Govt. Pilot Senior Secondary School Kurfi", "Govt. Secondary School Tsauri"]}, "Kusada": {"primary": ["Gidan Mutun Daya Primary School", "Girls Vocational Primary School", "Kofa Primary School", "Kusada Model Primary School", "Kusada Pilot Primary School"], "secondary": ["Govt. Junior Secondary School Kusada", "Govt. Senior Secondary School Kusada"]}, "Mai'Adua": {"primary": ["Ahmad Garzali Primary School", "Amadu Primary School", "Girls Pilot Primary School", "Hamza Abdullahi Primary School", "Ya'u Umar Pilot Primary School", "Yusuf Bello Primary School"], "secondary": ["Comm. Girls Sec. School Kantin Dawa, Mai Adua", "Govt. Junior Secondary School Mai'adua", "Govt. Senior Secondary School Mai'adua"]}, "Malumfashi": {"primary": ["Aliyu Primary School", "Dan-Sarai Primary School", "Dan-Yari Primary School", "Dayi Model Primary School", "Dudi Primary School, Malumfashi", "Galadima Model Primary School", "Girls Day Primary School", "Karfi Model Primary School", "Mararrabar Kankara Primary School", "Pilot Primary School", "Sambo Primary School Kofar Kudu", "Tsangaya Model Primary School"], "secondary": ["Comm. Day Sec. Sch. Layin Minister, Malumfashi", "Community Model Arabic College, Malumfashi", "Foundations Comm. Science Sec. Sch. M/Fashi", "Foundations Community Science Sec. Sch. M/Fashi", "Government Girls Secondary School, Malumfashi", "Government Pilot Secondary School Kuringafa", "Govt Day Secondary School Burdugau K", "Govt. Day Junior Sec. Sch. Danrimi", "Govt. Day Junior Sec. Sch. Malumfashi", "Govt. Day Secondary School Dayi", "Govt. Day Secondary School Tudu", "Govt. Day Secondary School, Dayi", "Govt. Day Senior Sec. School Danrimi Malumfashi", "Govt. Day Senior Secondary School Malumfashi", "Govt. Girls Secondary School Malumfashi", "Govt. Junior Secondary School Karfi", "Govt. School for the Deaf, Malumfashi", "Govt. Senior Secondary School Karfi", "Govt. Unity Secondary School Malumfashi"]}, "Mani": {"primary": ["Central Model Primary School", "Girls Primary School", "Muhd Dikko Primary School", "Yantakori Primary School"], "secondary": ["Comm. Day Secondary School Magami, Mani", "Govt. Girls Secondary School K/Arewa Mani", "Govt. Junior Secondary School Muduru", "Govt. Pilot Junior Secondary School Mani", "Govt. Pilot Secondary School Mani", "Govt. Secondary School Doguru", "Govt. Secondary School Doro", "Govt. Secondary School Duwan", "Govt. Secondary School Jani", "Govt. Secondary School Randawa", "Govt. Senior Secondary School Muduru"]}, "Mashi": {"primary": ["Dokawa Primary School", "Hamis Primary School", "Mashi Model Primary School", "Pilot Primary School Mashi"], "secondary": ["Govt. Girls Secondary School Mashi", "Govt. Pilot Junior Secondary School Mashi", "Govt. Pilot Senior Secondary School Mashi"]}, "Matazu": {"primary": ["Adamu Primary School", "Matazu Girls Day Primary School", "Matazu Model Primary School", "Matazu Pilot Primary School"], "secondary": ["Comm. Girls Secondary School, Matazu", "Govt. Girls Secondary School Matazu", "Govt. Junior Secondary School Jikamshi", "Govt. Junior Secondary School Matazu", "Govt. Senior Secondary School Jikamshi", "Govt. Senior Secondary School Matazu"]}, "Musawa": {"primary": ["Girls Day Primary School", "Inde Primary School", "Usman Liman Primary School", "Yero Primary School"], "secondary": ["Govt. Day Secondary School Musawa", "Govt. Girls Secondary School Musawa"]}, "Rimi": {"primary": ["Girls Primary School Rimi", "Kaim Primary School Rimi", "Kofar Kudu Conv. Primary School", "Kofar Yamma Rimi Primary School", "Lambar Rimi Primary School", "Rimi Pilot Primary School"], "secondary": ["Comm. Girls Secondary School Rimi", "Govt. Day Secondary School Ganuwa", "Govt. Day Secondary School Iyatawa", "Govt. Junior Secondary School Kuraye", "Govt. Junior Secondary School Makurda", "Govt. Junior Secondary School Rimi", "Govt. Junior Secondary School Tsagero", "Govt. Secondary School Abukur", "Govt. Secondary School Kuraye", "Govt. Secondary School Majen-Wayya", "Govt. Senior Secondary School Abukur", "Govt. Senior Secondary School Kuraye", "Govt. Senior Secondary School Majen-Wayya", "Govt. Senior Secondary School Makurda", "Govt. Senior Secondary School Rimi", "Govt. Senior Secondary School Tsagero"]}, "Sabuwa": {"primary": ["Hamida S. Primary School", "Sabuwa Girls Primary School", "Sabuwa Model Primary School", "Sabuwa Pilot Primary School", "Shehu Primary School Damari"], "secondary": ["Govt. Day Secondary School Sabua 'A'", "Govt. Day Secondary School Sabua 'B'"]}, "Safana": {"primary": ["Dallaje Pilot Primary School", "Girls Primary School", "Magaji Primary School", "Yarima Abdulkadir Model Primary School"], "secondary": ["Govt. Pilot Junior Secondary School Safana", "Govt. Pilot Senior Secondary School Safana"]}, "Sandamu": {"primary": ["Fatima Shema Girls Primary School", "Kofar Ruwa Primary School", "Pilot Primary School", "Sandamu II Primary School"], "secondary": ["Govt. Junior Secondary School, Sandamu", "Govt. Senior Secondary School, Sandamu"]}, "Zango": {"primary": ["Abdulkuddus Primary School", "Adamu Primary School", "Girls Primary School", "Hussaini Primary School", "Kofar Arewa Primary School", "Mamman Zango Primary School", "Nuhu Makeri Primary School", "Pilot Primary School"], "secondary": ["Comm. Secondary School, Zango", "Govt. Pilot Junior Secondary School, Zango", "Govt. Pilot Senior Secondary School, Zango"]}};
+window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary School", "Dr. Habibu Primary School", "Dr. Ibrahim Aminu Kurami Primary School", "Dutsen Reme 'A' Primary School", "Dutsen Reme 'B' Primary School", "Galadima Primary School", "Inclusive Special Education", "Kabomo Primary School", "Tsiga 'B' Primary School", "Tsiga Model Primary School", "Tukur Idris Nadabo Primary School"], "secondary": ["Comm. Girls' College, Bakori", "Govt. Day Secondary School Barde (Tsiga)", "Govt. Girls Arabic Junior Sec. Sch. Kabomo", "Govt. Girls Arabic Senior Sec. School Kabomo", "Govt. Junior Secondary School Bakori", "Govt. Junior Secondary School Kurami", "Govt. Junior Secondary School Tsiga", "Govt. Senior Secondary School Bakori", "Govt. Senior Secondary School Kurami", "Govt. Senior Secondary School Tsiga", "Kabomo Com. College (In Kabomo Pri. Sch.)"]}, "Batagarawa": {"primary": ["Ajiwa Islamiyya Primary School", "Ajiwa Model Primary School", "Almun Jama'a Primary School", "Autawa Primary School", "Babbar Ruga Primary School", "Bakiyawa Islamiyya Primary School", "Bakiyawa Model Primary School", "Bambami Primary School", "Barawa Primary School", "Barda Primary School", "Bargaja Primary School", "Barhim Estate Primary School", "Batagarawa Islamiyya Primary School", "Batagarawa Low-cost Primary School", "Batagarawa Model Primary School", "Batagarawa Pilot Primary School", "Dandagoro Islamiyya Primary School", "Dandagoro Model Primary School", "Girls Primary School Batagarawa", "Gwammatawa Gari Primary School", "Gwammatawa Primary School", "Jangafe Primary School", "Jilawa Nomadic Primary School", "Jino Primary School", "Kabukawa Primary School", "Kore Primary School", "Majen Abdu Primary School", "Majen Audu Bakiyawa Primary School", "Mohd Kabir Usman Memorial Primary School", "NYSC Camp. N/Layout Primary School", "Tsanni Model Primary School", "Unwala Jangefe Primary School", "Unwala L. Primary School", "Yan Shanya Primary School"], "secondary": ["Batlada Comm. Secondary School, Batagarawa", "Govt. Day Secondary School Tsanni", "Govt. Day Secondary School, Dandagoro", "Govt. Junior Secondary School Ajiwa", "Govt. Junior Secondary School Batagarawa", "Govt. Pilot Secondary School, Dabaibayawa", "Govt. Sci. Secondary School, Batagarawa", "Govt. Secondary School Bakiyawa", "Govt. Secondary School Tsanni", "Govt. Senior Secondary School Ajiwa", "Govt. Senior Secondary School Bakiyawa", "Govt. Senior Secondary School Batagarawa", "Grammar Comm. Sec. School, Dandagoro"]}, "Batsari": {"primary": ["Batsari Model Primary School", "Dan Waire Science Primary School", "Girls Day Primary School", "Leko Senior Pilot Primary School", "Wagini Model Primary School"], "secondary": ["Govt. Pilot Junior Secondary School Batsari", "Govt. Pilot Senior Secondary School Batsari"]}, "Baure": {"primary": ["Aya Primary School", "Babban Mutum II Primary School", "Babban Mutum, I Model Primary School", "Baure I Primary School", "Baure II Primary School", "Girls Education Programme Primary School", "Haruna Babba Primary School", "Magaji Primary School", "Pilot Primary School", "Unguwar Turaki Primary School"], "secondary": ["Govt. Girls Arabic Junior Sec. School, Fago", "Govt. Girls Junior Secondary School, Rogogo", "Govt. Girls Science Secondary School, Baure", "Govt. Girls Senior Secondary School, Rogogo", "Govt. Junior Secondary School Babban Mutum", "Govt. Junior Secondary School, Baure", "Govt. Junior Secondary School, Fago", "Govt. Junior Secondary School, Karkarku", "Govt. Pilot Junior Sec. School, Unguwar Rai", "Govt. Pilot Junior Secondary School, Kagare", "Govt. Pilot Junior Secondary School, Tsodoji", "Govt. Pilot Secondary School, Garni", "Govt. Pilot Secondary School, Kawari Gyada", "Govt. Pilot Secondary School, Kawarin Kudi", "Govt. Pilot Senior Sec. School, Kawari Gyada", "Govt. Pilot Senior Secondary School, Garni", "Govt. Pilot Senior Secondary School, Unguwar Rai", "Govt. Secondary School Karkarku", "Govt. Secondary School Kawarin Malamai", "Govt. Secondary School, Dankum", "Govt. Secondary School, Garki", "Govt. Secondary School, Hui", "Govt. Secondary School, Katsayal", "Govt. Secondary School, Kwasarawa", "Govt. Secondary School, Rijiyar Tsamiya", "Govt. Secondary School, Rogogo Masauka", "Govt. Secondary School, Yanduna", "Govt. Secondary School, Yanmaulu", "Govt. Secondary School, Yardaje", "Govt. Secondary School, Zugai", "Govt. Senior Secondary School Kawarin Malamai", "Govt. Senior Secondary School, Babban Mutum", "Govt. Senior Secondary School, Baure", "Govt. Senior Secondary School, Fago", "Govt. Senior Secondary School, Garki", "Govt. Senior Secondary School, Hui", "Govt. Senior Secondary School, Karkarku", "Govt. Senior Secondary School, Katsayal", "Govt. Senior Secondary School, Kwasarawa", "Govt. Senior Secondary School, Rijiyar Tsamiya", "Govt. Senior Secondary School, Yanduna", "Govt. Senior Secondary School, Yardaje"]}, "Bindawa": {"primary": ["Bindawa Model Primary School", "Community Primary School", "Dallaje Primary School", "Dan Iya Primary School", "Girls Primary School", "Pilot Primary School", "Tafashiya Primary School", "Tama Model Primary School", "Wali Primary School"], "secondary": ["Govt. Day Secondary School Dallaje, Bindawa", "Govt. Day Secondary School Giremawa, Bindawa", "Govt. Secondary School Bindawa", "Ummarun Dallaje. Com. Sec. Sch. Sararin Kuka"]}, "Charanchi": {"primary": ["Abdullahi Ahmadu Primary School", "Banye Primary School", "Charanchi Girls Primary School", "Charanchi Model Primary School", "Charanchi Pilot Primary School", "Radda Model Primary School"], "secondary": ["Comm. Arabic Secondary School, Charanchi", "Govt. Day Secondary School Radda", "Govt. Day Secondary School, Charanchi", "Govt. Secondary School Banye", "Govt. Senior Secondary School Banye"]}, "Dan Musa": {"primary": ["Danmusa Model Primary School", "Girls Day Primary School", "Magajin Malam Primary School", "Yantumaki Model Primary School", "Yarima Pilot Primary School"], "secondary": ["Govt. Secondary School, Yantumaki"]}, "Dandume": {"primary": ["Dandume Model Primary School", "Dandume Pilot Primary School", "Danmayakin Tsoho Primary School", "Dantankari Model Primary School", "Mahuta Model Primary School"], "secondary": ["Govt. Day Secondary School Dantankari", "Govt. Day Secondary School Mahuta G", "Govt. Junior Secondary School Dandume", "Govt. Junior Secondary School Mahuta 'D'", "Govt. Senior Secondary School Dandume", "Govt. Senior Secondary School Mahuta 'D'"]}, "Danja": {"primary": ["Abubakar Primary School", "Dabai Model Primary School", "Danja Model Primary School", "Dr. Sani Abu Primary School", "Model Qur'an Primary School", "Pilot Primary School"], "secondary": ["Comm. Girls Secondary School, Danja", "Deda Comm. Secondary School, Danja", "Government Pilot Sec. Sch. Almakiyayi Danjanku", "Govt. Junior Secondary School Danja", "Govt. Secondary School Dabai", "Govt. Senior Secondary School Dabai", "Govt. Senior Secondary School Danja"]}, "Daura": {"primary": ["Bayajidda Model Nursery & Primary School", "Dan Nakola Primary School", "Daurama Nursery & Primary School", "Dunu Primary School", "Gen. Muhd Buhari Nursery & Primary School", "Girls Pilot Primary School", "Govt School For the Deaf", "Gurjiya Primary School", "Kalgo Primary School", "Madawaki Abubakar Primary School", "Magaji Sa'idu Nursery & Primary School", "Magaji Umaru Pilot Primary School", "Magajiya Primary School", "Matawalle Ahmadu Primary School", "Nasarawa Nursery & Primary School", "Sarkin Fada Abdu Primary School", "Shadambu Low-cost Primary School", "Suduji Primary School"], "secondary": ["ABGM5 Durnurkol", "Family Support Programme Daura", "Family Support Programme Sec. Sch. Daura", "Federal Govt. College Daura", "Govt. Girls Junior Secondary School Daura", "Govt. Girls Secondary School Shargalle", "Govt. Girls Senior Secondary School Daura", "Govt. Junior Secondary School Daura", "Govt. Junior Secondary School Ganga", "Govt. Junior Secondary School Shargalle", "Govt. Pilot Junior Sec. Sch. Matawalle Amadu", "Govt. Pilot Junior Sec. School Sukwanawa", "Govt. Pilot Junior Secondary School Maigari", "Govt. Pilot Senior Sec. School Matawalle Amadu", "Govt. Pilot Senior Secondary School Maigari", "Govt. Pilot Senior Secondary School Sukwanawa", "Govt. Secondary School Bumbum", "Govt. Secondary School Dan Aune", "Govt. Secondary School Dan Nakola", "Govt. Secondary School Gurjiya", "Govt. Secondary School Jirdede", "Govt. Secondary School Kalgo", "Govt. Secondary School Kangolan", "Govt. Secondary School Kayawa", "Govt. Secondary School Koza", "Govt. Secondary School Suduji", "Govt. Secondary School Yar Yandi", "Govt. Senior Secondary School Daura", "Govt. Senior Secondary School Ganga", "Govt. Senior Secondary School Shargalle", "GRISS Dagura", "GRISS Minawa", "Police Day Secondary School Daura", "Police Day Senior Sec. School Daura"]}, "Dutsi": {"primary": ["Dutsi Model Primary School", "Dutsi Pilot Primary School", "Fatima Shema G. Primary School", "Shargalle M. Primary School", "Sirika N. Primary School"], "secondary": ["Govt. Secondary School Dutsi", "GRISS Sirika"]}, "Dutsin-Ma": {"primary": ["Girls Primary School", "Makera Primary School", "Na' Alhaji Primary School", "Qur'anic Model Primary School", "Sabon Garin Safana Primary School", "Sada Primary School", "Sheikh Abubakar Gumi Primary School", "Tsangaya Model Primary School", "Yandaka Model Primary School", "Yarima D Primary School", "Zubairu M. Pilot Primary School"], "secondary": ["Govt. Girls Arabic Junior Sec. School D/Ma", "Govt. Girls Arabic Senior Secondary School D/Ma", "Govt. Girls Junior Secondary School D/Ma", "Govt. Girls Senior Secondary School D/Ma", "Govt. Junior Secondary School 'D' Dutsin-ma", "Govt. Junior Secondary School Karofi", "Govt. Junior Secondary School Makera", "Govt. Pilot Junior Secondary School D/Ma", "Govt. Pilot Senior Secondary School D/Ma", "Govt. Secondary School Dabawa", "Govt. Secondary School Kuki", "Govt. Secondary School Makera", "Govt. Senior Secondary School 'D' Dutsin-ma", "Govt. Senior Secondary School Karofi", "Govt. Senior Secondary School Makera"]}, "Faskari": {"primary": ["Adamu Zagami M. Primary School Yankara", "Ahmad Mohammad Bawa M. Primary School", "Alhaji Yahaya Model Qur'an Primary School", "Balan Dawa Primary School", "Garba Baballe Model Primary School Daudawa", "Girls Day Primary School", "Hajiya Turai Yar'adua Primary School", "Madawaki Abdullahi M. Primary School Mairua", "Shehu Inuwa Pilot Primary School", "Sheme Primary School"], "secondary": ["Govt. Day Secondary School Daudawa", "Govt. Day Secondary School Faskari", "Govt. Day Secondary School Maigora", "Govt. Day Secondary School Ruwan Godiya", "Govt. Day Secondary School Sheme", "Govt. Day Secondary School Yankara", "Govt. Day Secondary School Yar Malamai", "Govt. Day Secondary School Yarmalamai", "Govt. Junior Secondary School Mairua", "Govt. Senior Secondary School Mairua"]}, "Funtua": {"primary": ["Aya Primary School", "Bala Abdullahi Primary School", "Bala Mai Doki Primary School", "Bisije Primary School", "Girls Day Primary School", "Idris Girls Primary School", "Jabiri Primary School", "Kakumi B Primary School", "Low-cost Primary School", "Magaji Abdullahi Primary School", "Magaji Nuhu Primary School", "Makera Primary School", "Sambo Idris Sambo Primary School"], "secondary": ["Dutsen Reme Comm. Secondary School, Funtua", "Govt. College Junior, Funtua", "Govt. College Senior Funtua", "Govt. Day Secondary School Barde", "Govt. Day Secondary School Guga", "Govt. Day Secondary School Jargaba", "Govt. Day Secondary School Kahutu", "Govt. Day Secondary School Kakumi", "Govt. Day Secondary School Kokami", "Govt. Day Secondary School Tandama", "Govt. Day Secondary School Tudun Iya", "Govt. Girls Junior Secondary School Funtua", "Govt. Girls Senior Secondary School Funtua", "Govt. Junior Secondary School Funtua", "Govt. Secondary School Maska", "Govt. Senior Secondary School Funtua", "Govt. Senior Secondary School Maska"]}, "Ingawa": {"primary": ["Dambo Abu Primary School", "Dambo Tukur Model Primary School", "Ingawa Girls Primary School", "Ingawa Pilot Primary School"], "secondary": ["Binta Abdullahi Maimaje Govt. Day Sec. Sch. Ingawa", "Govt. Sci. Secondary School, Ingawa", "Govt. Secondary School Ingawa", "Govt. Secondary School Yandoma"]}, "Jibia": {"primary": ["Army Children School", "Daddara Liman Primary School", "Girls Day Primary School", "Muhammadu Rabiu Model Primary School", "Pilot Senior Primary School"], "secondary": ["Govt. Girls Unity Junior Secondary School Jibia", "Govt. Girls Unity Sec. School, Jibia", "Govt. Secondary School Daddara", "Govt. Secondary School Magama Jibia"]}, "Kafur": {"primary": ["Bala Primary School", "Girls Day Primary School", "Gozaki Model Primary School", "Kafur Model Primary School", "Masari Primary School"], "secondary": ["Government Pilot Secondary School, Kafur", "Govt. Girls' Day Secondary School, Kafur", "Govt. Junior Secondary School Gozaki", "Govt. Senior Secondary School Gozaki"]}, "Kaita": {"primary": ["Girls Primary School", "Isah Kaita M. Primary School", "Kaura Ama Primary School", "Pilot Primary School"], "secondary": ["Govt. Secondary School Kaita"]}, "Kankara": {"primary": ["Girls Vocational Primary School", "Justice A Bello Primary School", "Lawal Primary School", "Pilot Science Primary School", "Sheik Gumi Primary School"], "secondary": ["College of Arabic and Islamic Studies, Kankara", "Comm. Girls Secondary School, Kankara", "Govt. Day Junior Secondary School Kankara", "Govt. Day Pilot Sec. Sch. Nuhu Model Kankara", "Govt. Day Pilot Sec. School Nuhu Model Kankara", "Govt. Day Pilot Sec. School Wawar Kaza", "Govt. Day Pilot Secondary School Wawar Kaza", "Govt. Day Secondary School Gatakawa Kankara", "Govt. Day Secondary School Ketare, Kankara", "Govt. Day Senior Secondary School Kankara", "Govt. Pilot Sec. School Sabon Layi, Kankara", "Govt. Pilot Secondary School Sabon Layi, Kankara"]}, "Kankia": {"primary": ["Gyaza M. Primary School", "Hassan Usman M. Primary School", "Hassu Iro Inko G. D. Primary School", "Kafin Soli M. Primary School", "Kankia Pilot Primary School", "Musa Dangiwa Primary School", "Nuhu M. Primary School", "Sada Primary School"], "secondary": ["Dan Isa Yakubu Com. Arabic Sec. Sch. Rimaye", "Govt. Girls Junior Secondary School Kankia", "Govt. Girls Secondary School Kaikai", "Govt. Girls Secondary School Rimaye", "Govt. Girls Senior Secondary School Kankia", "Govt. Junior Secondary School Kankia", "Govt. Junior Secondary School Kanti Kankia", "Govt. Secondary School Gyaza", "Govt. Secondary School Kafin Soli", "Govt. Secondary School Rimaye", "Govt. Senior Secondary School Gyaza", "Govt. Senior Secondary School Kankia", "Govt. Senior Secondary School Kanti Kankia"]}, "Katsina": {"primary": ["Ahmadu Coomassie M Sci. Primary School", "Anas Mukaddas Primary School", "Bi Lingual Primary School", "Dallatu Aminu Primary School", "Danmarna Pilot Jun. Sec School", "Danmarna Primary School", "Danmasani Bala Saulawa Primary School", "Dikko Memorial Primary School", "Dr. Abdulmumini K. U. Model Primary School", "Dr. Ibrahim Shehu Shema Primary School", "Dr. Kabir Usman Primary School", "Family Support", "Farin Yaro Primary School", "Fatima Baika Girls", "Fatima Ibrahim Shema Sc. G Primary School", "Garba Kaita Memorial Primary School", "Gidado Primary School", "Hamza Maigoro Primary School", "Hassan Usman Sci. Mod. Primary School", "Hassu Iro Inko Primary School", "Isah Kaita Qur. Primary School", "Jabiru Abdullahi Primary School", "Kambarawa Primary School", "Kukar Gesa Primary School", "Mamman Barda Primary School", "Mannir Yakubu Primary School", "Muhammadu Buhari Primary School", "Muhammadu Dodo Primary School", "Musa Yar'adua Qur'an Primary School", "Nagogo Sci. Model Primary School", "Pilot Nagogo Senior Primary School", "Sa'i Amadu Na Funtua Primary School", "Sabon Gida Primary School", "Sabuwar Ung. New Extension Primary School", "Sani Danlami Primary School", "School For the Blind", "Senator Ibrahim Ida Primary School", "Sir Usman Nagogo N. A", "Talba Ibrahim Primary School", "Tudun Muntsira Primary School", "Ummarun Dallaje Primary School", "Waziri Zayyana Sci. Mod. Primary School"], "secondary": ["Al-Kanz Comm. Secondary School, Katsina", "Amadu Coomassie Comm. Sec. School Kayalwa", "Barhim Comm. Secondary School, Katsina", "Comm. Day Secondary School Kwado, Katsina", "EDUCON Comm. Secondary School Filin Samji", "El-Ladan Comm. Secondary School Dan Marina", "Family Support Programme Katsina", "Family Support Secondary School Katsina", "Girls Pilot Secondary School Dan Marina, Katsina", "Gobarau Comm. Sec. Sch. Tsohuwar Kasuwa", "Govt. College Katsina Junior", "Govt. College Katsina Senior", "Govt. Day Junior Secondary School K/Yandaka", "Govt. Day Secondary School Dankama", "Govt. Day Secondary School for the Blind, Katsina", "Govt. Day Secondary School Tudun Wada, Katsina", "Govt. Day Senior Secondary School K/Yandaka", "Govt. Girls Pilot Sec. School Dan Marna", "Govt. Girls Pilot Secondary School Danmarna", "Govt. Girls Secondary School D/Safe", "Govt. Girls Secondary School Dutsen Safe", "Govt. Junior Secondary School K/Kaura", "Govt. Pilot Junior Secondary School K/Sauri", "Govt. Pilot Secondary School D/Safe", "Govt. Pilot Secondary School Dutsen Safe", "Govt. Pilot Senior Secondary School K/Sauri", "Govt. Secondary School D/Safe Low-Cost", "Govt. Secondary School Natsinta Junior", "Govt. Senior Secondary School D/Safe Low-Cost", "Govt. Senior Secondary School Kofar Kaura", "Govt. Senior Secondary School Natsinta", "Hassu Iro Inko Comm. Sec. Sch. Kofar Sauri", "Hassu Iro Inko Girls College (Former WTC Senior)", "Hassu Iro Inko Girls College (WTC Junior)", "Jabiru Abdullahi Comm. Sec. Sch. Kofar Kaura", "Katsina Bilingual School (in SUNCAIS)", "Katsina Bilingual School (In SUNCAIS), Katsina", "Katsina College Katsina Junior", "Katsina College Katsina Senior", "Kofar Kaura Comm. Day Sec. School, Katsina", "Lami Abba Secondary School Gra, Katsina", "Liwa'ul Islam Comm. Sec. Sch. Kofar Kaura", "Modoji Comm. Secondary School, Katsina", "Muh'd Dodo I. Comm. Day Sec. Sch. Katsina", "Muh'd Dodo I. Comm. Day Sec. Sch. Kofar Kaura", "Muh'd Dodo Pilot Secondary School", "Nagogo Comm. Day Sec. School Kofar Keke", "Rafin Dadi Comm. Secondary School, Katsina", "Sir Emeka O. Junior Sec. School Kambarawa", "Sir Emeka O. Senior Sec. School Kambarawa", "SMYSS Jifatu", "SUNCAIS (Senior)", "SUNCAIS Junior (Former ATC)", "Turai Yar'adua Comm. Sec. Sch. (NARTO Park)", "UMYU Staff School, Katsina", "Waziri Zayyana Comm. Sec. Sch. Rafin Dadi"]}, "Kurfi": {"primary": ["Amadi Kurfi Quranic Primary School Kurfi", "Birchi Model Primary School", "Girls Primary School", "Kofar Yamma Primary School Kurfi", "Maradi Amadu Model Primary School Kurfi", "Samaila Mamman Pilot Primary School Kurfi", "Tsauri Model Primary School"], "secondary": ["Aisha Indo Abdulkadir Govt. Girls Sec. Sch. Kurfi", "Govt. Girls Secondary School Kurfi", "Govt. Pilot Secondary School Kurfi", "Govt. Pilot Senior Secondary School Kurfi", "Govt. Secondary School Tsauri"]}, "Kusada": {"primary": ["Gidan Mutun Daya Primary School", "Girls Vocational Primary School", "Kofa Primary School", "Kusada Model Primary School", "Kusada Pilot Primary School"], "secondary": ["Govt. Junior Secondary School Kusada", "Govt. Senior Secondary School Kusada"]}, "Mai'Adua": {"primary": ["Ahmad Garzali Primary School", "Amadu Primary School", "Girls Pilot Primary School", "Hamza Abdullahi Primary School", "Ya'u Umar Pilot Primary School", "Yusuf Bello Primary School"], "secondary": ["Comm. Girls Sec. School Kantin Dawa, Mai Adua", "Govt. Junior Secondary School Mai'adua", "Govt. Senior Secondary School Mai'adua"]}, "Malumfashi": {"primary": ["Aliyu Primary School", "Dan-Sarai Primary School", "Dan-Yari Primary School", "Dayi Model Primary School", "Dudi Primary School, Malumfashi", "Galadima Model Primary School", "Girls Day Primary School", "Karfi Model Primary School", "Mararrabar Kankara Primary School", "Pilot Primary School", "Sambo Primary School Kofar Kudu", "Tsangaya Model Primary School"], "secondary": ["Comm. Day Sec. Sch. Layin Minister, Malumfashi", "Community Model Arabic College, Malumfashi", "Foundations Comm. Science Sec. Sch. M/Fashi", "Foundations Community Science Sec. Sch. M/Fashi", "Government Girls Secondary School, Malumfashi", "Government Pilot Secondary School Kuringafa", "Govt Day Secondary School Burdugau K", "Govt. Day Junior Sec. Sch. Danrimi", "Govt. Day Junior Sec. Sch. Malumfashi", "Govt. Day Secondary School Dayi", "Govt. Day Secondary School Tudu", "Govt. Day Secondary School, Dayi", "Govt. Day Senior Sec. School Danrimi Malumfashi", "Govt. Day Senior Secondary School Malumfashi", "Govt. Girls Secondary School Malumfashi", "Govt. Junior Secondary School Karfi", "Govt. School for the Deaf, Malumfashi", "Govt. Senior Secondary School Karfi", "Govt. Unity Secondary School Malumfashi"]}, "Mani": {"primary": ["Central Model Primary School", "Girls Primary School", "Muhd Dikko Primary School", "Yantakori Primary School"], "secondary": ["Comm. Day Secondary School Magami, Mani", "Govt. Girls Secondary School K/Arewa Mani", "Govt. Junior Secondary School Muduru", "Govt. Pilot Junior Secondary School Mani", "Govt. Pilot Secondary School Mani", "Govt. Secondary School Doguru", "Govt. Secondary School Doro", "Govt. Secondary School Duwan", "Govt. Secondary School Jani", "Govt. Secondary School Randawa", "Govt. Senior Secondary School Muduru"]}, "Mashi": {"primary": ["Dokawa Primary School", "Hamis Primary School", "Mashi Model Primary School", "Pilot Primary School Mashi"], "secondary": ["Govt. Girls Secondary School Mashi", "Govt. Pilot Junior Secondary School Mashi", "Govt. Pilot Senior Secondary School Mashi"]}, "Matazu": {"primary": ["Adamu Primary School", "Matazu Girls Day Primary School", "Matazu Model Primary School", "Matazu Pilot Primary School"], "secondary": ["Comm. Girls Secondary School, Matazu", "Govt. Girls Secondary School Matazu", "Govt. Junior Secondary School Jikamshi", "Govt. Junior Secondary School Matazu", "Govt. Senior Secondary School Jikamshi", "Govt. Senior Secondary School Matazu"]}, "Musawa": {"primary": ["Girls Day Primary School", "Inde Primary School", "Usman Liman Primary School", "Yero Primary School"], "secondary": ["Govt. Day Secondary School Musawa", "Govt. Girls Secondary School Musawa"]}, "Rimi": {"primary": ["Girls Primary School Rimi", "Kaim Primary School Rimi", "Kofar Kudu Conv. Primary School", "Kofar Yamma Rimi Primary School", "Lambar Rimi Primary School", "Rimi Pilot Primary School"], "secondary": ["Comm. Girls Secondary School Rimi", "Govt. Day Secondary School Ganuwa", "Govt. Day Secondary School Iyatawa", "Govt. Junior Secondary School Kuraye", "Govt. Junior Secondary School Makurda", "Govt. Junior Secondary School Rimi", "Govt. Junior Secondary School Tsagero", "Govt. Secondary School Abukur", "Govt. Secondary School Kuraye", "Govt. Secondary School Majen-Wayya", "Govt. Senior Secondary School Abukur", "Govt. Senior Secondary School Kuraye", "Govt. Senior Secondary School Majen-Wayya", "Govt. Senior Secondary School Makurda", "Govt. Senior Secondary School Rimi", "Govt. Senior Secondary School Tsagero"]}, "Sabuwa": {"primary": ["Hamida S. Primary School", "Sabuwa Girls Primary School", "Sabuwa Model Primary School", "Sabuwa Pilot Primary School", "Shehu Primary School Damari"], "secondary": ["Govt. Day Secondary School Sabua 'A'", "Govt. Day Secondary School Sabua 'B'"]}, "Safana": {"primary": ["Dallaje Pilot Primary School", "Girls Primary School", "Magaji Primary School", "Yarima Abdulkadir Model Primary School"], "secondary": ["Govt. Pilot Junior Secondary School Safana", "Govt. Pilot Senior Secondary School Safana"]}, "Sandamu": {"primary": ["Fatima Shema Girls Primary School", "Kofar Ruwa Primary School", "Pilot Primary School", "Sandamu II Primary School"], "secondary": ["Govt. Junior Secondary School, Sandamu", "Govt. Senior Secondary School, Sandamu"]}, "Zango": {"primary": ["Abdulkuddus Primary School", "Adamu Primary School", "Girls Primary School", "Hussaini Primary School", "Kofar Arewa Primary School", "Mamman Zango Primary School", "Nuhu Makeri Primary School", "Pilot Primary School"], "secondary": ["Comm. Secondary School, Zango", "Govt. Pilot Junior Secondary School, Zango", "Govt. Pilot Senior Secondary School, Zango"]}};;
 (function() {
   function esc(s) {
     return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
@@ -1201,48 +1210,32 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       <nav class="sidebar-nav" id="sidebarNav">
         <div class="nav-section">
           <div class="nav-section-title">Main</div>
-          <button class="nav-item active" data-view="overview"><span class="icon">📊</span> Overview</button>
+          <button class="nav-item active" data-view="overview"><span class="icon">📊</span> Dashboard</button>
           <button class="nav-item" data-view="analytics"><span class="icon">📈</span> Analytics & Reports</button>
         </div>
         <div class="nav-section">
-          <div class="nav-section-title">Website</div>
-          <button class="nav-item" data-view="homepage"><span class="icon">🏠</span> Homepage</button>
-          <button class="nav-item" data-view="content"><span class="icon">📝</span> Website Content</button>
-          <button class="nav-item" data-view="branding"><span class="icon">🎨</span> Branding & Settings</button>
-          <button class="nav-item" data-view="appearance"><span class="icon">🖼️</span> Appearance & Media</button>
-          <button class="nav-item" data-view="images"><span class="icon">🗂️</span> Image Management</button>
-          <button class="nav-item" data-view="portfolio"><span class="icon">👨‍💻</span> My Profile & Portfolio</button>
-          <button class="nav-item" data-view="navigation"><span class="icon">🔗</span> Navigation</button>
-          <button class="nav-item" data-view="languages"><span class="icon">🌐</span> Languages</button>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-title">Learning</div>
-          <button class="nav-item" data-view="categories"><span class="icon">📁</span> Categories</button>
-          <button class="nav-item" data-view="courses"><span class="icon">📚</span> Courses</button>
-          <button class="nav-item" data-view="subjects"><span class="icon">📖</span> Subjects & Topics</button>
-          <button class="nav-item" data-view="lessons"><span class="icon">🎬</span> Lessons</button>
-          <button class="nav-item" data-view="questions"><span class="icon">❓</span> Question Bank</button>
-          <button class="nav-item" data-view="import"><span class="icon">📥</span> Bulk Import</button>
-          <button class="nav-item" data-view="exams"><span class="icon">📋</span> Examinations</button>
-          <button class="nav-item" data-view="assignments"><span class="icon">✏️</span> Assignments</button>
-          <button class="nav-item" data-view="certificates"><span class="icon">🏅</span> Certificates</button>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-title">Users</div>
+          <div class="nav-section-title">People</div>
           <button class="nav-item" data-view="students"><span class="icon">👨‍🎓</span> Students</button>
           <button class="nav-item" data-view="teachers"><span class="icon">👩‍🏫</span> Teachers</button>
+          <button class="nav-item" data-view="headmasters"><span class="icon">🏫</span> Headmasters / Head Teachers</button>
+          <button class="nav-item" data-view="principals"><span class="icon">🎓</span> Principals</button>
           <button class="nav-item" data-view="access"><span class="icon">🔑</span> Course Access</button>
           <button class="nav-item" data-view="roles"><span class="icon">🛡️</span> Roles & Permissions</button>
+          <button class="nav-item" data-view="admin-create-user"><span class="icon">➕</span> Create User / Invite</button>
         </div>
         <div class="nav-section">
-          <div class="nav-section-title">Operations</div>
-          <button class="nav-item" data-view="payments"><span class="icon">💳</span> Payments</button>
-          <button class="nav-item" data-view="announcements"><span class="icon">📢</span> Announcements</button>
-          <button class="nav-item" data-view="notifications"><span class="icon">🔔</span> Notifications</button>
-          <button class="nav-item" data-view="contacts"><span class="icon">✉️</span> Contact Requests</button>
-          <button class="nav-item" data-view="forum"><span class="icon">💬</span> Discussion Forum</button>
+          <div class="nav-section-title">Academics</div>
+          <button class="nav-item" data-view="classes-mgmt"><span class="icon">🧾</span> Classes Management</button>
+          <button class="nav-item" data-view="subjects-mgmt"><span class="icon">📖</span> Subjects Management</button>
+          <button class="nav-item" data-view="class-subjects"><span class="icon">🔗</span> Class Subjects</button>
+          <button class="nav-item" data-view="teacher-assignments"><span class="icon">📌</span> Teacher Assignments</button>
+          <button class="nav-item" data-view="form-masters"><span class="icon">👤</span> Form Masters</button>
+          <button class="nav-item" data-view="academic-sessions"><span class="icon">📅</span> Academic Sessions</button>
+          <button class="nav-item" data-view="marks-mgmt"><span class="icon">📝</span> Marks Management</button>
+          <button class="nav-item" data-view="results-mgmt"><span class="icon">📊</span> Results</button>
+          <button class="nav-item" data-view="report-cards"><span class="icon">📄</span> Report Cards</button>
+          <button class="nav-item" data-view="broadsheets"><span class="icon">📑</span> Broadsheets</button>
         </div>
-
         <div class="nav-section">
           <div class="nav-section-title">Katsina Schools</div>
           <button class="nav-item" data-view="ks-overview"><span class="icon">🏫</span> Schools Overview</button>
@@ -1259,10 +1252,42 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           <button class="nav-item" data-view="ks-import"><span class="icon">📥</span> Bulk School Import</button>
         </div>
         <div class="nav-section">
+          <div class="nav-section-title">Learning (Platform)</div>
+          <button class="nav-item" data-view="categories"><span class="icon">📁</span> Categories</button>
+          <button class="nav-item" data-view="courses"><span class="icon">📚</span> Courses</button>
+          <button class="nav-item" data-view="subjects"><span class="icon">📖</span> Subjects & Topics</button>
+          <button class="nav-item" data-view="lessons"><span class="icon">🎬</span> Lessons</button>
+          <button class="nav-item" data-view="questions"><span class="icon">❓</span> Question Bank</button>
+          <button class="nav-item" data-view="import"><span class="icon">📥</span> Bulk Import</button>
+          <button class="nav-item" data-view="exams"><span class="icon">📋</span> Examinations</button>
+          <button class="nav-item" data-view="assignments"><span class="icon">✏️</span> Assignments</button>
+          <button class="nav-item" data-view="certificates"><span class="icon">🏅</span> Certificates</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Website</div>
+          <button class="nav-item" data-view="homepage"><span class="icon">🏠</span> Homepage</button>
+          <button class="nav-item" data-view="content"><span class="icon">📝</span> Website Content</button>
+          <button class="nav-item" data-view="branding"><span class="icon">🎨</span> Branding & Settings</button>
+          <button class="nav-item" data-view="appearance"><span class="icon">🖼️</span> Appearance & Media</button>
+          <button class="nav-item" data-view="images"><span class="icon">🗂️</span> Image Management</button>
+          <button class="nav-item" data-view="portfolio"><span class="icon">👨‍💻</span> My Profile & Portfolio</button>
+          <button class="nav-item" data-view="navigation"><span class="icon">🔗</span> Navigation</button>
+          <button class="nav-item" data-view="languages"><span class="icon">🌐</span> Languages</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <button class="nav-item" data-view="payments"><span class="icon">💳</span> Payments</button>
+          <button class="nav-item" data-view="announcements"><span class="icon">📢</span> Announcements</button>
+          <button class="nav-item" data-view="notifications"><span class="icon">🔔</span> Notifications</button>
+          <button class="nav-item" data-view="contacts"><span class="icon">✉️</span> Contact Requests</button>
+          <button class="nav-item" data-view="forum"><span class="icon">💬</span> Discussion Forum</button>
+        </div>
+        <div class="nav-section">
           <div class="nav-section-title">System</div>
-          <button class="nav-item" data-view="security"><span class="icon">🔒</span> Security</button>
+          <button class="nav-item" data-view="audit"><span class="icon">📜</span> Audit Logs</button>
+          <button class="nav-item" data-view="security"><span class="icon">🔒</span> Security Settings</button>
           <button class="nav-item" data-view="backend-setup"><span class="icon">🧩</span> Backend Setup</button>
-          <button class="nav-item" data-view="audit"><span class="icon">📜</span> Login History & Audit</button>
+          <button class="nav-item" data-view="system-settings"><span class="icon">⚙️</span> System Settings</button>
           <button class="nav-item" data-view="backup"><span class="icon">💾</span> Backup & Restore</button>
           <button class="nav-item" data-view="profile"><span class="icon">👤</span> Admin Profile</button>
         </div>
@@ -1497,6 +1522,31 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
               <button class="btn btn-primary" id="btnAddStudent">+ Add Student</button>
             </div>
             <div class="card-body">
+              <form id="studentRegisterForm" style="display:grid;gap:10px;max-width:640px;margin-bottom:20px;padding:14px;border:1px solid var(--border);border-radius:12px;background:#fafbfc;">
+                <h3 style="font-size:1rem;">Register student (school record)</h3>
+                <div class="form-group"><label>Full Name *</label><input id="stFullName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Admission Number *</label><input id="stAdmissionNo" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>School *</label>
+                  <select id="stSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Select school…</option></select>
+                  <input type="hidden" id="stSchoolId" />
+                </div>
+                <div class="form-group"><label>Class *</label>
+                  <select id="stClassSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Select school first…</option></select>
+                  <input type="hidden" id="stClassId" />
+                </div>
+                <div class="form-group"><label>Academic Session ID</label><input id="stSessionId" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Gender</label><select id="stGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select></div>
+                <div class="form-group"><label>Date of Birth</label><input id="stDob" type="date" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email Address for Sign-in *</label><input id="stEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Password for the Student *</label><input id="stPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" autocomplete="new-password" /></div>
+                <div class="form-group"><label>Phone (optional)</label><input id="stPhone" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Parent/Guardian Name</label><input id="stParentName" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Parent/Guardian Phone</label><input id="stParentPhone" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label><input type="checkbox" id="stAlsoInvite" /> Also send login invitation to email</label></div>
+                <button type="submit" class="btn btn-primary">Register student</button>
+                <div id="stFormStatus" style="font-size:0.9rem;"></div>
+              </form>
+
               <div class="toolbar">
                 <div class="search-box"><input type="text" id="studentSearch" placeholder="Search by name or email…" /></div>
                 <select class="filter-select" id="studentStatusFilter">
@@ -1523,6 +1573,20 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
               <button class="btn btn-primary" id="btnAddTeacher">+ Add Teacher</button>
             </div>
             <div class="card-body">
+              <form id="teacherRegisterForm" style="display:grid;gap:10px;max-width:560px;margin-bottom:20px;padding:14px;border:1px solid var(--border);border-radius:12px;background:#fafbfc;">
+                <h3 style="font-size:1rem;">Invite teacher</h3>
+                <div class="form-group"><label>Full Name *</label><input id="tFullName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email Address for Sign-in *</label><input id="tEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Password for the Assigned Teacher *</label><input id="tPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" autocomplete="new-password" /></div>
+                <div class="form-group"><label>Phone</label><input id="tPhone" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Gender</label><select id="tGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select></div>
+                <div class="form-group"><label>School ID *</label><input id="tSchoolId" required placeholder="Auto for school admin" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Qualification</label><input id="tQualification" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Specialization</label><input id="tSpecialization" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <button type="submit" class="btn btn-primary">Send teacher invitation</button>
+                <div id="tFormStatus" style="font-size:0.9rem;"></div>
+              </form>
+
               <div class="toolbar">
                 <div class="search-box"><input type="text" id="teacherSearch" placeholder="Search teachers…" /></div>
               </div>
@@ -2066,21 +2130,40 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
 
         <div class="view" id="view-admin-create-user">
           <div class="card">
-            <div class="card-header"><h2>Create Teacher / Student Account</h2></div>
+            <div class="card-header"><h2>Register / Invite User</h2></div>
             <div class="card-body">
-              <p style="font-size:0.9rem;color:#546e7a;">Admin assigns email + password. The user must first verify their email address, then can log in — no forced password change. The password is stored only in Firebase Authentication.</p>
-              <form id="adminCreateUserForm">
-                <div class="form-group"><label>Full name</label><input id="acuName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Email</label><input id="acuEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Password (give to user securely)</label><input id="acuPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Role</label>
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:12px;">Creates a <strong>Firestore invitation</strong> with locked role + schoolId. User signs up, verifies email, and claims the profile. Compatible with Spark (no Cloud Functions, no admin-set passwords).</p>
+              <form id="adminCreateUserForm" style="display:grid;gap:10px;max-width:560px;">
+                <div class="form-group"><label>Full name *</label><input id="acuName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email *</label><input id="acuEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Role *</label>
                   <select id="acuRole" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;">
-                    <option value="student">Student</option>
                     <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                    <option value="headmaster">Headmaster (Primary)</option>
+                    <option value="principal">Principal (Secondary)</option>
+                    <option value="admin">School Admin</option>
                   </select>
                 </div>
-                <div class="form-group"><label>Phone (optional)</label><input id="acuPhone" type="tel" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <button type="submit" class="btn btn-primary" id="btnAdminCreateUser">Create account</button>
+                <div class="form-group"><label>School *</label>
+                  <select id="acuSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Select school…</option></select>
+                </div>
+                <input type="hidden" id="acuSchoolId" />
+                <div class="form-group"><label>Phone</label><input id="acuPhone" type="tel" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Gender</label>
+                  <select id="acuGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select>
+                </div>
+                <div class="form-group" id="acuTeacherFields" style="display:none;">
+                  <label>Qualification</label><input id="acuQualification" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-bottom:8px;" />
+                  <label>Specialization</label><input id="acuSpecialization" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                </div>
+                <div class="form-group" id="acuStudentFields" style="display:none;">
+                  <label>Student record ID (students/{id}) to link *</label>
+                  <input id="acuStudentId" placeholder="schoolId_admissionNo" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                  <small style="color:#546e7a;">Create the student record under Students first, then invite the login email.</small>
+                </div>
+                <div class="form-group"><label><input type="checkbox" id="acuForceReplace" /> Replace existing school leader if role is Headmaster/Principal</label></div>
+                <button type="submit" class="btn btn-primary" id="btnAdminCreateUser">Send invitation</button>
                 <div id="acuStatus" style="margin-top:10px;font-size:0.9rem;"></div>
               </form>
             </div>
@@ -2348,9 +2431,260 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             </div>
           </div>
         </div>
-      </div>
+      
+        <!-- ========== SUPER ADMIN: People extras ========== -->
+        <div class="view" id="view-headmasters">
+          <div class="card">
+            <div class="card-header"><h2>Headmasters / Head Teachers</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:14px;">Register a Headmaster for a <strong>Primary</strong> school. Creates a secure invitation (schoolId locked). User activates via email verification — no admin-set password (Spark).</p>
+              <form id="hmRegisterForm" style="display:grid;gap:10px;max-width:560px;margin-bottom:20px;">
+                <div class="form-group"><label>Full Name *</label><input id="hmFullName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email Address for Sign-in *</label><input id="hmEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Password for the Assigned Headmaster *</label><input id="hmPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" autocomplete="new-password" /><small style="color:#546e7a;">Min 8 characters. Stored only in Firebase Authentication (not Firestore).</small></div>
+                <div class="form-group"><label>Phone</label><input id="hmPhone" type="tel" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Gender</label>
+                  <select id="hmGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select>
+                </div>
+                <div class="form-group"><label>Select Primary School *</label>
+                  <select id="hmSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Loading schools…</option></select>
+                  <input type="hidden" id="hmSchoolId" />
+                </div>
+                <div class="form-group"><label>Residential Address (optional)</label><input id="hmAddress" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label><input type="checkbox" id="hmForceReplace" /> Replace existing active Headmaster (audited)</label></div>
+                <button type="submit" class="btn btn-primary">Send invitation</button>
+                <div id="hmFormStatus" style="font-size:0.9rem;"></div>
+              </form>
+              <div class="toolbar"><input type="text" id="hmSearch" placeholder="Search name or email…" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:220px;" /></div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>School</th><th>Status</th></tr></thead>
+                <tbody id="headmastersTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-principals">
+          <div class="card">
+            <div class="card-header"><h2>Principals</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:14px;">Register a Principal for a <strong>Secondary</strong> school. Invitation locks <code>schoolId</code> and role.</p>
+              <form id="prRegisterForm" style="display:grid;gap:10px;max-width:560px;margin-bottom:20px;">
+                <div class="form-group"><label>Full Name *</label><input id="prFullName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email Address for Sign-in *</label><input id="prEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Password for the Assigned Principal *</label><input id="prPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" autocomplete="new-password" /><small style="color:#546e7a;">Min 8 characters. Auth only — not stored in Firestore.</small></div>
+                <div class="form-group"><label>Phone</label><input id="prPhone" type="tel" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Gender</label>
+                  <select id="prGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select>
+                </div>
+                <div class="form-group"><label>Select Secondary School *</label>
+                  <select id="prSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Loading schools…</option></select>
+                  <input type="hidden" id="prSchoolId" />
+                </div>
+                <div class="form-group"><label>Residential Address (optional)</label><input id="prAddress" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label><input type="checkbox" id="prForceReplace" /> Replace existing active Principal (audited)</label></div>
+                <button type="submit" class="btn btn-primary">Send invitation</button>
+                <div id="prFormStatus" style="font-size:0.9rem;"></div>
+              </form>
+              <div class="toolbar"><input type="text" id="prSearch" placeholder="Search…" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:220px;" /></div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>School</th><th>Status</th></tr></thead>
+                <tbody id="principalsTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== Academics (school-scoped backend) ========== -->
+        <div class="view" id="view-classes-mgmt">
+          <div class="card">
+            <div class="card-header"><h2>Classes Management</h2>
+              <button type="button" class="btn btn-primary" id="btnCreateClass">+ Add Class</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="classSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-outline" id="btnLoadClasses">Load classes</button>
+              </div>
+              <div id="classesMgmtMeta" style="font-size:0.85rem;color:#546e7a;margin:8px 0;"></div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Class</th><th>Level</th><th>Status</th><th>ID</th></tr></thead>
+                <tbody id="classesMgmtTable"><tr><td colspan="5" style="padding:16px;text-align:center;color:#546e7a;">Enter School ID and Load.</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-subjects-mgmt">
+          <div class="card">
+            <div class="card-header"><h2>Subjects Management</h2>
+              <button type="button" class="btn btn-primary" id="btnCreateSubject">+ Add Subject</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="subjectSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-outline" id="btnLoadSubjectsMgmt">Load subjects</button>
+              </div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Subject</th><th>Code</th><th>Status</th><th>ID</th></tr></thead>
+                <tbody id="subjectsMgmtTable"><tr><td colspan="5" style="padding:16px;text-align:center;color:#546e7a;">Enter School ID and Load.</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-class-subjects">
+          <div class="card">
+            <div class="card-header"><h2>Class Subjects</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;">Link school subjects to a class (curriculum). Uses <code>classSubjects</code> backend.</p>
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="csSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="csClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-outline" id="btnLoadClassSubjects">Load</button>
+                <input type="text" id="csSubjectId" placeholder="Subject ID to assign" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-primary" id="btnAssignClassSubject">Assign subject</button>
+              </div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Subject ID</th><th>Name</th><th>Status</th></tr></thead>
+                <tbody id="classSubjectsTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Load a class.</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-teacher-assignments">
+          <div class="card">
+            <div class="card-header"><h2>Teacher Assignments</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;">Per-class subject lists for each teacher (not one global list).</p>
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="taSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="taSessionId" placeholder="Academic Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-outline" id="btnLoadTeacherAssign">Load</button>
+              </div>
+              <div class="form-group" style="margin-top:12px;display:grid;gap:8px;max-width:520px;">
+                <input type="text" id="taTeacherId" placeholder="Teacher UID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="taClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="taSubjectIds" placeholder="Subject IDs (comma-separated)" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-primary" id="btnSaveTeacherAssign">Save assignment</button>
+              </div>
+              <div class="table-wrap" style="margin-top:12px;"><table><thead><tr><th>Teacher</th><th>Class</th><th>Subjects</th><th>Status</th></tr></thead>
+                <tbody id="teacherAssignTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Load assignments.</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-form-masters">
+          <div class="card">
+            <div class="card-header"><h2>Form Master Assignments</h2></div>
+            <div class="card-body">
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="fmSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="fmSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-outline" id="btnLoadFormMasters">Load</button>
+              </div>
+              <div class="form-group" style="margin-top:12px;display:grid;gap:8px;max-width:520px;">
+                <input type="text" id="fmTeacherId" placeholder="Teacher UID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="fmClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-primary" id="btnAssignFormMaster">Assign Form Master</button>
+              </div>
+              <div class="table-wrap" style="margin-top:12px;"><table><thead><tr><th>Teacher</th><th>Class</th><th>Session</th><th>Status</th></tr></thead>
+                <tbody id="formMastersTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Load.</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-academic-sessions">
+          <div class="card">
+            <div class="card-header"><h2>Academic Sessions</h2>
+              <button type="button" class="btn btn-primary" id="btnCreateSession">+ Add Session</button>
+            </div>
+            <div class="card-body">
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="sessSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-outline" id="btnLoadSessions">Load</button>
+              </div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Status</th><th>Current</th><th>ID</th></tr></thead>
+                <tbody id="sessionsTable"><tr><td colspan="5" style="padding:16px;text-align:center;color:#546e7a;">Load sessions.</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-marks-mgmt">
+          <div class="card">
+            <div class="card-header"><h2>Marks Management</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;">Teachers enter marks for assigned subjects. Form Masters can view all subjects in their class.</p>
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="mkSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="mkSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="mkTerm" placeholder="Term (e.g. First Term)" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="mkClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-outline" id="btnLoadMarks">Load marks</button>
+              </div>
+              <div class="table-wrap"><table><thead><tr><th>Student</th><th>Subject</th><th>Total</th><th>Status</th></tr></thead>
+                <tbody id="marksMgmtTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Load marks for a class/term.</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-results-mgmt">
+          <div class="card">
+            <div class="card-header"><h2>Results</h2></div>
+            <div class="card-body">
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="rsSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="rsSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="rsTerm" placeholder="Term" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="rsClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-outline" id="btnLoadResults">Load results</button>
+              </div>
+              <div class="table-wrap"><table><thead><tr><th>Student</th><th>Subject</th><th>Total</th><th>Status</th></tr></thead>
+                <tbody id="resultsMgmtTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Load results.</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-report-cards">
+          <div class="card">
+            <div class="card-header"><h2>Report Cards</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;">Completion check → prepare drafts → Form Master publish. Missing marks are not treated as zero.</p>
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="rcSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="rcSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="rcTerm" placeholder="Term" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="rcClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;">
+                <button type="button" class="btn btn-outline" id="btnRcCheck">Check completion</button>
+                <button type="button" class="btn btn-outline" id="btnRcPrepare">Prepare drafts</button>
+                <button type="button" class="btn btn-primary" id="btnRcPublish">Publish (Form Master)</button>
+                <button type="button" class="btn btn-outline" id="btnRcLoad">Load cards</button>
+              </div>
+              <div id="rcStatus" style="font-size:0.9rem;color:#546e7a;margin-bottom:10px;"></div>
+              <div class="table-wrap"><table><thead><tr><th>Student</th><th>Status</th><th>Workflow</th><th>Complete</th></tr></thead>
+                <tbody id="reportCardsTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Run a check or load cards.</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-broadsheets">
+          <div class="card">
+            <div class="card-header"><h2>Broadsheets</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;">Class × subject matrix from marks for a term (read-only overview).</p>
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
+                <input type="text" id="bsSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="bsSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="bsTerm" placeholder="Term" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <input type="text" id="bsClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <button type="button" class="btn btn-outline" id="btnLoadBroadsheet">Build broadsheet</button>
+              </div>
+              <div id="broadsheetWrap" style="overflow:auto;margin-top:12px;"><p style="color:#546e7a;">Load a class/term to build the matrix.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="view-system-settings">
+          <div class="card">
+            <div class="card-header"><h2>System Settings</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:12px;">Platform appearance and system document (<code>system/appearance</code>). Use Appearance & Media for images.</p>
+              <button type="button" class="btn btn-outline" data-goto="appearance">Open Appearance & Media</button>
+              <button type="button" class="btn btn-outline" data-goto="branding">Open Branding</button>
+              <button type="button" class="btn btn-outline" data-goto="backend-setup">Open Backend Setup</button>
+              <button type="button" class="btn btn-outline" data-goto="security">Open Security</button>
+            </div>
+          </div>
+        </div>
+
+
+
+</div>
     </div>
   </div>
+
 
 
   <!-- ========== SCHOOL ADMIN DASHBOARD ========== -->
@@ -2360,24 +2694,16 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         <div class="logo">ME</div>
         <div><span id="schoolBrandName">School</span><small>School Admin</small></div>
       </div>
-      <nav class="sidebar-nav">
+      <nav class="sidebar-nav" id="schoolSidebarNav">
         <div class="nav-section">
-          <div class="nav-section-title">School</div>
-          <button class="nav-item active" data-sview="s-overview"><span class="icon">📊</span> Overview</button>
-          <button class="nav-item" data-sview="s-profile"><span class="icon">🏫</span> Profile & Logo</button>
-          <button class="nav-item" data-sview="s-teachers"><span class="icon">👩‍🏫</span> Teachers</button>
-          <button class="nav-item" data-sview="s-formmasters"><span class="icon">📎</span> Form Masters</button>
-          <button class="nav-item" data-sview="s-students"><span class="icon">👨‍🎓</span> Students</button>
-          <button class="nav-item" data-sview="s-classes"><span class="icon">📚</span> Classes</button>
-          <button class="nav-item" data-sview="s-subjects"><span class="icon">📖</span> Subjects</button>
-          <button class="nav-item" data-sview="s-sessions"><span class="icon">📆</span> Sessions & Terms</button>
-          <button class="nav-item" data-sview="s-exams"><span class="icon">📋</span> Examinations</button>
-          <button class="nav-item" data-sview="s-results"><span class="icon">📝</span> Results</button>
-          <button class="nav-item" data-sview="s-reports"><span class="icon">📄</span> Report Cards</button>
-          <button class="nav-item" data-sview="s-attendance"><span class="icon">✓</span> Attendance</button>
-          <button class="nav-item" data-sview="s-announcements"><span class="icon">📢</span> Announcements</button>
-          <button class="nav-item" data-sview="s-billing"><span class="icon">💳</span> Subscription</button>
-          <button class="nav-item" data-sview="s-settings"><span class="icon">⚙️</span> Settings</button>
+          <div class="nav-section-title">Leadership</div>
+          <button class="nav-item active" data-sview="s-overview"><span class="icon">📊</span> School Overview</button>
+          <button class="nav-item" data-sview="s-teachers"><span class="icon">👩‍🏫</span> Teachers Management</button>
+          <button class="nav-item" data-sview="s-students"><span class="icon">👨‍🎓</span> Students Management</button>
+          <button class="nav-item" data-sview="s-classes"><span class="icon">📚</span> Class Management</button>
+          <button class="nav-item" data-sview="s-reports"><span class="icon">📄</span> Report Card & Broadsheet</button>
+          <button class="nav-item" data-sview="s-promotion"><span class="icon">⬆️</span> Promotion</button>
+          <button class="nav-item" data-sview="s-term"><span class="icon">📆</span> Term</button>
         </div>
       </nav>
       <div class="sidebar-footer">
@@ -2501,6 +2827,122 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       </div>
     </div>
   </div>
+
+  <!-- ========== TEACHER SCHOOL DASHBOARD ========== -->
+  <div class="app" id="teacherSchoolApp">
+    <aside class="sidebar" id="teacherSidebar">
+      <div class="sidebar-brand">
+        <div class="logo">ME</div>
+        <div><span id="teacherBrandName">Teacher</span><small id="teacherBrandSub">Subject Teacher</small></div>
+      </div>
+      <nav class="sidebar-nav" id="teacherSidebarNav">
+        <div class="nav-section">
+          <div class="nav-section-title">Teacher</div>
+          <button class="nav-item active" data-tview="t-classes"><span class="icon">📚</span> My Assigned Classes</button>
+          <button class="nav-item" data-tview="t-marks"><span class="icon">📝</span> Marks</button>
+          <button class="nav-item" data-tview="t-results"><span class="icon">📊</span> My Results</button>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="avatar" id="teacherUserAvatar">T</div>
+          <div class="info"><div class="name" id="teacherUserName">Teacher</div><div class="role" id="teacherUserRole">Teacher</div></div>
+        </div>
+        <button class="btn-logout" id="teacherLogoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left"><h1 class="page-title" id="teacherPageTitle">My Assigned Classes</h1></div>
+      </header>
+      <div class="content" id="teacherContent">
+        <div class="view active" id="tview-t-classes">
+          <div class="card"><div class="card-header"><h2>My Assigned Classes</h2></div>
+            <div class="card-body"><div id="teacherClassesList" class="table-wrap"><p style="color:#546e7a;">Loading assignments…</p></div></div>
+          </div>
+        </div>
+        <div class="view" id="tview-t-marks">
+          <div class="card"><div class="card-header"><h2>Enter Marks</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:12px;">First CA (20) + Second CA (20) + Examination (60) = <strong>100</strong></p>
+              <div class="toolbar" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+                <select id="tmClass" style="padding:10px;border-radius:8px;border:1px solid #ddd;min-width:160px;"><option value="">Choose Class</option></select>
+                <select id="tmSubject" style="padding:10px;border-radius:8px;border:1px solid #ddd;min-width:160px;"><option value="">Choose Subject</option></select>
+                <input id="tmSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                <input id="tmTerm" placeholder="Term (e.g. First Term)" style="padding:10px;border-radius:8px;border:1px solid #ddd;" />
+                <button type="button" class="btn btn-outline" id="tmLoadStudents">Load students</button>
+              </div>
+              <div class="table-wrap"><table class="marks-table"><thead><tr>
+                <th>Student</th><th>1st CA (20)</th><th>2nd CA (20)</th><th>Exam (60)</th><th>Total (100)</th><th></th>
+              </tr></thead>
+              <tbody id="tmMarksBody"><tr><td colspan="6" style="padding:16px;text-align:center;color:#546e7a;">Select class &amp; subject.</td></tr></tbody></table></div>
+              <div id="tmStatus" style="margin-top:10px;font-size:0.9rem;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="view" id="tview-t-results">
+          <div class="card"><div class="card-header"><h2>My Results</h2></div>
+            <div class="card-body"><div id="teacherResultsList"><p style="color:#546e7a;">Results for your subjects will appear here.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== STUDENT DASHBOARD ========== -->
+  <div class="app" id="studentApp">
+    <aside class="sidebar" id="studentSidebar">
+      <div class="sidebar-brand">
+        <div class="logo">ME</div>
+        <div><span id="studentBrandName">Student</span><small id="studentBrandSub">Learner</small></div>
+      </div>
+      <nav class="sidebar-nav" id="studentSidebarNav">
+        <div class="nav-section">
+          <div class="nav-section-title">Student</div>
+          <button class="nav-item active" data-stview="st-subjects"><span class="icon">📖</span> My Subjects</button>
+          <button class="nav-item" data-stview="st-results"><span class="icon">📊</span> My Results</button>
+          <button class="nav-item" data-stview="st-report"><span class="icon">📄</span> My Report Card</button>
+          <button class="nav-item" data-stview="st-cert"><span class="icon">🏅</span> My Certificate</button>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="avatar" id="studentUserAvatar">S</div>
+          <div class="info"><div class="name" id="studentUserName">Student</div><div class="role" id="studentUserRole">Student</div></div>
+        </div>
+        <button class="btn-logout" id="studentLogoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left"><h1 class="page-title" id="studentPageTitle">My Subjects</h1></div>
+      </header>
+      <div class="content" id="studentContent">
+        <div class="view active" id="stview-st-subjects">
+          <div class="card"><div class="card-header"><h2>My Subjects</h2></div>
+            <div class="card-body"><div id="studentSubjectsList"><p style="color:#546e7a;">Subjects for your class will load here.</p></div></div>
+          </div>
+        </div>
+        <div class="view" id="stview-st-results">
+          <div class="card"><div class="card-header"><h2>My Results</h2></div>
+            <div class="card-body"><div id="studentResultsList"><p style="color:#546e7a;">Your results will appear here when published.</p></div></div>
+          </div>
+        </div>
+        <div class="view" id="stview-st-report">
+          <div class="card"><div class="card-header"><h2>My Report Card</h2></div>
+            <div class="card-body"><div id="studentReportCard"><p style="color:#546e7a;">Published report cards only.</p></div></div>
+          </div>
+        </div>
+        <div class="view" id="stview-st-cert">
+          <div class="card"><div class="card-header"><h2 id="studentCertTitle">My Certificate</h2></div>
+            <div class="card-body"><div id="studentCertBody"><p style="color:#546e7a;">Certificate section (Primary / Secondary as applicable).</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
   <!-- Toast container -->
   <div class="toast-container" id="toastContainer"></div>
@@ -2651,8 +3093,8 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
 
     // Dashboard page for each role. Change a file name here if yours is different.
     const DASHBOARDS = {
-      student: "student-dashboard.html",
-      teacher: "teacher-dashboard.html",
+      student: "#student",
+      teacher: "#teacher",
       admin: "#admin",
       super_admin: "#admin",
       platform_admin: "#admin",
@@ -2660,7 +3102,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       principal: "#school",
       school_admin: "#school",
       exam_officer: "#school",
-      subject_teacher: "#school"
+      subject_teacher: "#teacher"
     };
     const ROLE_LABELS = { student:"Student", teacher:"Teacher", admin:"Admin", super_admin:"Super Admin", headmaster:"Headmaster", principal:"Principal" };
 
@@ -2678,11 +3120,15 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       const isLogin = location.hash === "#login";
       const isAdmin = location.hash === "#admin";
       const isSchool = location.hash === "#school";
+      const isTeacher = location.hash === "#teacher";
+      const isStudent = location.hash === "#student";
       document.documentElement.classList.toggle("is-login", isLogin);
       document.documentElement.classList.toggle("is-admin", isAdmin);
       document.documentElement.classList.toggle("is-school", isSchool);
+      document.documentElement.classList.toggle("is-teacher-school", isTeacher);
+      document.documentElement.classList.toggle("is-student-dash", isStudent);
       byId("mobileNav").classList.remove("show");
-      if (isAdmin || isSchool) { window.scrollTo(0, 0); return; }
+      if (isAdmin || isSchool || isTeacher || isStudent) { window.scrollTo(0, 0); return; }
       if (isLogin) { window.scrollTo(0, 0); }
       else if (scroll && location.hash.length > 1) {
         try { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); } catch (e) {}
@@ -2817,10 +3263,18 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
 
       const url = DASHBOARDS[role];
       if (url && String(url).startsWith("#")) {
-        const mode = String(url).slice(1) === "school" ? "school" : "admin";   // Headmaster/Principal -> school shell
-        document.documentElement.classList.remove("is-login");
-        document.documentElement.classList.add("is-" + mode);
-        if (location.hash !== "#" + mode) location.hash = mode;
+        const modeRaw = String(url).slice(1);
+        // Map hash -> html class: admin, school, teacher-school, student-dash
+        const classMap = { admin: "is-admin", school: "is-school", teacher: "is-teacher-school", student: "is-student-dash" };
+        const cls = classMap[modeRaw] || ("is-" + modeRaw);
+        document.documentElement.classList.remove("is-login", "is-admin", "is-school", "is-teacher-school", "is-student-dash");
+        document.documentElement.classList.add(cls);
+        if (location.hash !== "#" + modeRaw) location.hash = modeRaw;
+        try {
+          if (modeRaw === "teacher" && window.__initTeacherDash) window.__initTeacherDash();
+          if (modeRaw === "student" && window.__initStudentDash) window.__initStudentDash();
+          if (modeRaw === "school" && window.__initSchoolDash) window.__initSchoolDash();
+        } catch (e) { console.warn(e); }
         window.scrollTo(0, 0);
         return;
       }
@@ -3145,20 +3599,33 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     const navItems = document.querySelectorAll(".nav-item[data-view]");
     const pageTitle = $("pageTitle");
     const titleMap = {
-      overview: "Overview", analytics: "Analytics & Reports", homepage: "Homepage",
-      content: "Website Content", branding: "Branding & Settings", navigation: "Navigation",
-      languages: "Languages", categories: "Categories", courses: "Courses",
+      overview: "Dashboard", analytics: "Analytics & Reports", homepage: "Homepage",
+      content: "Website Content", branding: "Branding & Settings", appearance: "Appearance & Media",
+      images: "Image Management", portfolio: "My Profile & Portfolio",
+      navigation: "Navigation", languages: "Languages", categories: "Categories", courses: "Courses",
       subjects: "Subjects & Topics", lessons: "Lessons", questions: "Question Bank",
       import: "Bulk Import", exams: "Examinations", assignments: "Assignments",
       certificates: "Certificates", students: "Students", teachers: "Teachers",
-      access: "Course Access", roles: "Roles & Permissions", payments: "Payments",
-      announcements: "Announcements", notifications: "Notifications", contacts: "Contact Requests",
-      forum: "Discussion Forum", security: "Security", audit: "Login History & Audit",
-      backup: "Backup & Restore", profile: "Admin Profile"
+      headmasters: "Headmasters / Head Teachers", principals: "Principals",
+      access: "Course Access", roles: "Roles & Permissions", "admin-create-user": "Create User / Invite",
+      "classes-mgmt": "Classes Management", "subjects-mgmt": "Subjects Management",
+      "class-subjects": "Class Subjects", "teacher-assignments": "Teacher Assignments",
+      "form-masters": "Form Masters", "academic-sessions": "Academic Sessions",
+      "marks-mgmt": "Marks Management", "results-mgmt": "Results", "report-cards": "Report Cards",
+      broadsheets: "Broadsheets",
+      payments: "Payments", announcements: "Announcements", notifications: "Notifications",
+      contacts: "Contact Requests", forum: "Discussion Forum",
+      "ks-overview": "Schools Overview", "ks-primary": "Primary Schools", "ks-secondary": "Secondary Schools",
+      "ks-directory": "School Directory", "ks-registrations": "Registration Requests",
+      "ks-verification": "School Verification", "ks-admins": "School Administrators",
+      "ks-plans": "Subscription Plans", "ks-subscriptions": "School Subscriptions",
+      "ks-payments": "Payment Verification", "ks-reports": "Schools Reports", "ks-import": "Bulk School Import",
+      security: "Security Settings", "backend-setup": "Backend Setup", "system-settings": "System Settings",
+      audit: "Audit Logs", backup: "Backup & Restore", profile: "Admin Profile"
     };
 
     function showView(name) {
-      views.forEach(v => v.classList.remove("active"));
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
       const el = $("view-" + name);
       if (el) el.classList.add("active");
       navItems.forEach(n => n.classList.toggle("active", n.dataset.view === name));
@@ -3531,9 +3998,11 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       };
       document.querySelectorAll("#adminApp .nav-item[data-view]").forEach(btn => {
         const v = btn.dataset.view;
-        if (v === "backend-setup") { btn.style.display = callerIsSuper() ? "" : "none"; return; }
+        if (callerIsSuper()) { btn.style.display = ""; return; }
+        if (v === "backend-setup") { btn.style.display = "none"; return; }
         const p = need[v] || (v.startsWith("ks-") ? "manage_schools" : null);
         if (p) btn.style.display = hasPerm(p) ? "" : "none";
+        else btn.style.display = "";
       });
     }
 
@@ -3571,6 +4040,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           return;
         }
         const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        docs.sort((a, b) => String(a.fullName || a.email || "").localeCompare(String(b.fullName || b.email || ""), undefined, { sensitivity: "base" }));
         const byId = {}; docs.forEach(u => byId[u.id] = u);
         const authInfo = {};
         try {
@@ -4561,6 +5031,18 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         case "courses": loadCourses(); break;
         case "students": loadUsersByRole("student", "studentsTable"); break;
         case "teachers": loadUsersByRole("teacher", "teachersTable"); break;
+        case "headmasters":
+          loadUsersByRole("headmaster", "headmastersTable");
+          if (typeof fillSchoolSelect === "function") fillSchoolSelect(document.getElementById("hmSchoolSelect"), document.getElementById("hmSchoolId"), "primary");
+          else if (typeof refreshSchoolDropdowns === "function") refreshSchoolDropdowns();
+          break;
+        case "principals":
+          loadUsersByRole("principal", "principalsTable");
+          if (typeof fillSchoolSelect === "function") fillSchoolSelect(document.getElementById("prSchoolSelect"), document.getElementById("prSchoolId"), "secondary");
+          break;
+        case "admin-create-user":
+          if (typeof fillSchoolSelect === "function") fillSchoolSelect(document.getElementById("acuSchoolSelect"), document.getElementById("acuSchoolId"), null);
+          break;
         case "announcements": loadAnnouncements(); break;
         case "contacts": loadContacts(); break;
         case "questions": loadQuestions(); break;
@@ -4588,9 +5070,511 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             $("anExams").textContent = "—";
           });
           break;
+        case "ks-overview":
+        case "ks-primary":
+        case "ks-secondary":
+        case "ks-directory":
+        case "ks-registrations":
+        case "ks-verification":
+        case "ks-admins":
+        case "ks-plans":
+        case "ks-subscriptions":
+        case "ks-payments":
+        case "ks-reports":
+        case "ks-import":
+          if (typeof loadKatsinaView === "function") loadKatsinaView(name);
+          break;
         default: break;
       }
     }
+
+    // ---- Super Admin academic panels → window.MMSAYAYA_BACKEND ----
+    function escHtml(s) {
+      return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+    function B() { return window.MMSAYAYA_BACKEND; }
+    async function saLoadClasses() {
+      const sid = ($("classSchoolId") && $("classSchoolId").value || "").trim();
+      const tb = $("classesMgmtTable"); if (!tb) return;
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;text-align:center;'>School ID and backend required.</td></tr>"; return; }
+      try {
+        const rows = await B().classes.list(sid);
+        if (!rows.length) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;text-align:center;'>No classes.</td></tr>"; return; }
+        tb.innerHTML = rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.level||"")+"</td><td>"+escHtml(r.status||"")+"</td><td style='font-size:0.75rem'>"+escHtml(r.id)+"</td></tr>").join("");
+        if ($("classesMgmtMeta")) $("classesMgmtMeta").textContent = rows.length + " class(es)";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+    }
+    async function saLoadSubjectsMgmt() {
+      const sid = ($("subjectSchoolId") && $("subjectSchoolId").value || "").trim();
+      const tb = $("subjectsMgmtTable"); if (!tb) return;
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;text-align:center;'>School ID and backend required.</td></tr>"; return; }
+      try {
+        const rows = await B().subjects.list(sid);
+        tb.innerHTML = rows.length ? rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.code||"")+"</td><td>"+escHtml(r.status||"")+"</td><td style='font-size:0.75rem'>"+escHtml(r.id)+"</td></tr>").join("") : "<tr><td colspan='5' style='padding:16px;text-align:center;'>No subjects.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+    }
+    async function saLoadClassSubjects() {
+      const sid = ($("csSchoolId")&&$("csSchoolId").value||"").trim();
+      const cid = ($("csClassId")&&$("csClassId").value||"").trim();
+      const tb = $("classSubjectsTable"); if (!tb) return;
+      if (!sid || !cid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID + Class ID required.</td></tr>"; return; }
+      try {
+        const rows = (await B().classSubjects.listByClass(sid, cid)).filter(r => r.status === "active");
+        tb.innerHTML = rows.length ? rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td>"+escHtml(r.subjectId)+"</td><td>"+escHtml(r.subjectName||"")+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>None linked.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+    }
+    async function saLoadTeacherAssign() {
+      const sid = ($("taSchoolId")&&$("taSchoolId").value||"").trim();
+      const xid = ($("taSessionId")&&$("taSessionId").value||"").trim();
+      const tb = $("teacherAssignTable"); if (!tb) return;
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      try {
+        const rows = await B().teacherAssignments.list(sid, xid || undefined);
+        tb.innerHTML = rows.length ? rows.map(r => "<tr><td>"+escHtml(r.teacherId)+"</td><td>"+escHtml(r.classId)+"</td><td>"+escHtml((r.subjectIds||[]).join(", "))+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>None.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+    }
+    async function saLoadFormMasters() {
+      const sid = ($("fmSchoolId")&&$("fmSchoolId").value||"").trim();
+      const xid = ($("fmSessionId")&&$("fmSessionId").value||"").trim();
+      const tb = $("formMastersTable"); if (!tb) return;
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      try {
+        const rows = await B().formMasters.list(sid, xid || undefined);
+        tb.innerHTML = rows.length ? rows.map(r => "<tr><td>"+escHtml(r.teacherId)+"</td><td>"+escHtml(r.classId)+"</td><td>"+escHtml(r.academicSessionId)+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>None.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+    }
+    async function saLoadSessions() {
+      const sid = ($("sessSchoolId")&&$("sessSchoolId").value||"").trim();
+      const tb = $("sessionsTable"); if (!tb) return;
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      try {
+        const rows = await B().academicSessions.list(sid);
+        tb.innerHTML = rows.length ? rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.status)+"</td><td>"+(r.isCurrent?"Yes":"")+"</td><td style='font-size:0.75rem'>"+escHtml(r.id)+"</td></tr>").join("") : "<tr><td colspan='5' style='padding:16px;text-align:center;'>None.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+    }
+    async function saLoadMarks() {
+      const sid = ($("mkSchoolId")&&$("mkSchoolId").value||"").trim();
+      const xid = ($("mkSessionId")&&$("mkSessionId").value||"").trim();
+      const term = ($("mkTerm")&&$("mkTerm").value||"").trim();
+      const cid = ($("mkClassId")&&$("mkClassId").value||"").trim();
+      const tb = $("marksMgmtTable"); if (!tb) return;
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      try {
+        const rows = await B().marks.listForClass(sid, { academicSessionId: xid, term, classId: cid });
+        tb.innerHTML = rows.length ? rows.map(r => "<tr><td>"+escHtml(r.studentId)+"</td><td>"+escHtml(r.subjectId)+"</td><td>"+escHtml(r.total)+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>No marks.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+    }
+    async function saLoadResults() {
+      const sid = ($("rsSchoolId")&&$("rsSchoolId").value||"").trim();
+      const xid = ($("rsSessionId")&&$("rsSessionId").value||"").trim();
+      const term = ($("rsTerm")&&$("rsTerm").value||"").trim();
+      const cid = ($("rsClassId")&&$("rsClassId").value||"").trim();
+      const tb = $("resultsMgmtTable"); if (!tb) return;
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      try {
+        const rows = await B().results.listClassTerm(sid, { academicSessionId: xid, term, classId: cid });
+        tb.innerHTML = rows.length ? rows.map(r => "<tr><td>"+escHtml(r.studentId)+"</td><td>"+escHtml(r.subjectId)+"</td><td>"+escHtml(r.total)+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>No results.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+    }
+    async function saRcCheck() {
+      const st = $("rcStatus");
+      try {
+        const check = await B().reportCards.completionCheck(($("rcSchoolId").value||"").trim(), {
+          academicSessionId: ($("rcSessionId").value||"").trim(),
+          term: ($("rcTerm").value||"").trim(),
+          classId: ($("rcClassId").value||"").trim()
+        });
+        if (st) st.textContent = check.reason + (check.missingCount ? (" Missing: " + check.missingCount) : "");
+      } catch (e) { if (st) st.textContent = e.message || String(e); }
+    }
+    async function saRcPrepare() {
+      const st = $("rcStatus");
+      try {
+        const r = await B().reportCards.prepareDrafts(($("rcSchoolId").value||"").trim(), {
+          academicSessionId: ($("rcSessionId").value||"").trim(),
+          term: ($("rcTerm").value||"").trim(),
+          classId: ($("rcClassId").value||"").trim()
+        });
+        if (st) st.textContent = "Drafts prepared. Complete=" + (r.completion && r.completion.complete);
+        await saRcLoad();
+      } catch (e) { if (st) st.textContent = e.message || String(e); }
+    }
+    async function saRcPublish() {
+      const st = $("rcStatus");
+      try {
+        const r = await B().reportCards.publish(($("rcSchoolId").value||"").trim(), {
+          academicSessionId: ($("rcSessionId").value||"").trim(),
+          term: ($("rcTerm").value||"").trim(),
+          classId: ($("rcClassId").value||"").trim()
+        });
+        if (st) st.textContent = "Published " + r.count + " card(s).";
+        await saRcLoad();
+      } catch (e) {
+        if (st) st.textContent = (e && e.message) || String(e);
+        if (e && e.completion && st) st.textContent += " Missing " + (e.completion.missingCount || 0);
+      }
+    }
+    async function saRcLoad() {
+      const tb = $("reportCardsTable"); if (!tb || !B()) return;
+      try {
+        const rows = await B().reportCards.list(($("rcSchoolId").value||"").trim(), {
+          academicSessionId: ($("rcSessionId").value||"").trim(),
+          term: ($("rcTerm").value||"").trim(),
+          classId: ($("rcClassId").value||"").trim()
+        });
+        tb.innerHTML = rows.length ? rows.map(r => "<tr><td>"+escHtml(r.studentName||r.studentId)+"</td><td>"+escHtml(r.status)+"</td><td>"+escHtml(r.workflow||"")+"</td><td>"+(r.marksComplete?"Yes":"No")+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>None.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+    }
+    async function saLoadBroadsheet() {
+      const wrap = $("broadsheetWrap"); if (!wrap || !B()) return;
+      const sid = ($("bsSchoolId").value||"").trim();
+      const xid = ($("bsSessionId").value||"").trim();
+      const term = ($("bsTerm").value||"").trim();
+      const cid = ($("bsClassId").value||"").trim();
+      try {
+        const marks = await B().marks.list(sid, { academicSessionId: xid, term, classId: cid });
+        const students = [...new Set(marks.map(m => m.studentId))];
+        const subjects = [...new Set(marks.map(m => m.subjectId))];
+        const map = {};
+        marks.forEach(m => { map[m.studentId + "::" + m.subjectId] = m; });
+        let h = "<table style='border-collapse:collapse;font-size:0.85rem;'><thead><tr><th style='padding:6px;border:1px solid #ddd;'>Student</th>";
+        subjects.forEach(s => { h += "<th style='padding:6px;border:1px solid #ddd;'>"+escHtml(s)+"</th>"; });
+        h += "</tr></thead><tbody>";
+        students.forEach(st => {
+          h += "<tr><td style='padding:6px;border:1px solid #ddd;'>"+escHtml(st)+"</td>";
+          subjects.forEach(s => {
+            const m = map[st+"::"+s];
+            h += "<td style='padding:6px;border:1px solid #ddd;text-align:center;'>"+(m ? escHtml(m.total)+" <small>("+escHtml(m.status)+")</small>" : "—")+"</td>";
+          });
+          h += "</tr>";
+        });
+        h += "</tbody></table>";
+        wrap.innerHTML = students.length ? h : "<p style='color:#546e7a;'>No marks for this selection.</p>";
+      } catch (e) { wrap.innerHTML = "<p style='color:#c62828;'>"+escHtml(e.message||e)+"</p>"; }
+    }
+    function wireSaAcademicButtons() {
+      const bind = (id, fn) => { const el = $(id); if (el && !el.dataset.saBound) { el.dataset.saBound = "1"; el.addEventListener("click", fn); } };
+      bind("btnLoadClasses", saLoadClasses);
+      bind("btnLoadSubjectsMgmt", saLoadSubjectsMgmt);
+      bind("btnLoadClassSubjects", saLoadClassSubjects);
+      bind("btnAssignClassSubject", async () => {
+        try {
+          await B().classSubjects.assign(($("csSchoolId").value||"").trim(), { classId: ($("csClassId").value||"").trim(), subjectId: ($("csSubjectId").value||"").trim() });
+          await saLoadClassSubjects();
+        } catch (e) { alert(e.message || e); }
+      });
+      bind("btnLoadTeacherAssign", saLoadTeacherAssign);
+      bind("btnSaveTeacherAssign", async () => {
+        try {
+          const subjectIds = ($("taSubjectIds").value||"").split(",").map(s => s.trim()).filter(Boolean);
+          await B().teacherAssignments.assign(($("taSchoolId").value||"").trim(), {
+            teacherId: ($("taTeacherId").value||"").trim(),
+            classId: ($("taClassId").value||"").trim(),
+            academicSessionId: ($("taSessionId").value||"").trim(),
+            subjectIds
+          });
+          await saLoadTeacherAssign();
+        } catch (e) { alert(e.message || e); }
+      });
+      bind("btnLoadFormMasters", saLoadFormMasters);
+      bind("btnAssignFormMaster", async () => {
+        try {
+          await B().formMasters.assign(($("fmSchoolId").value||"").trim(), {
+            teacherId: ($("fmTeacherId").value||"").trim(),
+            classId: ($("fmClassId").value||"").trim(),
+            academicSessionId: ($("fmSessionId").value||"").trim()
+          });
+          await saLoadFormMasters();
+        } catch (e) { alert(e.message || e); }
+      });
+      bind("btnLoadSessions", saLoadSessions);
+      bind("btnCreateSession", async () => {
+        const sid = ($("sessSchoolId").value||"").trim();
+        const name = prompt("Session name (e.g. 2026/2027)");
+        if (!name) return;
+        try { await B().academicSessions.create(sid, { name }); await saLoadSessions(); } catch (e) { alert(e.message || e); }
+      });
+      bind("btnCreateClass", async () => {
+        const sid = ($("classSchoolId").value||"").trim();
+        const name = prompt("Class name (e.g. Primary 4)");
+        if (!name) return;
+        try { await B().classes.create(sid, { name }); await saLoadClasses(); } catch (e) { alert(e.message || e); }
+      });
+      bind("btnCreateSubject", async () => {
+        const sid = ($("subjectSchoolId").value||"").trim();
+        const name = prompt("Subject name");
+        if (!name) return;
+        try { await B().subjects.create(sid, { name }); await saLoadSubjectsMgmt(); } catch (e) { alert(e.message || e); }
+      });
+      bind("btnLoadMarks", saLoadMarks);
+      bind("btnLoadResults", saLoadResults);
+      bind("btnRcCheck", saRcCheck);
+      bind("btnRcPrepare", saRcPrepare);
+      bind("btnRcPublish", saRcPublish);
+      bind("btnRcLoad", saRcLoad);
+      bind("btnLoadBroadsheet", saLoadBroadsheet);
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wireSaAcademicButtons);
+    else wireSaAcademicButtons();
+    
+setTimeout(wireSaAcademicButtons, 800);
+
+    // ========== School user registration & invitation UI ==========
+    (function wireRegistrationUI() {
+      const $id = (id) => document.getElementById(id);
+      const B = () => window.MMSAYAYA_BACKEND;
+      function msg(el, text, ok) {
+        if (!el) return;
+        el.style.color = ok ? "#2e7d32" : "#c62828";
+        el.textContent = text || "";
+      }
+      async function fillSchoolSelect(selectEl, schoolIdEl, typeFilter, attempt) {
+        window.__fillSchoolSelect = fillSchoolSelect;
+        if (!selectEl) return;
+        attempt = attempt || 0;
+        if (!B()) {
+          if (attempt < 50) {
+            selectEl.innerHTML = '<option value="">Loading schools…</option>';
+            setTimeout(function(){ fillSchoolSelect(selectEl, schoolIdEl, typeFilter, attempt + 1); }, 200);
+          } else {
+            selectEl.innerHTML = '<option value="">Could not load backend — refresh page</option>';
+          }
+          return;
+        }
+        selectEl.innerHTML = '<option value="">Loading schools…</option>';
+        try {
+          var rows = [];
+          // Prefer complete Katsina directory (Primary/Secondary lists embedded in page)
+          function fromDirectory(tf) {
+            var KS = window.KATSINA_SCHOOLS || {};
+            var out = [];
+            Object.keys(KS).sort(function(a,b){ return a.localeCompare(b, undefined, {sensitivity:"base"}); }).forEach(function(lga) {
+              var block = KS[lga] || {};
+              var list = [];
+              if (tf === "primary") list = block.primary || [];
+              else if (tf === "secondary") list = block.secondary || [];
+              else list = [].concat(block.primary || [], block.secondary || []);
+              list.forEach(function(name) {
+                var type = tf === "primary" ? "primary" : (tf === "secondary" ? "secondary" : ((block.primary||[]).indexOf(name)>=0 ? "primary" : "secondary"));
+                if (!tf) {
+                  type = (block.primary || []).indexOf(name) >= 0 ? "primary" : "secondary";
+                }
+                out.push({
+                  id: "kt_" + type + "_" + lga.replace(/[^a-zA-Z0-9]+/g, "_") + "_" + String(name).replace(/[^a-zA-Z0-9]+/g, "_").slice(0, 60),
+                  name: name,
+                  town: lga,
+                  lga: lga,
+                  schoolType: type,
+                  source: "directory"
+                });
+              });
+            });
+            return out;
+          }
+          if (typeFilter === "primary" || typeFilter === "secondary") {
+            rows = fromDirectory(typeFilter);
+          } else {
+            try {
+              rows = await B().schools.listAll();
+            } catch (err1) {
+              console.warn("schools.list fallback", err1);
+              rows = [];
+            }
+            if (!rows || !rows.length) rows = fromDirectory(null);
+          }
+          if (!rows || !rows.length) {
+            selectEl.innerHTML = '<option value="">No schools found</option>';
+            return;
+          }
+          function placeOf(s) {
+            return String(s.town || s.location || s.lga || s.lgaName || s.city || "").trim();
+          }
+          function schoolNameOf(s) {
+            return String(s.name || s.schoolName || s.id || "").trim();
+          }
+          // A–Z: Town/Gari first, then School name
+          rows = rows.slice().sort(function(a, b) {
+            var pa = placeOf(a).toLowerCase(), pb = placeOf(b).toLowerCase();
+            if (pa && pb && pa !== pb) return pa.localeCompare(pb, undefined, { sensitivity: "base" });
+            if (pa && !pb) return -1;
+            if (!pa && pb) return 1;
+            return schoolNameOf(a).localeCompare(schoolNameOf(b), undefined, { sensitivity: "base" });
+          });
+          selectEl.innerHTML = '<option value="">Select school (' + rows.length + ')…</option>' +
+            rows.map(function(s) {
+              var place = placeOf(s);
+              var name = schoolNameOf(s);
+              var label = place ? (place + " — " + name) : name;
+              return '<option value="' + String(s.id).replace(/"/g, "") + '">' + label.replace(/</g, "&lt;") + "</option>";
+            }).join("");
+          selectEl.onchange = function() {
+            /* schoolId is the select value — no separate School ID field */
+            if (schoolIdEl) schoolIdEl.value = selectEl.value || '';
+          };
+        } catch (e) {
+          var msg = (e && e.message) ? String(e.message) : 'Failed to load schools';
+          if (/sign in/i.test(msg)) msg = 'Loading schools failed — try refresh. If empty, add schools in Firestore.';
+          selectEl.innerHTML = '<option value="">' + msg.replace(/</g,'&lt;') + '</option>';
+        }
+      }
+      function refreshSchoolDropdowns() {
+        fillSchoolSelect($id("hmSchoolSelect"), $id("hmSchoolId"), "primary");
+        fillSchoolSelect($id("prSchoolSelect"), $id("prSchoolId"), "secondary");
+        fillSchoolSelect($id("acuSchoolSelect"), $id("acuSchoolId"), null);
+      }
+      async function sendInvite(payload, statusEl) {
+        try {
+          if (!B()) throw new Error("Backend not ready");
+          const r = await B().invitations.create(payload);
+          msg(statusEl, "Invitation sent to "+r.email+" for school "+r.schoolId+". User must sign up, verify email, then sign in.", true);
+          return r;
+        } catch (e) {
+          msg(statusEl, e.message || String(e), false);
+          throw e;
+        }
+      }
+      // Headmaster form
+      const hmForm = $id("hmRegisterForm");
+      if (hmForm && !hmForm.dataset.bound) {
+        hmForm.dataset.bound = "1";
+        fillSchoolSelect($id("hmSchoolSelect"), $id("hmSchoolId"), "primary");
+        hmForm.addEventListener("submit", async (ev) => {
+          ev.preventDefault();
+          const schoolId = ($id("hmSchoolId").value || $id("hmSchoolSelect").value || "").trim();
+          if (!schoolId) return msg($id("hmFormStatus"), "Select a primary school.", false);
+          await sendInvite({
+            email: $id("hmEmail").value, fullName: $id("hmFullName").value, role: "headmaster",
+            schoolId, phone: $id("hmPhone").value, gender: $id("hmGender").value,
+            address: $id("hmAddress").value, forceReplace: !!($id("hmForceReplace") && $id("hmForceReplace").checked)
+          }, $id("hmFormStatus"));
+          if (typeof loadUsersByRole === "function") loadUsersByRole("headmaster", "headmastersTable");
+        });
+      }
+      // Principal form
+      const prForm = $id("prRegisterForm");
+      if (prForm && !prForm.dataset.bound) {
+        prForm.dataset.bound = "1";
+        fillSchoolSelect($id("prSchoolSelect"), $id("prSchoolId"), "secondary");
+        prForm.addEventListener("submit", async (ev) => {
+          ev.preventDefault();
+          const schoolId = ($id("prSchoolId").value || $id("prSchoolSelect").value || "").trim();
+          if (!schoolId) return msg($id("prFormStatus"), "Select a secondary school.", false);
+          await sendInvite({
+            email: $id("prEmail").value, fullName: $id("prFullName").value, role: "principal",
+            schoolId, phone: $id("prPhone").value, gender: $id("prGender").value,
+            address: $id("prAddress").value, forceReplace: !!($id("prForceReplace") && $id("prForceReplace").checked)
+          }, $id("prFormStatus"));
+          if (typeof loadUsersByRole === "function") loadUsersByRole("principal", "principalsTable");
+        });
+      }
+      // Admin create / invite form
+      const acuForm = $id("adminCreateUserForm");
+      if (acuForm && !acuForm.dataset.bound) {
+        acuForm.dataset.bound = "1";
+        fillSchoolSelect($id("acuSchoolSelect"), $id("acuSchoolId"), null);
+        const roleEl = $id("acuRole");
+        function syncAcuRole() {
+          const r = roleEl ? roleEl.value : "";
+          if ($id("acuTeacherFields")) $id("acuTeacherFields").style.display = r === "teacher" ? "block" : "none";
+          if ($id("acuStudentFields")) $id("acuStudentFields").style.display = r === "student" ? "block" : "none";
+        }
+        if (roleEl) roleEl.addEventListener("change", syncAcuRole);
+        syncAcuRole();
+        acuForm.addEventListener("submit", async (ev) => {
+          ev.preventDefault();
+          const schoolId = ($id("acuSchoolId").value || $id("acuSchoolSelect").value || "").trim();
+          const role = ($id("acuRole").value || "").trim();
+          if (!schoolId) return msg($id("acuStatus"), "Select a school — required for school linking.", false);
+          if (role === "student" && !($id("acuStudentId").value || "").trim()) {
+            return msg($id("acuStatus"), "Student invitations require an existing student record ID.", false);
+          }
+          try {
+            const result = await B().legacyCall("createUserByAdmin", {
+              email: $id("acuEmail").value, fullName: $id("acuName").value, role, schoolId,
+              phone: $id("acuPhone") && $id("acuPhone").value,
+              gender: $id("acuGender") && $id("acuGender").value,
+              studentId: $id("acuStudentId") && $id("acuStudentId").value,
+              qualification: $id("acuQualification") && $id("acuQualification").value,
+              specialization: $id("acuSpecialization") && $id("acuSpecialization").value,
+              forceReplace: !!($id("acuForceReplace") && $id("acuForceReplace").checked)
+            });
+            msg($id("acuStatus"), (result && result.notice) || "Invitation created.", true);
+          } catch (e) {
+            msg($id("acuStatus"), e.message || String(e), false);
+          }
+        });
+      }
+      // Teacher invite
+      const tForm = $id("teacherRegisterForm");
+      if (tForm && !tForm.dataset.bound) {
+        tForm.dataset.bound = "1";
+        tForm.addEventListener("submit", async (ev) => {
+          ev.preventDefault();
+          let schoolId = ($id("tSchoolId").value || "").trim();
+          try {
+            if (!schoolId && B()) {
+              const actor = await B().loadActor();
+              schoolId = actor.schoolId || "";
+              if ($id("tSchoolId")) $id("tSchoolId").value = schoolId;
+            }
+            if (!schoolId) return msg($id("tFormStatus"), "School ID is required.", false);
+            const teacherId = schoolId + "_T_" + Date.now().toString(36).toUpperCase();
+            await sendInvite({
+              email: $id("tEmail").value, fullName: $id("tFullName").value, role: "teacher",
+              schoolId, phone: $id("tPhone").value, gender: $id("tGender").value,
+              qualification: $id("tQualification").value, specialization: $id("tSpecialization").value,
+              teacherId
+            }, $id("tFormStatus"));
+            if (typeof loadUsersByRole === "function") loadUsersByRole("teacher", "teachersTable");
+          } catch (e) { /* status already set */ }
+        });
+      }
+      // Student register
+      const sForm = $id("studentRegisterForm");
+      if (sForm && !sForm.dataset.bound) {
+        sForm.dataset.bound = "1";
+        sForm.addEventListener("submit", async (ev) => {
+          ev.preventDefault();
+          const statusEl = $id("stFormStatus");
+          try {
+            if (!B()) throw new Error("Backend not ready");
+            const schoolId = ($id("stSchoolId").value || "").trim();
+            if (!schoolId) throw new Error("School ID is required.");
+            const studentId = await B().students.create(schoolId, {
+              fullName: $id("stFullName").value,
+              admissionNo: $id("stAdmissionNo").value,
+              classId: $id("stClassId").value,
+              academicSessionId: $id("stSessionId").value || null,
+              gender: $id("stGender").value || null,
+              dateOfBirth: $id("stDob").value || null,
+              email: $id("stEmail").value || null,
+              phone: $id("stPhone").value || null,
+              parentName: $id("stParentName").value || null,
+              parentPhone: $id("stParentPhone").value || null
+            });
+            let extra = " Student ID: " + studentId;
+            if ($id("stAlsoInvite") && $id("stAlsoInvite").checked) {
+              const email = ($id("stEmail").value || "").trim();
+              if (!email) throw new Error("Email required to send login invitation.");
+              await B().invitations.create({
+                email, fullName: $id("stFullName").value, role: "student",
+                schoolId, studentId, phone: $id("stPhone").value
+              });
+              extra += " Invitation sent to " + email;
+            }
+            msg(statusEl, "Student registered." + extra, true);
+            if (typeof loadUsersByRole === "function") loadUsersByRole("student", "studentsTable");
+          } catch (e) {
+            msg(statusEl, e.message || String(e), false);
+          }
+        });
+      }
+      refreshSchoolDropdowns();
+      setTimeout(refreshSchoolDropdowns, 500);
+      setTimeout(refreshSchoolDropdowns, 1500);
+      setTimeout(refreshSchoolDropdowns, 3000);
+    })();
+
   
   </script>
 
@@ -7129,6 +8113,41 @@ export function createSchoolBackend({ db, auth, fs }) {
   // ================================================================== schools
   const schools = {
     async get(schoolId) { const s = await getDoc(doc(db, "schools", schoolId)); return s.exists() ? { id: s.id, ...s.data() } : null; },
+    async listAll() {
+      // Schools are publicly readable (rules: allow read: if true). Do NOT require loadActor —
+      // that caused "Sign in first" in registration dropdowns when auth module timing differed.
+      const snap = await getDocs(collection(db, "schools"));
+      let rows = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      try {
+        const actor = await loadActor();
+        const r = normRole(actor.role);
+        if (r !== ROLES.SUPER_ADMIN && r !== "superadmin" && r !== ROLES.ADMIN && r !== "admin") {
+          if (actor.schoolId) rows = rows.filter((s) => s.id === actor.schoolId);
+        }
+      } catch (_) { /* unauthenticated or not ready: still return list for dropdowns */ }
+      // Default A–Z by town then school name
+      rows.sort(function(a, b) {
+        function place(s){ return String(s.town || s.location || s.lga || s.lgaName || s.city || "").trim().toLowerCase(); }
+        function name(s){ return String(s.name || s.schoolName || s.id || "").trim().toLowerCase(); }
+        var pa = place(a), pb = place(b);
+        if (pa && pb && pa !== pb) return pa < pb ? -1 : 1;
+        if (pa && !pb) return -1;
+        if (!pa && pb) return 1;
+        return name(a) < name(b) ? -1 : name(a) > name(b) ? 1 : 0;
+      });
+      return rows;
+    },
+    async listByType(schoolType) {
+      const all = await this.listAll();
+      if (!schoolType) return all;
+      const t = String(schoolType).toLowerCase();
+      return all.filter((s) => {
+        const st = String(s.schoolType || s.type || "").toLowerCase();
+        if (t === "primary") return st === "primary";
+        if (t === "secondary") return ["secondary", "junior_secondary", "senior_secondary"].includes(st) || st === "secondary";
+        return st === t;
+      });
+    },
     /** School details a school Admin may edit (rules enforce the allowed fields). */
     async updateDetails(schoolId, patch) {
       const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
@@ -7243,7 +8262,17 @@ export function createSchoolBackend({ db, auth, fs }) {
       const id = Ids.student(schoolId, admissionNo); const ref = doc(db, "students", id);
       if ((await getDoc(ref)).exists()) fail("A student with this admission number already exists.");
       const b = writeBatch(db);
-      b.set(ref, { schoolId, studentId: id, admissionNo, fullName, classId: input.classId, gender: input.gender || null, dateOfBirth: input.dateOfBirth || null, userId: null, status: "active", createdBy: actor.uid, createdAt: ts(), updatedAt: ts() });
+      b.set(ref, {
+        schoolId, studentId: id, admissionNo, fullName, classId: input.classId,
+        gender: input.gender || null, dateOfBirth: input.dateOfBirth || null,
+        academicSessionId: input.academicSessionId || null,
+        parentName: input.parentName ? String(input.parentName).slice(0, 120) : null,
+        parentPhone: input.parentPhone ? String(input.parentPhone).slice(0, 40) : null,
+        phone: input.phone ? String(input.phone).slice(0, 40) : null,
+        email: input.email ? normalizeEmail(input.email) : null,
+        userId: null, status: input.status || "active",
+        createdBy: actor.uid, createdAt: ts(), updatedAt: ts()
+      });
       addAudit(b, actor, { action: "student_create", schoolId, targetType: "students", targetId: id, summary: { classId: input.classId } });
       await b.commit(); return id;
     },
@@ -7422,26 +8451,54 @@ export function createSchoolBackend({ db, auth, fs }) {
   const invitations = {
     list: (schoolId) => listBySchool("invitations", schoolId),
     /** Creates an invitation. The invited person later signs up + verifies e-mail + claims it. */
-    async create({ email, fullName, role, schoolId, permissions, studentId, days = 14 }) {
+    async create({ email, fullName, role, schoolId, permissions, studentId, days = 14, phone, gender, address, qualification, specialization, teacherId, forceReplace = false, profileExtras }) {
       const actor = await loadActor();
       role = normRole(role); email = normalizeEmail(email); fullName = String(fullName || "").trim();
       if (!ROLE_LIST.includes(role) || role === ROLES.SUPER_ADMIN) fail("That role cannot be invited.");
       if (!invitableRoles(actor).includes(role)) fail("You are not allowed to invite a " + role + ".");
       if (!isValidEmail(email)) fail("Enter a valid email address."); if (!isValidName(fullName)) fail("Enter a valid full name.");
+      if (!schoolId) fail("Select a school. Every account must be linked to a school.");
       const school = await schools.get(schoolId); if (!school) fail("School not found.");
-      if (!roleMatchesSchoolType(role, school.schoolType)) fail(role === "headmaster" ? "A Headmaster belongs to a Primary school." : "A Principal belongs to a Secondary school.");
-      if (role !== "super_admin" && actor.role !== ROLES.SUPER_ADMIN) need(actor, role === "teacher" ? OPERATION_PERMS.inviteTeacher : OPERATION_PERMS.inviteStudent, schoolId);
+      if (!roleMatchesSchoolType(role, school.schoolType)) fail(role === "headmaster" ? "A Headmaster belongs to a Primary school." : role === "principal" ? "A Principal belongs to a Secondary school." : "Role does not match school type.");
+      // Super Admin may invite leaders/admins; school staff only teacher/student with perms
+      if (actor.role !== ROLES.SUPER_ADMIN) {
+        if (role === "teacher") need(actor, OPERATION_PERMS.inviteTeacher, schoolId);
+        else if (role === "student") need(actor, OPERATION_PERMS.inviteStudent, schoolId);
+        else fail("Only a Super Admin can invite a " + role + ".");
+        if (actor.schoolId && actor.schoolId !== schoolId) fail("You may only invite users to your own school.");
+      }
+      // Leadership uniqueness: one active headmaster/principal per school unless forceReplace
+      if (role === "headmaster" || role === "principal") {
+        const existing = await getDocs(query(collection(db, "users"), where("schoolId", "==", schoolId), where("role", "==", role), where("status", "==", "active")));
+        if (!existing.empty && !forceReplace) {
+          fail("This school already has an active " + role + ". Enable 'Replace existing leader' to reassign (audited).");
+        }
+      }
       const ref = doc(db, "invitations", email);
       const prev = await getDoc(ref);
       if (prev.exists() && prev.data().status === "claimed") fail("This email already has an account.");
-      if (prev.exists() && prev.data().status === "pending" && prev.data().expiresAt.toMillis() > Date.now()) fail("A pending invitation already exists for this email. Revoke it first.");
+      if (prev.exists() && prev.data().status === "pending" && prev.data().expiresAt && prev.data().expiresAt.toMillis && prev.data().expiresAt.toMillis() > Date.now()) fail("A pending invitation already exists for this email. Revoke it first.");
       if (role === "student") {
         if (!studentId) fail("Choose the student record to link this account to.");
         const st = await getDoc(doc(db, "students", studentId));
         if (!st.exists() || st.data().schoolId !== schoolId) fail("Student record not found in this school.");
         if (st.data().userId) fail("This student already has an account.");
       }
-      const data = { email, fullName, role, schoolId, status: "pending", invitedBy: actor.uid, expiresAt: Timestamp.fromMillis(Date.now() + Math.min(30, days) * 864e5 - 6e4), createdAt: ts(), updatedAt: ts() };
+      const data = {
+        email, fullName, role, schoolId,
+        schoolName: school.name || "",
+        status: "pending", invitedBy: actor.uid,
+        expiresAt: Timestamp.fromMillis(Date.now() + Math.min(30, Math.max(1, days || 14)) * 864e5 - 6e4),
+        createdAt: ts(), updatedAt: ts()
+      };
+      if (phone) data.phone = String(phone).slice(0, 40);
+      if (gender) data.gender = String(gender).slice(0, 20);
+      if (address) data.address = String(address).slice(0, 300);
+      if (qualification) data.qualification = String(qualification).slice(0, 120);
+      if (specialization) data.specialization = String(specialization).slice(0, 120);
+      if (teacherId) data.teacherId = String(teacherId).slice(0, 80);
+      if (profileExtras && typeof profileExtras === "object") data.profileExtras = profileExtras;
+      if (forceReplace && (role === "headmaster" || role === "principal")) data.forceReplace = true;
       if (permissions !== undefined) { need(actor, OPERATION_PERMS.setUserPermissions, schoolId); data.permissions = cleanPerms(role, permissions); }
       if (role === "student") data.studentId = studentId;
       const b = writeBatch(db);
@@ -7478,14 +8535,35 @@ export function createSchoolBackend({ db, auth, fs }) {
       const u = auth.currentUser; if (!u) fail("Sign in first.");
       if (u.emailVerified !== true) fail("Verify your email address first.");
       const inv = await invitations.mine(); if (!inv) return null;
-      const prof = { uid: u.uid, email: inv.email, fullName: inv.fullName, role: inv.role, schoolId: inv.schoolId, status: "active", createdBy: inv.invitedBy, source: "invitation", createdAt: ts(), updatedAt: ts() };
+      if (!inv.schoolId) fail("Invitation has no school linked. Contact Super Admin.");
+      // Only fields allowed by Firestore claimKeys (plus optional phone/gender if rules permit)
+      const prof = {
+        uid: u.uid, email: inv.email, fullName: inv.fullName, role: inv.role,
+        schoolId: inv.schoolId, status: "active",
+        createdBy: inv.invitedBy, source: "invitation",
+        createdAt: ts(), updatedAt: ts()
+      };
       if (inv.permissions !== undefined) prof.permissions = inv.permissions;
       if (inv.studentId) prof.studentId = inv.studentId;
+      if (inv.phone) prof.phone = inv.phone;
+      if (inv.gender) prof.gender = inv.gender;
+      if (inv.address) prof.address = inv.address;
+      if (inv.qualification) prof.qualification = inv.qualification;
+      if (inv.specialization) prof.specialization = inv.specialization;
+      if (inv.teacherId) prof.teacherId = inv.teacherId;
       const b = writeBatch(db);
+      // Replace previous leader if invitation was issued with forceReplace
+      if (inv.forceReplace && (inv.role === "headmaster" || inv.role === "principal")) {
+        const existing = await getDocs(query(collection(db, "users"), where("schoolId", "==", inv.schoolId), where("role", "==", inv.role), where("status", "==", "active")));
+        existing.forEach((d) => {
+          if (d.id !== u.uid) b.update(d.ref, { status: "inactive", updatedAt: ts(), replacedBy: u.uid });
+        });
+      }
       b.set(doc(db, "users", u.uid), prof);
       b.update(doc(db, "invitations", inv.id), { status: "claimed", claimedBy: u.uid, claimedAt: ts(), updatedAt: ts() });
       if (inv.studentId) b.update(doc(db, "students", inv.studentId), { userId: u.uid, updatedAt: ts() });
-      b.set(doc(collection(db, "auditLogs")), { action: "invitation_claimed", actorId: u.uid, actorRole: inv.role, actorEmail: inv.email, schoolId: inv.schoolId, targetType: "invitations", targetId: inv.id, summary: { role: inv.role }, createdAt: ts() });
+      /* School leaderUid stamp: Super Admin can set via schools.updateDetails / console; claim focuses on users.schoolId */
+      b.set(doc(collection(db, "auditLogs")), { action: "invitation_claimed", actorId: u.uid, actorRole: inv.role, actorEmail: inv.email, schoolId: inv.schoolId, targetType: "invitations", targetId: inv.id, summary: { role: inv.role, schoolId: inv.schoolId }, createdAt: ts() });
       await b.commit();
       return { uid: u.uid, role: inv.role, schoolId: inv.schoolId, fullName: inv.fullName };
     }
@@ -7932,12 +9010,18 @@ export function createSchoolBackend({ db, auth, fs }) {
     switch (name) {
       case "createUserByAdmin": {
         const actor = await loadActor();
-        const schoolId = data.schoolId || actor.schoolId;
-        if (!schoolId) fail("Your account is not linked to a school yet. A Super Admin must assign your school first.");
-        const studentId = data.studentId;
-        await invitations.create({ email: data.email, fullName: data.fullName, role: data.role, schoolId, studentId, permissions: data.permissions });
-        return { uid: null, email: normalizeEmail(data.email), role: normRole(data.role), verificationEmailSent: false, invited: true,
-          notice: "Invitation created. The person must open the login page, choose 'Activate invited account', sign up with this email, verify it, and the account is then created with the role you set. No password is set by an Admin on the Spark plan." };
+        let schoolId = data.schoolId || actor.schoolId || null;
+        if (!schoolId) fail("Select a school for this user. Super Admin accounts are not school-linked; every Headmaster, Principal, Teacher and Student must be assigned a schoolId when invited.");
+        if (actor.role !== ROLES.SUPER_ADMIN && actor.schoolId && actor.schoolId !== schoolId) fail("You can only invite users to your own school.");
+        await invitations.create({
+          email: data.email, fullName: data.fullName, role: data.role, schoolId,
+          studentId: data.studentId, permissions: data.permissions,
+          phone: data.phone, gender: data.gender, address: data.address,
+          qualification: data.qualification, specialization: data.specialization,
+          teacherId: data.teacherId, forceReplace: !!data.forceReplace
+        });
+        return { uid: null, email: normalizeEmail(data.email), role: normRole(data.role), schoolId, verificationEmailSent: false, invited: true,
+          notice: "Invitation created for " + normalizeEmail(data.email) + " (school: " + schoolId + "). User must: 1) Open login 2) Sign up with this email 3) Verify email 4) Sign in — profile + schoolId are applied automatically. No admin-set password on Spark." };
       }
       case "setUserStatus": await users.setStatus(data.uid, data.status); return { ok: true, status: data.status };
       case "setUserPermissions": await users.setPermissions(data.uid, data.permissions); return { ok: true, permissions: data.permissions };
@@ -9345,5 +10429,529 @@ service firebase.storage {
   });
 })();
 </script>
+
+<script type="module">
+/* Role registration (Spark-safe): secondary Auth app creates the user without signing out Super Admin */
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signOut as secSignOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBlEw1Pb5HzIePo5SlolYm9ofvCUSBS0wM",
+  authDomain: "mmsayaya-academy.firebaseapp.com",
+  projectId: "mmsayaya-academy",
+  storageBucket: "mmsayaya-academy.firebasestorage.app",
+  messagingSenderId: "261003419792",
+  appId: "1:261003419792:web:9710d497a942a92c10b815"
+};
+
+function primaryApp() {
+  return getApps().find(a => a.name === "[DEFAULT]") || initializeApp(firebaseConfig);
+}
+function secondaryAuth() {
+  let app;
+  try { app = getApp("SecondaryReg"); }
+  catch (_) { app = initializeApp(firebaseConfig, "SecondaryReg"); }
+  return getAuth(app);
+}
+
+window.ME_registerAccount = async function(payload) {
+  const { email, password, fullName, role, schoolId, phone, gender, extra } = payload;
+  if (!email || !password || password.length < 8) throw new Error("Valid email and password (min 8) are required.");
+  if (!schoolId) throw new Error("School is required.");
+  if (!fullName) throw new Error("Full name is required.");
+  const allowed = ["student", "teacher", "headmaster", "principal", "admin"];
+  if (!allowed.includes(role)) throw new Error("Invalid role.");
+
+  // If school chosen from Katsina directory, ensure a Firestore schools/{id} doc exists
+  let resolvedSchoolId = schoolId;
+  try {
+    const db0 = getFirestore(primaryApp());
+    const sref = doc(db0, "schools", schoolId);
+    const ssnap = await getDoc(sref);
+    if (!ssnap.exists()) {
+      // Parse directory id: kt_primary_LGA_Name or kt_secondary_...
+      let schoolType = "secondary";
+      let name = schoolId;
+      let town = "";
+      if (String(schoolId).startsWith("kt_")) {
+        const parts = String(schoolId).split("_");
+        schoolType = parts[1] === "primary" ? "primary" : "secondary";
+        // recover name/town from selected option label if provided
+        if (payload.schoolName) name = payload.schoolName;
+        if (payload.schoolTown) town = payload.schoolTown;
+        await setDoc(sref, {
+          name: name,
+          schoolType: schoolType,
+          town: town || null,
+          lga: town || null,
+          state: "Katsina",
+          status: "active",
+          source: "katsina_directory",
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      }
+    }
+    resolvedSchoolId = schoolId;
+  } catch (e) {
+    console.warn("school ensure", e);
+  }
+
+  const sec = secondaryAuth();
+  let cred;
+  try {
+    cred = await createUserWithEmailAndPassword(sec, String(email).trim().toLowerCase(), password);
+  } catch (e) {
+    if (e.code === "auth/email-already-in-use") throw new Error("This email is already registered.");
+    throw e;
+  }
+  const uid = cred.user.uid;
+  const db = getFirestore(primaryApp());
+  const profile = {
+    uid, email: String(email).trim().toLowerCase(), fullName: String(fullName).trim(),
+    role, schoolId: resolvedSchoolId, status: "active",
+    phone: phone || null, gender: gender || null,
+    source: "admin_registration", createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
+    verificationBypass: true
+  };
+  if (extra && typeof extra === "object") Object.assign(profile, extra);
+  try {
+    await setDoc(doc(db, "users", uid), profile);
+  } catch (e) {
+    try { await secSignOut(sec); } catch (_) {}
+    throw new Error("Auth user created but profile write failed: " + (e.message || e) + ". Deploy updated Firestore rules allowing admin user create.");
+  }
+  try { await secSignOut(sec); } catch (_) {}
+  return { uid, email: profile.email, role, schoolId };
+};
+
+// ----- Teacher dashboard -----
+window.__initTeacherDash = async function() {
+  const B = window.MMSAYAYA_BACKEND;
+  const $ = (id) => document.getElementById(id);
+  if (!$("teacherSchoolApp")) return;
+  let actor = null;
+  try { actor = B ? await B.loadActor() : null; } catch (e) { console.warn(e); }
+  if ($("teacherUserName") && actor) $("teacherUserName").textContent = actor.fullName || actor.email || "Teacher";
+  if ($("teacherUserRole")) $("teacherUserRole").textContent = "Teacher";
+  // Nav
+  document.querySelectorAll("#teacherSidebarNav .nav-item").forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll("#teacherSidebarNav .nav-item").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const v = btn.getAttribute("data-tview");
+      document.querySelectorAll("#teacherContent .view").forEach(x => x.classList.remove("active"));
+      const el = $("tview-" + v);
+      if (el) el.classList.add("active");
+      if ($("teacherPageTitle")) $("teacherPageTitle").textContent = btn.textContent.trim();
+      if (v === "t-classes") loadTeacherClasses();
+      if (v === "t-results") loadTeacherResults();
+    };
+  });
+  if ($("teacherLogoutBtn")) $("teacherLogoutBtn").onclick = async () => {
+    try {
+      const { getAuth, signOut } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js");
+      await signOut(getAuth(primaryApp()));
+    } catch (_) {}
+    location.hash = "login";
+    location.reload();
+  };
+  async function loadTeacherClasses() {
+    const box = $("teacherClassesList");
+    if (!box || !B || !actor) return;
+    try {
+      const rows = await B.teacherAssignments.list(actor.schoolId);
+      const mine = rows.filter(r => r.teacherId === actor.uid && r.status === "active");
+      if (!mine.length) { box.innerHTML = "<p style='color:#546e7a;'>No class assignments yet.</p>"; return; }
+      box.innerHTML = "<table><thead><tr><th>Class</th><th>Subjects</th><th>Session</th></tr></thead><tbody>" +
+        mine.map(r => "<tr><td>"+r.classId+"</td><td>"+(r.subjectIds||[]).join(", ")+"</td><td>"+(r.academicSessionId||"")+"</td></tr>").join("") +
+        "</tbody></table>";
+      // populate marks class dropdown
+      const sel = $("tmClass");
+      if (sel) {
+        sel.innerHTML = '<option value="">Choose Class</option>' + mine.map(r => '<option value="'+r.classId+'" data-subjects="'+(r.subjectIds||[]).join(",")+'" data-session="'+(r.academicSessionId||'')+'">'+r.classId+'</option>').join("");
+        sel.onchange = () => {
+          const opt = sel.selectedOptions[0];
+          const subs = (opt && opt.getAttribute("data-subjects") || "").split(",").filter(Boolean);
+          const ss = $("tmSubject");
+          if (ss) ss.innerHTML = '<option value="">Choose Subject</option>' + subs.map(s => '<option value="'+s+'">'+s+'</option>').join("");
+          if ($("tmSessionId") && opt) $("tmSessionId").value = opt.getAttribute("data-session") || "";
+        };
+      }
+    } catch (e) { box.innerHTML = "<p style='color:#c62828;'>"+(e.message||e)+"</p>"; }
+  }
+  async function loadTeacherResults() {
+    const box = $("teacherResultsList");
+    if (!box || !B || !actor) return;
+    try {
+      const rows = await B.results.list(actor.schoolId, {});
+      const mine = rows.filter(r => r.teacherId === actor.uid);
+      box.innerHTML = mine.length ? "<table><thead><tr><th>Student</th><th>Subject</th><th>Total</th><th>Status</th></tr></thead><tbody>" +
+        mine.map(r => "<tr><td>"+r.studentId+"</td><td>"+r.subjectId+"</td><td>"+r.total+"</td><td>"+r.status+"</td></tr>").join("") + "</tbody></table>"
+        : "<p style='color:#546e7a;'>No results yet.</p>";
+    } catch (e) { box.innerHTML = "<p style='color:#c62828;'>"+(e.message||e)+"</p>"; }
+  }
+  if ($("tmLoadStudents")) $("tmLoadStudents").onclick = async () => {
+    const status = $("tmStatus");
+    const body = $("tmMarksBody");
+    try {
+      if (!B || !actor) throw new Error("Not ready");
+      const classId = $("tmClass").value;
+      const subjectId = $("tmSubject").value;
+      if (!classId || !subjectId) throw new Error("Choose class and subject.");
+      const students = await B.students.list(actor.schoolId, classId);
+      const active = students.filter(s => (s.status||"active")==="active");
+      if (!active.length) { body.innerHTML = "<tr><td colspan='6' style='padding:16px;text-align:center;'>No students in this class.</td></tr>"; return; }
+      body.innerHTML = active.map(s => {
+        const sid = s.studentId || s.id;
+        return "<tr data-sid='"+sid+"'><td>"+(s.fullName||sid)+"</td>" +
+          "<td><input type='number' min='0' max='20' step='0.5' class='ca1' style='width:64px'/></td>" +
+          "<td><input type='number' min='0' max='20' step='0.5' class='ca2' style='width:64px'/></td>" +
+          "<td><input type='number' min='0' max='60' step='0.5' class='ex' style='width:64px'/></td>" +
+          "<td class='tot'>0</td>" +
+          "<td><button type='button' class='btn btn-primary btn-save-mark' style='padding:6px 10px;font-size:0.8rem;'>Save</button></td></tr>";
+      }).join("");
+      body.querySelectorAll("tr").forEach(tr => {
+        const recalc = () => {
+          const a = Number(tr.querySelector(".ca1").value)||0;
+          const b = Number(tr.querySelector(".ca2").value)||0;
+          const c = Number(tr.querySelector(".ex").value)||0;
+          tr.querySelector(".tot").textContent = String(Math.min(100, a+b+c));
+        };
+        tr.querySelectorAll("input").forEach(inp => inp.addEventListener("input", recalc));
+        tr.querySelector(".btn-save-mark").onclick = async () => {
+          const ca1 = Number(tr.querySelector(".ca1").value)||0;
+          const ca2 = Number(tr.querySelector(".ca2").value)||0;
+          const ex = Number(tr.querySelector(".ex").value)||0;
+          if (ca1 > 20 || ca2 > 20 || ex > 60 || ca1 < 0 || ca2 < 0 || ex < 0) {
+            status.textContent = "Invalid marks: CA max 20 each, Exam max 60."; status.style.color = "#c62828"; return;
+          }
+          const total = ca1 + ca2 + ex;
+          try {
+            await B.marks.save(actor.schoolId, {
+              academicSessionId: $("tmSessionId").value.trim(),
+              term: $("tmTerm").value.trim() || "First Term",
+              classId, subjectId,
+              studentId: tr.getAttribute("data-sid"),
+              scores: { firstCA: ca1, secondCA: ca2, examination: ex },
+              status: "submitted",
+              maxComponent: 60,
+              maxTotal: 100
+            });
+            status.textContent = "Saved total " + total + " for " + tr.getAttribute("data-sid");
+            status.style.color = "#2e7d32";
+          } catch (e) {
+            status.textContent = e.message || String(e); status.style.color = "#c62828";
+          }
+        };
+      });
+      status.textContent = active.length + " students loaded."; status.style.color = "#546e7a";
+    } catch (e) {
+      if (status) { status.textContent = e.message || String(e); status.style.color = "#c62828"; }
+    }
+  };
+  loadTeacherClasses();
+};
+
+// ----- Student dashboard -----
+window.__initStudentDash = async function() {
+  const B = window.MMSAYAYA_BACKEND;
+  const $ = (id) => document.getElementById(id);
+  let actor = null;
+  try { actor = B ? await B.loadActor() : null; } catch (e) {}
+  if ($("studentUserName") && actor) $("studentUserName").textContent = actor.fullName || "Student";
+  // Certificate title by school type
+  try {
+    if (actor && actor.schoolId && B) {
+      const sch = await B.schools.get(actor.schoolId);
+      const t = String(sch && sch.schoolType || "").toLowerCase();
+      if ($("studentCertTitle")) $("studentCertTitle").textContent = t === "primary" ? "My Primary Certificate" : "My Secondary Certificate";
+      if ($("studentBrandSub")) $("studentBrandSub").textContent = sch && sch.name || "Student";
+    }
+  } catch (_) {}
+  document.querySelectorAll("#studentSidebarNav .nav-item").forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll("#studentSidebarNav .nav-item").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const v = btn.getAttribute("data-stview");
+      document.querySelectorAll("#studentContent .view").forEach(x => x.classList.remove("active"));
+      const el = $("stview-" + v);
+      if (el) el.classList.add("active");
+      if ($("studentPageTitle")) $("studentPageTitle").textContent = btn.textContent.trim();
+      if (v === "st-subjects") loadSubjects();
+      if (v === "st-results") loadResults();
+      if (v === "st-report") loadReport();
+    };
+  });
+  if ($("studentLogoutBtn")) $("studentLogoutBtn").onclick = async () => {
+    try {
+      const { getAuth, signOut } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js");
+      await signOut(getAuth(primaryApp()));
+    } catch (_) {}
+    location.hash = "login";
+    location.reload();
+  };
+  async function loadSubjects() {
+    const box = $("studentSubjectsList");
+    if (!box || !B || !actor) return;
+    try {
+      let classId = actor.classId;
+      if (!classId && actor.studentId) {
+        const st = await getDoc(doc(getFirestore(primaryApp()), "students", actor.studentId));
+        if (st.exists()) classId = st.data().classId;
+      }
+      if (!classId) { box.innerHTML = "<p style='color:#546e7a;'>No class assigned.</p>"; return; }
+      const rows = await B.classSubjects.listByClass(actor.schoolId, classId);
+      const active = rows.filter(r => r.status === "active");
+      box.innerHTML = active.length ? "<ul style='line-height:1.9;'>" + active.map(r => "<li>"+(r.subjectName||r.subjectId)+"</li>").join("") + "</ul>"
+        : "<p style='color:#546e7a;'>No subjects linked to your class yet.</p>";
+    } catch (e) { box.innerHTML = "<p style='color:#c62828;'>"+(e.message||e)+"</p>"; }
+  }
+  async function loadResults() {
+    const box = $("studentResultsList");
+    if (!box || !B || !actor) return;
+    try {
+      const sid = actor.studentId || actor.uid;
+      const rows = await B.results.list(actor.schoolId, { studentId: sid });
+      const pub = rows.filter(r => r.status === "published" || r.status === "submitted");
+      box.innerHTML = pub.length ? "<table><thead><tr><th>Subject</th><th>Total</th><th>Status</th></tr></thead><tbody>" +
+        pub.map(r => "<tr><td>"+r.subjectId+"</td><td>"+r.total+"</td><td>"+r.status+"</td></tr>").join("") + "</tbody></table>"
+        : "<p style='color:#546e7a;'>No results available.</p>";
+    } catch (e) { box.innerHTML = "<p style='color:#c62828;'>"+(e.message||e)+"</p>"; }
+  }
+  async function loadReport() {
+    const box = $("studentReportCard");
+    if (!box || !B || !actor) return;
+    try {
+      const sid = actor.studentId;
+      if (!sid) { box.innerHTML = "<p style='color:#546e7a;'>Student record not linked.</p>"; return; }
+      const rows = await B.reportCards.list(actor.schoolId, { studentId: sid, status: "published" });
+      box.innerHTML = rows.length ? rows.map(r => "<div style='margin-bottom:12px;padding:12px;border:1px solid #e2e8f0;border-radius:10px;'><strong>"+ (r.term||"") +" — "+(r.status)+"</strong><pre style='white-space:pre-wrap;font-size:0.85rem;'>"+JSON.stringify(r.subjectResults||[],null,2)+"</pre></div>").join("")
+        : "<p style='color:#546e7a;'>No published report card yet.</p>";
+    } catch (e) { box.innerHTML = "<p style='color:#c62828;'>"+(e.message||e)+"</p>"; }
+  }
+  loadSubjects();
+};
+
+// School leadership dash init (promotion/term stubs)
+window.__initSchoolDash = function() {
+  const $ = (id) => document.getElementById(id);
+  // Ensure promotion & term views exist
+  const content = document.querySelector("#schoolApp .content") || document.getElementById("schoolContent");
+  if (content && !document.getElementById("sview-s-promotion")) {
+    const wrap = document.createElement("div");
+    wrap.innerHTML = `
+      <div class="view" id="view-s-promotion"><div class="card"><div class="card-header"><h2>Promotion</h2></div>
+        <div class="card-body"><p style="color:#546e7a;">Promote students between classes within this school. Use Students Management to move students when authorized.</p></div></div></div>
+      <div class="view" id="view-s-term"><div class="card"><div class="card-header"><h2>Term</h2></div>
+        <div class="card-body"><p style="color:#546e7a;">Manage academic terms via Sessions. Set the current term for marks and report cards.</p>
+        <button type="button" class="btn btn-outline" data-sview="s-sessions">Open Sessions</button></div></div></div>`;
+    // Only append if school content uses view-s-* pattern - check existing
+  }
+  document.querySelectorAll("#schoolSidebarNav .nav-item").forEach(btn => {
+    if (btn.dataset.sBound) return;
+    btn.dataset.sBound = "1";
+  });
+};
+
+// Wire registration forms to ME_registerAccount
+function wirePassReg() {
+  const $ = (id) => document.getElementById(id);
+  async function handleLeader(formId, role, emailId, passId, nameId, phoneId, genderId, schoolIdEl, statusId, forceId) {
+    const form = $(formId);
+    if (!form || form.dataset.passBound) return;
+    form.dataset.passBound = "1";
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      const st = $(statusId);
+      try {
+        let schoolId = ($(schoolIdEl) && $(schoolIdEl).value || "").trim();
+        if (!schoolId && formId === "hmRegisterForm" && $("hmSchoolSelect")) schoolId = $("hmSchoolSelect").value.trim();
+        if (!schoolId && formId === "prRegisterForm" && $("prSchoolSelect")) schoolId = $("prSchoolSelect").value.trim();
+        if (!schoolId) throw new Error("Select a school from the list.");
+        const sel = formId === "hmRegisterForm" ? $("hmSchoolSelect") : (formId === "prRegisterForm" ? $("prSchoolSelect") : null);
+        let schoolName = "", schoolTown = "";
+        if (sel && sel.selectedOptions && sel.selectedOptions[0]) {
+          const label = sel.selectedOptions[0].textContent || "";
+          const parts = label.split(" — ");
+          if (parts.length >= 2) { schoolTown = parts[0].trim(); schoolName = parts.slice(1).join(" — ").trim(); }
+          else schoolName = label.trim();
+        }
+        const r = await window.ME_registerAccount({
+          email: $(emailId).value, password: $(passId).value, fullName: $(nameId).value,
+          role, schoolId, phone: $(phoneId) && $(phoneId).value, gender: $(genderId) && $(genderId).value,
+          schoolName, schoolTown
+        });
+        if (st) { st.style.color = "#2e7d32"; st.textContent = "Account created: "+r.email+" → school "+r.schoolId+" (UID linked). They can sign in now."; }
+      } catch (e) {
+        if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); }
+      }
+    }, true);
+  }
+  handleLeader("hmRegisterForm", "headmaster", "hmEmail", "hmPassword", "hmFullName", "hmPhone", "hmGender", "hmSchoolId", "hmFormStatus");
+  handleLeader("prRegisterForm", "principal", "prEmail", "prPassword", "prFullName", "prPhone", "prGender", "prSchoolId", "prFormStatus");
+  const tForm = $("teacherRegisterForm");
+  if (tForm && !tForm.dataset.passBound) {
+    tForm.dataset.passBound = "1";
+    tForm.addEventListener("submit", async (ev) => {
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      const st = $("tFormStatus");
+      try {
+        let schoolId = ($("tSchoolId").value || "").trim();
+        if (!schoolId && window.MMSAYAYA_BACKEND) {
+          const a = await window.MMSAYAYA_BACKEND.loadActor();
+          schoolId = a.schoolId || "";
+        }
+        const r = await window.ME_registerAccount({
+          email: $("tEmail").value, password: $("tPassword").value, fullName: $("tFullName").value,
+          role: "teacher", schoolId, phone: $("tPhone").value, gender: $("tGender").value,
+          extra: { qualification: $("tQualification") && $("tQualification").value, specialization: $("tSpecialization") && $("tSpecialization").value }
+        });
+        if (st) { st.style.color = "#2e7d32"; st.textContent = "Teacher account created: "+r.email; }
+      } catch (e) { if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); } }
+    }, true);
+  }
+  const sForm = $("studentRegisterForm");
+  if (sForm && !sForm.dataset.passBound) {
+    sForm.dataset.passBound = "1";
+    // school -> classes cascade
+    const fillStSchools = async () => {
+      const sel = $("stSchoolSelect");
+      if (!sel || !window.MMSAYAYA_BACKEND) return;
+      try {
+        let rows = await window.MMSAYAYA_BACKEND.schools.listAll();
+        if (window.ME_sortSchoolsAZ) rows = window.ME_sortSchoolsAZ(rows);
+        else rows = rows.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
+        sel.innerHTML = '<option value="">Select school…</option>' + rows.map(s => {
+          const label = window.ME_schoolOptionLabel ? window.ME_schoolOptionLabel(s) : ((s.town||s.lga||'') ? (s.town||s.lga)+' — '+(s.name||s.id) : (s.name||s.id));
+          return '<option value="'+s.id+'">'+label.replace(/</g,'&lt;')+'</option>';
+        }).join("");
+        sel.onchange = async () => {
+          $("stSchoolId").value = sel.value;
+          const cs = $("stClassSelect");
+          if (!cs) return;
+          cs.innerHTML = '<option value="">Loading classes…</option>';
+          try {
+            let classes = await window.MMSAYAYA_BACKEND.classes.list(sel.value);
+            classes = (window.ME_sortAZ ? window.ME_sortAZ(classes, c => c.name || c.id) : classes.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''))));
+            cs.innerHTML = '<option value="">Select class…</option>' + classes.map(c => '<option value="'+c.id+'">'+(c.name||c.id)+'</option>').join("");
+            cs.onchange = () => { $("stClassId").value = cs.value; };
+          } catch (e) { cs.innerHTML = '<option value="">'+(e.message||"Failed")+'</option>'; }
+        };
+      } catch (e) { sel.innerHTML = '<option value="">'+(e.message||"Failed")+'</option>'; }
+    };
+    fillStSchools();
+    setTimeout(fillStSchools, 1500);
+    sForm.addEventListener("submit", async (ev) => {
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      const st = $("stFormStatus");
+      try {
+        const schoolId = ($("stSchoolId").value || $("stSchoolSelect").value || "").trim();
+        const classId = ($("stClassId").value || $("stClassSelect").value || "").trim();
+        if (!schoolId || !classId) throw new Error("School and class are required.");
+        const B = window.MMSAYAYA_BACKEND;
+        const studentId = await B.students.create(schoolId, {
+          fullName: $("stFullName").value, admissionNo: $("stAdmissionNo").value, classId,
+          academicSessionId: $("stSessionId") && $("stSessionId").value, gender: $("stGender").value,
+          dateOfBirth: $("stDob").value, email: $("stEmail").value, phone: $("stPhone").value,
+          parentName: $("stParentName") && $("stParentName").value, parentPhone: $("stParentPhone") && $("stParentPhone").value
+        });
+        const r = await window.ME_registerAccount({
+          email: $("stEmail").value, password: $("stPassword").value, fullName: $("stFullName").value,
+          role: "student", schoolId, phone: $("stPhone").value, gender: $("stGender").value,
+          extra: { studentId, classId }
+        });
+        // link student.userId
+        try {
+          const db = getFirestore(primaryApp());
+          await setDoc(doc(db, "students", studentId), { userId: r.uid, updatedAt: serverTimestamp() }, { merge: true });
+        } catch (_) {}
+        if (st) { st.style.color = "#2e7d32"; st.textContent = "Student registered & login created: "+r.email+" (linked to "+studentId+")"; }
+      } catch (e) { if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); } }
+    }, true);
+  }
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wirePassReg);
+else wirePassReg();
+setTimeout(wirePassReg, 1200);
+</script>
+
+
+<script>
+(function(){
+  if (window.__schoolNavWired) return; window.__schoolNavWired = true;
+  function wire() {
+    var nav = document.getElementById("schoolSidebarNav");
+    if (!nav) return;
+    nav.querySelectorAll(".nav-item[data-sview]").forEach(function(btn){
+      if (btn.dataset.wired) return; btn.dataset.wired = "1";
+      btn.addEventListener("click", function(){
+        nav.querySelectorAll(".nav-item").forEach(function(b){ b.classList.remove("active"); });
+        btn.classList.add("active");
+        var name = btn.getAttribute("data-sview");
+        var title = document.getElementById("schoolPageTitle");
+        if (title) title.textContent = btn.textContent.trim();
+        var root = document.getElementById("schoolApp");
+        if (!root) return;
+        root.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); v.style.display = "none"; });
+        var map = {
+          "s-overview": ["view-s-overview","s-overview", "view-overview"],
+          "s-teachers": ["view-s-teachers","s-teachers"],
+          "s-students": ["view-s-students","s-students"],
+          "s-classes": ["view-s-classes","s-classes"],
+          "s-reports": ["view-s-reports","s-reports","view-s-results"],
+          "s-promotion": ["view-s-promotion"],
+          "s-term": ["view-s-term","view-s-sessions","s-sessions"]
+        };
+        var ids = map[name] || [("view-" + name), name];
+        var found = null;
+        for (var i=0;i<ids.length;i++){
+          found = document.getElementById(ids[i]);
+          if (found) break;
+        }
+        if (found) { found.classList.add("active"); found.style.display = ""; }
+      });
+    });
+    var lo = document.getElementById("schoolLogoutBtn");
+    if (lo && !lo.dataset.wired) {
+      lo.dataset.wired = "1";
+      lo.addEventListener("click", function(){ location.hash = "login"; location.reload(); });
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wire);
+  else wire();
+  setTimeout(wire, 800);
+})();
+</script>
+
+
+<script>
+/* MMSAYAYA — A–Z sort helpers for all long choice lists */
+window.ME_sortAZ = function(arr, nameFn) {
+  nameFn = nameFn || function(x){ return String(x && (x.name || x.fullName || x.title || x.id) || x || ""); };
+  return (arr || []).slice().sort(function(a,b){
+    return nameFn(a).localeCompare(nameFn(b), undefined, { sensitivity: "base" });
+  });
+};
+window.ME_sortSchoolsAZ = function(arr) {
+  function place(s){ return String(s.town || s.location || s.lga || s.lgaName || s.city || "").trim(); }
+  function name(s){ return String(s.name || s.schoolName || s.id || "").trim(); }
+  return (arr || []).slice().sort(function(a,b){
+    var pa = place(a).toLowerCase(), pb = place(b).toLowerCase();
+    if (pa && pb && pa !== pb) return pa.localeCompare(pb, undefined, { sensitivity: "base" });
+    if (pa && !pb) return -1;
+    if (!pa && pb) return 1;
+    return name(a).localeCompare(name(b), undefined, { sensitivity: "base" });
+  });
+};
+window.ME_schoolOptionLabel = function(s) {
+  var place = String(s.town || s.location || s.lga || s.lgaName || s.city || "").trim();
+  var name = String(s.name || s.schoolName || s.id || "").trim();
+  return place ? (place + " — " + name) : name;
+};
+</script>
+
 </body>
 </html>
