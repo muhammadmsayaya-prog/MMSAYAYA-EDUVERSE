@@ -146,6 +146,12 @@ window.SITE_IMAGE_SLOTS = {
     .form-group input, .form-group textarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:#fafbfc; }
     .form-group input:focus, .form-group textarea:focus { outline:none; border-color:var(--primary); background:#fff; box-shadow:0 0 0 3px rgba(13,71,161,0.1); }
     .form-group textarea { resize:vertical; min-height:100px; }
+    .btn-google { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:12px 16px; border-radius:10px; border:1.5px solid #dadce0; background:#fff; color:#3c4043; font-weight:600; font-size:0.95rem; cursor:pointer; min-height:46px; }
+    .btn-google:hover { background:#f8f9fa; box-shadow:0 1px 3px rgba(60,64,67,.25); }
+    .btn-google:disabled { opacity:.6; cursor:not-allowed; }
+    .login-or { display:flex; align-items:center; gap:12px; margin:16px 0; color:#78909c; font-size:0.85rem; }
+    .login-or::before, .login-or::after { content:""; flex:1; height:1px; background:#e2e8f0; }
+    .form-alert.info { background:#e3f2fd; color:#0d47a1; }
     .form-alert { padding:10px 14px; border-radius:8px; font-size:0.875rem; margin-bottom:14px; display:none; }
     .form-alert.show { display:block; }
     .form-alert.success { background:#e8f5e9; color:#2e7d32; }
@@ -736,6 +742,19 @@ window.SITE_IMAGE_SLOTS = {
           </div>
           <button class="btn btn-primary" id="loginBtn" style="width:100%;">Login</button>
           <button type="button" class="link-btn" id="forgotBtn">Forgot password?</button>
+          <div class="login-or"><span>or</span></div>
+          <button type="button" class="btn-google" id="googleBtn">
+            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            <span>Continue with Google</span>
+          </button>
+        </div>
+
+        <div id="verifyPanel" hidden>
+          <p class="login-hint"><strong>Verify your email address</strong><br>
+            We sent a verification link to <strong id="verifyEmailText"></strong>. Open that email (check Spam too), tap the link, then press the button below.</p>
+          <button class="btn btn-primary" id="verifyCheckBtn" style="width:100%;">I have verified my email</button>
+          <button class="btn btn-outline" id="verifyResendBtn" style="width:100%;margin-top:10px;">Resend verification email</button>
+          <button type="button" class="link-btn" id="verifyLogoutBtn">Use a different account</button>
         </div>
 
         <div id="signedInPanel" hidden>
@@ -1247,6 +1266,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         <div class="nav-section">
           <div class="nav-section-title">System</div>
           <button class="nav-item" data-view="security"><span class="icon">🔒</span> Security</button>
+          <button class="nav-item" data-view="backend-setup"><span class="icon">🧩</span> Backend Setup</button>
           <button class="nav-item" data-view="audit"><span class="icon">📜</span> Login History & Audit</button>
           <button class="nav-item" data-view="backup"><span class="icon">💾</span> Backup & Restore</button>
           <button class="nav-item" data-view="profile"><span class="icon">👤</span> Admin Profile</button>
@@ -2001,11 +2021,59 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         </div>
 
         
+        <div class="view" id="view-backend-setup">
+          <div class="card">
+            <div class="card-header"><h2>Backend Setup (Super Admin)</h2></div>
+            <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;">Cloud Functions and Security Rules must run on Firebase's servers, not in the browser. This page holds their complete code so this one HTML file contains everything. Copy each block to the place shown.</p>
+              <ol style="font-size:0.9rem;color:#37474f;line-height:1.7;padding-left:20px;">
+                <li>Firebase Console &gt; Authentication &gt; Sign-in method: enable <strong>Email/Password</strong> and <strong>Google</strong>; add your website domain under Settings &gt; Authorized domains.</li>
+                <li>Upgrade the project to the <strong>Blaze</strong> plan (needed for Cloud Functions).</li>
+                <li>Save the two <strong>functions</strong> files below, then run: <code>npm install -g firebase-tools</code>, <code>firebase login</code>, <code>firebase use mmsayaya-academy</code>, <code>cd functions &amp;&amp; npm install</code>, <code>cd ..</code>, <code>firebase deploy --only functions</code>.</li>
+                <li>Paste the two <strong>rules</strong> into the Console (or deploy them with <code>firebase deploy --only firestore:rules,storage</code>).</li>
+                <li>Existing users must verify their email once. If an old account's email cannot receive mail, add the boolean field <code>verificationBypass = true</code> to its <code>users/&lt;uid&gt;</code> document in Firestore.</li>
+              </ol>
+              <div style="margin-top:22px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <h3 style="margin:0;font-size:1rem;">functions/index.js</h3>
+                  <button class="btn btn-sm btn-primary bs-copy" data-target="bsFunctions">Copy</button>
+                </div>
+                <p style="margin:6px 0 8px;font-size:0.85rem;color:#546e7a;">Create a folder named functions in your Firebase project and save this as functions/index.js.</p>
+                <pre id="bsFunctions" style="max-height:340px;overflow:auto;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:10px;font-size:12px;line-height:1.5;white-space:pre;"></pre>
+              </div>
+              <div style="margin-top:22px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <h3 style="margin:0;font-size:1rem;">functions/package.json</h3>
+                  <button class="btn btn-sm btn-primary bs-copy" data-target="bsPackage">Copy</button>
+                </div>
+                <p style="margin:6px 0 8px;font-size:0.85rem;color:#546e7a;">Save this as functions/package.json (same folder), then run: cd functions && npm install</p>
+                <pre id="bsPackage" style="max-height:340px;overflow:auto;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:10px;font-size:12px;line-height:1.5;white-space:pre;"></pre>
+              </div>
+              <div style="margin-top:22px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <h3 style="margin:0;font-size:1rem;">firestore.rules</h3>
+                  <button class="btn btn-sm btn-primary bs-copy" data-target="bsFirestore">Copy</button>
+                </div>
+                <p style="margin:6px 0 8px;font-size:0.85rem;color:#546e7a;">Firebase Console > Firestore Database > Rules > paste > Publish.</p>
+                <pre id="bsFirestore" style="max-height:340px;overflow:auto;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:10px;font-size:12px;line-height:1.5;white-space:pre;"></pre>
+              </div>
+              <div style="margin-top:22px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <h3 style="margin:0;font-size:1rem;">storage.rules</h3>
+                  <button class="btn btn-sm btn-primary bs-copy" data-target="bsStorage">Copy</button>
+                </div>
+                <p style="margin:6px 0 8px;font-size:0.85rem;color:#546e7a;">Firebase Console > Storage > Rules > paste > Publish.</p>
+                <pre id="bsStorage" style="max-height:340px;overflow:auto;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:10px;font-size:12px;line-height:1.5;white-space:pre;"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="view" id="view-admin-create-user">
           <div class="card">
             <div class="card-header"><h2>Create Teacher / Student Account</h2></div>
             <div class="card-body">
-              <p style="font-size:0.9rem;color:#546e7a;">Admin assigns email + password. User can log in immediately — no forced password change. Password is stored only in Firebase Authentication.</p>
+              <p style="font-size:0.9rem;color:#546e7a;">Admin assigns email + password. The user must first verify their email address, then can log in — no forced password change. The password is stored only in Firebase Authentication.</p>
               <form id="adminCreateUserForm">
                 <div class="form-group"><label>Full name</label><input id="acuName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
                 <div class="form-group"><label>Email</label><input id="acuEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
@@ -2475,7 +2543,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, getAdditionalUserInfo, sendEmailVerification, linkWithCredential } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
     import { getFirestore, collection, getDocs, addDoc, query, where, orderBy, limit, serverTimestamp, doc, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -2652,28 +2720,99 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       catch (e) { return false; }
     }
 
-    // Verifies the role, then redirects to the matching dashboard.
+    // ---------- Email verification gate ----------
+    const VERIFY_MIN_GAP_MS = 60 * 1000;       // at least 60 seconds between emails
+    const VERIFY_MAX_PER_HOUR = 5;             // at most 5 emails per hour from this browser
+    let verifyTimer = null;
+    let pendingGoogleCred = null;
+    function verifyLog() {
+      try { const now = Date.now(); return JSON.parse(localStorage.getItem("mev_verify_log") || "[]").filter(t => now - t < 3600000); }
+      catch (e) { return []; }
+    }
+    function verifySaveLog(log) { try { localStorage.setItem("mev_verify_log", JSON.stringify(log)); } catch (e) {} }
+    function startVerifyCooldown(ms) {
+      const btn = byId("verifyResendBtn");
+      clearInterval(verifyTimer);
+      let left = Math.ceil(ms / 1000);
+      if (left <= 0) { btn.disabled = false; btn.textContent = "Resend verification email"; return; }
+      btn.disabled = true;
+      const tick = () => {
+        if (left <= 0) { clearInterval(verifyTimer); btn.disabled = false; btn.textContent = "Resend verification email"; return; }
+        btn.textContent = "Resend in " + left + "s"; left--;
+      };
+      tick(); verifyTimer = setInterval(tick, 1000);
+    }
+    async function sendVerification(user) {
+      const now = Date.now();
+      const log = verifyLog();
+      const last = log.length ? log[log.length - 1] : 0;
+      if (last && now - last < VERIFY_MIN_GAP_MS) { startVerifyCooldown(VERIFY_MIN_GAP_MS - (now - last)); return false; }
+      if (log.length >= VERIFY_MAX_PER_HOUR) { setAlert("error", "Too many verification emails requested. Please try again in an hour."); return false; }
+      try {
+        await sendEmailVerification(user);
+        log.push(now); verifySaveLog(log);
+        setAlert("success", "Verification email sent to " + user.email + ". Open the link, then press \"I have verified my email\".");
+        startVerifyCooldown(VERIFY_MIN_GAP_MS);
+        return true;
+      } catch (e) {
+        setAlert("error", e && e.code === "auth/too-many-requests"
+          ? "Too many requests. Please wait a while and try again."
+          : "Could not send the verification email. Check your connection and try again.");
+        return false;
+      }
+    }
+    function showVerifyPanel(user) {
+      byId("loginForm").hidden = true; byId("saSection").hidden = true; byId("signedInPanel").hidden = true;
+      byId("verifyPanel").hidden = false;
+      byId("verifyEmailText").textContent = user.email || "";
+      const log = verifyLog();
+      const last = log.length ? log[log.length - 1] : 0;
+      if (!last || Date.now() - last > 5 * 60 * 1000) sendVerification(user);
+      else {
+        setAlert("info", "Your email is not verified yet. A verification email was sent recently - check your inbox and Spam folder.");
+        startVerifyCooldown(Math.max(0, VERIFY_MIN_GAP_MS - (Date.now() - last)));
+      }
+    }
+    function hideVerifyPanel() { byId("verifyPanel").hidden = true; byId("loginForm").hidden = false; clearInterval(verifyTimer); }
+
+    // Verifies the account, then redirects to the matching dashboard.
     async function routeUser(user) {
+      try { await user.reload(); } catch (e) {}
+      user = auth.currentUser || user;
+
+      let profile = null;
+      if (!user.emailVerified) {
+        // Only an account the platform owner explicitly marked (Firebase Console) may skip verification.
+        try {
+          const s0 = await getDoc(doc(db, "users", user.uid));
+          if (s0.exists() && s0.data().verificationBypass === true) profile = s0.data();
+        } catch (e) {}
+        if (!profile) { showVerifyPanel(user); return; }
+      }
+
       const tokenRes = await user.getIdTokenResult(true);
       const claims = tokenRes.claims || {};
       let role = normRole(claims.role);
       if (claims.super_admin === true || claims.superAdmin === true) role = "super_admin";
 
-      let profile = null;
-      try {
-        const snap = await getDoc(doc(db, "users", user.uid));
-        if (snap.exists()) profile = snap.data();
-      } catch (e) {}
-
-      if (profile) {
-        const status = String(profile.status || "active").toLowerCase();
-        if (["suspended", "disabled", "deleted"].includes(status)) {
-          await signOut(auth);
-          const err = new Error("This account is suspended. Contact the administrator."); err.custom = true; throw err;
-        }
-        if (normRole(profile.role) === "super_admin") role = "super_admin";
-        else if (!role) role = normRole(profile.role);
+      if (!profile) {
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          if (snap.exists()) profile = snap.data();
+        } catch (e) {}
       }
+
+      if (!profile) {
+        await signOut(auth);
+        const err = new Error("No MMSAYAYA EDUVERSE account was found for this login. Ask your administrator to create your account."); err.custom = true; throw err;
+      }
+      const status = String(profile.status || "active").toLowerCase();
+      if (["suspended", "inactive", "disabled", "deleted"].includes(status)) {
+        await signOut(auth);
+        const err = new Error(status === "inactive" ? "This account is deactivated. Contact the administrator." : "This account is suspended. Contact the administrator."); err.custom = true; throw err;
+      }
+      if (normRole(profile.role) === "super_admin") role = "super_admin";
+      else if (!role) role = normRole(profile.role);
 
       if (!DASHBOARDS[role]) {
         await signOut(auth);
@@ -2712,23 +2851,88 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         case "auth/operation-not-allowed": return "Email/Password sign-in is off. Turn it on in Firebase Console → Authentication → Sign-in method.";
         case "auth/email-already-in-use": return "This email already has an account. Delete it in Firebase Authentication first, or use another email.";
         case "auth/weak-password": return "Password is too weak. Use at least 8 characters.";
+        case "auth/popup-closed-by-user":
+        case "auth/cancelled-popup-request": return "Google sign-in was cancelled.";
+        case "auth/popup-blocked": return "The sign-in window was blocked. Allow pop-ups and try again.";
+        case "auth/unauthorized-domain": return "This website address is not authorised for Google sign-in. Add it in Firebase Console > Authentication > Settings > Authorized domains.";
+        case "auth/account-exists-with-different-credential": return "An account already exists with this email. Enter your password above and press Login to link Google safely.";
         default: return "Something went wrong. Try again.";
       }
     }
 
     byId("loginBtn").addEventListener("click", async () => {
-      const email = byId("loginEmail").value.trim();
+      const email = byId("loginEmail").value.trim().toLowerCase();
       const password = byId("loginPassword").value;
       if (!email || !password) return setAlert("error", "Enter your email and password.");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return setAlert("error", "Enter a valid email address.");
       const btn = byId("loginBtn");
       btn.disabled = true; btn.textContent = "Logging in…"; clearAlert();
       try {
         const cred = await signInWithEmailAndPassword(auth, email, password);
+        if (pendingGoogleCred) {                       // secure account linking after the password proves ownership
+          try { await linkWithCredential(cred.user, pendingGoogleCred); } catch (e) {}
+          pendingGoogleCred = null;
+        }
         await routeUser(cred.user);
       } catch (e) { setAlert("error", authError(e)); }
       finally { btn.disabled = false; btn.textContent = "Login"; }
     });
     byId("loginPassword").addEventListener("keydown", (e) => { if (e.key === "Enter") byId("loginBtn").click(); });
+
+    // ---------- Google Sign-In ----------
+    const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: "select_account" });
+
+    // After Google authenticates: the account must already exist (created by an Admin).
+    // A brand-new Google user never receives any role or access automatically.
+    async function afterGoogle(result) {
+      const user = result.user;
+      const isNew = (() => { try { return getAdditionalUserInfo(result).isNewUser === true; } catch (e) { return false; } })();
+      let hasProfile = false;
+      try { const s0 = await getDoc(doc(db, "users", user.uid)); hasProfile = s0.exists(); } catch (e) { hasProfile = false; }
+      if (!hasProfile) {
+        try { if (isNew) await user.delete(); else await signOut(auth); } catch (e) { try { await signOut(auth); } catch (_) {} }
+        return setAlert("error", "No MMSAYAYA EDUVERSE account is linked to this Google account. Ask your administrator to create your account using this email address.");
+      }
+      await routeUser(user);
+    }
+    byId("googleBtn").addEventListener("click", async () => {
+      const btn = byId("googleBtn");
+      btn.disabled = true; clearAlert();
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        await afterGoogle(result);
+      } catch (e) {
+        if (e && (e.code === "auth/popup-blocked" || e.code === "auth/operation-not-supported-in-this-environment")) {
+          try { await signInWithRedirect(auth, googleProvider); return; } catch (e2) { e = e2; }
+        }
+        if (e && e.code === "auth/account-exists-with-different-credential") {
+          pendingGoogleCred = GoogleAuthProvider.credentialFromError(e);
+          const em = e.customData && e.customData.email; if (em) byId("loginEmail").value = em;
+        }
+        const quiet = e && (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request");
+        setAlert(quiet ? "info" : "error", authError(e));
+      } finally { btn.disabled = false; }
+    });
+    // Mobile / popup-blocked fallback returns here after the redirect
+    getRedirectResult(auth).then(async (result) => { if (result && result.user) await afterGoogle(result); })
+      .catch((e) => { if (e && e.code) setAlert("error", authError(e)); });
+
+    byId("verifyResendBtn").addEventListener("click", async () => { if (auth.currentUser) await sendVerification(auth.currentUser); });
+    byId("verifyCheckBtn").addEventListener("click", async () => {
+      const u = auth.currentUser; if (!u) return hideVerifyPanel();
+      const btn = byId("verifyCheckBtn"); btn.disabled = true;
+      try {
+        await u.reload();
+        if (!auth.currentUser.emailVerified) setAlert("error", "Your email is not verified yet. Open the link in the email first.");
+        else { hideVerifyPanel(); clearAlert(); await routeUser(auth.currentUser); }
+      } catch (e) { setAlert("error", authError(e)); }
+      finally { btn.disabled = false; }
+    });
+    byId("verifyLogoutBtn").addEventListener("click", async () => {
+      try { await signOut(auth); } catch (e) {}
+      hideVerifyPanel(); byId("loginPassword").value = ""; clearAlert(); refreshSetupState();
+    });
 
     byId("forgotBtn").addEventListener("click", async () => {
       const email = byId("loginEmail").value.trim();
@@ -2808,7 +3012,8 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
   <script type="module">
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-functions.js";
     import {
       getFirestore, collection, getDocs, getDoc, addDoc, setDoc, updateDoc, deleteDoc,
       doc, query, where, orderBy, limit, serverTimestamp, writeBatch
@@ -2827,6 +3032,12 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const functions = getFunctions(app, "us-central1");
+    // Every privileged action goes through a trusted Cloud Function (it re-checks the caller on the server).
+    async function callFn(name, data) {
+      try { const r = await httpsCallable(functions, name)(data || {}); return r.data; }
+      catch (e) { throw new Error((e && e.message) ? e.message : "Request failed."); }
+    }
 
     // ---------- Auth gate ----------
     let currentUser = null;
@@ -2843,6 +3054,13 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         const snap = await getDoc(doc(db, "users", user.uid));
         if (snap.exists()) {
           currentProfile = snap.data();
+          if (!user.emailVerified && currentProfile.verificationBypass !== true) { document.documentElement.classList.remove("is-admin"); return; }
+          if (["suspended", "inactive", "disabled", "deleted"].includes(String(currentProfile.status || "active").toLowerCase())) {
+            document.documentElement.classList.remove("is-admin");
+            try { await signOut(auth); } catch (_) {}
+            if (location.hash === "#admin") location.hash = "#login";
+            return;
+          }
           const role = String(currentProfile.role || "").toLowerCase().replace(/[\s-]+/g, "_");
           if (role !== "admin" && role !== "super_admin") {
             document.documentElement.classList.remove("is-admin");
@@ -2853,6 +3071,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             return;
           }
           document.documentElement.classList.add("is-admin");
+          try { applyNavPermissions(); } catch (_) {}
           document.getElementById("adminName").textContent = currentProfile.fullName || user.email;
           document.getElementById("adminRole").textContent = role === "super_admin" ? "Super Admin" : "Admin";
           document.getElementById("adminAvatar").textContent = (currentProfile.fullName || "A").charAt(0).toUpperCase();
@@ -3301,7 +3520,73 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       }, true);
     });
 
-    // Students / Teachers
+    // =====================================================================
+    // Permissions (UI only - the real enforcement is in Cloud Functions + Firestore rules)
+    // =====================================================================
+    const PERM_LABELS = {
+      view_courses: "View assigned courses", take_exams: "Take exams", view_results: "View own results",
+      download_certificates: "Download certificates", message: "Send messages", practice_questions: "Use practice questions",
+      manage_lessons: "Manage lessons (assigned courses)", manage_assignments: "Manage assignments and exams",
+      create_questions: "Create questions", grade: "Grade and record results", view_students: "View assigned students",
+      manage_users: "Manage users", create_student: "Create students", create_teacher: "Create teachers",
+      manage_permissions: "Manage permissions", suspend_users: "Suspend / activate accounts", reset_passwords: "Reset passwords",
+      manage_content: "Manage learning content and website", manage_payments: "Verify payments",
+      manage_schools: "Manage schools", manage_announcements: "Manage announcements", manage_access: "Manage course access",
+      view_reports: "View reports and audit logs"
+    };
+    const STUDENT_PERMS = ["view_courses","take_exams","view_results","download_certificates","message","practice_questions"];
+    const TEACHER_PERMS = ["manage_lessons","manage_assignments","create_questions","grade","view_students","message"];
+    const ADMIN_PERMS = ["manage_users","create_student","create_teacher","manage_permissions","suspend_users","reset_passwords","manage_content","manage_payments","manage_schools","manage_announcements","manage_access","view_reports"];
+    const normR = (r) => { r = String(r || "").toLowerCase().replace(/[\s-]+/g, "_"); return r === "superadmin" ? "super_admin" : r; };
+    function effPerms(p) {
+      const r = normR(p && p.role);
+      if (r === "super_admin") return ["*"];
+      if (p && Array.isArray(p.permissions)) return p.permissions;
+      return r === "admin" ? ADMIN_PERMS : (r === "teacher" ? TEACHER_PERMS : STUDENT_PERMS);
+    }
+    function hasPerm(p) { if (!currentProfile) return false; const e = effPerms(currentProfile); return e.includes("*") || e.includes(p); }
+    function callerIsSuper() { return normR(currentProfile && currentProfile.role) === "super_admin"; }
+    function applyNavPermissions() {
+      const need = {
+        students: "manage_users", teachers: "manage_users", roles: "manage_users", access: "manage_access", payments: "manage_payments",
+        announcements: "manage_announcements", notifications: "manage_announcements", contacts: "manage_content",
+        categories: "manage_content", courses: "manage_content", subjects: "manage_content", lessons: "manage_content",
+        questions: "manage_content", import: "manage_content", exams: "manage_content", assignments: "manage_content",
+        certificates: "manage_content", homepage: "manage_content", content: "manage_content", branding: "manage_content",
+        navigation: "manage_content", analytics: "view_reports", audit: "view_reports"
+      };
+      document.querySelectorAll("#adminApp .nav-item[data-view]").forEach(btn => {
+        const v = btn.dataset.view;
+        if (v === "backend-setup") { btn.style.display = callerIsSuper() ? "" : "none"; return; }
+        const p = need[v] || (v.startsWith("ks-") ? "manage_schools" : null);
+        if (p) btn.style.display = hasPerm(p) ? "" : "none";
+      });
+    }
+
+    async function loadCourseSubjectOptions() {
+      try {
+        const [c, sb] = await Promise.all([getDocs(collection(db, "courses")), getDocs(collection(db, "subjects"))]);
+        return {
+          courses: c.docs.map(d => ({ id: d.id, title: d.data().title || d.id })),
+          subjects: sb.docs.map(d => ({ id: d.id, title: d.data().name || d.id }))
+        };
+      } catch (e) { return { courses: [], subjects: [] }; }
+    }
+    function multiSelect(id, items, selected) {
+      if (!items.length) return `<p class="form-hint">Nothing available yet.</p><select id="${id}" multiple hidden></select>`;
+      return `<select id="${id}" multiple size="5" style="width:100%;">` +
+        items.map(i => `<option value="${escapeHtml(i.id)}" ${selected.includes(i.id) ? "selected" : ""}>${escapeHtml(i.title)}</option>`).join("") + `</select>`;
+    }
+    function selVals(id) { const el = $(id); return el ? Array.from(el.selectedOptions).map(o => o.value) : []; }
+    function permCheckboxes(catalog, current) {
+      return `<div style="display:grid;gap:8px;">` + catalog.map(p =>
+        `<label style="display:flex;gap:10px;align-items:center;font-weight:500;"><input type="checkbox" class="perm-cb" value="${p}" ${current.includes(p) ? "checked" : ""} style="width:18px;height:18px;" /> ${escapeHtml(PERM_LABELS[p] || p)}</label>`
+      ).join("") + `</div>`;
+    }
+
+    // =====================================================================
+    // Students / Teachers (all changes go through Cloud Functions)
+    // =====================================================================
     async function loadUsersByRole(role, tableId) {
       const tbody = $(tableId);
       tbody.innerHTML = `<tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr>`;
@@ -3311,49 +3596,45 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No ${role}s found.</p></div></td></tr>`;
           return;
         }
+        const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const byId = {}; docs.forEach(u => byId[u.id] = u);
+        const authInfo = {};
+        try {
+          for (let i = 0; i < docs.length; i += 100) {
+            const r = await callFn("getUsersAuthStatus", { uids: docs.slice(i, i + 100).map(x => x.id) });
+            Object.assign(authInfo, r.users || {});
+          }
+        } catch (e) { /* status badges are optional */ }
         let html = "";
-        snap.forEach(d => {
-          const u = d.data();
-          const status = (u.status || "active").toLowerCase();
-          const badge = status === "active" ? "badge-success" : "badge-danger";
+        docs.forEach(u => {
+          const status = String(u.status || "active").toLowerCase();
+          const badge = status === "active" ? "badge-success" : (status === "inactive" ? "badge-muted" : "badge-danger");
+          const ai = authInfo[u.id];
+          const ver = ai ? (ai.emailVerified ? `<span class="badge badge-success">Email verified</span>` : `<span class="badge badge-muted">Not verified</span>`) : "";
           html += `<tr>
             <td><strong>${escapeHtml(u.fullName || "—")}</strong></td>
             <td>${escapeHtml(u.email || "—")}</td>
-            <td><span class="badge ${badge}">${status}</span></td>
+            <td><span class="badge ${badge}">${escapeHtml(status)}</span> ${ver}</td>
             <td>${formatDate(u.createdAt)}</td>
             <td class="actions">
-              <button class="btn btn-sm btn-outline btn-edit-user" data-id="${d.id}" data-role="${role}">Edit</button>
-              <button class="btn btn-sm btn-ghost btn-toggle-user" data-id="${d.id}" data-status="${status}">${status === "active" ? "Suspend" : "Activate"}</button>
+              <button class="btn btn-sm btn-outline btn-edit-user" data-id="${u.id}">Edit</button>
+              <button class="btn btn-sm btn-outline btn-perm-user" data-id="${u.id}">Permissions</button>
+              <button class="btn btn-sm btn-ghost btn-toggle-user" data-id="${u.id}" data-status="${escapeHtml(status)}">${status === "active" ? "Suspend" : "Activate"}</button>
+              <button class="btn btn-sm btn-ghost btn-pw-user" data-id="${u.id}">Password</button>
             </td>
           </tr>`;
         });
         tbody.innerHTML = html;
-        document.querySelectorAll(".btn-edit-user").forEach(btn => {
-          btn.onclick = async () => {
-            const snap = await getDoc(doc(db, "users", btn.dataset.id));
-            if (!snap.exists()) return;
-            const u = snap.data();
-            openModal("Edit User", `
-              <div class="form-group"><label>Full Name</label><input id="fName" value="${escapeHtml(u.fullName || "")}" /></div>
-              <div class="form-group"><label>Email</label><input value="${escapeHtml(u.email || "")}" disabled /></div>
-              <div class="form-group"><label>Status</label><select id="fStatus"><option value="active" ${u.status!=="suspended"?"selected":""}>Active</option><option value="suspended" ${u.status==="suspended"?"selected":""}>Suspended</option></select></div>
-            `, async () => {
-              await updateDoc(doc(db, "users", btn.dataset.id), {
-                fullName: $("fName").value.trim(), status: $("fStatus").value, updatedAt: serverTimestamp()
-              });
-              toast("User updated", "success");
-              closeModal();
-              loadUsersByRole(btn.dataset.role, tableId);
-            });
-          };
-        });
-        document.querySelectorAll(".btn-toggle-user").forEach(btn => {
+        tbody.querySelectorAll(".btn-edit-user").forEach(btn => btn.onclick = () => openEditUserModal(byId[btn.dataset.id], role, tableId));
+        tbody.querySelectorAll(".btn-perm-user").forEach(btn => btn.onclick = () => openPermissionsModal(byId[btn.dataset.id], role, tableId));
+        tbody.querySelectorAll(".btn-pw-user").forEach(btn => btn.onclick = () => openPasswordModal(byId[btn.dataset.id]));
+        tbody.querySelectorAll(".btn-toggle-user").forEach(btn => {
           btn.onclick = async () => {
             const next = btn.dataset.status === "active" ? "suspended" : "active";
             const ok = await confirmDialog(next === "suspended" ? "Suspend User" : "Activate User", `Set status to ${next}?`);
             if (!ok) return;
-            await updateDoc(doc(db, "users", btn.dataset.id), { status: next, updatedAt: serverTimestamp() });
-            toast("Status updated", "success");
+            try { await callFn("setUserStatus", { uid: btn.dataset.id, status: next }); toast("Status updated", "success"); }
+            catch (e) { toast(e.message, "error"); }
             loadUsersByRole(role, tableId);
           };
         });
@@ -3365,25 +3646,108 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     $("btnAddStudent")?.addEventListener("click", () => openAddUserModal("student"));
     $("btnAddTeacher")?.addEventListener("click", () => openAddUserModal("teacher"));
 
-    function openAddUserModal(role) {
+    async function openAddUserModal(role) {
+      const opts = await loadCourseSubjectOptions();
+      const catalog = role === "teacher" ? TEACHER_PERMS : STUDENT_PERMS;
+      const canPerm = hasPerm("manage_permissions");
       openModal(`Add ${role === "student" ? "Student" : "Teacher"}`, `
-        <p class="form-hint" style="margin-bottom:12px;">Creates a profile record only. The user must still register/login via Firebase Auth (or you invite them).</p>
-        <div class="form-group"><label>Full Name *</label><input id="fName" /></div>
-        <div class="form-group"><label>Email *</label><input type="email" id="fEmail" /></div>
+        <p class="form-hint" style="margin-bottom:12px;">Use the person's real email address. They must verify it before they can open their dashboard. The password you assign stays valid until they change it themselves.</p>
+        <div class="form-group"><label>Full Name *</label><input id="fName" autocomplete="off" /></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="fEmail" autocomplete="off" /></div>
+        <div class="form-group"><label>Initial Password * (8+ characters, letters and numbers)</label><input type="text" id="fPassword" autocomplete="off" /></div>
+        <div class="form-group"><label>Phone (optional)</label><input type="tel" id="fPhone" autocomplete="off" /></div>
+        <div class="form-group"><label>Assign courses</label>${multiSelect("fCourses", opts.courses, [])}</div>
+        <div class="form-group"><label>Assign subjects</label>${multiSelect("fSubjects", opts.subjects, [])}</div>
+        ${canPerm ? `<div class="form-group"><label>Permissions</label>${permCheckboxes(catalog, role === "teacher" ? TEACHER_PERMS : STUDENT_PERMS)}</div>` : ""}
       `, async () => {
-        const fullName = $("fName").value.trim();
-        const email = $("fEmail").value.trim().toLowerCase();
-        if (!fullName || !email) return toast("Name and email required", "error");
-        await addDoc(collection(db, "users"), {
-          fullName, email, role, status: "active",
-          createdBy: currentUser?.uid || "admin",
-          createdAt: serverTimestamp(), updatedAt: serverTimestamp()
-        });
-        toast(`${role} profile created`, "success");
-        closeModal();
-        loadUsersByRole(role, role === "student" ? "studentsTable" : "teachersTable");
-        loadOverview();
+        const payload = {
+          role, fullName: $("fName").value.trim(), email: $("fEmail").value.trim().toLowerCase(),
+          password: $("fPassword").value, phone: $("fPhone").value.trim(),
+          assignedCourses: selVals("fCourses"), assignedSubjects: selVals("fSubjects")
+        };
+        if (canPerm) payload.permissions = Array.from(document.querySelectorAll(".perm-cb:checked")).map(x => x.value);
+        if (!payload.fullName || !payload.email || !payload.password) return toast("Name, email and password are required", "error");
+        try {
+          const res = await callFn("createUserByAdmin", payload);
+          toast(res.verificationEmailSent
+            ? `${role} account created. Verification email sent.`
+            : `${role} account created. The verification email is sent when the user first logs in.`, "success");
+          closeModal();
+          loadUsersByRole(role, role === "student" ? "studentsTable" : "teachersTable");
+          loadOverview();
+        } catch (e) { toast(e.message, "error"); }
+      }, true);
+    }
+
+    async function openEditUserModal(u, role, tableId) {
+      if (!u) return;
+      const opts = await loadCourseSubjectOptions();
+      const st = String(u.status || "active").toLowerCase();
+      openModal("Edit User", `
+        <div class="form-group"><label>Full Name</label><input id="fName" value="${escapeHtml(u.fullName || "")}" /></div>
+        <div class="form-group"><label>Email</label><input value="${escapeHtml(u.email || "")}" disabled /></div>
+        <div class="form-group"><label>Phone</label><input id="fPhone" value="${escapeHtml(u.phone || "")}" /></div>
+        <div class="form-group"><label>Status</label><select id="fStatus">
+          <option value="active" ${st === "active" ? "selected" : ""}>Active</option>
+          <option value="inactive" ${st === "inactive" ? "selected" : ""}>Inactive (deactivated)</option>
+          <option value="suspended" ${st === "suspended" ? "selected" : ""}>Suspended</option></select></div>
+        <div class="form-group"><label>Assigned courses</label>${multiSelect("fCourses", opts.courses, u.assignedCourses || [])}</div>
+        <div class="form-group"><label>Assigned subjects</label>${multiSelect("fSubjects", opts.subjects, u.assignedSubjects || [])}</div>
+      `, async () => {
+        try {
+          await callFn("updateUserByAdmin", {
+            uid: u.id, fullName: $("fName").value.trim(), phone: $("fPhone").value.trim(),
+            assignedCourses: selVals("fCourses"), assignedSubjects: selVals("fSubjects")
+          });
+          if ($("fStatus").value !== st) await callFn("setUserStatus", { uid: u.id, status: $("fStatus").value });
+          toast("User updated", "success");
+          closeModal();
+          loadUsersByRole(role, tableId);
+        } catch (e) { toast(e.message, "error"); }
+      }, true);
+    }
+
+    function openPermissionsModal(u, role, tableId) {
+      if (!u) return;
+      const r = normR(u.role);
+      const catalog = r === "admin" ? ADMIN_PERMS : (r === "teacher" ? TEACHER_PERMS : STUDENT_PERMS);
+      const current = Array.isArray(u.permissions) ? u.permissions : catalog;
+      openModal("Permissions - " + (u.fullName || u.email), `
+        <p class="form-hint" style="margin-bottom:12px;">Switch each permission on or off. The server enforces these limits.</p>
+        ${permCheckboxes(catalog, current)}
+      `, async () => {
+        const permissions = Array.from(document.querySelectorAll(".perm-cb:checked")).map(x => x.value);
+        try {
+          await callFn("setUserPermissions", { uid: u.id, permissions });
+          toast("Permissions saved", "success");
+          closeModal();
+          if (tableId) loadUsersByRole(role, tableId); else loadRoles();
+        } catch (e) { toast(e.message, "error"); }
       });
+    }
+
+    function openPasswordModal(u) {
+      if (!u) return;
+      openModal("Password - " + (u.fullName || u.email), `
+        <p class="form-hint" style="margin-bottom:12px;">Set a new password for this user (it stays valid until they change it), or send them a secure reset link by email. Passwords are never stored in the database.</p>
+        <div class="form-group"><label>New password (8+ characters, letters and numbers)</label><input type="text" id="fNewPw" autocomplete="off" /></div>
+        <button type="button" class="btn btn-outline" id="btnSendResetMail" style="width:100%;">Send password-reset email instead</button>
+      `, async () => {
+        const pw = $("fNewPw").value;
+        if (!pw) return toast("Enter a new password, or use the reset email button", "error");
+        try { await callFn("adminSetUserPassword", { uid: u.id, newPassword: pw }); toast("Password updated. The user was signed out everywhere.", "success"); closeModal(); }
+        catch (e) { toast(e.message, "error"); }
+      });
+      setTimeout(() => {
+        const b = $("btnSendResetMail");
+        if (b) b.onclick = async () => {
+          try {
+            const r = await callFn("adminInitiatePasswordReset", { uid: u.id });
+            await sendPasswordResetEmail(auth, r.email);
+            toast("Reset email sent to " + r.email, "success"); closeModal();
+          } catch (e) { toast(e.message, "error"); }
+        };
+      }, 0);
     }
 
     // Announcements
@@ -3750,7 +4114,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         if (!studentId || !courseId) return toast("Select student and course", "error");
         const st = $("fStudent").selectedOptions[0];
         const cr = $("fCourse").selectedOptions[0];
-        await addDoc(collection(db, "courseAccess"), {
+        await setDoc(doc(db, "courseAccess", studentId + "_" + courseId), {
           studentId, studentName: st.dataset.name, studentEmail: st.dataset.email,
           courseId, courseTitle: cr.dataset.title,
           status: $("fStatus").value, grantedBy: currentUser?.uid,
@@ -4025,37 +4389,37 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       tbody.innerHTML = `<tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr>`;
       try {
         const snap = await getDocs(collection(db, "users"));
-        let html = "";
+        const all = {}; let html = "";
         snap.forEach(d => {
-          const u = d.data();
-          const role = (u.role || "student").toLowerCase();
+          const u = { id: d.id, ...d.data() }; all[d.id] = u;
+          const role = normR(u.role || "student");
           if (role === "super_admin") {
             html += `<tr><td>${escapeHtml(u.fullName||"—")}</td><td>${escapeHtml(u.email||"—")}</td><td><span class="badge badge-info">super_admin</span></td><td>—</td><td>—</td></tr>`;
             return;
           }
+          const locked = role === "admin" && !callerIsSuper();   // only a Super Admin manages Admins
+          const options = ["student","teacher"].concat(callerIsSuper() ? ["admin"] : []);
           html += `<tr>
             <td>${escapeHtml(u.fullName||"—")}</td>
             <td>${escapeHtml(u.email||"—")}</td>
-            <td><span class="badge badge-muted">${role}</span></td>
-            <td>
-              <select class="filter-select role-select" data-id="${d.id}" style="min-width:120px;">
-                <option value="student" ${role==="student"?"selected":""}>student</option>
-                <option value="teacher" ${role==="teacher"?"selected":""}>teacher</option>
-                <option value="admin" ${role==="admin"?"selected":""}>admin</option>
-              </select>
-            </td>
-            <td><button class="btn btn-sm btn-primary btn-save-role" data-id="${d.id}">Save</button></td>
+            <td><span class="badge badge-muted">${escapeHtml(role)}</span></td>
+            <td>${locked ? "—" : `<select class="filter-select role-select" data-id="${d.id}" style="min-width:120px;">
+              ${options.map(o => `<option value="${o}" ${role===o?"selected":""}>${o}</option>`).join("")}
+            </select>`}</td>
+            <td>${locked ? "—" : `<button class="btn btn-sm btn-primary btn-save-role" data-id="${d.id}">Save</button>
+              <button class="btn btn-sm btn-outline btn-role-perm" data-id="${d.id}">Permissions</button>`}</td>
           </tr>`;
         });
         tbody.innerHTML = html || `<tr><td colspan="5"><div class="empty-state"><p>No users.</p></div></td></tr>`;
-        document.querySelectorAll(".btn-save-role").forEach(btn => {
+        tbody.querySelectorAll(".btn-save-role").forEach(btn => {
           btn.onclick = async () => {
             const sel = document.querySelector(`.role-select[data-id="${btn.dataset.id}"]`);
-            await updateDoc(doc(db, "users", btn.dataset.id), { role: sel.value, updatedAt: serverTimestamp() });
-            toast("Role updated", "success");
+            try { await callFn("setUserRole", { uid: btn.dataset.id, role: sel.value }); toast("Role updated", "success"); }
+            catch (e) { toast(e.message, "error"); }
             loadRoles();
           };
         });
+        tbody.querySelectorAll(".btn-role-perm").forEach(btn => btn.onclick = () => openPermissionsModal(all[btn.dataset.id], null, null));
       } catch (e) {
         tbody.innerHTML = `<tr><td colspan="5">Error loading users.</td></tr>`;
       }
@@ -4065,12 +4429,12 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     async function loadAudit() {
       const tbody = $("auditTable");
       try {
-        const snap = await getDocs(query(collection(db, "auditLogs"), orderBy("createdAt", "desc"), limit(50)));
+        const snap = await getDocs(query(collection(db, "audit_logs"), orderBy("createdAt", "desc"), limit(50)));
         if (snap.empty) throw new Error("empty");
         let html = "";
         snap.forEach(d => {
           const a = d.data();
-          html += `<tr><td>${escapeHtml(a.userEmail || a.userId || "—")}</td><td>${escapeHtml(a.action || "—")}</td><td>${escapeHtml(a.ip || a.device || "—")}</td><td>${formatDate(a.createdAt)}</td></tr>`;
+          html += `<tr><td>${escapeHtml(a.byEmail || a.userEmail || a.userId || a.by || "—")}</td><td>${escapeHtml(a.action || "—")}</td><td>${escapeHtml(a.ip || a.device || "—")}</td><td>${formatDate(a.createdAt)}</td></tr>`;
         });
         tbody.innerHTML = html;
       } catch {
@@ -6190,6 +6554,7 @@ setTimeout(loadAppearance, 800);
  * Does NOT replace Firebase config. Extends existing behavior.
  */
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-functions.js";
 import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
   sendPasswordResetEmail, updatePassword, onAuthStateChanged, signOut
@@ -6365,11 +6730,10 @@ window.MEV_RBAC = {
 // ---------- Admin creates Teacher / Student (password assigned, NO forced change) ----------
 window.MEV_Accounts = {
   /**
-   * Creates Auth user + users/{uid} profile.
-   * NOTE: Client-side createUser signs in as the new user — we re-login Admin if session email/password provided,
-   * or Admin should use a Cloud Function in production. Here we document and restore when possible.
+   * Creates the account through the trusted Cloud Function "createUserByAdmin"
+   * (Firebase Admin SDK). The Admin stays signed in; nothing is stored client-side.
    */
-  async createByAdmin({ email, password, fullName, role, phone, schoolId, extra }) {
+  async createByAdmin({ email, password, fullName, role, phone, schoolId, assignedCourses, assignedSubjects }) {
     email = MEV.normalizeEmail(email);
     role = String(role || "student").toLowerCase();
     if (!["teacher", "student"].includes(role)) throw new Error("Role must be teacher or student");
@@ -6378,56 +6742,17 @@ window.MEV_Accounts = {
     if (!MEV.isValidPassword(password)) throw new Error("Password must be 8+ chars with letters and numbers");
     if (!MEV.isValidName(fullName)) throw new Error("Enter a valid full name");
     if (phone && !MEV.isValidPhone(phone)) throw new Error("Invalid phone number");
-
-    const adminUser = auth.currentUser;
-    if (!adminUser) throw new Error("Admin must be logged in");
-
-    // Check duplicate profile by email
-    const q = query(collection(db, "users"), where("email", "==", email), limit(1));
-    const existing = await getDocs(q);
-    if (!existing.empty) throw new Error("An account with this email already exists");
-
-    // Create auth account (this signs in as new user in client SDK)
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    const uid = cred.user.uid;
-
-    // Profile — NEVER store password
-    await setDoc(doc(db, "users", uid), {
-      uid,
-      email,
-      fullName: fullName.trim(),
-      role,
-      phone: phone || "",
-      schoolId: schoolId || null,
-      status: "active",
-      createdBy: adminUser.uid,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-      mustChangePassword: false, // explicit: Admin-assigned password stays valid
-      ...(extra || {})
-    }, { merge: true });
-
-    // Audit (no password)
+    if (!auth.currentUser) throw new Error("Admin must be logged in");
     try {
-      await addDoc(collection(db, "audit_logs"), {
-        action: "admin_create_user",
-        targetUid: uid,
-        targetEmail: email,
-        role,
-        by: adminUser.uid,
-        at: serverTimestamp()
-      });
-    } catch (_) {}
-
-    // Sign out new user — Admin must sign in again (client SDK limitation)
-    await signOut(auth);
-
-    return {
-      uid,
-      email,
-      role,
-      message: "Account created. Password is set in Firebase Auth only (not stored in Firestore). Sign in again as Admin. Give the user their email and password securely offline."
-    };
+      const fn = httpsCallable(getFunctions(app, "us-central1"), "createUserByAdmin");
+      const r = (await fn({ email, password, fullName, role, phone, schoolId, assignedCourses, assignedSubjects })).data;
+      return {
+        uid: r.uid, email: r.email, role: r.role,
+        message: r.verificationEmailSent
+          ? "Account created. A verification email was sent to the user."
+          : "Account created. The user receives a verification email when they first log in."
+      };
+    } catch (e) { throw new Error(e && e.message ? e.message : "Could not create the account"); }
   }
 };
 
@@ -6446,7 +6771,7 @@ function wireAdminCreateUser() {
       if (status) status.textContent = "Creating account…";
       const res = await MEV_Accounts.createByAdmin({ email, password, fullName, role, phone });
       if (status) status.textContent = res.message;
-      alert(res.message + "\n\nEmail: " + res.email + "\n(Role: " + res.role + ")\nShare password securely — it is not saved in the database.");
+      alert(res.message + "\n\nEmail: " + res.email + "\n(Role: " + res.role + ")\nGive the user the password you assigned. It is not stored in the database.");
     } catch (e) {
       if (status) status.textContent = e.message || String(e);
       alert(e.message || String(e));
@@ -6562,10 +6887,6 @@ window.MEV_Password = {
     // Re-auth
     await signInWithEmailAndPassword(auth, u.email, currentPassword);
     await updatePassword(auth.currentUser, newPassword);
-    // Ensure no mustChangePassword flag
-    try {
-      await updateDoc(doc(db, "users", u.uid), { mustChangePassword: false, updatedAt: serverTimestamp() });
-    } catch (_) {}
     return "Password updated successfully.";
   }
 };
@@ -6624,5 +6945,787 @@ else bootMEV();
 console.log("MEV validation/RBAC/accounts module loaded");
 </script>
 
+<script type="text/plain" id="bsFunctionsSrc">/**
+ * MMSAYAYA EDUVERSE - Trusted backend (Cloud Functions, Node 20, 2nd gen).
+ *
+ * IMPORTANT: Firebase Admin SDK bypasses Firestore Security Rules, so EVERY
+ * function below independently verifies the caller (identity, verified email,
+ * active account, role and permission) before doing anything.
+ *
+ * Passwords are never stored or logged. They go only to Firebase Authentication.
+ */
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
+const { onDocumentWritten } = require("firebase-functions/v2/firestore");
+const { setGlobalOptions } = require("firebase-functions/v2");
+const { defineString } = require("firebase-functions/params");
+const admin = require("firebase-admin");
+const nodemailer = require("nodemailer");
+
+admin.initializeApp();
+const db = admin.firestore();
+const auth = admin.auth();
+const FieldValue = admin.firestore.FieldValue;
+
+setGlobalOptions({ region: "us-central1", maxInstances: 10 });
+
+// Optional: set SMTP_URL (e.g. smtps://user:pass@smtp.example.com:465) to send the
+// verification-instruction email from the server when an Admin creates an account.
+// If empty, the user receives the verification email on their first login instead.
+const SMTP_URL = defineString("SMTP_URL", { default: "" });
+const MAIL_FROM = defineString("MAIL_FROM", { default: "MMSAYAYA EDUVERSE <no-reply@example.com>" });
+
+// ------------------------------------------------------------------
+// Roles & permission catalogue (keep in sync with the HTML + rules)
+// ------------------------------------------------------------------
+const ROLE_STUDENT = "student";
+const ROLE_TEACHER = "teacher";
+const ROLE_ADMIN = "admin";
+const ROLE_SUPER = "super_admin";
+
+const STUDENT_PERMS = ["view_courses", "take_exams", "view_results", "download_certificates", "message", "practice_questions"];
+const TEACHER_PERMS = ["manage_lessons", "manage_assignments", "create_questions", "grade", "view_students", "message"];
+const ADMIN_PERMS = [
+  "manage_users", "create_student", "create_teacher", "manage_permissions", "suspend_users",
+  "reset_passwords", "manage_content", "manage_payments", "manage_schools",
+  "manage_announcements", "manage_access", "view_reports"
+];
+// Defaults used when a profile has no explicit "permissions" array (existing accounts).
+const DEFAULT_ADMIN_PERMS = ADMIN_PERMS.slice();
+const DEFAULT_TEACHER_PERMS = ["manage_lessons", "manage_assignments", "create_questions", "grade", "view_students", "message"];
+const DEFAULT_STUDENT_PERMS = STUDENT_PERMS.slice();
+
+const STATUSES = ["active", "inactive", "suspended"];
+const DISPOSABLE = /^(tempmail|guerrillamail|mailinator|10minutemail|yopmail|trashmail|fakeinbox)/i;
+
+// ------------------------------------------------------------------
+// Helpers
+// ------------------------------------------------------------------
+function normRole(r) {
+  r = String(r || "").toLowerCase().replace(/[\s-]+/g, "_");
+  return r === "superadmin" ? "super_admin" : r;
+}
+function normalizeEmail(e) { return String(e || "").trim().toLowerCase(); }
+function isValidEmail(e) {
+  if (!e || e.length > 254) return false;
+  const re = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i;
+  if (!re.test(e)) return false;
+  const [local, domain] = e.split("@");
+  return !!local && local.length <= 64 && !!domain && domain.indexOf(".") > 0;
+}
+function isSuspiciousEmail(e) { return DISPOSABLE.test((e.split("@")[1] || "").split(".")[0] || ""); }
+function isValidPassword(p) {
+  p = String(p || "");
+  return p.length >= 8 && p.length <= 128 && /[A-Za-z]/.test(p) && /\d/.test(p);
+}
+function isValidName(n) {
+  n = String(n || "").trim();
+  return n.length >= 2 && n.length <= 80 && /^[a-zA-Z][a-zA-Z\s'.-]*$/.test(n);
+}
+function cleanStringArray(arr, max = 200) {
+  if (!Array.isArray(arr)) return [];
+  return Array.from(new Set(arr.filter((x) => typeof x === "string" && x.length > 0 && x.length < 200))).slice(0, max);
+}
+function fail(code, msg) { throw new HttpsError(code, msg); }
+
+function effectivePerms(profile) {
+  const role = normRole(profile.role);
+  if (role === ROLE_SUPER) return ["*"];
+  if (Array.isArray(profile.permissions)) return profile.permissions;
+  if (role === ROLE_ADMIN) return DEFAULT_ADMIN_PERMS;
+  if (role === ROLE_TEACHER) return DEFAULT_TEACHER_PERMS;
+  return DEFAULT_STUDENT_PERMS;
+}
+
+/** Verifies the caller from trusted data (Auth token + Firestore profile). */
+async function requireCaller(request) {
+  if (!request.auth) fail("unauthenticated", "Sign in first.");
+  const uid = request.auth.uid;
+  if (request.auth.token.email_verified !== true) fail("permission-denied", "Verify your email address first.");
+  const snap = await db.collection("users").doc(uid).get();
+  if (!snap.exists) fail("permission-denied", "No profile for this account.");
+  const profile = snap.data();
+  if ((profile.status || "active") !== "active") fail("permission-denied", "This account is not active.");
+  const role = normRole(profile.role);
+  if (role !== ROLE_ADMIN && role !== ROLE_SUPER) fail("permission-denied", "Admin access required.");
+  return { uid, role, profile, perms: effectivePerms(profile), isSuper: role === ROLE_SUPER, email: request.auth.token.email || "" };
+}
+function requirePerm(caller, perm) {
+  if (caller.isSuper) return;
+  if (!caller.perms.includes(perm)) fail("permission-denied", "You do not have the '" + perm + "' permission.");
+}
+
+/** A regular Admin can only manage Students and Teachers. Only Super Admin manages Admins. */
+function assertCanManageTarget(caller, targetProfile, targetUid) {
+  const tRole = normRole(targetProfile.role);
+  if (tRole === ROLE_SUPER) {
+    if (!caller.isSuper) fail("permission-denied", "Only a Super Admin can manage a Super Admin.");
+    if (targetUid === caller.uid) fail("failed-precondition", "You cannot change your own Super Admin account here.");
+  }
+  if (tRole === ROLE_ADMIN && !caller.isSuper) fail("permission-denied", "Only a Super Admin can manage Admin accounts.");
+}
+
+async function getTarget(uid) {
+  if (typeof uid !== "string" || !uid || uid.length > 128) fail("invalid-argument", "Invalid user.");
+  const snap = await db.collection("users").doc(uid).get();
+  if (!snap.exists) fail("not-found", "User not found.");
+  return snap.data();
+}
+
+/** Simple per-caller rate limit stored in Firestore (server side). */
+async function rateLimit(uid, key, max, windowSec) {
+  const ref = db.collection("_rateLimits").doc(uid + "_" + key);
+  const now = Date.now();
+  await db.runTransaction(async (tx) => {
+    const s = await tx.get(ref);
+    let hits = (s.exists ? s.data().hits || [] : []).filter((t) => now - t < windowSec * 1000);
+    if (hits.length >= max) fail("resource-exhausted", "Too many requests. Try again later.");
+    hits.push(now);
+    tx.set(ref, { hits });
+  });
+}
+
+async function audit(action, caller, extra) {
+  try {
+    await db.collection("audit_logs").add({
+      action, by: caller.uid, byEmail: caller.email || "", at: FieldValue.serverTimestamp(),
+      createdAt: FieldValue.serverTimestamp(), ...extra   // never include passwords
+    });
+  } catch (e) { console.error("audit failed"); }
+}
+
+async function setClaims(uid, role) {
+  await auth.setCustomUserClaims(uid, { role: role, super_admin: role === ROLE_SUPER });
+}
+
+async function trySendVerificationMail(email, fullName) {
+  const smtp = SMTP_URL.value();
+  if (!smtp) return false;
+  try {
+    const link = await auth.generateEmailVerificationLink(email);
+    const t = nodemailer.createTransport(smtp);
+    await t.sendMail({
+      from: MAIL_FROM.value(), to: email,
+      subject: "Verify your email - MMSAYAYA EDUVERSE",
+      text: "Hello " + fullName + ",\n\nAn account was created for you on MMSAYAYA EDUVERSE.\n" +
+            "Please verify that this email address is yours by opening this link:\n" + link +
+            "\n\nThen log in with the email and the password your administrator gave you.\n"
+    });
+    return true;
+  } catch (e) { console.error("verification mail failed", e.message); return false; }
+}
+
+// ------------------------------------------------------------------
+// 1. Create Student / Teacher (Admin enters email + initial password)
+// ------------------------------------------------------------------
+exports.createUserByAdmin = onCall(async (request) => {
+  const caller = await requireCaller(request);
+  const d = request.data || {};
+  const role = normRole(d.role);
+  if (role !== ROLE_STUDENT && role !== ROLE_TEACHER) fail("permission-denied", "Admins can create only Student or Teacher accounts.");
+  requirePerm(caller, role === ROLE_STUDENT ? "create_student" : "create_teacher");
+  await rateLimit(caller.uid, "createUser", 60, 3600);
+
+  const email = normalizeEmail(d.email);
+  const fullName = String(d.fullName || "").trim();
+  const phone = String(d.phone || "").trim();
+  if (!isValidEmail(email)) fail("invalid-argument", "Enter a valid email address.");
+  if (isSuspiciousEmail(email)) fail("invalid-argument", "Disposable email addresses are not allowed.");
+  if (!isValidName(fullName)) fail("invalid-argument", "Enter a valid full name.");
+  if (!isValidPassword(d.password)) fail("invalid-argument", "Password must be 8+ characters with letters and numbers.");
+  if (phone && !/^\+?[0-9\s\-()]{7,20}$/.test(phone)) fail("invalid-argument", "Invalid phone number.");
+
+  // Duplicate checks: Auth (case-insensitive by normalization) and Firestore profile
+  try { await auth.getUserByEmail(email); fail("already-exists", "An account with this email already exists."); }
+  catch (e) { if (e instanceof HttpsError) throw e; if (e.code !== "auth/user-not-found") throw e; }
+  const dup = await db.collection("users").where("email", "==", email).limit(1).get();
+  if (!dup.empty) fail("already-exists", "An account with this email already exists.");
+
+  const allowed = role === ROLE_STUDENT ? STUDENT_PERMS : TEACHER_PERMS;
+  let permissions = Array.isArray(d.permissions)
+    ? d.permissions.filter((p) => allowed.includes(p))
+    : (role === ROLE_STUDENT ? DEFAULT_STUDENT_PERMS : DEFAULT_TEACHER_PERMS);
+  if (Array.isArray(d.permissions) && !caller.isSuper && !caller.perms.includes("manage_permissions")) {
+    permissions = role === ROLE_STUDENT ? DEFAULT_STUDENT_PERMS : DEFAULT_TEACHER_PERMS;
+  }
+
+  let userRecord;
+  try {
+    userRecord = await auth.createUser({
+      email, password: d.password, displayName: fullName, emailVerified: false, disabled: false
+    });
+  } catch (e) {
+    if (e.code === "auth/email-already-exists") fail("already-exists", "An account with this email already exists.");
+    if (e.code === "auth/invalid-password") fail("invalid-argument", "Password is not acceptable.");
+    console.error("createUser failed", e.code);
+    fail("internal", "Could not create the account.");
+  }
+  const uid = userRecord.uid;
+  try {
+    await setClaims(uid, role);
+    await db.collection("users").doc(uid).set({
+      uid, email, fullName, role, phone,
+      schoolId: typeof d.schoolId === "string" ? d.schoolId : null,
+      status: "active",
+      permissions,
+      assignedCourses: cleanStringArray(d.assignedCourses),
+      assignedSubjects: cleanStringArray(d.assignedSubjects),
+      mustChangePassword: false,           // Admin-assigned password stays valid
+      createdBy: caller.uid,
+      createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()
+    });
+  } catch (e) {
+    try { await auth.deleteUser(uid); } catch (_) {}
+    console.error("profile write failed");
+    fail("internal", "Could not save the profile. Nothing was created.");
+  }
+  await audit("admin_create_user", caller, { targetUid: uid, targetEmail: email, role });
+  const mailed = await trySendVerificationMail(email, fullName);
+  return { uid, email, role, verificationEmailSent: mailed };
+});
+
+// ------------------------------------------------------------------
+// 2. Edit user information + course/subject assignment
+// ------------------------------------------------------------------
+exports.updateUserByAdmin = onCall(async (request) => {
+  const caller = await requireCaller(request);
+  requirePerm(caller, "manage_users");
+  const d = request.data || {};
+  const target = await getTarget(d.uid);
+  assertCanManageTarget(caller, target, d.uid);
+  const patch = { updatedAt: FieldValue.serverTimestamp() };
+  if (d.fullName !== undefined) {
+    if (!isValidName(d.fullName)) fail("invalid-argument", "Enter a valid full name.");
+    patch.fullName = String(d.fullName).trim();
+  }
+  if (d.phone !== undefined) {
+    const p = String(d.phone || "").trim();
+    if (p && !/^\+?[0-9\s\-()]{7,20}$/.test(p)) fail("invalid-argument", "Invalid phone number.");
+    patch.phone = p;
+  }
+  if (d.schoolId !== undefined) patch.schoolId = typeof d.schoolId === "string" && d.schoolId ? d.schoolId : null;
+  if (d.assignedCourses !== undefined) patch.assignedCourses = cleanStringArray(d.assignedCourses);
+  if (d.assignedSubjects !== undefined) patch.assignedSubjects = cleanStringArray(d.assignedSubjects);
+  await db.collection("users").doc(d.uid).update(patch);
+  if (patch.fullName) { try { await auth.updateUser(d.uid, { displayName: patch.fullName }); } catch (_) {} }
+  await audit("admin_update_user", caller, { targetUid: d.uid });
+  return { ok: true };
+});
+
+// ------------------------------------------------------------------
+// 3. Grant / revoke permissions
+// ------------------------------------------------------------------
+exports.setUserPermissions = onCall(async (request) => {
+  const caller = await requireCaller(request);
+  requirePerm(caller, "manage_permissions");
+  const d = request.data || {};
+  const target = await getTarget(d.uid);
+  assertCanManageTarget(caller, target, d.uid);
+  const tRole = normRole(target.role);
+  if (tRole === ROLE_SUPER) fail("permission-denied", "Super Admin permissions cannot be changed.");
+  if (!Array.isArray(d.permissions)) fail("invalid-argument", "Permissions must be a list.");
+  const catalogue = tRole === ROLE_ADMIN ? ADMIN_PERMS : (tRole === ROLE_TEACHER ? TEACHER_PERMS : STUDENT_PERMS);
+  const permissions = Array.from(new Set(d.permissions.filter((p) => catalogue.includes(p))));
+  // An Admin may only hand out permissions they hold themselves (Super Admin: all)
+  if (tRole === ROLE_ADMIN) {
+    if (!caller.isSuper) fail("permission-denied", "Only a Super Admin can change Admin permissions.");
+  }
+  await db.collection("users").doc(d.uid).update({ permissions, updatedAt: FieldValue.serverTimestamp() });
+  await audit("admin_set_permissions", caller, { targetUid: d.uid, count: permissions.length });
+  return { ok: true, permissions };
+});
+
+// ------------------------------------------------------------------
+// 4. Activate / deactivate / suspend / reactivate
+// ------------------------------------------------------------------
+exports.setUserStatus = onCall(async (request) => {
+  const caller = await requireCaller(request);
+  requirePerm(caller, "suspend_users");
+  const d = request.data || {};
+  if (!STATUSES.includes(d.status)) fail("invalid-argument", "Invalid status.");
+  const target = await getTarget(d.uid);
+  assertCanManageTarget(caller, target, d.uid);
+  if (d.uid === caller.uid) fail("failed-precondition", "You cannot change your own status.");
+  const active = d.status === "active";
+  await auth.updateUser(d.uid, { disabled: !active });
+  if (!active) { try { await auth.revokeRefreshTokens(d.uid); } catch (_) {} }
+  await db.collection("users").doc(d.uid).update({ status: d.status, updatedAt: FieldValue.serverTimestamp() });
+  await audit("admin_set_status", caller, { targetUid: d.uid, status: d.status });
+  return { ok: true, status: d.status };
+});
+
+// ------------------------------------------------------------------
+// 5. Change role (Super Admin only for Admin; nobody can create a Super Admin here)
+// ------------------------------------------------------------------
+exports.setUserRole = onCall(async (request) => {
+  const caller = await requireCaller(request);
+  requirePerm(caller, "manage_users");
+  const d = request.data || {};
+  const newRole = normRole(d.role);
+  if (![ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN].includes(newRole)) fail("permission-denied", "That role cannot be assigned here.");
+  if (newRole === ROLE_ADMIN && !caller.isSuper) fail("permission-denied", "Only a Super Admin can create an Admin.");
+  const target = await getTarget(d.uid);
+  assertCanManageTarget(caller, target, d.uid);
+  if (normRole(target.role) === ROLE_SUPER) fail("permission-denied", "Super Admin role cannot be changed.");
+  if (d.uid === caller.uid) fail("failed-precondition", "You cannot change your own role.");
+  const patch = { role: newRole, updatedAt: FieldValue.serverTimestamp() };
+  // reset permissions to a valid default list for the new role
+  patch.permissions = newRole === ROLE_ADMIN ? DEFAULT_ADMIN_PERMS : (newRole === ROLE_TEACHER ? DEFAULT_TEACHER_PERMS : DEFAULT_STUDENT_PERMS);
+  await db.collection("users").doc(d.uid).update(patch);
+  await setClaims(d.uid, newRole);
+  try { await auth.revokeRefreshTokens(d.uid); } catch (_) {}
+  await audit("admin_set_role", caller, { targetUid: d.uid, role: newRole });
+  return { ok: true, role: newRole };
+});
+
+// ------------------------------------------------------------------
+// 6. Passwords: Admin sets a new (permanent) password, or starts a reset email
+// ------------------------------------------------------------------
+exports.adminSetUserPassword = onCall(async (request) => {
+  const caller = await requireCaller(request);
+  requirePerm(caller, "reset_passwords");
+  await rateLimit(caller.uid, "setPassword", 30, 3600);
+  const d = request.data || {};
+  if (!isValidPassword(d.newPassword)) fail("invalid-argument", "Password must be 8+ characters with letters and numbers.");
+  const target = await getTarget(d.uid);
+  assertCanManageTarget(caller, target, d.uid);
+  await auth.updateUser(d.uid, { password: d.newPassword });
+  try { await auth.revokeRefreshTokens(d.uid); } catch (_) {}
+  await db.collection("users").doc(d.uid).update({ mustChangePassword: false, updatedAt: FieldValue.serverTimestamp() });
+  await audit("admin_set_password", caller, { targetUid: d.uid });   // password is never logged
+  return { ok: true };
+});
+
+// Verifies permission + records the action; the browser then calls sendPasswordResetEmail
+// so that Firebase itself emails the reset link to the user (the Admin never sees the link).
+exports.adminInitiatePasswordReset = onCall(async (request) => {
+  const caller = await requireCaller(request);
+  requirePerm(caller, "reset_passwords");
+  await rateLimit(caller.uid, "resetPassword", 60, 3600);
+  const d = request.data || {};
+  const target = await getTarget(d.uid);
+  assertCanManageTarget(caller, target, d.uid);
+  await audit("admin_initiate_password_reset", caller, { targetUid: d.uid });
+  return { ok: true, email: target.email };
+});
+
+// ------------------------------------------------------------------
+// 7. Account/verification status for the Admin tables (Auth-only data)
+// ------------------------------------------------------------------
+exports.getUsersAuthStatus = onCall(async (request) => {
+  const caller = await requireCaller(request);
+  requirePerm(caller, "manage_users");
+  const uids = Array.isArray((request.data || {}).uids) ? request.data.uids.slice(0, 100) : [];
+  const out = {};
+  if (!uids.length) return { users: out };
+  const res = await auth.getUsers(uids.map((uid) => ({ uid })));
+  res.users.forEach((u) => {
+    out[u.uid] = {
+      emailVerified: u.emailVerified === true,
+      disabled: u.disabled === true,
+      lastSignIn: u.metadata.lastSignInTime || null,
+      providers: u.providerData.map((p) => p.providerId)
+    };
+  });
+  return { users: out };
+});
+
+// ------------------------------------------------------------------
+// 8. Keep the custom claim "role" in sync with users/{uid}.role
+//    (also covers the first Super Admin created by the setup form)
+// ------------------------------------------------------------------
+exports.syncUserClaims = onDocumentWritten("users/{uid}", async (event) => {
+  const after = event.data && event.data.after && event.data.after.exists ? event.data.after.data() : null;
+  if (!after) return;
+  const role = normRole(after.role);
+  if (![ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN, ROLE_SUPER].includes(role)) return;
+  try {
+    const u = await auth.getUser(event.params.uid);
+    const c = u.customClaims || {};
+    if (c.role === role && (c.super_admin === true) === (role === ROLE_SUPER)) return;
+    await setClaims(event.params.uid, role);
+  } catch (e) { console.error("claim sync failed", e.code); }
+});
+</script>
+<script type="text/plain" id="bsPackageSrc">{
+  "name": "mmsayaya-functions",
+  "description": "MMSAYAYA EDUVERSE - trusted backend for user management",
+  "main": "index.js",
+  "engines": { "node": "20" },
+  "private": true,
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0",
+    "nodemailer": "^6.9.16"
+  }
+}
+</script>
+<script type="text/plain" id="bsFirestoreSrc">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =====================================================================
+    // Identity helpers
+    // =====================================================================
+    function hasAuth() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function profilePath() { return /databases/$(database)/documents/users/$(request.auth.uid); }
+    function hasProfile() { return hasAuth() && exists(profilePath()); }
+    function userDoc() { return get(profilePath()).data; }
+
+    // Protected-data gate: signed in + email verified + account active.
+    // "verificationBypass" can only be set from the Firebase Console / Admin SDK (never by clients).
+    function emailOk() {
+      return request.auth.token.email_verified == true
+        || (hasProfile() && userDoc().get('verificationBypass', false) == true);
+    }
+    function authed() {
+      return hasAuth() && emailOk() && hasProfile()
+        && userDoc().get('status', 'active') == 'active';
+    }
+
+    function role() { return authed() ? userDoc().role : ''; }
+    function isSuperAdmin() { return role() in ['super_admin', 'superadmin']; }
+    function isAdmin() { return role() in ['admin', 'super_admin', 'superadmin']; }
+    function isTeacher() { return role() == 'teacher'; }
+    function isStudent() { return role() == 'student'; }
+    function isOwner(userId) { return hasAuth() && uid() == userId; }
+
+    // ---------------- Permission checks (enforced here, not only in the UI) ----------------
+    function defaultAdminPerms() {
+      return ['manage_users','create_student','create_teacher','manage_permissions','suspend_users',
+              'reset_passwords','manage_content','manage_payments','manage_schools',
+              'manage_announcements','manage_access','view_reports'];
+    }
+    function defaultTeacherPerms() {
+      return ['manage_lessons','manage_assignments','create_questions','grade','view_students','message'];
+    }
+    // Admin permission (Super Admin always passes)
+    function can(p) {
+      return isSuperAdmin()
+        || (isAdmin() && ('permissions' in userDoc() ? p in userDoc().permissions : p in defaultAdminPerms()));
+    }
+    // Teacher permission
+    function teacherCan(p) {
+      return isTeacher()
+        && ('permissions' in userDoc() ? p in userDoc().permissions : p in defaultTeacherPerms());
+    }
+    function assignedCourses() { return userDoc().get('assignedCourses', []); }
+
+    function validEmail(e) {
+      return e is string && e.size() > 4 && e.size() < 255 && e.matches('.*@.*\\..*');
+    }
+
+    // Student has an active course-access record for this course (document id = uid_courseId)
+    function hasCourseAccess(courseId) {
+      return courseId is string && (
+        assignedCourses().hasAny([courseId])
+        || (exists(/databases/$(database)/documents/courseAccess/$(uid() + '_' + courseId))
+            && get(/databases/$(database)/documents/courseAccess/$(uid() + '_' + courseId)).data.get('status', '') == 'active')
+        || exists(/databases/$(database)/documents/course_access/$(uid() + '_' + courseId))
+      );
+    }
+
+    // =====================================================================
+    // First Super Admin setup (one time). Written in ONE batch with system/initialSetup.
+    // =====================================================================
+    function setupDocPath() { return /databases/$(database)/documents/system/initialSetup; }
+    function validSetupKey(k) { return k is string && k.size() >= 8 && k.size() <= 64; }
+    function isFirstSetup(userId) {
+      return isOwner(userId)
+        && !exists(setupDocPath())
+        && request.resource.data.role == 'super_admin'
+        && request.resource.data.createdBy == 'first-setup'
+        && !(request.resource.data.keys().hasAny(['password','plainPassword','pwd','verificationBypass']))
+        && existsAfter(setupDocPath())
+        && validSetupKey(getAfter(setupDocPath()).data.setupKey);
+    }
+
+    // =====================================================================
+    // Users
+    //  - Accounts are created ONLY by trusted Cloud Functions (Admin SDK) or the one-time setup.
+    //  - Roles, permissions, status and assignments can be changed ONLY by Cloud Functions.
+    //  - A user can edit only harmless profile fields of their own document.
+    // =====================================================================
+    match /users/{userId} {
+      allow read: if (isOwner(userId) && authed())
+        || can('manage_users')
+        || (isTeacher() && teacherCan('view_students')
+            && resource.data.role == 'student'
+            && resource.data.get('assignedCourses', []).hasAny(assignedCourses()));
+      allow create: if isFirstSetup(userId);
+      allow update: if isOwner(userId) && authed()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['fullName','phone','photoURL','updatedAt','lastLoginAt']);
+      allow delete: if false;
+    }
+
+    // =====================================================================
+    // Public site settings / setup state
+    // =====================================================================
+    match /system/{docId} {
+      allow read: if true;
+      allow write: if can('manage_content');
+      allow create: if docId == 'initialSetup'
+        && hasAuth()
+        && !exists(setupDocPath())
+        && request.resource.data.status == 'completed'
+        && validSetupKey(request.resource.data.setupKey)
+        && existsAfter(/databases/$(database)/documents/users/$(uid()))
+        && getAfter(/databases/$(database)/documents/users/$(uid())).data.role == 'super_admin';
+    }
+
+    // =====================================================================
+    // Schools
+    // =====================================================================
+    match /schools/{id} {
+      allow read: if true;
+      allow write: if can('manage_schools');
+    }
+    match /schoolRegistrationRequests/{id} {
+      allow create: if request.resource.data.status == 'pending'
+        && request.resource.data.schoolName is string
+        && request.resource.data.schoolName.size() > 1
+        && request.resource.data.schoolName.size() < 300
+        && request.resource.data.lga is string;
+      allow read, update, delete: if can('manage_schools');
+    }
+    match /subscriptionPlans/{id} { allow read, write: if can('manage_schools'); }
+    match /schoolSubscriptions/{id} { allow read, write: if can('manage_schools'); }
+    match /schoolPayments/{id} { allow read, write: if can('manage_payments'); }
+
+    // =====================================================================
+    // Catalogue (public listing) and learning content
+    // =====================================================================
+    match /categories/{id} {
+      allow read: if true;
+      allow write: if can('manage_content');
+    }
+    match /courses/{id} {
+      allow read: if resource.data.status == 'published'
+        || resource.data.get('published', true) == true
+        || can('manage_content') || isTeacher();
+      allow write: if can('manage_content');
+    }
+    match /subjects/{id} {
+      allow read: if true;
+      allow write: if can('manage_content') || teacherCan('manage_lessons');
+    }
+    match /topics/{id} {
+      allow read: if true;
+      allow write: if can('manage_content') || teacherCan('manage_lessons');
+    }
+    // Lessons: students only for courses they were given access to; teachers only their assigned courses
+    match /lessons/{id} {
+      allow read: if can('manage_content')
+        || (isTeacher() && resource.data.get('courseId', '') in assignedCourses())
+        || (isStudent() && resource.data.get('isPublished', true) == true
+            && hasCourseAccess(resource.data.get('courseId', null)));
+      allow create: if can('manage_content')
+        || (teacherCan('manage_lessons') && request.resource.data.get('courseId', '') in assignedCourses());
+      allow update, delete: if can('manage_content')
+        || (teacherCan('manage_lessons') && resource.data.get('courseId', '') in assignedCourses()
+            && request.resource.data.get('courseId', '') in assignedCourses());
+    }
+    // Answer keys are never public: Admin/Teacher only
+    match /questionBank/{id} {
+      allow read: if can('manage_content') || teacherCan('create_questions');
+      allow write: if can('manage_content') || teacherCan('create_questions');
+    }
+    match /questions/{id} {
+      allow read: if can('manage_content') || teacherCan('create_questions')
+        || (authed() && resource.data.get('published', false) == true
+            && resource.data.get('access', 'free') == 'free');
+      allow write: if can('manage_content') || teacherCan('create_questions');
+    }
+    match /practice_questions/{id} {
+      allow read: if can('manage_content') || teacherCan('create_questions')
+        || (authed() && resource.data.get('published', false) == true);
+      allow write: if can('manage_content') || teacherCan('create_questions');
+    }
+
+    // =====================================================================
+    // Announcements, contact form, navigation, images
+    // =====================================================================
+    match /announcements/{id} {
+      allow read: if resource.data.isPublished == true
+        || resource.data.get('status', 'published') == 'published'
+        || resource.data.get('published', true) == true
+        || can('manage_announcements');
+      allow write: if can('manage_announcements');
+    }
+    match /contactRequests/{id} {
+      allow create: if request.resource.data.status == 'new'
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() > 0
+        && request.resource.data.fullName.size() < 200
+        && validEmail(request.resource.data.email)
+        && request.resource.data.subject is string
+        && request.resource.data.subject.size() < 300
+        && request.resource.data.message is string
+        && request.resource.data.message.size() < 5000;
+      allow read, update, delete: if can('manage_content');
+    }
+    match /navigation/{id} {
+      allow read: if true;
+      allow write: if can('manage_content');
+    }
+    match /imageAssets/{id} { allow read, write: if can('manage_content'); }
+
+    // =====================================================================
+    // Notifications & messages (own records only)
+    // =====================================================================
+    match /notifications/{id} {
+      allow read: if authed() && (resource.data.get('userId', '') == uid() || can('manage_announcements'));
+      allow create: if can('manage_announcements');
+      allow update: if authed() && (resource.data.get('userId', '') == uid() || can('manage_announcements'));
+      allow delete: if can('manage_announcements') || (authed() && resource.data.get('userId', '') == uid());
+    }
+    match /messages/{id} {
+      allow read: if authed() &&
+        (uid() in resource.data.get('participants', [])
+         || resource.data.get('from', '') == uid()
+         || resource.data.get('to', '') == uid()
+         || can('manage_users'));
+      allow create: if authed() && (isAdmin() || isTeacher() || isStudent());
+      allow update: if authed() &&
+        (uid() in resource.data.get('participants', [])
+         || resource.data.get('to', '') == uid()
+         || can('manage_users'));
+    }
+
+    // =====================================================================
+    // Payments & course access (own records; Admin verifies)
+    // =====================================================================
+    match /payments/{id} {
+      allow read: if authed() && (resource.data.get('userId', '') == uid() || can('manage_payments'));
+      allow create: if authed()
+        && request.resource.data.userId == uid()
+        && request.resource.data.status == 'pending'
+        && request.resource.data.verified == false;
+      allow update: if can('manage_payments');
+      allow delete: if isSuperAdmin();
+    }
+    match /course_access/{id} {
+      allow read: if authed() && (resource.data.get('userId', '') == uid() || can('manage_access') || can('manage_payments'));
+      allow write: if can('manage_access') || can('manage_payments');
+    }
+    match /courseAccess/{id} {
+      allow read: if authed() && (resource.data.get('studentId', '') == uid() || can('manage_access'));
+      allow write: if can('manage_access');
+    }
+
+    // =====================================================================
+    // Exams / results / assignments
+    // =====================================================================
+    match /exams/{id} {
+      allow read: if authed();
+      allow create: if can('manage_content')
+        || (teacherCan('manage_assignments') && request.resource.data.get('courseId', '') in assignedCourses());
+      allow update, delete: if can('manage_content')
+        || (teacherCan('manage_assignments') && resource.data.get('courseId', '') in assignedCourses());
+    }
+    match /results/{id} {
+      allow read: if authed() && (resource.data.get('userId', '') == uid() || can('view_reports') || teacherCan('grade'));
+      allow write: if can('manage_content') || teacherCan('grade');
+    }
+    match /assignments/{id} {
+      allow read: if authed();
+      allow write: if can('manage_content') || teacherCan('manage_assignments');
+    }
+
+    // =====================================================================
+    // Certificates
+    // =====================================================================
+    match /certificates/{id} {
+      allow get: if authed() && (resource.data.get('userId', '') == uid() || can('manage_content'));
+      allow list: if (authed() && (resource.data.get('userId', '') == uid() || can('manage_content')))
+        || (request.query.limit != null && request.query.limit <= 1);   // public "verify certificate" lookup
+      allow write: if can('manage_content');
+    }
+
+    // =====================================================================
+    // Audit logs (written by Cloud Functions; Admin with report permission can read)
+    // =====================================================================
+    match /audit_logs/{id} {
+      allow read: if can('view_reports');
+      allow write: if false;
+    }
+    match /auditLogs/{id} {
+      allow read: if can('view_reports');
+      allow write: if false;
+    }
+
+    // Server-side rate-limit counters (Cloud Functions only)
+    match /_rateLimits/{id} { allow read, write: if false; }
+
+    // =====================================================================
+    // Deny everything else
+    // =====================================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+</script>
+<script type="text/plain" id="bsStorageSrc">rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function hasAuth() { return request.auth != null; }
+    function profile() { return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data; }
+    function verified() { return hasAuth() && request.auth.token.email_verified == true; }
+    function activeAdmin() {
+      return verified()
+        && firestore.exists(/databases/(default)/documents/users/$(request.auth.uid))
+        && profile().get('status', 'active') == 'active'
+        && profile().role in ['admin', 'super_admin', 'superadmin'];
+    }
+    function adminCan(p) {
+      return activeAdmin() && (profile().role in ['super_admin', 'superadmin']
+        || ('permissions' in profile() ? p in profile().permissions
+            : p in ['manage_users','manage_content','manage_payments','manage_schools','manage_announcements','manage_access','view_reports']));
+    }
+    function isImage() { return request.resource.contentType.matches('image/.*'); }
+
+    // Public site images, branding and portfolio (public read; only Admin with content permission writes)
+    match /site-images/{allPaths=**} {
+      allow read: if true;
+      allow write: if adminCan('manage_content') && isImage() && request.resource.size < 5 * 1024 * 1024;
+      allow delete: if adminCan('manage_content');
+    }
+    match /branding/{allPaths=**} {
+      allow read: if true;
+      allow write: if adminCan('manage_content') && isImage() && request.resource.size < 5 * 1024 * 1024;
+      allow delete: if adminCan('manage_content');
+    }
+    match /portfolio/{allPaths=**} {
+      allow read: if true;
+      allow write: if adminCan('manage_content') && request.resource.size < 10 * 1024 * 1024;
+      allow delete: if adminCan('manage_content');
+    }
+
+    // Everything else is private
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+</script>
+<script>
+(function(){
+  ["bsFunctions","bsPackage","bsFirestore","bsStorage"].forEach(function(id){
+    var src=document.getElementById(id+"Src"), pre=document.getElementById(id);
+    if(src&&pre) pre.textContent=src.textContent.replace(/^\n/,"");
+  });
+  document.querySelectorAll(".bs-copy").forEach(function(btn){
+    btn.addEventListener("click", async function(){
+      var pre=document.getElementById(btn.dataset.target); if(!pre) return;
+      try{ await navigator.clipboard.writeText(pre.textContent); }
+      catch(e){ var r=document.createRange(); r.selectNodeContents(pre); var sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); document.execCommand("copy"); sel.removeAllRanges(); }
+      var old=btn.textContent; btn.textContent="Copied"; setTimeout(function(){btn.textContent=old;},1500);
+    });
+  });
+})();
+</script>
 </body>
 </html>
