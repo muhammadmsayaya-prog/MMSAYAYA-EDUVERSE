@@ -774,23 +774,6 @@ window.SITE_IMAGE_SLOTS = {
           <button class="btn btn-outline" id="logoutBtn" style="width:100%;">Logout</button>
         </div>
 
-        <div id="saSection" hidden>
-          <hr class="login-divider">
-          <button type="button" class="btn btn-outline" id="saToggleBtn" style="width:100%;">Create Super Admin Account</button>
-          <div id="saForm" hidden>
-            <p class="login-hint">This can only be done once. After it is created, this option disappears permanently.</p>
-            <div class="form-group"><label for="saName">Full Name</label><input type="text" id="saName" autocomplete="name" maxlength="100" /></div>
-            <div class="form-group"><label for="saEmail">Email Address</label><input type="email" id="saEmail" autocomplete="email" maxlength="200" /></div>
-            <div class="form-group"><label for="saPassword">Password</label>
-              <div class="pw-wrap"><input type="password" id="saPassword" autocomplete="new-password" maxlength="128" /><button type="button" class="pw-toggle" data-target="saPassword">Show</button></div>
-            </div>
-            <div class="form-group"><label for="saConfirm">Confirm Password</label>
-              <div class="pw-wrap"><input type="password" id="saConfirm" autocomplete="new-password" maxlength="128" /><button type="button" class="pw-toggle" data-target="saConfirm">Show</button></div>
-            </div>
-            <div class="form-group"><label for="saKey">Setup Key</label><input type="password" id="saKey" autocomplete="off" maxlength="64" /></div>
-            <button class="btn btn-primary" id="saCreateBtn" style="width:100%;">Create Super Admin</button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -2700,22 +2683,12 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       document.documentElement.classList.toggle("is-school", isSchool);
       byId("mobileNav").classList.remove("show");
       if (isAdmin || isSchool) { window.scrollTo(0, 0); return; }
-      if (isLogin) { window.scrollTo(0, 0); refreshSetupState(); }
+      if (isLogin) { window.scrollTo(0, 0); }
       else if (scroll && location.hash.length > 1) {
         try { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); } catch (e) {}
       }
     }
     window.addEventListener("hashchange", () => applyRoute(true));
-
-    // The Super Admin option is shown only when setup is confirmed NOT completed.
-    async function refreshSetupState() {
-      let show = false;
-      try {
-        const snap = await getDoc(doc(db, "system", "initialSetup"));
-        show = !snap.exists();
-      } catch (e) { show = false; }
-      byId("saSection").hidden = !show;
-    }
 
     document.querySelectorAll(".pw-toggle").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -2773,7 +2746,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       }
     }
     function showVerifyPanel(user) {
-      byId("loginForm").hidden = true; byId("saSection").hidden = true; byId("signedInPanel").hidden = true;
+      byId("loginForm").hidden = true; byId("signedInPanel").hidden = true;
       byId("verifyPanel").hidden = false;
       byId("verifyEmailText").textContent = user.email || "";
       const log = verifyLog();
@@ -2855,7 +2828,6 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
 
       // Dashboard page not found: confirm the login instead of a dead link.
       byId("loginForm").hidden = true;
-      byId("saSection").hidden = true;
       byId("signedInPanel").hidden = false;
       const name = (profile && profile.fullName) || user.email;
       byId("signedInText").textContent = "Login successful. Signed in as " + name + " (" + ROLE_LABELS[role] + "). The dashboard page " + url + " was not found.";
@@ -2959,7 +2931,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     });
     byId("verifyLogoutBtn").addEventListener("click", async () => {
       try { await signOut(auth); } catch (e) {}
-      hideVerifyPanel(); byId("loginPassword").value = ""; clearAlert(); refreshSetupState();
+      hideVerifyPanel(); byId("loginPassword").value = ""; clearAlert();
     });
 
     byId("forgotBtn").addEventListener("click", async () => {
@@ -2977,61 +2949,6 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       byId("loginForm").hidden = false;
       byId("loginPassword").value = "";
       clearAlert();
-      refreshSetupState();
-    });
-
-    byId("saToggleBtn").addEventListener("click", () => {
-      byId("saForm").hidden = !byId("saForm").hidden;
-    });
-
-    byId("saCreateBtn").addEventListener("click", async () => {
-      const fullName = byId("saName").value.trim();
-      const email = byId("saEmail").value.trim().toLowerCase();
-      const password = byId("saPassword").value;
-      const confirm = byId("saConfirm").value;
-      const key = byId("saKey").value.trim();
-
-      if (!fullName || !email || !password || !confirm || !key) return setAlert("error", "Fill in all Super Admin fields.");
-      if (!/^[A-Za-z0-9_-]{8,64}$/.test(key)) return setAlert("error", "Setup Key is not valid.");
-      if (password.length < 8) return setAlert("error", "Password must be at least 8 characters.");
-      if (password !== confirm) return setAlert("error", "Passwords do not match.");
-
-      const btn = byId("saCreateBtn");
-      btn.disabled = true; btn.textContent = "Creating…"; clearAlert();
-
-      let cred;
-      try {
-        cred = await createUserWithEmailAndPassword(auth, email, password);
-      } catch (e) {
-        btn.disabled = false; btn.textContent = "Create Super Admin";
-        return setAlert("error", authError(e));
-      }
-
-      try {
-        const batch = writeBatch(db);
-        batch.set(doc(db, "users", cred.user.uid), {
-          uid: cred.user.uid, fullName, email: cred.user.email,
-          role: "super_admin", status: "active", createdBy: "first-setup",
-          createdAt: serverTimestamp(), updatedAt: serverTimestamp()
-        });
-        batch.set(doc(db, "system", "initialSetup"), {
-          status: "completed", completedAt: serverTimestamp(), setupKey: key
-        });
-        await batch.commit();
-      } catch (e) {
-        try { await cred.user.delete(); } catch (_) {}
-        btn.disabled = false; btn.textContent = "Create Super Admin";
-        const denied = e && (e.code === "permission-denied" || /permission/i.test(e.message || ""));
-        return setAlert("error", denied
-          ? "Not allowed: the Setup Key is wrong, the rules are not published, or setup was already completed."
-          : "Could not save the Super Admin profile. Try again.");
-      }
-
-      // Setup is done: remove the option permanently and sign in.
-      byId("saSection").hidden = true;
-      byId("saForm").hidden = true;
-      setAlert("success", "Super Admin created. Signing you in…");
-      try { await routeUser(cred.user); } catch (e) { setAlert("error", authError(e)); }
     });
 
     // ---------- Activate an invited account (Spark replacement for Admin-created accounts) ----------
@@ -7097,6 +7014,7 @@ export const Ids = Object.freeze({
   subject: (schoolId, codeOrName) => `${schoolId}_${slug(codeOrName)}`,
   session: (schoolId, name) => `${schoolId}_${slug(name)}`,
   student: (schoolId, admissionNo) => `${schoolId}_${slug(admissionNo)}`,
+  classSubject: (classId, subjectId) => `${classId}__${subjectId}`,
   teacherAssignment: (sessionId, classId, teacherId) => `${sessionId}_${classId}_${teacherId}`,
   formMasterAssignment: (sessionId, classId) => `${sessionId}_${classId}`,
   /** marks/{schoolId}_{session}_{term}_{class}_{subject}_{student} using the school-local parts */
@@ -7329,6 +7247,33 @@ export function createSchoolBackend({ db, auth, fs }) {
       addAudit(b, actor, { action: "student_create", schoolId, targetType: "students", targetId: id, summary: { classId: input.classId } });
       await b.commit(); return id;
     },
+    /** Move a student to another class in the SAME school. */
+    async moveToClass(studentId, newClassId) {
+      const ref = doc(db, "students", studentId);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) fail("Student not found.");
+      const cur = snap.data();
+      const actor = await loadActor();
+      if (!can(actor, OPERATION_PERMS.manageStudents, cur.schoolId) && !can(actor, "manage_users", cur.schoolId)) {
+        fail("You do not have permission to move students.");
+      }
+      if (!newClassId) fail("New class is required.");
+      if (newClassId === cur.classId) return studentId;
+      const cSnap = await getDoc(doc(db, "classes", newClassId));
+      if (!cSnap.exists() || cSnap.data().schoolId !== cur.schoolId) fail("Target class is not in the student's school.");
+      if (cSnap.data().status !== "active") fail("Target class is not active.");
+      const b = writeBatch(db);
+      b.update(ref, { classId: newClassId, updatedAt: ts() });
+      addAudit(b, actor, {
+        action: "student_move_class",
+        schoolId: cur.schoolId,
+        targetType: "students",
+        targetId: studentId,
+        summary: { from: cur.classId, to: newClassId }
+      });
+      await b.commit();
+      return studentId;
+    },
     async update(studentId, patch) {
       const ref = doc(db, "students", studentId); const snap = await getDoc(ref); if (!snap.exists()) fail("Student not found.");
       const cur = snap.data(); const actor = await loadActor();
@@ -7389,6 +7334,87 @@ export function createSchoolBackend({ db, auth, fs }) {
     async positionsOf(teacherId, schoolId) {
       const list = await listBySchool("formMasterAssignments", schoolId, [where("teacherId", "==", teacherId)]);
       return list.filter((x) => x.status === "active").map((x) => ({ position: "form_master", classId: x.classId, academicSessionId: x.academicSessionId }));
+    }
+  };
+
+  // ================================================================== class ↔ subject curriculum links (school + class specific)
+  // Subjects remain school-level catalogues; classSubjects says which subjects a class offers.
+  const classSubjects = {
+    listByClass: (schoolId, classId) => listBySchool("classSubjects", schoolId, [where("classId", "==", classId)]),
+    listBySchool: (schoolId) => listBySchool("classSubjects", schoolId),
+    async assign(schoolId, { classId, subjectId }) {
+      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
+      if (!classId || !subjectId) fail("classId and subjectId are required.");
+      const cSnap = await getDoc(doc(db, "classes", classId));
+      if (!cSnap.exists() || cSnap.data().schoolId !== schoolId || cSnap.data().status !== "active") fail("Class not found in this school.");
+      const sSnap = await getDoc(doc(db, "subjects", subjectId));
+      if (!sSnap.exists() || sSnap.data().schoolId !== schoolId || sSnap.data().status !== "active") fail("Subject not found in this school.");
+      const id = Ids.classSubject(classId, subjectId);
+      const ref = doc(db, "classSubjects", id);
+      if ((await getDoc(ref)).exists() && (await getDoc(ref)).data().status === "active") return id;
+      const b = writeBatch(db);
+      b.set(ref, {
+        schoolId, classId, subjectId,
+        subjectName: sSnap.data().name || "",
+        className: cSnap.data().name || "",
+        status: "active",
+        createdBy: actor.uid, createdAt: ts(), updatedAt: ts()
+      });
+      addAudit(b, actor, { action: "class_subject_assign", schoolId, targetType: "classSubjects", targetId: id, summary: { classId, subjectId } });
+      await b.commit();
+      return id;
+    },
+    async assignMany(schoolId, { classId, subjectIds }) {
+      if (!Array.isArray(subjectIds) || !subjectIds.length) fail("Provide at least one subjectId.");
+      const out = [];
+      for (const subjectId of subjectIds) {
+        out.push(await this.assign(schoolId, { classId, subjectId }));
+      }
+      return out;
+    },
+    async remove(schoolId, { classId, subjectId }) {
+      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
+      const id = Ids.classSubject(classId, subjectId);
+      const ref = doc(db, "classSubjects", id);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) fail("Class-subject link not found.");
+      if (snap.data().schoolId !== schoolId) fail("School mismatch.");
+      const b = writeBatch(db);
+      b.update(ref, { status: "archived", updatedAt: ts() });
+      addAudit(b, actor, { action: "class_subject_remove", schoolId, targetType: "classSubjects", targetId: id, summary: { classId, subjectId } });
+      await b.commit();
+    },
+    async activeSubjectsForClass(schoolId, classId) {
+      const links = await this.listByClass(schoolId, classId);
+      return links.filter((x) => x.status === "active").map((x) => x.subjectId);
+    }
+  };
+
+  // ================================================================== teacher / form-master access scope (read helpers)
+  const access = {
+    /** Classes this teacher teaches (active) in a session, each with its own subjectIds. */
+    async teacherClassAssignments(schoolId, teacherId, academicSessionId) {
+      const list = await teacherAssignments.list(schoolId, academicSessionId);
+      return list.filter((a) => a.teacherId === teacherId && a.status === "active");
+    },
+    async isFormMaster(schoolId, teacherId, classId, academicSessionId) {
+      const id = Ids.formMasterAssignment(academicSessionId, classId);
+      const snap = await getDoc(doc(db, "formMasterAssignments", id));
+      return snap.exists() && snap.data().status === "active" && snap.data().teacherId === teacherId && snap.data().schoolId === schoolId;
+    },
+    /** Students visible to a teacher: classes they teach OR form-master. */
+    async studentsVisibleToTeacher(schoolId, teacherId, academicSessionId) {
+      const actor = await loadActor();
+      if (actor.uid !== teacherId && !can(actor, OPERATION_PERMS.manageStudents, schoolId) && actor.role !== ROLES.SUPER_ADMIN) {
+        fail("Not allowed to list these students.");
+      }
+      const taught = await this.teacherClassAssignments(schoolId, teacherId, academicSessionId);
+      const fm = await formMasters.list(schoolId, academicSessionId);
+      const fmClasses = fm.filter((f) => f.teacherId === teacherId && f.status === "active").map((f) => f.classId);
+      const classIds = Array.from(new Set([].concat(taught.map((t) => t.classId), fmClasses)));
+      if (!classIds.length) return [];
+      const all = await students.list(schoolId);
+      return all.filter((s) => s.status === "active" && classIds.includes(s.classId));
     }
   };
 
@@ -7505,21 +7531,390 @@ export function createSchoolBackend({ db, auth, fs }) {
 
   // ================================================================== marks (teacher, own class + subject only)
   const marks = {
-    async save(schoolId, { academicSessionId, term, classId, subjectId, studentId, scores, status = "draft" }) {
-      const actor = await loadActor();
-      if (!canTeacher(actor, "grade") || actor.schoolId !== schoolId) fail("Only a teacher of this school with the 'grade' permission can enter marks.");
-      if (!["draft", "submitted"].includes(status)) fail("Teachers can save drafts or submit marks only.");
-      const vals = Object.values(scores || {}); if (vals.some((v) => typeof v !== "number" || !isFinite(v) || v < 0)) fail("Scores must be non-negative numbers.");
-      const total = vals.reduce((a, c) => a + c, 0); if (total > 1000) fail("Total is out of range.");
-      const ta = await getDoc(doc(db, "teacherAssignments", Ids.teacherAssignment(academicSessionId, classId, actor.uid)));
-      if (!ta.exists() || ta.data().status !== "active" || !(ta.data().subjectIds || []).includes(subjectId)) fail("You are not assigned to teach this subject in this class.");
-      const id = Ids.mark(schoolId, academicSessionId, term, classId, subjectId, studentId); const ref = doc(db, "marks", id);
-      const prev = await getDoc(ref); const b = writeBatch(db);
-      if (prev.exists()) b.update(ref, { scores, total, status, updatedAt: ts() });
-      else b.set(ref, { schoolId, academicSessionId, term, classId, subjectId, studentId, teacherId: actor.uid, scores, total, status, createdAt: ts(), updatedAt: ts() });
-      await b.commit(); return id;
+    _maxComponent: 100,
+    _maxTotal: 1000,
+    _validateScores(scores, maxComponent, maxTotal) {
+      if (!scores || typeof scores !== "object" || Array.isArray(scores)) fail("scores must be an object of named components.");
+      const keys = Object.keys(scores);
+      if (!keys.length) fail("At least one score component is required.");
+      if (keys.length > 12) fail("Too many score components (max 12).");
+      let total = 0;
+      keys.forEach((k) => {
+        const v = scores[k];
+        if (typeof v !== "number" || !isFinite(v) || v < 0) fail("Score '" + k + "' must be a non-negative number.");
+        if (v > maxComponent) fail("Score '" + k + "' exceeds maximum (" + maxComponent + ").");
+        total += v;
+      });
+      if (total > maxTotal) fail("Total marks exceed maximum (" + maxTotal + ").");
+      return total;
     },
-    list: (schoolId, classId, subjectId, academicSessionId) => listBySchool("marks", schoolId, [where("classId", "==", classId), where("subjectId", "==", subjectId), where("academicSessionId", "==", academicSessionId)])
+    async _assertWritable(actor, schoolId, { academicSessionId, term, classId, subjectId, studentId }) {
+      if (actor.schoolId !== schoolId && actor.role !== ROLES.SUPER_ADMIN) fail("Wrong school.");
+      if (!term || String(term).length > 40) fail("Term is required.");
+      if (!academicSessionId) fail("Academic session is required.");
+      const sess = await getDoc(doc(db, "academicSessions", academicSessionId));
+      if (!sess.exists() || sess.data().schoolId !== schoolId || sess.data().status !== "active") fail("Invalid academic session for this school.");
+      const st = await getDoc(doc(db, "students", studentId));
+      if (!st.exists() || st.data().schoolId !== schoolId) fail("Student not in this school.");
+      if (st.data().classId !== classId) fail("Student is not in the specified class.");
+      if ((st.data().status || "active") !== "active") fail("Student is not active.");
+      const cls = await getDoc(doc(db, "classes", classId));
+      if (!cls.exists() || cls.data().schoolId !== schoolId || cls.data().status !== "active") fail("Invalid class.");
+      const sub = await getDoc(doc(db, "subjects", subjectId));
+      if (!sub.exists() || sub.data().schoolId !== schoolId || sub.data().status !== "active") fail("Invalid subject.");
+      const ta = await getDoc(doc(db, "teacherAssignments", Ids.teacherAssignment(academicSessionId, classId, actor.uid)));
+      const fmOk = await access.isFormMaster(schoolId, actor.uid, classId, academicSessionId);
+      const teachOk = ta.exists() && ta.data().status === "active" && (ta.data().subjectIds || []).includes(subjectId);
+      if (!teachOk && !fmOk) fail("Not assigned to this subject/class (or Form Master).");
+      if (!canTeacher(actor, "grade") && !fmOk) fail("Missing 'grade' permission.");
+      return { student: st.data(), className: cls.data().name, subjectName: sub.data().name };
+    },
+    async save(schoolId, { academicSessionId, term, classId, subjectId, studentId, scores, status = "draft", maxComponent, maxTotal }) {
+      const actor = await loadActor();
+      if (!["draft", "submitted"].includes(status)) fail("Teachers may only set status to draft or submitted.");
+      const total = this._validateScores(scores, maxComponent || this._maxComponent, maxTotal || this._maxTotal);
+      await this._assertWritable(actor, schoolId, { academicSessionId, term, classId, subjectId, studentId });
+      const id = Ids.mark(schoolId, academicSessionId, term, classId, subjectId, studentId);
+      const ref = doc(db, "marks", id);
+      const prev = await getDoc(ref);
+      if (prev.exists() && prev.data().status === "locked") fail("This mark is locked and cannot be edited.");
+      const b = writeBatch(db);
+      const payload = {
+        schoolId, academicSessionId, term: String(term), classId, subjectId, studentId,
+        teacherId: actor.uid, scores, total, status,
+        enteredBy: actor.uid, updatedBy: actor.uid, updatedAt: ts()
+      };
+      if (prev.exists()) {
+        b.update(ref, payload);
+      } else {
+        b.set(ref, { ...payload, createdAt: ts(), createdBy: actor.uid });
+      }
+      addAudit(b, actor, {
+        action: "mark_save", schoolId, targetType: "marks", targetId: id,
+        summary: { classId, subjectId, studentId, term, status, total }
+      });
+      await b.commit();
+      return id;
+    },
+    list: (schoolId, filters = {}) => {
+      const extra = [];
+      if (filters.classId) extra.push(where("classId", "==", filters.classId));
+      if (filters.subjectId) extra.push(where("subjectId", "==", filters.subjectId));
+      if (filters.academicSessionId) extra.push(where("academicSessionId", "==", filters.academicSessionId));
+      if (filters.term) extra.push(where("term", "==", filters.term));
+      if (filters.studentId) extra.push(where("studentId", "==", filters.studentId));
+      return listBySchool("marks", schoolId, extra);
+    },
+    async listForClass(schoolId, { academicSessionId, term, classId }) {
+      const actor = await loadActor();
+      const fmOk = await access.isFormMaster(schoolId, actor.uid, classId, academicSessionId);
+      const staff = can(actor, OPERATION_PERMS.manageResults, schoolId) || can(actor, OPERATION_PERMS.viewReports, schoolId) || actor.role === ROLES.SUPER_ADMIN;
+      if (!fmOk && !staff) {
+        // subject teacher: only their subjects
+        const rows = await this.list(schoolId, { academicSessionId, term, classId });
+        const ta = await getDoc(doc(db, "teacherAssignments", Ids.teacherAssignment(academicSessionId, classId, actor.uid)));
+        const allowed = ta.exists() && ta.data().status === "active" ? (ta.data().subjectIds || []) : [];
+        return rows.filter((r) => allowed.includes(r.subjectId));
+      }
+      return this.list(schoolId, { academicSessionId, term, classId });
+    }
+  };
+
+  // ================================================================== Results (per student × subject rollup for a term)
+  const results = {
+    idFor(schoolId, academicSessionId, term, classId, subjectId, studentId) {
+      const loc = (id) => String(id).startsWith(schoolId + "_") ? String(id).slice(schoolId.length + 1) : String(id);
+      return [schoolId, "result", loc(academicSessionId), slug(term), loc(classId), loc(subjectId), loc(studentId)].join("_");
+    },
+    async syncFromMark(schoolId, markId) {
+      const mRef = doc(db, "marks", markId);
+      const mSnap = await getDoc(mRef);
+      if (!mSnap.exists()) fail("Mark not found.");
+      const m = mSnap.data();
+      if (m.schoolId !== schoolId) fail("School mismatch.");
+      const id = schoolId + "_result_" + [m.academicSessionId, slug(m.term), m.classId, m.subjectId, m.studentId]
+        .map((x) => String(x).startsWith(schoolId + "_") ? String(x).slice(schoolId.length + 1) : String(x)).join("_");
+      const ref = doc(db, "results", id);
+      const actor = await loadActor();
+      const b = writeBatch(db);
+      b.set(ref, {
+        schoolId, academicSessionId: m.academicSessionId, term: m.term,
+        classId: m.classId, subjectId: m.subjectId, studentId: m.studentId,
+        markId, total: m.total, scores: m.scores, status: m.status === "submitted" ? "submitted" : "draft",
+        teacherId: m.teacherId, updatedAt: ts(), updatedBy: actor.uid, createdAt: ts()
+      }, { merge: true });
+      await b.commit();
+      return id;
+    },
+    list: (schoolId, filters = {}) => {
+      const extra = [];
+      if (filters.classId) extra.push(where("classId", "==", filters.classId));
+      if (filters.subjectId) extra.push(where("subjectId", "==", filters.subjectId));
+      if (filters.academicSessionId) extra.push(where("academicSessionId", "==", filters.academicSessionId));
+      if (filters.term) extra.push(where("term", "==", filters.term));
+      if (filters.studentId) extra.push(where("studentId", "==", filters.studentId));
+      return listBySchool("results", schoolId, extra);
+    },
+    async listClassTerm(schoolId, { academicSessionId, term, classId }) {
+      const actor = await loadActor();
+      const fmOk = await access.isFormMaster(schoolId, actor.uid, classId, academicSessionId);
+      const staff = can(actor, OPERATION_PERMS.manageResults, schoolId) || can(actor, OPERATION_PERMS.viewReports, schoolId) || actor.role === ROLES.SUPER_ADMIN;
+      const rows = await this.list(schoolId, { academicSessionId, term, classId });
+      if (fmOk || staff) return rows;
+      // ordinary teacher: only own subjects
+      const ta = await getDoc(doc(db, "teacherAssignments", Ids.teacherAssignment(academicSessionId, classId, actor.uid)));
+      const allowed = ta.exists() && ta.data().status === "active" ? (ta.data().subjectIds || []) : [];
+      return rows.filter((r) => allowed.includes(r.subjectId) || r.teacherId === actor.uid);
+    }
+  };
+
+  // ================================================================== Report cards + Form Master publishing workflow
+  // DRAFT → MARKS COMPLETED → VALIDATION → READY → PUBLISHED (or REOPENED for correction)
+  const reportCards = {
+    _cardId(schoolId, academicSessionId, term, classId, studentId) {
+      const loc = (id) => String(id).startsWith(schoolId + "_") ? String(id).slice(schoolId.length + 1) : String(id);
+      return [schoolId, "rc", loc(academicSessionId), slug(term), loc(classId), loc(studentId)].join("_");
+    },
+    /**
+     * Completion check — missing marks are NOT treated as zero.
+     * requiredSubjectIds: from classSubjects (active) unless explicitly passed.
+     */
+    async completionCheck(schoolId, { academicSessionId, term, classId, requiredSubjectIds }) {
+      if (!academicSessionId || !term || !classId) fail("session, term and classId are required.");
+      const studentsList = (await students.list(schoolId, classId)).filter((s) => (s.status || "active") === "active");
+      let subjectIds = requiredSubjectIds;
+      if (!subjectIds || !subjectIds.length) {
+        subjectIds = await classSubjects.activeSubjectsForClass(schoolId, classId);
+      }
+      if (!subjectIds.length) {
+        return {
+          complete: false,
+          ready: false,
+          reason: "No required subjects are linked to this class (classSubjects). Assign subjects first.",
+          missing: [],
+          students: studentsList.length,
+          subjects: 0
+        };
+      }
+      const markRows = await marks.list(schoolId, { academicSessionId, term, classId });
+      // only submitted (or locked) counts as complete — draft is incomplete
+      const completeKeys = new Set(
+        markRows
+          .filter((m) => m.status === "submitted" || m.status === "locked" || m.status === "approved")
+          .map((m) => m.studentId + "::" + m.subjectId)
+      );
+      const missing = [];
+      studentsList.forEach((st) => {
+        subjectIds.forEach((subId) => {
+          if (!completeKeys.has(st.studentId + "::" + subId) && !completeKeys.has(st.id + "::" + subId)) {
+            // studentId field is the document id
+            const sid = st.studentId || st.id;
+            if (!completeKeys.has(sid + "::" + subId)) {
+              missing.push({ studentId: sid, studentName: st.fullName || "", subjectId: subId });
+            }
+          }
+        });
+      });
+      // dedupe
+      const seen = new Set();
+      const missingUnique = [];
+      missing.forEach((m) => {
+        const k = m.studentId + "::" + m.subjectId;
+        if (!seen.has(k)) { seen.add(k); missingUnique.push(m); }
+      });
+      return {
+        complete: missingUnique.length === 0 && studentsList.length > 0,
+        ready: missingUnique.length === 0 && studentsList.length > 0,
+        reason: missingUnique.length
+          ? (missingUnique.length + " required mark(s) missing or still draft (not counted as zero).")
+          : (studentsList.length ? "All required marks submitted." : "No active students in this class."),
+        missing: missingUnique.slice(0, 200),
+        missingCount: missingUnique.length,
+        students: studentsList.length,
+        subjects: subjectIds.length,
+        subjectIds,
+        academicSessionId,
+        term,
+        classId,
+        schoolId
+      };
+    },
+    async list(schoolId, filters = {}) {
+      const extra = [];
+      if (filters.classId) extra.push(where("classId", "==", filters.classId));
+      if (filters.academicSessionId) extra.push(where("academicSessionId", "==", filters.academicSessionId));
+      if (filters.term) extra.push(where("term", "==", filters.term));
+      if (filters.studentId) extra.push(where("studentId", "==", filters.studentId));
+      if (filters.status) extra.push(where("status", "==", filters.status));
+      return listBySchool("reportCards", schoolId, extra);
+    },
+    /** Build/refresh DRAFT report cards for every student in the class (Form Master or manage_report_cards). */
+    async prepareDrafts(schoolId, { academicSessionId, term, classId }) {
+      const actor = await loadActor();
+      const fmOk = await access.isFormMaster(schoolId, actor.uid, classId, academicSessionId);
+      if (!fmOk && !can(actor, OPERATION_PERMS.manageReportCards, schoolId) && actor.role !== ROLES.SUPER_ADMIN) {
+        fail("Only the Form Master of this class (or an authorised admin) can prepare report cards.");
+      }
+      const check = await this.completionCheck(schoolId, { academicSessionId, term, classId });
+      const studentsList = (await students.list(schoolId, classId)).filter((s) => (s.status || "active") === "active");
+      const markRows = await marks.list(schoolId, { academicSessionId, term, classId });
+      const byStudent = {};
+      markRows.forEach((m) => {
+        const sid = m.studentId;
+        if (!byStudent[sid]) byStudent[sid] = [];
+        byStudent[sid].push({
+          subjectId: m.subjectId, total: m.total, scores: m.scores, status: m.status, markId: m.id || null
+        });
+      });
+      const b = writeBatch(db);
+      const ids = [];
+      for (const st of studentsList) {
+        const sid = st.studentId || st.id;
+        const id = this._cardId(schoolId, academicSessionId, term, classId, sid);
+        ids.push(id);
+        const ref = doc(db, "reportCards", id);
+        const existing = await getDoc(ref);
+        if (existing.exists() && existing.data().status === "published") {
+          continue; // never silently overwrite published
+        }
+        const subjectResults = byStudent[sid] || [];
+        const payload = {
+          schoolId, academicSessionId, term: String(term), classId, studentId: sid,
+          studentName: st.fullName || "",
+          subjectResults,
+          marksComplete: check.complete,
+          status: check.complete ? "ready" : "draft",
+          workflow: check.complete ? "ready_for_publishing" : "draft",
+          preparedBy: actor.uid,
+          updatedAt: ts(),
+          updatedBy: actor.uid
+        };
+        if (existing.exists()) b.update(ref, payload);
+        else b.set(ref, { ...payload, createdAt: ts(), createdBy: actor.uid });
+      }
+      addAudit(b, actor, {
+        action: "report_cards_prepare", schoolId, targetType: "reportCards", targetId: classId,
+        summary: { academicSessionId, term, classId, count: ids.length, complete: check.complete }
+      });
+      await b.commit();
+      return { ids, completion: check };
+    },
+    /**
+     * Form Master publish — blocked if any required mark is missing/draft.
+     * Creates/updates reportCards to status=published.
+     */
+    async publish(schoolId, { academicSessionId, term, classId }) {
+      const actor = await loadActor();
+      const fmOk = await access.isFormMaster(schoolId, actor.uid, classId, academicSessionId);
+      if (!fmOk && !can(actor, OPERATION_PERMS.manageReportCards, schoolId) && actor.role !== ROLES.SUPER_ADMIN) {
+        fail("Only the Form Master of this class may publish its report cards.");
+      }
+      const check = await this.completionCheck(schoolId, { academicSessionId, term, classId });
+      if (!check.complete) {
+        const err = new Error(check.reason + " Publishing blocked.");
+        err.code = "MARKS_INCOMPLETE";
+        err.completion = check;
+        throw err;
+      }
+      // refresh drafts to ready then publish
+      await this.prepareDrafts(schoolId, { academicSessionId, term, classId });
+      const studentsList = (await students.list(schoolId, classId)).filter((s) => (s.status || "active") === "active");
+      const markRows = await marks.list(schoolId, { academicSessionId, term, classId });
+      const byStudent = {};
+      markRows.forEach((m) => {
+        const sid = m.studentId;
+        if (!byStudent[sid]) byStudent[sid] = [];
+        byStudent[sid].push({
+          subjectId: m.subjectId, total: m.total, scores: m.scores, status: m.status
+        });
+      });
+      const b = writeBatch(db);
+      const publishedIds = [];
+      for (const st of studentsList) {
+        const sid = st.studentId || st.id;
+        const id = this._cardId(schoolId, academicSessionId, term, classId, sid);
+        const ref = doc(db, "reportCards", id);
+        const prev = await getDoc(ref);
+        if (prev.exists() && prev.data().status === "published" && prev.data().publishVersion) {
+          // already published — skip to prevent accidental duplicate publish; use reopen+publish for corrections
+          continue;
+        }
+        const payload = {
+          schoolId, academicSessionId, term: String(term), classId, studentId: sid,
+          studentName: st.fullName || "",
+          subjectResults: byStudent[sid] || [],
+          marksComplete: true,
+          status: "published",
+          workflow: "published",
+          publishedBy: actor.uid,
+          publishedAt: ts(),
+          publishVersion: (prev.exists() && prev.data().publishVersion) ? (prev.data().publishVersion + 1) : 1,
+          updatedAt: ts(), updatedBy: actor.uid
+        };
+        if (prev.exists()) b.update(ref, payload);
+        else b.set(ref, { ...payload, createdAt: ts(), createdBy: actor.uid });
+        publishedIds.push(id);
+      }
+      // class-level publication receipt
+      const receiptId = schoolId + "_pub_" + [academicSessionId, slug(term), classId]
+        .map((x) => String(x).startsWith(schoolId + "_") ? String(x).slice(schoolId.length + 1) : String(x)).join("_");
+      b.set(doc(db, "reportCardPublications", receiptId), {
+        schoolId, academicSessionId, term: String(term), classId,
+        publishedBy: actor.uid, publishedAt: ts(),
+        studentCount: publishedIds.length, status: "published"
+      });
+      addAudit(b, actor, {
+        action: "report_cards_publish", schoolId, targetType: "reportCards", targetId: classId,
+        summary: { academicSessionId, term, classId, count: publishedIds.length }
+      });
+      await b.commit();
+      return { publishedIds, receiptId, count: publishedIds.length };
+    },
+    /** Controlled reopen of published cards for correction (Form Master / manage_report_cards). */
+    async reopen(schoolId, { academicSessionId, term, classId, reason }) {
+      const actor = await loadActor();
+      const fmOk = await access.isFormMaster(schoolId, actor.uid, classId, academicSessionId);
+      if (!fmOk && !can(actor, OPERATION_PERMS.manageReportCards, schoolId) && actor.role !== ROLES.SUPER_ADMIN) {
+        fail("Not allowed to reopen report cards.");
+      }
+      if (!reason || String(reason).trim().length < 3) fail("A reason is required to reopen published report cards.");
+      const cards = await this.list(schoolId, { academicSessionId, term, classId, status: "published" });
+      if (!cards.length) fail("No published report cards found for this class/term.");
+      const b = writeBatch(db);
+      cards.forEach((c) => {
+        b.update(doc(db, "reportCards", c.id), {
+          status: "reopened",
+          workflow: "reopened_for_correction",
+          reopenReason: String(reason).slice(0, 300),
+          reopenedBy: actor.uid,
+          reopenedAt: ts(),
+          updatedAt: ts(),
+          updatedBy: actor.uid
+        });
+      });
+      addAudit(b, actor, {
+        action: "report_cards_reopen", schoolId, targetType: "reportCards", targetId: classId,
+        summary: { academicSessionId, term, classId, reason: String(reason).slice(0, 200), count: cards.length }
+      });
+      await b.commit();
+      return { count: cards.length };
+    },
+    /** Student: own published card only. */
+    async getMine(studentId, { academicSessionId, term, classId }) {
+      const actor = await loadActor();
+      if (actor.role === "student") {
+        if (actor.studentId !== studentId) fail("You may only view your own report card.");
+      }
+      const id = this._cardId(actor.schoolId || "", academicSessionId, term, classId, studentId);
+      // prefer actor school
+      const schoolId = actor.schoolId;
+      const cardId = this._cardId(schoolId, academicSessionId, term, classId, studentId);
+      const snap = await getDoc(doc(db, "reportCards", cardId));
+      if (!snap.exists()) fail("Report card not found.");
+      const data = snap.data();
+      if (data.status !== "published" && actor.role === "student") fail("This report card is not published yet.");
+      return { id: cardId, ...data };
+    }
   };
 
   // ================================================================== Spark replacements for the legacy Cloud Function names
@@ -7565,7 +7960,7 @@ export function createSchoolBackend({ db, auth, fs }) {
     }
   }
 
-  return { loadActor, schools, classes, subjects, academicSessions, students, teacherAssignments, formMasters, invitations, users, marks, legacyCall, audit: { add: addAudit },
+  return { loadActor, schools, classes, subjects, classSubjects, academicSessions, students, teacherAssignments, formMasters, access, invitations, users, marks, results, reportCards, legacyCall, audit: { add: addAudit },
     helpers: { can, canTeacher, effectivePerms, invitableRoles, Ids, slug } };
 }
 
@@ -7963,7 +8358,7 @@ exports.getUsersAuthStatus = onCall(async (request) => {
 
 // ------------------------------------------------------------------
 // 8. Keep the custom claim "role" in sync with users/{uid}.role
-//    (also covers the first Super Admin created by the setup form)
+//    (also covers the first Super Admin provisioned in the Firebase Console)
 // ------------------------------------------------------------------
 exports.syncUserClaims = onDocumentWritten("users/{uid}", async (event) => {
   const after = event.data && event.data.after && event.data.after.exists ? event.data.after.data() : null;
@@ -8000,8 +8395,9 @@ service cloud.firestore {
     //
     // These rules are the ONLY server-side authority on the Spark plan (there are no
     // Cloud Functions). Everything privileged is therefore decided here:
-    //   * Accounts are created only by (a) the one-time first Super Admin setup or
-    //     (b) CLAIMING an invitation that a Super Admin / school Admin created.
+    //   * Accounts are created only by CLAIMING an invitation that a Super Admin / school
+    //     Admin created. The FIRST Super Admin is provisioned manually in the Firebase
+    //     Console (Authentication + Firestore); no client can ever create a super_admin.
     //     The claimed profile must match the invitation exactly (role, schoolId, ...).
     //   * Nobody can change their own role, schoolId, permissions or status.
     //   * Every school-scoped document carries schoolId and is only reachable by
@@ -8183,19 +8579,10 @@ service cloud.firestore {
     }
 
     // =====================================================================
-    // First Super Admin setup (one time). Written in ONE batch with system/initialSetup.
+    // First Super Admin: NO client-side bootstrap exists any more.
+    // The first super_admin is created ONLY from the Firebase Console (Authentication user +
+    // users/{uid} document). Rules never allow a client to create a profile with that role.
     // =====================================================================
-    function setupDocPath() { return /databases/$(database)/documents/system/initialSetup; }
-    function validSetupKey(k) { return k is string && k.size() >= 8 && k.size() <= 64; }
-    function isFirstSetup(userId) {
-      return isOwner(userId)
-        && !exists(setupDocPath())
-        && request.resource.data.role == 'super_admin'
-        && request.resource.data.createdBy == 'first-setup'
-        && !(request.resource.data.keys().hasAny(['password','plainPassword','pwd','verificationBypass']))
-        && existsAfter(setupDocPath())
-        && validSetupKey(getAfter(setupDocPath()).data.setupKey);
-    }
 
     // =====================================================================
     // Invitation CLAIM (replaces Cloud-Function account creation on Spark).
@@ -8241,7 +8628,7 @@ service cloud.firestore {
 
     // =====================================================================
     // Users
-    //  - Created ONLY by first-setup or invitation claim.
+    //  - Created ONLY by invitation claim (never as super_admin). First Super Admin: Firebase Console.
     //  - role / schoolId / permissions / status are changed ONLY by a Super Admin (any non-super
     //    account) or by a school Admin for Teachers/Students of the SAME school (status, permissions,
     //    name, phone). Every such change must come with an audit log entry in the same batch.
@@ -8291,7 +8678,7 @@ service cloud.firestore {
     }
     match /users/{userId} {
       allow read: if (isOwner(userId) && authed()) || canReadUser(resource.data);
-      allow create: if isFirstSetup(userId) || claimCreateOk(userId);
+      allow create: if claimCreateOk(userId);
       allow update: if (isOwner(userId) && authed()
             && request.resource.data.diff(resource.data).affectedKeys()
                  .hasOnly(['fullName','phone','photoURL','updatedAt','lastLoginAt']))
@@ -8383,13 +8770,6 @@ service cloud.firestore {
     match /system/{docId} {
       allow read: if true;
       allow write: if can('manage_content');
-      allow create: if docId == 'initialSetup'
-        && hasAuth()
-        && !exists(setupDocPath())
-        && request.resource.data.status == 'completed'
-        && validSetupKey(request.resource.data.setupKey)
-        && existsAfter(/databases/$(database)/documents/users/$(uid()))
-        && getAfter(/databases/$(database)/documents/users/$(uid())).data.role == 'super_admin';
     }
 
     // =====================================================================
