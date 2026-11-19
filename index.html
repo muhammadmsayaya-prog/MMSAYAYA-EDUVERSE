@@ -5244,80 +5244,75 @@ setTimeout(wireSaAcademicButtons, 800);
           }
           return;
         }
-        selectEl.innerHTML = '<option value="">Loading schools…</option>';
+
+        selectEl.innerHTML = '<option value="">Loading registered schools…</option>';
+        if (schoolIdEl) schoolIdEl.value = '';
         try {
-          var rows = [];
-          // Prefer complete Katsina directory (Primary/Secondary lists embedded in page)
-          function fromDirectory(tf) {
-            var KS = window.KATSINA_SCHOOLS || {};
-            var out = [];
-            Object.keys(KS).sort(function(a,b){ return a.localeCompare(b, undefined, {sensitivity:"base"}); }).forEach(function(lga) {
-              var block = KS[lga] || {};
-              var list = [];
-              if (tf === "primary") list = block.primary || [];
-              else if (tf === "secondary") list = block.secondary || [];
-              else list = [].concat(block.primary || [], block.secondary || []);
-              list.forEach(function(name) {
-                var type = tf === "primary" ? "primary" : (tf === "secondary" ? "secondary" : ((block.primary||[]).indexOf(name)>=0 ? "primary" : "secondary"));
-                if (!tf) {
-                  type = (block.primary || []).indexOf(name) >= 0 ? "primary" : "secondary";
-                }
-                out.push({
-                  id: "kt_" + type + "_" + lga.replace(/[^a-zA-Z0-9]+/g, "_") + "_" + String(name).replace(/[^a-zA-Z0-9]+/g, "_").slice(0, 60),
-                  name: name,
-                  town: lga,
-                  lga: lga,
-                  schoolType: type,
-                  source: "directory"
-                });
-              });
+          // Registration must use real Firestore school document IDs only.
+          // Do not use the static Katsina directory here: its generated IDs
+          // are not document IDs in the Firestore "schools" collection.
+          var rows = await B().schools.listAll();
+          rows = Array.isArray(rows) ? rows : [];
+
+          function normalizeType(value) {
+            return String(value || '').trim().toLowerCase().replace(/[\s-]+/g, '_');
+          }
+          if (typeFilter) {
+            var wanted = normalizeType(typeFilter);
+            rows = rows.filter(function(s) {
+              var actual = normalizeType(s.schoolType || s.type);
+              if (wanted === 'primary') return actual === 'primary';
+              if (wanted === 'secondary') return ['secondary', 'junior_secondary', 'senior_secondary'].includes(actual);
+              return actual === wanted;
             });
-            return out;
           }
-          if (typeFilter === "primary" || typeFilter === "secondary") {
-            rows = fromDirectory(typeFilter);
-          } else {
-            try {
-              rows = await B().schools.listAll();
-            } catch (err1) {
-              console.warn("schools.list fallback", err1);
-              rows = [];
-            }
-            if (!rows || !rows.length) rows = fromDirectory(null);
-          }
-          if (!rows || !rows.length) {
-            selectEl.innerHTML = '<option value="">No schools found</option>';
+
+          // Ignore malformed records without a real Firestore document ID.
+          rows = rows.filter(function(s) { return s && typeof s.id === 'string' && s.id.trim(); });
+          if (!rows.length) {
+            var kind = typeFilter === 'primary' ? 'Primary' : (typeFilter === 'secondary' ? 'Secondary' : '');
+            selectEl.innerHTML = '<option value="">No registered ' + kind + ' schools found in Firestore. Add the school first.</option>';
             return;
           }
+
           function placeOf(s) {
-            return String(s.town || s.location || s.lga || s.lgaName || s.city || "").trim();
+            return String(s.town || s.location || s.lga || s.lgaName || s.city || '').trim();
           }
           function schoolNameOf(s) {
-            return String(s.name || s.schoolName || s.id || "").trim();
+            return String(s.name || s.schoolName || s.id || '').trim();
           }
-          // A–Z: Town/Gari first, then School name
           rows = rows.slice().sort(function(a, b) {
             var pa = placeOf(a).toLowerCase(), pb = placeOf(b).toLowerCase();
-            if (pa && pb && pa !== pb) return pa.localeCompare(pb, undefined, { sensitivity: "base" });
+            if (pa && pb && pa !== pb) return pa.localeCompare(pb, undefined, { sensitivity: 'base' });
             if (pa && !pb) return -1;
             if (!pa && pb) return 1;
-            return schoolNameOf(a).localeCompare(schoolNameOf(b), undefined, { sensitivity: "base" });
+            return schoolNameOf(a).localeCompare(schoolNameOf(b), undefined, { sensitivity: 'base' });
           });
-          selectEl.innerHTML = '<option value="">Select school (' + rows.length + ')…</option>' +
+
+          function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, function(ch) {
+              return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+            });
+          }
+          selectEl.innerHTML = '<option value="">Select registered school (' + rows.length + ')…</option>' +
             rows.map(function(s) {
               var place = placeOf(s);
               var name = schoolNameOf(s);
-              var label = place ? (place + " — " + name) : name;
-              return '<option value="' + String(s.id).replace(/"/g, "") + '">' + label.replace(/</g, "&lt;") + "</option>";
-            }).join("");
+              var label = place ? (place + ' — ' + name) : name;
+              return '<option value="' + escapeHtml(s.id) + '">' + escapeHtml(label) + '</option>';
+            }).join('');
+
           selectEl.onchange = function() {
-            /* schoolId is the select value — no separate School ID field */
             if (schoolIdEl) schoolIdEl.value = selectEl.value || '';
           };
+          // Keep the hidden ID synchronized if the browser restores a selection.
+          if (schoolIdEl) schoolIdEl.value = selectEl.value || '';
         } catch (e) {
-          var msg = (e && e.message) ? String(e.message) : 'Failed to load schools';
-          if (/sign in/i.test(msg)) msg = 'Loading schools failed — try refresh. If empty, add schools in Firestore.';
-          selectEl.innerHTML = '<option value="">' + msg.replace(/</g,'&lt;') + '</option>';
+          console.error('Failed to load registered schools:', e);
+          var errorText = (e && e.message) ? String(e.message) : 'Failed to load schools';
+          selectEl.innerHTML = '<option value="">Could not load registered schools: ' +
+            errorText.replace(/[&<>"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]; }) +
+            '</option>';
         }
       }
       function refreshSchoolDropdowns() {
