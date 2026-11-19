@@ -2409,12 +2409,12 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             </div>
             <div class="card-body">
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="classSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="classSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadClasses">Load classes</button>
               </div>
               <div id="classesMgmtMeta" style="font-size:0.85rem;color:#546e7a;margin:8px 0;"></div>
-              <div class="table-wrap"><table><thead><tr><th>#</th><th>Class</th><th>Level</th><th>Status</th><th>ID</th></tr></thead>
-                <tbody id="classesMgmtTable"><tr><td colspan="5" style="padding:16px;text-align:center;color:#546e7a;">Enter School ID and Load.</td></tr></tbody></table></div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Class</th><th>Level</th><th>Status</th></tr></thead>
+                <tbody id="classesMgmtTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Select a school and load.</td></tr></tbody></table></div>
             </div>
           </div>
         </div>
@@ -2425,11 +2425,11 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             </div>
             <div class="card-body">
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="subjectSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="subjectSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadSubjectsMgmt">Load subjects</button>
               </div>
-              <div class="table-wrap"><table><thead><tr><th>#</th><th>Subject</th><th>Code</th><th>Status</th><th>ID</th></tr></thead>
-                <tbody id="subjectsMgmtTable"><tr><td colspan="5" style="padding:16px;text-align:center;color:#546e7a;">Enter School ID and Load.</td></tr></tbody></table></div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Subject</th><th>Code</th><th>Status</th></tr></thead>
+                <tbody id="subjectsMgmtTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Select a school and load.</td></tr></tbody></table></div>
             </div>
           </div>
         </div>
@@ -2439,14 +2439,14 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             <div class="card-body">
               <p style="font-size:0.9rem;color:#546e7a;">Link school subjects to a class (curriculum). Uses <code>classSubjects</code> backend.</p>
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="csSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="csClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="csSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
+                <select id="csClassId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select class…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadClassSubjects">Load</button>
-                <input type="text" id="csSubjectId" placeholder="Subject ID to assign" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="csSubjectId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select subject…</option></select>
                 <button type="button" class="btn btn-primary" id="btnAssignClassSubject">Assign subject</button>
               </div>
-              <div class="table-wrap"><table><thead><tr><th>#</th><th>Subject ID</th><th>Name</th><th>Status</th></tr></thead>
-                <tbody id="classSubjectsTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Load a class.</td></tr></tbody></table></div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Subject</th><th>Name</th><th>Status</th></tr></thead>
+                <tbody id="classSubjectsTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Select a class and load.</td></tr></tbody></table></div>
             </div>
           </div>
         </div>
@@ -2456,14 +2456,14 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             <div class="card-body">
               <p style="font-size:0.9rem;color:#546e7a;">Per-class subject lists for each teacher (not one global list).</p>
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="taSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="taSessionId" placeholder="Academic Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="taSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
+                <select id="taSessionId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select academic session…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadTeacherAssign">Load</button>
               </div>
               <div class="form-group" style="margin-top:12px;display:grid;gap:8px;max-width:520px;">
-                <input type="text" id="taTeacherId" placeholder="Teacher UID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="taClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="taSubjectIds" placeholder="Subject IDs (comma-separated)" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="taTeacherId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select teacher…</option></select>
+                <select id="taClassId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select class…</option></select>
+                <select id="taSubjectIds" multiple size="4" aria-label="Select subjects" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:220px;"></select>
                 <button type="button" class="btn btn-primary" id="btnSaveTeacherAssign">Save assignment</button>
               </div>
               <div class="table-wrap" style="margin-top:12px;"><table><thead><tr><th>Teacher</th><th>Class</th><th>Subjects</th><th>Status</th></tr></thead>
@@ -2476,13 +2476,13 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             <div class="card-header"><h2>Form Master Assignments</h2></div>
             <div class="card-body">
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="fmSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="fmSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="fmSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
+                <select id="fmSessionId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select academic session…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadFormMasters">Load</button>
               </div>
               <div class="form-group" style="margin-top:12px;display:grid;gap:8px;max-width:520px;">
-                <input type="text" id="fmTeacherId" placeholder="Teacher UID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="fmClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="fmTeacherId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select teacher…</option></select>
+                <select id="fmClassId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select class…</option></select>
                 <button type="button" class="btn btn-primary" id="btnAssignFormMaster">Assign Form Master</button>
               </div>
               <div class="table-wrap" style="margin-top:12px;"><table><thead><tr><th>Teacher</th><th>Class</th><th>Session</th><th>Status</th></tr></thead>
@@ -2497,11 +2497,11 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             </div>
             <div class="card-body">
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="sessSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="sessSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadSessions">Load</button>
               </div>
-              <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Status</th><th>Current</th><th>ID</th></tr></thead>
-                <tbody id="sessionsTable"><tr><td colspan="5" style="padding:16px;text-align:center;color:#546e7a;">Load sessions.</td></tr></tbody></table></div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Status</th><th>Current</th></tr></thead>
+                <tbody id="sessionsTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Load sessions.</td></tr></tbody></table></div>
             </div>
           </div>
         </div>
@@ -2511,10 +2511,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             <div class="card-body">
               <p style="font-size:0.9rem;color:#546e7a;">Teachers enter marks for assigned subjects. Form Masters can view all subjects in their class.</p>
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="mkSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="mkSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="mkTerm" placeholder="Term (e.g. First Term)" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="mkClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="mkSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
+                <select id="mkSessionId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select academic session…</option></select>
+                <select id="mkTerm" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:170px;"><option value="">Select term…</option><option>First Term</option><option>Second Term</option><option>Third Term</option></select>
+                <select id="mkClassId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select class…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadMarks">Load marks</button>
               </div>
               <div class="table-wrap"><table><thead><tr><th>Student</th><th>Subject</th><th>Total</th><th>Status</th></tr></thead>
@@ -2527,10 +2527,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             <div class="card-header"><h2>Results</h2></div>
             <div class="card-body">
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="rsSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="rsSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="rsTerm" placeholder="Term" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="rsClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="rsSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
+                <select id="rsSessionId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select academic session…</option></select>
+                <select id="rsTerm" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:170px;"><option value="">Select term…</option><option>First Term</option><option>Second Term</option><option>Third Term</option></select>
+                <select id="rsClassId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select class…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadResults">Load results</button>
               </div>
               <div class="table-wrap"><table><thead><tr><th>Student</th><th>Subject</th><th>Total</th><th>Status</th></tr></thead>
@@ -2544,10 +2544,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             <div class="card-body">
               <p style="font-size:0.9rem;color:#546e7a;">Completion check → prepare drafts → Form Master publish. Missing marks are not treated as zero.</p>
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="rcSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="rcSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="rcTerm" placeholder="Term" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="rcClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="rcSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
+                <select id="rcSessionId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select academic session…</option></select>
+                <select id="rcTerm" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:170px;"><option value="">Select term…</option><option>First Term</option><option>Second Term</option><option>Third Term</option></select>
+                <select id="rcClassId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select class…</option></select>
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;">
                 <button type="button" class="btn btn-outline" id="btnRcCheck">Check completion</button>
@@ -2567,10 +2567,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             <div class="card-body">
               <p style="font-size:0.9rem;color:#546e7a;">Class × subject matrix from marks for a term (read-only overview).</p>
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
-                <input type="text" id="bsSchoolId" placeholder="School ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="bsSessionId" placeholder="Session ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="bsTerm" placeholder="Term" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
-                <input type="text" id="bsClassId" placeholder="Class ID" style="padding:10px;border-radius:8px;border:1px solid var(--border);" />
+                <select id="bsSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
+                <select id="bsSessionId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select academic session…</option></select>
+                <select id="bsTerm" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:170px;"><option value="">Select term…</option><option>First Term</option><option>Second Term</option><option>Third Term</option></select>
+                <select id="bsClassId" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:190px;"><option value="">Select class…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadBroadsheet">Build broadsheet</button>
               </div>
               <div id="broadsheetWrap" style="overflow:auto;margin-top:12px;"><p style="color:#546e7a;">Load a class/term to build the matrix.</p></div>
@@ -4999,38 +4999,38 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     async function saLoadClasses() {
       const sid = ($("classSchoolId") && $("classSchoolId").value || "").trim();
       const tb = $("classesMgmtTable"); if (!tb) return;
-      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;text-align:center;'>School ID and backend required.</td></tr>"; return; }
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>Select a school first.</td></tr>"; return; }
       try {
         const rows = await B().classes.list(sid);
-        if (!rows.length) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;text-align:center;'>No classes.</td></tr>"; return; }
-        tb.innerHTML = rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.level||"")+"</td><td>"+escHtml(r.status||"")+"</td><td style='font-size:0.75rem'>"+escHtml(r.id)+"</td></tr>").join("");
+        if (!rows.length) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>No classes.</td></tr>"; return; }
+        tb.innerHTML = rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.level||"")+"</td><td>"+escHtml(r.status||"")+"</td></tr>").join("");
         if ($("classesMgmtMeta")) $("classesMgmtMeta").textContent = rows.length + " class(es)";
-      } catch (e) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
     }
     async function saLoadSubjectsMgmt() {
       const sid = ($("subjectSchoolId") && $("subjectSchoolId").value || "").trim();
       const tb = $("subjectsMgmtTable"); if (!tb) return;
-      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;text-align:center;'>School ID and backend required.</td></tr>"; return; }
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>Select a school first.</td></tr>"; return; }
       try {
         const rows = await B().subjects.list(sid);
-        tb.innerHTML = rows.length ? rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.code||"")+"</td><td>"+escHtml(r.status||"")+"</td><td style='font-size:0.75rem'>"+escHtml(r.id)+"</td></tr>").join("") : "<tr><td colspan='5' style='padding:16px;text-align:center;'>No subjects.</td></tr>";
-      } catch (e) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+        tb.innerHTML = rows.length ? rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.code||"")+"</td><td>"+escHtml(r.status||"")+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>No subjects.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
     }
     async function saLoadClassSubjects() {
       const sid = ($("csSchoolId")&&$("csSchoolId").value||"").trim();
       const cid = ($("csClassId")&&$("csClassId").value||"").trim();
       const tb = $("classSubjectsTable"); if (!tb) return;
-      if (!sid || !cid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID + Class ID required.</td></tr>"; return; }
+      if (!sid || !cid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>Select a school and class first.</td></tr>"; return; }
       try {
         const rows = (await B().classSubjects.listByClass(sid, cid)).filter(r => r.status === "active");
-        tb.innerHTML = rows.length ? rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td>"+escHtml(r.subjectId)+"</td><td>"+escHtml(r.subjectName||"")+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>None linked.</td></tr>";
+        tb.innerHTML = rows.length ? rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td>"+escHtml(r.subjectName||r.subjectId)+"</td><td>"+escHtml(r.subjectName||"")+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>None linked.</td></tr>";
       } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
     }
     async function saLoadTeacherAssign() {
       const sid = ($("taSchoolId")&&$("taSchoolId").value||"").trim();
       const xid = ($("taSessionId")&&$("taSessionId").value||"").trim();
       const tb = $("teacherAssignTable"); if (!tb) return;
-      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>Select a school first.</td></tr>"; return; }
       try {
         const rows = await B().teacherAssignments.list(sid, xid || undefined);
         tb.innerHTML = rows.length ? rows.map(r => "<tr><td>"+escHtml(r.teacherId)+"</td><td>"+escHtml(r.classId)+"</td><td>"+escHtml((r.subjectIds||[]).join(", "))+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>None.</td></tr>";
@@ -5040,7 +5040,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       const sid = ($("fmSchoolId")&&$("fmSchoolId").value||"").trim();
       const xid = ($("fmSessionId")&&$("fmSessionId").value||"").trim();
       const tb = $("formMastersTable"); if (!tb) return;
-      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>Select a school first.</td></tr>"; return; }
       try {
         const rows = await B().formMasters.list(sid, xid || undefined);
         tb.innerHTML = rows.length ? rows.map(r => "<tr><td>"+escHtml(r.teacherId)+"</td><td>"+escHtml(r.classId)+"</td><td>"+escHtml(r.academicSessionId)+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>None.</td></tr>";
@@ -5049,11 +5049,11 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     async function saLoadSessions() {
       const sid = ($("sessSchoolId")&&$("sessSchoolId").value||"").trim();
       const tb = $("sessionsTable"); if (!tb) return;
-      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>Select a school first.</td></tr>"; return; }
       try {
         const rows = await B().academicSessions.list(sid);
-        tb.innerHTML = rows.length ? rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.status)+"</td><td>"+(r.isCurrent?"Yes":"")+"</td><td style='font-size:0.75rem'>"+escHtml(r.id)+"</td></tr>").join("") : "<tr><td colspan='5' style='padding:16px;text-align:center;'>None.</td></tr>";
-      } catch (e) { tb.innerHTML = "<tr><td colspan='5' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+        tb.innerHTML = rows.length ? rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.status)+"</td><td>"+(r.isCurrent?"Yes":"No")+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>None.</td></tr>";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
     }
     async function saLoadMarks() {
       const sid = ($("mkSchoolId")&&$("mkSchoolId").value||"").trim();
@@ -5061,7 +5061,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       const term = ($("mkTerm")&&$("mkTerm").value||"").trim();
       const cid = ($("mkClassId")&&$("mkClassId").value||"").trim();
       const tb = $("marksMgmtTable"); if (!tb) return;
-      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>Select a school first.</td></tr>"; return; }
       try {
         const rows = await B().marks.listForClass(sid, { academicSessionId: xid, term, classId: cid });
         tb.innerHTML = rows.length ? rows.map(r => "<tr><td>"+escHtml(r.studentId)+"</td><td>"+escHtml(r.subjectId)+"</td><td>"+escHtml(r.total)+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>No marks.</td></tr>";
@@ -5073,7 +5073,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       const term = ($("rsTerm")&&$("rsTerm").value||"").trim();
       const cid = ($("rsClassId")&&$("rsClassId").value||"").trim();
       const tb = $("resultsMgmtTable"); if (!tb) return;
-      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>School ID required.</td></tr>"; return; }
+      if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>Select a school first.</td></tr>"; return; }
       try {
         const rows = await B().results.listClassTerm(sid, { academicSessionId: xid, term, classId: cid });
         tb.innerHTML = rows.length ? rows.map(r => "<tr><td>"+escHtml(r.studentId)+"</td><td>"+escHtml(r.subjectId)+"</td><td>"+escHtml(r.total)+"</td><td>"+escHtml(r.status)+"</td></tr>").join("") : "<tr><td colspan='4' style='padding:16px;text-align:center;'>No results.</td></tr>";
@@ -5169,7 +5169,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       bind("btnLoadTeacherAssign", saLoadTeacherAssign);
       bind("btnSaveTeacherAssign", async () => {
         try {
-          const subjectIds = ($("taSubjectIds").value||"").split(",").map(s => s.trim()).filter(Boolean);
+          const subjectIds = Array.from($("taSubjectIds").selectedOptions || []).map(o => o.value).filter(Boolean);
           await B().teacherAssignments.assign(($("taSchoolId").value||"").trim(), {
             teacherId: ($("taTeacherId").value||"").trim(),
             classId: ($("taClassId").value||"").trim(),
@@ -5221,6 +5221,67 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     else wireSaAcademicButtons();
     
 setTimeout(wireSaAcademicButtons, 800);
+
+    // Human-friendly school and academic selectors. Document IDs remain internal option values only.
+    (function wireSchoolNameSelectors(){
+      const ids = (id) => document.getElementById(id);
+      const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+      const schoolSelectIds = ["classSchoolId","subjectSchoolId","csSchoolId","taSchoolId","fmSchoolId","sessSchoolId","mkSchoolId","rsSchoolId","rcSchoolId","bsSchoolId"];
+      const dependents = {
+        classSchoolId:[], subjectSchoolId:[], csSchoolId:["csClassId","csSubjectId"],
+        taSchoolId:["taSessionId","taTeacherId","taClassId","taSubjectIds"],
+        fmSchoolId:["fmSessionId","fmTeacherId","fmClassId"], sessSchoolId:[],
+        mkSchoolId:["mkSessionId","mkClassId"], rsSchoolId:["rsSessionId","rsClassId"],
+        rcSchoolId:["rcSessionId","rcClassId"], bsSchoolId:["bsSessionId","bsClassId"]
+      };
+      function fill(sel, rows, label, placeholder, multi){
+        if(!sel) return;
+        const old = multi ? Array.from(sel.selectedOptions).map(o=>o.value) : sel.value;
+        sel.innerHTML = (multi ? "" : `<option value="">${esc(placeholder || "Select…")}</option>`) + rows.map(r=>`<option value="${esc(r.id)}">${esc(label(r))}</option>`).join("");
+        if(multi){ Array.from(sel.options).forEach(o=>o.selected=old.includes(o.value)); }
+        else if(old && rows.some(r=>r.id===old)) sel.value=old;
+      }
+      function schoolLabel(s){ const nm=s.name||s.schoolName||"Unnamed school"; const loc=s.town||s.location||s.lga||s.lgaName||s.city||""; return loc ? `${loc} — ${nm}` : nm; }
+      async function loadSchoolOptions(){
+        if(!B()) { setTimeout(loadSchoolOptions,350); return; }
+        try {
+          const schools=await B().schools.listAll();
+          schoolSelectIds.forEach(id=>{
+            const sel=ids(id); if(!sel || sel.dataset.schoolReady) return;
+            fill(sel,schools,schoolLabel,"Select a school…"); sel.dataset.schoolReady="1";
+            sel.addEventListener("change",()=>loadSchoolChildren(id,sel.value));
+          });
+        } catch(e){ console.error("School dropdown load failed",e); }
+      }
+      async function loadSchoolChildren(sourceId,sid){
+        const targetIds=dependents[sourceId]||[];
+        targetIds.forEach(id=>{const el=ids(id); if(el){el.innerHTML=`<option value="">${el.multiple?"Select subject(s)…":"Select…"}</option>`;}});
+        if(!sid || !B()) return;
+        try {
+          const [classes,subjects,sessions,teachers]=await Promise.all([
+            B().classes.list(sid), B().subjects.list(sid), B().academicSessions.list(sid), B().users.listBySchool(sid,"teacher")
+          ]);
+          const active=a=>(a||[]).filter(x=>(x.status||"active")==="active");
+          const classRows=active(classes), subjectRows=active(subjects), sessionRows=active(sessions), teacherRows=active(teachers);
+          const configs={
+            csClassId:[classRows,r=>r.name||r.level||"Class"], csSubjectId:[subjectRows,r=>r.name||r.code||"Subject"],
+            taSessionId:[sessionRows,r=>r.name||"Academic session"], taTeacherId:[teacherRows,r=>r.fullName||r.name||r.email||"Teacher"],
+            taClassId:[classRows,r=>r.name||r.level||"Class"], taSubjectIds:[subjectRows,r=>r.name||r.code||"Subject"],
+            fmSessionId:[sessionRows,r=>r.name||"Academic session"], fmTeacherId:[teacherRows,r=>r.fullName||r.name||r.email||"Teacher"], fmClassId:[classRows,r=>r.name||r.level||"Class"],
+            mkSessionId:[sessionRows,r=>r.name||"Academic session"], mkClassId:[classRows,r=>r.name||r.level||"Class"],
+            rsSessionId:[sessionRows,r=>r.name||"Academic session"], rsClassId:[classRows,r=>r.name||r.level||"Class"],
+            rcSessionId:[sessionRows,r=>r.name||"Academic session"], rcClassId:[classRows,r=>r.name||r.level||"Class"],
+            bsSessionId:[sessionRows,r=>r.name||"Academic session"], bsClassId:[classRows,r=>r.name||r.level||"Class"]
+          };
+          targetIds.forEach(id=>{const el=ids(id),cfg=configs[id]; if(el&&cfg) fill(el,cfg[0],cfg[1],"Select…",!!el.multiple);});
+        } catch(e){ console.error("School academic dropdown load failed",e); }
+      }
+      function init(){loadSchoolOptions();}
+      if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
+      setTimeout(init,700); setTimeout(init,1600); setTimeout(init,3000);
+      window.__refreshSchoolNameSelectors=loadSchoolOptions;
+    })();
+
 
     // ========== School user registration & invitation UI ==========
     (function wireRegistrationUI() {
