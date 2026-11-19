@@ -2607,14 +2607,34 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       </div>
       <nav class="sidebar-nav" id="schoolSidebarNav">
         <div class="nav-section">
-          <div class="nav-section-title">Leadership</div>
+          <div class="nav-section-title" id="schoolLeadershipSectionTitle">School Leadership</div>
           <button class="nav-item active" data-sview="s-overview"><span class="icon">📊</span> School Overview</button>
           <button class="nav-item" data-sview="s-teachers"><span class="icon">👩‍🏫</span> Teachers Management</button>
           <button class="nav-item" data-sview="s-students"><span class="icon">👨‍🎓</span> Students Management</button>
-          <button class="nav-item" data-sview="s-classes"><span class="icon">📚</span> Class Management</button>
-          <button class="nav-item" data-sview="s-reports"><span class="icon">📄</span> Report Card & Broadsheet</button>
-          <button class="nav-item" data-sview="s-promotion"><span class="icon">⬆️</span> Promotion</button>
-          <button class="nav-item" data-sview="s-term"><span class="icon">📆</span> Term</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Academic Management</div>
+          <button class="nav-item" data-sview="s-classes"><span class="icon">📚</span> Classes Management</button>
+          <button class="nav-item" data-sview="s-subjects"><span class="icon">📖</span> Subjects Management</button>
+          <button class="nav-item" data-sview="s-class-subjects"><span class="icon">🔗</span> Class Subjects</button>
+          <button class="nav-item" data-sview="s-teacher-assignments"><span class="icon">📌</span> Teacher Assignments</button>
+          <button class="nav-item" data-sview="s-formmasters"><span class="icon">👤</span> Form Masters</button>
+          <button class="nav-item" data-sview="s-sessions"><span class="icon">📅</span> Academic Sessions</button>
+          <button class="nav-item" data-sview="s-marks"><span class="icon">📝</span> Marks Management</button>
+          <button class="nav-item" data-sview="s-results"><span class="icon">📊</span> Results</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Reports & School Activities</div>
+          <button class="nav-item" data-sview="s-report-cards"><span class="icon">📄</span> Report Cards</button>
+          <button class="nav-item" data-sview="s-broadsheets"><span class="icon">📑</span> Broadsheets</button>
+          <button class="nav-item" data-sview="s-promotion"><span class="icon">⬆️</span> Student Promotion</button>
+          <button class="nav-item" data-sview="s-attendance"><span class="icon">📅</span> Attendance</button>
+          <button class="nav-item" data-sview="s-announcements"><span class="icon">📢</span> Announcements</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Administration</div>
+          <button class="nav-item" data-sview="s-profile"><span class="icon">🏫</span> School Profile</button>
+          <button class="nav-item" data-sview="s-settings"><span class="icon">⚙️</span> Settings</button>
         </div>
       </nav>
       <div class="sidebar-footer">
@@ -2683,6 +2703,16 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
               <tbody id="schoolSubjectsTable"><tr><td colspan="3"><div class="empty-state">No subjects yet.</div></td></tr></tbody></table></div></div>
           </div>
         </div>
+        <div class="view" id="sview-s-class-subjects">
+          <div class="card"><div class="card-header"><h2>Class Subjects</h2></div>
+            <div class="card-body"><p class="empty-state">Link the subjects taught in each class. Select a class and its subjects from the school academic setup.</p></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-teacher-assignments">
+          <div class="card"><div class="card-header"><h2>Teacher Assignments</h2></div>
+            <div class="card-body"><p class="empty-state">Assign teachers to their classes and subjects within this school.</p></div>
+          </div>
+        </div>
         <div class="view" id="sview-s-sessions">
           <div class="card"><div class="card-header"><h2>Academic Sessions & Terms</h2><button class="btn btn-primary" id="btnAddSession">+ Session</button></div>
             <div class="card-body" id="sessionsBody"><p class="empty-state">Define sessions (e.g. 2025/2026) and terms.</p></div>
@@ -2700,6 +2730,11 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             </div>
           </div>
         </div>
+        <div class="view" id="sview-s-marks">
+          <div class="card"><div class="card-header"><h2>Marks Management</h2></div>
+            <div class="card-body"><p class="empty-state">Review and manage marks submitted for classes and subjects in this school.</p></div>
+          </div>
+        </div>
         <div class="view" id="sview-s-results">
           <div class="card"><div class="card-header"><h2>Results Management</h2></div>
             <div class="card-body"><p class="empty-state">Review submitted subject marks. Approve class results before report cards.</p>
@@ -2708,9 +2743,14 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             </div>
           </div>
         </div>
-        <div class="view" id="sview-s-reports">
+        <div class="view" id="sview-s-report-cards">
           <div class="card"><div class="card-header"><h2>Report Cards</h2></div>
-            <div class="card-body"><p class="empty-state">Generate individual report cards and class broadsheets after results are approved.</p>
+            <div class="card-body"><p class="empty-state">Generate and review individual student report cards after results are approved.</p></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-broadsheets">
+          <div class="card"><div class="card-header"><h2>Broadsheets</h2></div>
+            <div class="card-body"><p class="empty-state">Generate and review class broadsheets after marks and results are ready.</p>
               <button class="btn btn-outline" id="btnGenBroadsheet">Generate Broadsheet (selected class)</button>
             </div>
           </div>
@@ -2728,6 +2768,11 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         <div class="view" id="sview-s-billing">
           <div class="card"><div class="card-header"><h2>Payment & Subscription</h2></div>
             <div class="card-body" id="schoolBillingBody"><p class="empty-state">Subscription status and renewal.</p></div>
+          </div>
+        </div>
+        <div class="view" id="sview-s-promotion">
+          <div class="card"><div class="card-header"><h2>Student Promotion</h2></div>
+            <div class="card-body"><p class="empty-state">Promote students between classes within this school. Promotion actions will be managed here.</p></div>
           </div>
         </div>
         <div class="view" id="sview-s-settings">
@@ -5571,14 +5616,27 @@ setTimeout(wireSaAcademicButtons, 800);
       if (!tbody) return;
       tbody.innerHTML = `<tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr>`;
       try {
-        const snap = await getDocs(query(collection(db, "schools"), where("schoolType", "==", type)));
-        if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No ${type} schools yet. Add one or import CSV.</p></div></td></tr>`;
+        // Secondary Schools includes Secondary, Junior Secondary and Senior Secondary records.
+        const isSecondaryList = ["secondary", "junior_secondary", "senior_secondary"].includes(String(type || "").toLowerCase());
+        const snap = await getDocs(collection(db, "schools"));
+        const schoolRows = [];
+        snap.forEach(d => {
+          const data = d.data() || {};
+          const schoolType = String(data.schoolType || data.type || "").toLowerCase().replace(/[\s-]+/g, "_");
+          const matches = isSecondaryList
+            ? ["secondary", "junior_secondary", "senior_secondary"].includes(schoolType)
+            : schoolType === String(type || "").toLowerCase();
+          if (matches) schoolRows.push({ id: d.id, data });
+        });
+        if (!schoolRows.length) {
+          tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No ${isSecondaryList ? "secondary" : type} schools yet. Add one or import CSV.</p></div></td></tr>`;
           return;
         }
+        schoolRows.sort((a, b) => String(a.data.name || "").localeCompare(String(b.data.name || ""), undefined, { sensitivity: "base" }));
         let html = "";
-        snap.forEach(d => {
-          const s = d.data();
+        schoolRows.forEach(row => {
+          const d = { id: row.id };
+          const s = row.data;
           const st = s.status || "pending";
           const badge = st === "active" ? "badge-success" : st === "suspended" ? "badge-danger" : "badge-warning";
           html += `<tr>
@@ -5702,7 +5760,9 @@ setTimeout(wireSaAcademicButtons, 800);
         let p = 0, s = 0, v = 0, lgas = new Set();
         snap.forEach(d => {
           const x = d.data();
-          if (x.schoolType === "primary") p++; else if (x.schoolType === "secondary") s++;
+          const st = String(x.schoolType || x.type || "").toLowerCase().replace(/[\s-]+/g, "_");
+          if (st === "primary") p++;
+          else if (["secondary", "junior_secondary", "senior_secondary"].includes(st)) s++;
           if (x.verified) v++;
           if (x.lga) lgas.add(x.lga);
         });
@@ -6045,18 +6105,7 @@ setTimeout(wireSaAcademicButtons, 800);
       a.click();
     });
 
-    // School admin nav
-    document.querySelectorAll("[data-sview]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("#schoolApp .view").forEach(v => v.classList.remove("active"));
-        document.querySelectorAll("[data-sview]").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        const id = "sview-" + btn.dataset.sview;
-        const el = $(id);
-        if (el) el.classList.add("active");
-        if ($("schoolPageTitle")) $("schoolPageTitle").textContent = btn.textContent.trim();
-      });
-    });
+    // School leadership navigation is wired once by the dedicated handler at the end of this file.
     $("schoolLogoutBtn")?.addEventListener("click", async () => {
       try { await signOut(auth); } catch (e) {}
       document.documentElement.classList.remove("is-school");
@@ -10610,24 +10659,22 @@ window.__initStudentDash = async function() {
 };
 
 // School leadership dash init (promotion/term stubs)
-window.__initSchoolDash = function() {
+window.__initSchoolDash = async function() {
+  const B = window.MMSAYAYA_BACKEND;
   const $ = (id) => document.getElementById(id);
-  // Ensure promotion & term views exist
-  const content = document.querySelector("#schoolApp .content") || document.getElementById("schoolContent");
-  if (content && !document.getElementById("sview-s-promotion")) {
-    const wrap = document.createElement("div");
-    wrap.innerHTML = `
-      <div class="view" id="view-s-promotion"><div class="card"><div class="card-header"><h2>Promotion</h2></div>
-        <div class="card-body"><p style="color:#546e7a;">Promote students between classes within this school. Use Students Management to move students when authorized.</p></div></div></div>
-      <div class="view" id="view-s-term"><div class="card"><div class="card-header"><h2>Term</h2></div>
-        <div class="card-body"><p style="color:#546e7a;">Manage academic terms via Sessions. Set the current term for marks and report cards.</p>
-        <button type="button" class="btn btn-outline" data-sview="s-sessions">Open Sessions</button></div></div></div>`;
-    // Only append if school content uses view-s-* pattern - check existing
-  }
-  document.querySelectorAll("#schoolSidebarNav .nav-item").forEach(btn => {
-    if (btn.dataset.sBound) return;
-    btn.dataset.sBound = "1";
-  });
+  let actor = null;
+  try { actor = B ? await B.loadActor() : null; } catch (e) { console.warn("Could not load school leader profile", e); }
+  const role = String(actor && actor.role || "").toLowerCase();
+  const school = actor && actor.schoolId && B ? await B.schools.get(actor.schoolId).catch(() => null) : null;
+  const schoolName = school && (school.name || school.schoolName) || "My School";
+  const isPrimary = role === "headmaster";
+  const roleLabel = isPrimary ? "Headmaster" : role === "principal" ? "Principal" : "School Admin";
+  if ($("schoolBrandName")) $("schoolBrandName").textContent = schoolName;
+  if ($("schoolLeadershipSectionTitle")) $("schoolLeadershipSectionTitle").textContent = isPrimary ? "Primary School Leadership" : role === "principal" ? "Secondary School Leadership" : "School Leadership";
+  if ($("schoolUserName")) $("schoolUserName").textContent = actor && (actor.fullName || actor.name) || roleLabel;
+  if ($("schoolUserRole")) $("schoolUserRole").textContent = roleLabel;
+  if ($("schoolUserAvatar")) $("schoolUserAvatar").textContent = roleLabel.charAt(0);
+  if ($("schoolPageTitle")) $("schoolPageTitle").textContent = isPrimary ? "Primary School Overview" : role === "principal" ? "Secondary School Overview" : "School Overview";
 };
 
 // Wire registration forms to ME_registerAccount
@@ -10825,47 +10872,26 @@ setTimeout(wirePassReg, 1200);
 <script>
 (function(){
   if (window.__schoolNavWired) return; window.__schoolNavWired = true;
-  function wire() {
-    var nav = document.getElementById("schoolSidebarNav");
-    if (!nav) return;
+  function wire(){
+    var nav=document.getElementById("schoolSidebarNav");
+    var root=document.getElementById("schoolApp");
+    if(!nav||!root) return;
     nav.querySelectorAll(".nav-item[data-sview]").forEach(function(btn){
-      if (btn.dataset.wired) return; btn.dataset.wired = "1";
-      btn.addEventListener("click", function(){
-        nav.querySelectorAll(".nav-item").forEach(function(b){ b.classList.remove("active"); });
-        btn.classList.add("active");
-        var name = btn.getAttribute("data-sview");
-        var title = document.getElementById("schoolPageTitle");
-        if (title) title.textContent = btn.textContent.trim();
-        var root = document.getElementById("schoolApp");
-        if (!root) return;
-        root.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); v.style.display = "none"; });
-        var map = {
-          "s-overview": ["view-s-overview","s-overview", "view-overview"],
-          "s-teachers": ["view-s-teachers","s-teachers"],
-          "s-students": ["view-s-students","s-students"],
-          "s-classes": ["view-s-classes","s-classes"],
-          "s-reports": ["view-s-reports","s-reports","view-s-results"],
-          "s-promotion": ["view-s-promotion"],
-          "s-term": ["view-s-term","view-s-sessions","s-sessions"]
-        };
-        var ids = map[name] || [("view-" + name), name];
-        var found = null;
-        for (var i=0;i<ids.length;i++){
-          found = document.getElementById(ids[i]);
-          if (found) break;
-        }
-        if (found) { found.classList.add("active"); found.style.display = ""; }
+      if(btn.dataset.wired === "1") return;
+      btn.dataset.wired="1";
+      btn.addEventListener("click",function(){
+        nav.querySelectorAll(".nav-item[data-sview]").forEach(function(item){item.classList.toggle("active",item===btn);});
+        var key=btn.getAttribute("data-sview");
+        root.querySelectorAll(".view").forEach(function(view){view.classList.remove("active");});
+        var target=document.getElementById("sview-"+key);
+        if(target) target.classList.add("active");
+        var title=document.getElementById("schoolPageTitle");
+        if(title) title.textContent=btn.textContent.trim();
       });
     });
-    var lo = document.getElementById("schoolLogoutBtn");
-    if (lo && !lo.dataset.wired) {
-      lo.dataset.wired = "1";
-      lo.addEventListener("click", function(){ location.hash = "login"; location.reload(); });
-    }
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wire);
-  else wire();
-  setTimeout(wire, 800);
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",wire); else wire();
+  setTimeout(wire,800);
 })();
 </script>
 
