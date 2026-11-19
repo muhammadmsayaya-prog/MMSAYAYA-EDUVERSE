@@ -34,6 +34,29 @@ window.SITE_IMAGE_SLOTS = {
   <script>if(location.hash==="#login")document.documentElement.classList.add("is-login");</script>
   <meta name="description" content="MMSAYAYA EDUVERSE - Multi-disciplinary online learning platform." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS (utilities available; preflight OFF so existing MMSAYAYA styles stay intact) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: { preflight: false },
+      theme: {
+        extend: {
+          colors: {
+            me: {
+              primary: "#0D47A1",
+              secondary: "#1976D2",
+              emerald: "#00796B",
+              gold: "#C9A227",
+              navy: "#0a1628"
+            }
+          },
+          fontFamily: {
+            sans: ["Inter", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
   <style>
     :root {
       --primary: #0D47A1; --secondary: #1976D2; --emerald: #00796B;
@@ -244,14 +267,14 @@ window.SITE_IMAGE_SLOTS = {
     }
     .sidebar-brand span { font-weight:700; font-size:0.95rem; line-height:1.2; }
     .sidebar-brand small { display:block; font-size:0.7rem; opacity:0.7; font-weight:500; }
-    .sidebar-nav { flex:1; overflow-y:auto; padding:12px 10px 24px; }
-    .nav-section { margin-bottom:18px; }
+    .sidebar-nav { flex:1; min-height:0; overflow-y:auto; padding:10px 10px 8px; }
+    .nav-section { margin-bottom:10px; }
     .nav-section-title {
       font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
       color:rgba(255,255,255,0.45); padding:6px 12px 8px;
     }
     .nav-item {
-      display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px;
+      display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:10px;
       font-size:0.875rem; font-weight:500; color:rgba(255,255,255,0.85); cursor:pointer;
       transition:all 0.15s; border:none; background:none; width:100%; text-align:left;
     }
@@ -297,6 +320,18 @@ window.SITE_IMAGE_SLOTS = {
     .content { padding:24px; flex:1; }
     .view { display:none; }
     .view.active { display:block; }
+
+    /* Prevent dashboard/setup content from spilling under other shells */
+    .view:not(.active) { display: none !important; }
+    #adminApp, #schoolApp, #teacherSchoolApp, #studentApp { display: none !important; }
+    html.is-admin #adminApp { display: flex !important; }
+    html.is-school #schoolApp { display: flex !important; }
+    html.is-teacher-school #teacherSchoolApp { display: flex !important; }
+    html.is-student-dash #studentApp { display: flex !important; }
+    script[type="text/plain"] { display: none !important; }
+    #view-backend-setup:not(.active) pre,
+    #view-backend-setup:not(.active) textarea { display: none !important; max-height: 0 !important; overflow: hidden !important; }
+
 
     /* Cards & Stats */
     .stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; margin-bottom:24px; }
@@ -2440,13 +2475,42 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
               <button type="button" class="btn btn-primary" id="btnCreateClass">+ Add Class</button>
             </div>
             <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:14px;">
+                Super Admin can apply the official class structure to all Primary or Secondary schools. Existing classes are kept; missing ones are added.
+              </p>
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                <button type="button" class="btn btn-emerald" id="btnApplyPrimaryClassesAll">Apply Primary classes to ALL Primary schools</button>
+                <button type="button" class="btn btn-emerald" id="btnApplySecondaryClassesAll">Apply Secondary classes to ALL Secondary schools</button>
+                <button type="button" class="btn btn-outline" id="btnApplyClassesOneSchool">Apply to selected school only</button>
+                <button type="button" class="btn btn-outline" id="btnSeedAllSchoolClasses">Apply to every school</button>
+              </div>
+              <div id="classesBulkStatus" style="font-size:0.9rem;margin-bottom:12px;color:#546e7a;"></div>
+              <details style="margin-bottom:16px;border:1px solid var(--border);border-radius:10px;padding:12px;background:#fafbfc;">
+                <summary style="cursor:pointer;font-weight:600;">Official class structure</summary>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;font-size:0.85rem;">
+                  <div>
+                    <strong>PRIMARY</strong>
+                    <ul style="margin:8px 0 0 18px;line-height:1.7;">
+                      <li>Nursery 1, Nursery 2, Nursery 3</li>
+                      <li>Primary 1, Primary 2, Primary 3, Primary 4, Primary 5, Primary 6</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <strong>SECONDARY</strong>
+                    <ul style="margin:8px 0 0 18px;line-height:1.7;">
+                      <li>JSS 1, JSS 2, JSS 3</li>
+                      <li>SS 1, SS 2, SS 3</li>
+                    </ul>
+                  </div>
+                </div>
+              </details>
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
                 <select id="classSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadClasses">Load classes</button>
               </div>
-              <div id="classesMgmtMeta" style="font-size:0.85rem;color:#546e7a;margin:8px 0;"></div>
-              <div class="table-wrap"><table><thead><tr><th>#</th><th>Class</th><th>Level</th><th>Status</th></tr></thead>
-                <tbody id="classesMgmtTable"><tr><td colspan="4" style="padding:16px;text-align:center;color:#546e7a;">Select a school and load.</td></tr></tbody></table></div>
+              <div id="classesMgmtMeta" style="font-size:0.85rem;color:#546e7a;margin:8px 0;">Primary: Nursery 1–3 + Primary 1–6. Secondary: JSS 1–3 + SS 1–3.</div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Class</th><th>Section</th><th>Level</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="classesMgmtTable"><tr><td colspan="6" style="padding:16px;text-align:center;color:#546e7a;">Select a school and load.</td></tr></tbody></table></div>
             </div>
           </div>
         </div>
@@ -2456,6 +2520,29 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
               <button type="button" class="btn btn-primary" id="btnCreateSubject">+ Add Subject</button>
             </div>
             <div class="card-body">
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:14px;">
+                Super Admin can push the official <strong>Primary</strong> or <strong>Secondary</strong> subject list to <em>all</em> schools of that type.
+                Each school then sees the complete list under their Subject Management.
+              </p>
+              <div class="toolbar" style="gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                <button type="button" class="btn btn-emerald" id="btnApplyPrimarySubjectsAll">Apply Primary subjects → ALL Primary schools</button>
+                <button type="button" class="btn btn-emerald" id="btnApplySecondarySubjectsAll">Apply Secondary subjects → ALL Secondary schools</button>
+                <button type="button" class="btn btn-outline" id="btnApplySubjectsOneSchool">Apply catalogue to selected school</button>
+              </div>
+              <div id="subjectsBulkStatus" style="font-size:0.9rem;margin-bottom:12px;color:#546e7a;"></div>
+              <details style="margin-bottom:16px;border:1px solid var(--border);border-radius:10px;padding:12px;background:#fafbfc;">
+                <summary style="cursor:pointer;font-weight:600;">Official subject lists (preview)</summary>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;">
+                  <div>
+                    <strong>Primary</strong>
+                    <ol id="primarySubjectsPreview" style="margin:8px 0 0 18px;font-size:0.85rem;line-height:1.6;"></ol>
+                  </div>
+                  <div>
+                    <strong>Secondary</strong>
+                    <ol id="secondarySubjectsPreview" style="margin:8px 0 0 18px;font-size:0.85rem;line-height:1.6;"></ol>
+                  </div>
+                </div>
+              </details>
               <div class="toolbar" style="gap:8px;flex-wrap:wrap;">
                 <select id="subjectSchoolId" required style="padding:10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:360px;"><option value="">Loading schools…</option></select>
                 <button type="button" class="btn btn-outline" id="btnLoadSubjectsMgmt">Load subjects</button>
@@ -2758,8 +2845,8 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         </div>
         <div class="view" id="sview-s-classes">
           <div class="card"><div class="card-header"><h2>Classes</h2><button class="btn btn-primary" id="btnAddClass">+ Add Class</button></div>
-            <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Level</th><th>Form Master</th><th>Status</th></tr></thead>
-              <tbody id="schoolClassesTable"><tr><td colspan="4"><div class="empty-state">No classes yet.</div></td></tr></tbody></table></div></div>
+            <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Section</th><th>Level</th><th>Form Master</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="schoolClassesTable"><tr><td colspan="6"><div class="empty-state">No classes yet.</div></td></tr></tbody></table></div></div>
           </div>
         </div>
         <div class="view" id="sview-s-subjects">
@@ -5323,11 +5410,11 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       const tb = $("classesMgmtTable"); if (!tb) return;
       if (!sid || !B()) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>Select a school first.</td></tr>"; return; }
       try {
-        const rows = await B().classes.list(sid);
-        if (!rows.length) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;text-align:center;'>No classes.</td></tr>"; return; }
-        tb.innerHTML = rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.level||"")+"</td><td>"+escHtml(r.status||"")+"</td></tr>").join("");
-        if ($("classesMgmtMeta")) $("classesMgmtMeta").textContent = rows.length + " class(es)";
-      } catch (e) { tb.innerHTML = "<tr><td colspan='4' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
+        const rows = await B().classes.list(sid, { includeArchived: true });
+        if (!rows.length) { tb.innerHTML = "<tr><td colspan='6' style='padding:16px;text-align:center;'>No classes yet. Use Add Class or apply standard classes.</td></tr>"; return; }
+        tb.innerHTML = rows.map((r,i) => "<tr><td>"+(i+1)+"</td><td><strong>"+escHtml(r.name)+"</strong></td><td>"+escHtml(r.groupLabel||r.group||"Custom")+"</td><td>"+escHtml(r.level||"")+"</td><td>"+escHtml(r.status||"")+"</td><td><button type='button' class='btn btn-outline sa-class-edit' data-id='"+escHtml(r.id)+"' data-name='"+escHtml(r.name)+"' data-level='"+escHtml(r.level||"")+"'>Edit</button> <button type='button' class='btn btn-outline sa-class-archive' data-id='"+escHtml(r.id)+"' data-status='"+escHtml(r.status||"active")+"'>"+(r.status==='archived'?'Restore':'Remove')+"</button></td></tr>").join("");
+        if ($("classesMgmtMeta")) $("classesMgmtMeta").textContent = rows.length + " class(es) in this school";
+      } catch (e) { tb.innerHTML = "<tr><td colspan='6' style='padding:16px;color:#c62828;'>"+escHtml(e.message||e)+"</td></tr>"; }
     }
     async function saLoadSubjectsMgmt() {
       const sid = ($("subjectSchoolId") && $("subjectSchoolId").value || "").trim();
@@ -5503,15 +5590,136 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       });
       bind("btnCreateClass", async () => {
         const sid = ($("classSchoolId").value||"").trim();
-        const name = prompt("Class name (e.g. Primary 4)");
+        if (!sid) return alert("Select a school first.");
+        const name = prompt("Class name (e.g. Nursery 3, Primary 4, JSS 1, SS 1):");
         if (!name) return;
-        try { await B().classes.create(sid, { name }); await saLoadClasses(); } catch (e) { alert(e.message || e); }
+        const level = prompt("Level/section label (optional):", name.trim().toUpperCase().split(" ")[0]) || "";
+        try { await B().classes.create(sid, { name, level }); await saLoadClasses(); } catch (e) { alert(e.message || e); }
       });
+      async function runBulkClasses(type) {
+        const st = document.getElementById("classesBulkStatus");
+        if (!confirm("Apply the official "+type+" class structure to ALL active "+type+" schools?\n\n" +
+          (type === "primary"
+            ? "Nursery 1–3 + Primary 1–6"
+            : "JSS 1–3 + SS 1–3") +
+          "\n\nExisting classes are kept; missing ones are added.")) return;
+        if (st) { st.style.color = "#546e7a"; st.textContent = "Updating all "+type+" schools… please wait."; }
+        try {
+          if (!B() || !B().classes.applyCatalogueToAll) throw new Error("Backend not ready.");
+          const r = await B().classes.applyCatalogueToAll(type);
+          const msg = "Done: "+r.schoolsUpdated+"/"+r.schoolsTargeted+" "+type+" schools updated. Classes added: "+r.classesAdded+(r.errors && r.errors.length ? ". Errors: "+r.errors.length : ".");
+          if (st) { st.style.color = "#2e7d32"; st.textContent = msg; }
+          alert(msg);
+          await saLoadClasses();
+        } catch (e) {
+          if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); }
+          alert(e.message || String(e));
+        }
+      }
+      bind("btnApplyPrimaryClassesAll", () => runBulkClasses("primary"));
+      bind("btnApplySecondaryClassesAll", () => runBulkClasses("secondary"));
+      bind("btnApplyClassesOneSchool", async () => {
+        const sid = ($("classSchoolId").value||"").trim();
+        const st = document.getElementById("classesBulkStatus");
+        if (!sid) { alert("Select a school first."); return; }
+        if (!confirm("Apply the official class structure for this school's type?")) return;
+        try {
+          if (st) st.textContent = "Applying…";
+          const r = await B().classes.ensureDefaults(sid);
+          if (r.unsupported) throw new Error("This school type is not supported for standard classes.");
+          const msg = "School updated: added "+r.added+" class(es) (catalogue has "+r.total+").";
+          if (st) { st.style.color = "#2e7d32"; st.textContent = msg; }
+          await saLoadClasses();
+        } catch (e) {
+          if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); }
+          alert(e.message || e);
+        }
+      });
+      bind("btnSeedAllSchoolClasses", async () => {
+        const button = $("btnSeedAllSchoolClasses");
+        if (!confirm("Apply the standard class structure to every registered Primary and Secondary school? Existing classes will be kept; missing standard classes will be added.")) return;
+        try {
+          button.disabled = true; button.textContent = "Applying…";
+          const all = await B().schools.listAll(); let count = 0, skipped = 0;
+          for (const school of all) {
+            const result = await B().classes.ensureDefaults(school.id);
+            if (result && result.added) count += result.added; else skipped++;
+          }
+          alert("Standard class structure applied. Added " + count + " class(es). Schools without a supported school type: " + skipped + ".");
+          await saLoadClasses();
+        } catch (e) { alert("Could not apply classes to all schools: " + (e.message || e)); }
+        finally { button.disabled = false; button.textContent = "Apply standard classes to all schools"; }
+      });
+      const classTable = $("classesMgmtTable");
+      if (classTable && !classTable.dataset.classActionsBound) {
+        classTable.dataset.classActionsBound = "1";
+        classTable.addEventListener("click", async (event) => {
+          const edit = event.target.closest(".sa-class-edit");
+          const archive = event.target.closest(".sa-class-archive");
+          try {
+            if (edit) {
+              const name = prompt("Update class name:", edit.dataset.name || ""); if (!name) return;
+              const level = prompt("Update level/section label:", edit.dataset.level || "") || "";
+              await B().classes.update(edit.dataset.id, { name, level }); await saLoadClasses();
+            } else if (archive) {
+              const restore = archive.dataset.status === "archived";
+              if (!confirm(restore ? "Restore this class?" : "Remove this class from active use? Existing student records will be preserved.")) return;
+              await B().classes.setArchived(archive.dataset.id, !restore); await saLoadClasses();
+            }
+          } catch (e) { alert(e.message || e); }
+        });
+      }
       bind("btnCreateSubject", async () => {
         const sid = ($("subjectSchoolId").value||"").trim();
         const name = prompt("Subject name");
         if (!name) return;
         try { await B().subjects.create(sid, { name }); await saLoadSubjectsMgmt(); } catch (e) { alert(e.message || e); }
+      });
+      function fillSubjectPreviews() {
+        try {
+          const cat = B() && B().subjects.catalogue ? B().subjects.catalogue() : null;
+          if (!cat) return;
+          const p = document.getElementById("primarySubjectsPreview");
+          const s = document.getElementById("secondarySubjectsPreview");
+          if (p) p.innerHTML = (cat.primary || []).map(n => "<li>"+String(n).replace(/</g,"&lt;")+"</li>").join("");
+          if (s) s.innerHTML = (cat.secondary || []).map(n => "<li>"+String(n).replace(/</g,"&lt;")+"</li>").join("");
+        } catch (e) {}
+      }
+      setTimeout(fillSubjectPreviews, 800);
+      setTimeout(fillSubjectPreviews, 2000);
+      async function runBulkSubjects(type) {
+        const st = document.getElementById("subjectsBulkStatus");
+        if (!confirm("Apply the official "+type+" subject list to ALL active "+type+" schools? Missing subjects will be added; existing ones are kept.")) return;
+        if (st) { st.style.color = "#546e7a"; st.textContent = "Updating all "+type+" schools… please wait."; }
+        try {
+          if (!B() || !B().subjects.applyCatalogueToAll) throw new Error("Backend not ready.");
+          const r = await B().subjects.applyCatalogueToAll(type);
+          const msg = "Done: "+r.schoolsUpdated+"/"+r.schoolsTargeted+" "+type+" schools updated. Subjects added: "+r.subjectsAdded+(r.errors && r.errors.length ? ". Errors: "+r.errors.length : ".");
+          if (st) { st.style.color = "#2e7d32"; st.textContent = msg; }
+          alert(msg);
+          await saLoadSubjectsMgmt();
+        } catch (e) {
+          if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); }
+          alert(e.message || String(e));
+        }
+      }
+      bind("btnApplyPrimarySubjectsAll", () => runBulkSubjects("primary"));
+      bind("btnApplySecondarySubjectsAll", () => runBulkSubjects("secondary"));
+      bind("btnApplySubjectsOneSchool", async () => {
+        const sid = ($("subjectSchoolId").value||"").trim();
+        const st = document.getElementById("subjectsBulkStatus");
+        if (!sid) { alert("Select a school first."); return; }
+        if (!confirm("Apply the official subject catalogue for this school's type?")) return;
+        try {
+          if (st) st.textContent = "Applying…";
+          const r = await B().subjects.ensureDefaults(sid);
+          const msg = "School updated: added "+r.added+" subjects (catalogue has "+r.total+").";
+          if (st) { st.style.color = "#2e7d32"; st.textContent = msg; }
+          await saLoadSubjectsMgmt();
+        } catch (e) {
+          if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); }
+          alert(e.message || e);
+        }
       });
       bind("btnLoadMarks", saLoadMarks);
       bind("btnLoadResults", saLoadResults);
@@ -5600,52 +5808,91 @@ setTimeout(wireSaAcademicButtons, 800);
         window.__fillSchoolSelect = fillSchoolSelect;
         if (!selectEl) return;
         attempt = attempt || 0;
-        if (!B()) {
+        if (!window.MMSAYAYA_BACKEND && !window.KATSINA_SCHOOLS) {
           if (attempt < 50) {
             selectEl.innerHTML = '<option value="">Loading schools…</option>';
             setTimeout(function(){ fillSchoolSelect(selectEl, schoolIdEl, typeFilter, attempt + 1); }, 200);
           } else {
-            selectEl.innerHTML = '<option value="">Could not load backend — refresh page</option>';
+            selectEl.innerHTML = '<option value="">Could not load schools — refresh page</option>';
           }
           return;
         }
-
-        selectEl.innerHTML = '<option value="">Loading registered schools…</option>';
+        selectEl.innerHTML = '<option value="">Loading schools…</option>';
         if (schoolIdEl) schoolIdEl.value = '';
         try {
-          // Registration must use real Firestore school document IDs only.
-          // Do not use the static Katsina directory here: its generated IDs
-          // are not document IDs in the Firestore "schools" collection.
-          var rows = await B().schools.listAll();
-          rows = Array.isArray(rows) ? rows : [];
-
           function normalizeType(value) {
             return String(value || '').trim().toLowerCase().replace(/[\s-]+/g, '_');
           }
-          if (typeFilter) {
-            var wanted = normalizeType(typeFilter);
-            rows = rows.filter(function(s) {
-              var actual = normalizeType(s.schoolType || s.type);
-              if (wanted === 'primary') return actual === 'primary';
-              if (wanted === 'secondary') return ['secondary', 'junior_secondary', 'senior_secondary'].includes(actual);
-              return actual === wanted;
-            });
-          }
-
-          // Ignore malformed records without a real Firestore document ID.
-          rows = rows.filter(function(s) { return s && typeof s.id === 'string' && s.id.trim(); });
-          if (!rows.length) {
-            var kind = typeFilter === 'primary' ? 'Primary' : (typeFilter === 'secondary' ? 'Secondary' : '');
-            selectEl.innerHTML = '<option value="">No registered ' + kind + ' schools found in Firestore. Add the school first.</option>';
-            return;
-          }
-
           function placeOf(s) {
             return String(s.town || s.location || s.lga || s.lgaName || s.city || '').trim();
           }
           function schoolNameOf(s) {
             return String(s.name || s.schoolName || s.id || '').trim();
           }
+          function slugPart(v) {
+            return String(v || '').replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 48);
+          }
+
+          // Full Katsina directory (complete Primary / Secondary lists)
+          function fromDirectory(tf) {
+            var KS = window.KATSINA_SCHOOLS || {};
+            var out = [];
+            Object.keys(KS).sort(function(a,b){ return a.localeCompare(b, undefined, {sensitivity:'base'}); }).forEach(function(lga) {
+              var block = KS[lga] || {};
+              var names = [];
+              if (tf === 'primary') names = block.primary || [];
+              else if (tf === 'secondary') names = block.secondary || [];
+              else names = [].concat(block.primary || [], block.secondary || []);
+              names.forEach(function(name) {
+                var type = 'secondary';
+                if (tf === 'primary') type = 'primary';
+                else if (tf === 'secondary') type = 'secondary';
+                else type = (block.primary || []).indexOf(name) >= 0 ? 'primary' : 'secondary';
+                out.push({
+                  id: 'kt_' + type + '_' + slugPart(lga) + '_' + slugPart(name),
+                  name: name,
+                  town: lga,
+                  lga: lga,
+                  schoolType: type,
+                  source: 'directory'
+                });
+              });
+            });
+            return out;
+          }
+
+          var rows = [];
+          var wanted = typeFilter ? normalizeType(typeFilter) : '';
+
+          // Prefer complete directory for Primary / Secondary registration dropdowns
+          if (wanted === 'primary' || wanted === 'secondary') {
+            rows = fromDirectory(wanted);
+          }
+
+          // Merge any registered Firestore schools of same type (real docs)
+          try {
+            if (window.MMSAYAYA_BACKEND && window.MMSAYAYA_BACKEND.schools) {
+              var registered = await window.MMSAYAYA_BACKEND.schools.listAll();
+              registered = Array.isArray(registered) ? registered : [];
+              registered.forEach(function(s) {
+                if (!s || !s.id) return;
+                var actual = normalizeType(s.schoolType || s.type);
+                if (wanted === 'primary' && actual !== 'primary') return;
+                if (wanted === 'secondary' && ['secondary','junior_secondary','senior_secondary'].indexOf(actual) < 0) return;
+                // Avoid duplicate display name+lga already in directory
+                var labelKey = (placeOf(s) + '|' + schoolNameOf(s)).toLowerCase();
+                var exists = rows.some(function(r){ return (placeOf(r)+'|'+schoolNameOf(r)).toLowerCase() === labelKey; });
+                if (!exists) rows.push(s);
+              });
+            }
+          } catch (e) { console.warn('schools.listAll merge', e); }
+
+          if (!rows.length) {
+            selectEl.innerHTML = '<option value="">No schools found</option>';
+            return;
+          }
+
+          // A–Z by town/LGA, then school name
           rows = rows.slice().sort(function(a, b) {
             var pa = placeOf(a).toLowerCase(), pb = placeOf(b).toLowerCase();
             if (pa && pb && pa !== pb) return pa.localeCompare(pb, undefined, { sensitivity: 'base' });
@@ -5654,30 +5901,20 @@ setTimeout(wireSaAcademicButtons, 800);
             return schoolNameOf(a).localeCompare(schoolNameOf(b), undefined, { sensitivity: 'base' });
           });
 
-          function escapeHtml(value) {
-            return String(value).replace(/[&<>"']/g, function(ch) {
-              return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
-            });
-          }
-          selectEl.innerHTML = '<option value="">Select registered school (' + rows.length + ')…</option>' +
+          selectEl.innerHTML = '<option value="">Select school (' + rows.length + ')…</option>' +
             rows.map(function(s) {
               var place = placeOf(s);
               var name = schoolNameOf(s);
               var label = place ? (place + ' — ' + name) : name;
-              return '<option value="' + escapeHtml(s.id) + '">' + escapeHtml(label) + '</option>';
+              return '<option value="' + String(s.id).replace(/"/g, '') + '" data-name="' + name.replace(/"/g, '&quot;') + '" data-town="' + place.replace(/"/g, '&quot;') + '" data-type="' + String(s.schoolType || s.type || '').replace(/"/g, '') + '">' +
+                label.replace(/</g, '&lt;') + '</option>';
             }).join('');
 
           selectEl.onchange = function() {
             if (schoolIdEl) schoolIdEl.value = selectEl.value || '';
           };
-          // Keep the hidden ID synchronized if the browser restores a selection.
-          if (schoolIdEl) schoolIdEl.value = selectEl.value || '';
         } catch (e) {
-          console.error('Failed to load registered schools:', e);
-          var errorText = (e && e.message) ? String(e.message) : 'Failed to load schools';
-          selectEl.innerHTML = '<option value="">Could not load registered schools: ' +
-            errorText.replace(/[&<>"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]; }) +
-            '</option>';
+          selectEl.innerHTML = '<option value="">' + String(e.message || 'Failed to load schools').replace(/</g, '&lt;') + '</option>';
         }
       }
       function refreshSchoolDropdowns() {
@@ -8079,13 +8316,20 @@ export const ADMIN_PERMS = Object.freeze([
 ]);
 export const TEACHER_PERMS = Object.freeze(["manage_lessons", "manage_assignments", "create_questions", "grade", "view_students", "message"]);
 export const STUDENT_PERMS = Object.freeze(["view_courses", "take_exams", "view_results", "download_certificates", "message", "practice_questions"]);
-/** Granted ONLY explicitly by a Super Admin - never part of any default list. */
+/** Extra school-operational permissions used by school leadership. */
 export const EXPLICIT_ONLY_PERMS = Object.freeze(["view_students", "manage_results", "manage_report_cards"]);
-/** Catalogue for Admin / Headmaster / Principal. Headmaster & Principal get NONE by default (configured later). */
+/** Headmaster and Principal receive full operational control inside their own correctly typed school. */
+export const LEADER_SCHOOL_PERMS = Object.freeze([
+  "manage_users", "create_student", "create_teacher", "manage_permissions", "suspend_users",
+  "reset_passwords", "manage_schools", "manage_announcements", "view_reports",
+  "view_students", "manage_results", "manage_report_cards", "manage_certificates"
+]);
+/** Catalogue for Admin / Headmaster / Principal; platform-only powers remain separate. */
 export const STAFF_PERMS = Object.freeze([...ADMIN_PERMS, ...EXPLICIT_ONLY_PERMS]);
 
 export const DEFAULT_PERMS = Object.freeze({
-  admin: ADMIN_PERMS, teacher: TEACHER_PERMS, student: STUDENT_PERMS, headmaster: Object.freeze([]), principal: Object.freeze([])
+  admin: ADMIN_PERMS, teacher: TEACHER_PERMS, student: STUDENT_PERMS,
+  headmaster: LEADER_SCHOOL_PERMS, principal: LEADER_SCHOOL_PERMS
 });
 export const CATALOGUE = Object.freeze({
   admin: STAFF_PERMS, headmaster: STAFF_PERMS, principal: STAFF_PERMS, teacher: TEACHER_PERMS, student: STUDENT_PERMS
@@ -8139,6 +8383,9 @@ export const Ids = Object.freeze({
 export function effectivePerms(profile) {
   const role = normRole(profile && profile.role);
   if (role === ROLES.SUPER_ADMIN) return ["*"];
+  // Leaders always receive the school-operational permission set. Firestore Rules
+  // independently enforce their schoolId and the Headmaster/Principal school type.
+  if (role === ROLES.HEADMASTER || role === ROLES.PRINCIPAL) return Array.from(LEADER_SCHOOL_PERMS);
   if (profile && Array.isArray(profile.permissions)) return profile.permissions;
   return Array.from(DEFAULT_PERMS[role] || []);
 }
@@ -8154,6 +8401,7 @@ export function can(profile, perm, schoolId) {
   if (role === ROLES.SUPER_ADMIN) return true;
   if (!["admin", "headmaster", "principal"].includes(role)) return false;
   if (!schoolId || profile.schoolId !== schoolId) return false;
+  if (role === ROLES.HEADMASTER || role === ROLES.PRINCIPAL) return LEADER_SCHOOL_PERMS.includes(perm);
   const perms = effectivePerms(profile);
   return perms.includes(perm);
 }
@@ -8275,6 +8523,30 @@ export function createSchoolBackend({ db, auth, fs }) {
         return st === t;
       });
     },
+    async ensureDirectorySchool({ id, name, schoolType, town }) {
+      const actor = await loadActor();
+      if (actor.role !== ROLES.SUPER_ADMIN && actor.role !== "superadmin" && actor.role !== ROLES.ADMIN) fail("Only Admin can register directory schools.");
+      const ref = doc(db, "schools", id);
+      const snap = await getDoc(ref);
+      if (snap.exists()) return { id, ...(snap.data() || {}) };
+      const payload = {
+        name: String(name || id).slice(0, 160),
+        schoolType: schoolType === "primary" ? "primary" : "secondary",
+        town: town || null,
+        lga: town || null,
+        state: "Katsina",
+        status: "active",
+        source: "katsina_directory",
+        createdBy: actor.uid,
+        createdAt: ts(),
+        updatedAt: ts()
+      };
+      const b = writeBatch(db);
+      b.set(ref, payload);
+      addAudit(b, actor, { action: "school_directory_register", schoolId: id, targetType: "schools", targetId: id, summary: { name: payload.name, schoolType: payload.schoolType } });
+      await b.commit();
+      return { id, ...payload };
+    },
     /** School details a school Admin may edit (rules enforce the allowed fields). */
     async updateDetails(schoolId, patch) {
       const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
@@ -8293,21 +8565,35 @@ export function createSchoolBackend({ db, auth, fs }) {
 
   // ================================================================== classes / subjects (dynamic)
   const SCHOOL_CLASS_CATALOGUE = Object.freeze({
-    primary: ["NURSERY 1","NURSERY 2","PRIMARY 1","PRIMARY 2","PRIMARY 3","PRIMARY 4","PRIMARY 5","PRIMARY 6"],
-    secondary: ["JSS 1","JSS 2","JSS 3","SS 1","SS 2","SS 3"],
-    junior_secondary: ["JSS 1","JSS 2","JSS 3","SS 1","SS 2","SS 3"],
-    senior_secondary: ["JSS 1","JSS 2","JSS 3","SS 1","SS 2","SS 3"]
+    primary: [
+      { name: "NURSERY 1", group: "nursery", order: 1 }, { name: "NURSERY 2", group: "nursery", order: 2 }, { name: "NURSERY 3", group: "nursery", order: 3 },
+      { name: "PRIMARY 1", group: "primary", order: 4 }, { name: "PRIMARY 2", group: "primary", order: 5 }, { name: "PRIMARY 3", group: "primary", order: 6 },
+      { name: "PRIMARY 4", group: "primary", order: 7 }, { name: "PRIMARY 5", group: "primary", order: 8 }, { name: "PRIMARY 6", group: "primary", order: 9 }
+    ],
+    secondary: [
+      { name: "JSS 1", group: "junior_secondary", order: 1 }, { name: "JSS 2", group: "junior_secondary", order: 2 }, { name: "JSS 3", group: "junior_secondary", order: 3 },
+      { name: "SS 1", group: "senior_secondary", order: 4 }, { name: "SS 2", group: "senior_secondary", order: 5 }, { name: "SS 3", group: "senior_secondary", order: 6 }
+    ],
+    junior_secondary: [
+      { name: "JSS 1", group: "junior_secondary", order: 1 }, { name: "JSS 2", group: "junior_secondary", order: 2 }, { name: "JSS 3", group: "junior_secondary", order: 3 }
+    ],
+    senior_secondary: [
+      { name: "SS 1", group: "senior_secondary", order: 1 }, { name: "SS 2", group: "senior_secondary", order: 2 }, { name: "SS 3", group: "senior_secondary", order: 3 }
+    ]
   });
+  function inferClassGroup(name) {
+    const n = String(name || "").trim().toUpperCase();
+    if (n.startsWith("NURSERY")) return "nursery";
+    if (n.startsWith("PRIMARY")) return "primary";
+    if (n.startsWith("JSS") || n.startsWith("JUNIOR SECONDARY")) return "junior_secondary";
+    if (n.startsWith("SS") || n.startsWith("SENIOR SECONDARY")) return "senior_secondary";
+    return "custom";
+  }
+  const CLASS_GROUP_LABELS = { nursery: "Nursery School", primary: "Primary School", junior_secondary: "Junior Secondary", senior_secondary: "Senior Secondary", custom: "Custom Class" };
   function structureService({ coll, label, idFn, nameKey }) {
     return {
       list: async (schoolId, { includeArchived = false } = {}) => {
         let rows = await listBySchool(coll, schoolId);
-        if (coll === "classes") {
-          const school = await schools.get(schoolId);
-          const type = String(school && school.schoolType || "").toLowerCase();
-          const allowed = SCHOOL_CLASS_CATALOGUE[type] || [];
-          rows = rows.filter(x => allowed.includes(String(x.name || "").trim().toUpperCase()));
-        }
         return rows.filter(x => includeArchived || x.status === "active").sort((a,b)=>(a.order??0)-(b.order??0)||String(a.name).localeCompare(String(b.name)));
       },
       async create(schoolId, input) {
@@ -8315,19 +8601,13 @@ export function createSchoolBackend({ db, auth, fs }) {
         let name = String(input.name || "").trim();
         if (coll === "classes") name = name.toUpperCase();
         if (!name || name.length > 80) fail(label + " name is required (max 80 characters).");
-        if (coll === "classes") {
-          const school = await schools.get(schoolId);
-          const type = String(school && school.schoolType || "").toLowerCase();
-          const allowed = SCHOOL_CLASS_CATALOGUE[type] || [];
-          if (!allowed.includes(name.toUpperCase())) fail("This class is not part of the approved class list for this school type.");
-        }
         const base = coll === "subjects" ? (input.code || name) : name;
         const id = idFn(schoolId, base);
         if (id === schoolId + "_") fail("Invalid " + label + " name.");
         const ref = doc(db, coll, id);
         if ((await getDoc(ref)).exists()) fail("A " + label + " with this name already exists in this school.");
         const data = coll === "classes"
-          ? { schoolId, name, key: slug(name), level: String(input.level || "").slice(0, 40), order: Number(input.order) || 0, status: "active", createdBy: actor.uid, createdAt: ts(), updatedAt: ts() }
+          ? { schoolId, name, key: slug(name), group: String(input.group || inferClassGroup(name)), groupLabel: CLASS_GROUP_LABELS[String(input.group || inferClassGroup(name))] || CLASS_GROUP_LABELS.custom, level: String(input.level || "").slice(0, 40), order: Number(input.order) || 0, status: "active", createdBy: actor.uid, createdAt: ts(), updatedAt: ts() }
           : { schoolId, name, code: String(input.code || "").slice(0, 20), key: slug(base), level: String(input.level || "").slice(0, 40), status: "active", createdBy: actor.uid, createdAt: ts(), updatedAt: ts() };
         const b = writeBatch(db);
         b.set(ref, data);
@@ -8340,12 +8620,13 @@ export function createSchoolBackend({ db, auth, fs }) {
         if (!snap.exists()) fail(label + " not found.");
         const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, cur.schoolId);
         const data = {};
-        ["name", "level", "order", "code"].forEach((k) => { if (patch[k] !== undefined && (k !== "code" || coll === "subjects") && (k !== "order" || coll === "classes")) data[k] = patch[k]; });
+        ["name", "level", "order", "code", "group"].forEach((k) => { if (patch[k] !== undefined && (k !== "code" || coll === "subjects") && (k !== "order" || coll === "classes") && (k !== "group" || coll === "classes")) data[k] = patch[k]; });
         if (data.name !== undefined && !String(data.name).trim()) fail("Name cannot be empty.");
-        if (coll === "classes" && data.name !== undefined) {
-          const school = await schools.get(cur.schoolId); const type = String(school && school.schoolType || "").toLowerCase();
-          data.name = String(data.name).trim().toUpperCase();
-          if (!(SCHOOL_CLASS_CATALOGUE[type] || []).includes(data.name)) fail("This class is not part of the approved class list for this school type.");
+        if (coll === "classes") {
+          if (data.name !== undefined) data.name = String(data.name).trim().toUpperCase();
+          if (data.group !== undefined) data.group = String(data.group);
+          else if (data.name !== undefined) data.group = inferClassGroup(data.name);
+          if (data.group !== undefined) data.groupLabel = CLASS_GROUP_LABELS[data.group] || CLASS_GROUP_LABELS.custom;
         }
         const b = writeBatch(db);
         b.update(ref, { ...data, name: data.name !== undefined ? String(data.name).trim() : cur.name, updatedAt: ts() });
@@ -8364,7 +8645,107 @@ export function createSchoolBackend({ db, auth, fs }) {
     };
   }
   const classes = structureService({ coll: "classes", label: "class", idFn: Ids.class });
+  classes.ensureDefaults = async function(schoolId) {
+    const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
+    const school = await schools.get(schoolId); if (!school) fail("School not found.");
+    const type = String(school.schoolType || school.type || "").toLowerCase();
+    const catalogue = SCHOOL_CLASS_CATALOGUE[type] || [];
+    if (!catalogue.length) return { added: 0, unsupported: true };
+    const existing = await this.list(schoolId, { includeArchived: true });
+    const byName = new Map(existing.map(c => [String(c.name || "").trim().toUpperCase(), c]));
+    let added = 0;
+    for (const item of catalogue) {
+      const found = byName.get(item.name);
+      if (!found) { await this.create(schoolId, { ...item, level: item.group === "nursery" ? "Nursery" : item.group === "primary" ? "Primary" : item.group === "junior_secondary" ? "JSS" : "SS" }); added++; }
+      else if (found.status === "archived") await this.setArchived(found.id, false);
+    }
+    return { added, total: catalogue.length, unsupported: false };
+  };
+  
   const subjects = structureService({ coll: "subjects", label: "subject", idFn: Ids.subject });
+
+  /** Official curriculum subjects (Super Admin applies to all Primary or all Secondary schools). */
+  const SCHOOL_SUBJECT_CATALOGUE = Object.freeze({
+    primary: [
+      "English Studies", "Mathematics", "Basic Science", "Social Studies", "Nigerian Language",
+      "Computer Studies", "Writing", "Cultural and Creative Arts", "Home Economics",
+      "Practical Agriculture", "Arabic Language", "Religion", "Physical and Health Education",
+      "Civic Education", "Braille Writing", "Type-Writing", "Mobility Training", "Sign Language"
+    ],
+    secondary: [
+      "English Language", "Mathematics", "Hausa / Yoruba / Igbo Language", "Physics", "Government",
+      "Chemistry", "History", "Biology", "Geography", "Civic Education", "Agricultural Science",
+      "Animal Husbandry", "Woodwork", "Metal Work", "Economics", "IRS / CRS",
+      "Literature in English", "Hausa Literature", "Fine Arts"
+    ]
+  });
+
+  /**
+   * Ensure a school has every catalogue subject for its type (primary or secondary).
+   * Does not remove existing subjects; only adds missing ones. Super Admin or manageStructure.
+   */
+  subjects.ensureDefaults = async function(schoolId) {
+    const actor = await loadActor();
+    need(actor, OPERATION_PERMS.manageStructure, schoolId);
+    const school = await schools.get(schoolId);
+    if (!school) fail("School not found.");
+    const type = String(school.schoolType || school.type || "").toLowerCase();
+    let catalogue = [];
+    if (type === "primary") catalogue = SCHOOL_SUBJECT_CATALOGUE.primary;
+    else if (["secondary", "junior_secondary", "senior_secondary"].includes(type)) catalogue = SCHOOL_SUBJECT_CATALOGUE.secondary;
+    else fail("School type must be primary or secondary to apply standard subjects.");
+    const existing = await this.list(schoolId, { includeArchived: true });
+    const byName = new Map(existing.map(s => [String(s.name || "").trim().toUpperCase(), s]));
+    let added = 0;
+    for (let i = 0; i < catalogue.length; i++) {
+      const name = catalogue[i];
+      const key = name.toUpperCase();
+      const found = byName.get(key);
+      if (!found) {
+        await this.create(schoolId, { name, code: name.slice(0, 12).toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12) || ("SUB" + (i + 1)), level: type === "primary" ? "Primary" : "Secondary" });
+        added++;
+      } else if (found.status === "archived") {
+        await this.setArchived(found.id, false);
+      }
+    }
+    return { added, total: catalogue.length, schoolType: type, schoolName: school.name || schoolId };
+  };
+
+  /**
+   * Super Admin: apply catalogue subjects to EVERY active school of the given type.
+   * schoolType: "primary" | "secondary"
+   */
+  subjects.applyCatalogueToAll = async function(schoolType) {
+    const actor = await loadActor();
+    if (actor.role !== ROLES.SUPER_ADMIN && actor.role !== "superadmin") fail("Only Super Admin can update all schools.");
+    const t = String(schoolType || "").toLowerCase();
+    if (t !== "primary" && t !== "secondary") fail("schoolType must be primary or secondary.");
+    const all = await schools.listAll();
+    const targets = all.filter(s => {
+      const st = String(s.schoolType || s.type || "").toLowerCase();
+      if (t === "primary") return st === "primary";
+      return st === "secondary" || st === "junior_secondary" || st === "senior_secondary";
+    }).filter(s => !["suspended", "archived", "deleted"].includes(String(s.status || "active").toLowerCase()));
+    let schoolsUpdated = 0, subjectsAdded = 0, errors = [];
+    for (const sch of targets) {
+      try {
+        const r = await this.ensureDefaults(sch.id);
+        schoolsUpdated++;
+        subjectsAdded += r.added || 0;
+      } catch (e) {
+        errors.push({ schoolId: sch.id, name: sch.name || sch.id, error: e.message || String(e) });
+      }
+    }
+    return { schoolType: t, schoolsTargeted: targets.length, schoolsUpdated, subjectsAdded, errors };
+  };
+
+  subjects.catalogue = function(schoolType) {
+    const t = String(schoolType || "").toLowerCase();
+    if (t === "primary") return SCHOOL_SUBJECT_CATALOGUE.primary.slice();
+    if (t === "secondary") return SCHOOL_SUBJECT_CATALOGUE.secondary.slice();
+    return { primary: SCHOOL_SUBJECT_CATALOGUE.primary.slice(), secondary: SCHOOL_SUBJECT_CATALOGUE.secondary.slice() };
+  };
+
 
   // ================================================================== academic sessions
   const academicSessions = {
@@ -9910,7 +10291,7 @@ service cloud.firestore {
     // ---------------------------------------------------------------------
     function defaultAdminPerms() {
       return ['manage_users','create_student','create_teacher','manage_permissions','suspend_users',
-              'reset_passwords','manage_content','manage_payments','manage_schools',
+              'reset_passwords','manage_content','manage_certificates','manage_payments','manage_schools',
               'manage_announcements','manage_access','view_reports'];
     }
     function defaultTeacherPerms() {
@@ -9920,11 +10301,10 @@ service cloud.firestore {
     function studentPermCatalogue() {
       return ['view_courses','take_exams','view_results','download_certificates','message','practice_questions'];
     }
-    // Admin / Headmaster / Principal. The last three are NEVER granted by default;
-    // a Super Admin must switch them on explicitly.
+    // Staff permission catalogue. Headmaster/Principal operational access is role- and school-type-scoped below.
     function staffPermCatalogue() {
       return ['manage_users','create_student','create_teacher','manage_permissions','suspend_users',
-              'reset_passwords','manage_content','manage_payments','manage_schools',
+              'reset_passwords','manage_content','manage_certificates','manage_payments','manage_schools',
               'manage_announcements','manage_access','view_reports',
               'view_students','manage_results','manage_report_cards'];
     }
@@ -9955,13 +10335,24 @@ service cloud.firestore {
     }
     function assignedCourses() { return userDoc().get('assignedCourses', []); }
 
-    // SCHOOL scope. True for: Super Admin (every school); a school Admin holding p (defaults apply when
-    // no explicit list); a Headmaster/Principal ONLY when p was explicitly granted to them.
+    // Headmaster and Principal have full operational authority, but only inside
+    // their own correctly typed school. They do not receive platform-wide privileges.
+    function leaderSchoolPerms() {
+      return ['manage_users','create_student','create_teacher','manage_permissions','suspend_users',
+              'reset_passwords','manage_schools','manage_announcements','view_reports',
+              'view_students','manage_results','manage_report_cards','manage_certificates'];
+    }
+    function leaderCan(p, sid) {
+      return sid != null && mySchool() == sid && p in leaderSchoolPerms()
+        && ((role() == 'headmaster' && schoolTypeOf(sid) == 'primary')
+            || (role() == 'principal' && schoolTypeOf(sid) in ['secondary','junior_secondary','senior_secondary']));
+    }
+    // Super Admin: all schools; school Admin: permissions; Headmaster/Principal:
+    // all school-operational permissions for their own matching school type.
     function schoolCan(p, sid) {
       return isSuperAdmin()
         || (sid != null && mySchool() == sid
-            && ((role() == 'admin' && adminHolds(p))
-                || (isSchoolLeader() && explicitPerm(p))));
+            && ((role() == 'admin' && adminHolds(p)) || (isSchoolLeader() && leaderCan(p, sid))));
     }
     function memberOf(sid) {
       return isSuperAdmin() || (authed() && sid != null && mySchool() == sid);
@@ -9980,6 +10371,28 @@ service cloud.firestore {
         && !(get(schoolPath(sid)).data.get('status', 'active') in ['suspended', 'archived', 'deleted']);
     }
     function schoolTypeOf(sid) { return get(schoolPath(sid)).data.get('schoolType', ''); }
+    // Marks settings are controlled by the platform Super Admin or the school's own
+    // Admin / correctly matched school leader. Teachers and students are never writers.
+    function canManageMarksSettings(sid) {
+      return isSuperAdmin()
+        || (authed() && sid != null && mySchool() == sid && role() == 'admin')
+        || (authed() && sid != null && mySchool() == sid && role() == 'headmaster' && schoolTypeOf(sid) == 'primary')
+        || (authed() && sid != null && mySchool() == sid && role() == 'principal'
+            && schoolTypeOf(sid) in ['secondary','junior_secondary','senior_secondary']);
+    }
+    function markSettingsPath(sid) { return /databases/$(database)/documents/schoolMarkSettings/$(sid + '_marks'); }
+    function validConfiguredScores(sid, scores, total) {
+      return scores is map
+        && scores.keys().hasAll(['firstCA','secondCA','examination'])
+        && scores.keys().hasOnly(['firstCA','secondCA','examination'])
+        && scores.firstCA is number && scores.secondCA is number && scores.examination is number
+        && scores.firstCA >= 0 && scores.secondCA >= 0 && scores.examination >= 0
+        && scores.firstCA <= (exists(markSettingsPath(sid)) ? get(markSettingsPath(sid)).data.get('ca1Max', 20) : 20)
+        && scores.secondCA <= (exists(markSettingsPath(sid)) ? get(markSettingsPath(sid)).data.get('ca2Max', 20) : 20)
+        && scores.examination <= (exists(markSettingsPath(sid)) ? get(markSettingsPath(sid)).data.get('examMax', 60) : 60)
+        && total == scores.firstCA + scores.secondCA + scores.examination
+        && total <= (exists(markSettingsPath(sid)) ? get(markSettingsPath(sid)).data.get('totalMax', 100) : 100);
+    }
     // Headmaster -> Primary school, Principal -> Secondary school, Admin -> any
     function roleMatchesSchool(r, sid) {
       return r in ['admin', 'teacher', 'student']
@@ -10265,6 +10678,35 @@ service cloud.firestore {
             && (request.resource.data.get('currentSessionId', null) == resource.data.get('currentSessionId', null)
                 || sessionOk(request.resource.data.currentSessionId, id)));
     }
+    match /schoolMarkSettings/{settingsId} {
+      allow read: if isSuperAdmin() || (authed() && settingsId == mySchool() + '_marks');
+      allow create: if canManageMarksSettings(request.resource.data.get('schoolId', null))
+        && settingsId == request.resource.data.schoolId + '_marks'
+        && schoolOk(request.resource.data.schoolId)
+        && request.resource.data.keys().hasOnly(['schoolId','ca1Max','ca2Max','examMax','totalMax','gradingScale','updatedBy','updatedAt','lastAuditId'])
+        && request.resource.data.ca1Max is number && request.resource.data.ca1Max > 0 && request.resource.data.ca1Max <= 100
+        && request.resource.data.ca2Max is number && request.resource.data.ca2Max > 0 && request.resource.data.ca2Max <= 100
+        && request.resource.data.examMax is number && request.resource.data.examMax > 0 && request.resource.data.examMax <= 100
+        && request.resource.data.totalMax == request.resource.data.ca1Max + request.resource.data.ca2Max + request.resource.data.examMax
+        && request.resource.data.totalMax <= 300
+        && request.resource.data.gradingScale is list && request.resource.data.gradingScale.size() >= 2 && request.resource.data.gradingScale.size() <= 10
+        && request.resource.data.updatedBy == uid() && request.resource.data.updatedAt == request.time
+        && auditedAfter(request.resource.data.lastAuditId, 'marks_settings_update');
+      allow update: if canManageMarksSettings(resource.data.get('schoolId', null))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && settingsId == resource.data.schoolId + '_marks'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ca1Max','ca2Max','examMax','totalMax','gradingScale','updatedBy','updatedAt','lastAuditId'])
+        && request.resource.data.ca1Max is number && request.resource.data.ca1Max > 0 && request.resource.data.ca1Max <= 100
+        && request.resource.data.ca2Max is number && request.resource.data.ca2Max > 0 && request.resource.data.ca2Max <= 100
+        && request.resource.data.examMax is number && request.resource.data.examMax > 0 && request.resource.data.examMax <= 100
+        && request.resource.data.totalMax == request.resource.data.ca1Max + request.resource.data.ca2Max + request.resource.data.examMax
+        && request.resource.data.totalMax <= 300
+        && request.resource.data.gradingScale is list && request.resource.data.gradingScale.size() >= 2 && request.resource.data.gradingScale.size() <= 10
+        && request.resource.data.updatedBy == uid() && request.resource.data.updatedAt == request.time
+        && auditedAfter(request.resource.data.lastAuditId, 'marks_settings_update');
+      allow delete: if false;
+    }
+
     match /schoolRegistrationRequests/{id} {
       allow create: if request.resource.data.status == 'pending'
         && request.resource.data.schoolName is string
@@ -10280,19 +10722,28 @@ service cloud.firestore {
     // =====================================================================
     // SCHOOL STRUCTURE (per school; nothing is hard-coded)
     // =====================================================================
+    // Classes are school-specific and configurable by authorised school leadership.
+    function validSchoolClass(group, sid) {
+      return (schoolTypeOf(sid) == 'primary' && group in ['nursery','primary','custom'])
+        || (schoolTypeOf(sid) in ['secondary','junior_secondary','senior_secondary']
+            && group in ['junior_secondary','senior_secondary','custom']);
+    }
+
     match /classes/{classId} {
       allow read: if memberOf(resource.data.get('schoolId', null));
       allow create: if schoolCan('manage_schools', request.resource.data.get('schoolId', null))
         && idPrefixOk(classId, request.resource.data.schoolId)
         && schoolOk(request.resource.data.schoolId)
-        && request.resource.data.keys().hasOnly(['schoolId','name','key','level','order','status','createdBy','createdAt','updatedAt'])
+        && request.resource.data.keys().hasOnly(['schoolId','name','key','group','groupLabel','level','order','status','createdBy','createdAt','updatedAt'])
         && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 60
+        && validSchoolClass(request.resource.data.get('group', 'custom'), request.resource.data.schoolId)
         && request.resource.data.status == 'active'
         && request.resource.data.createdBy == uid();
       allow update: if schoolCan('manage_schools', resource.data.get('schoolId', null))
         && request.resource.data.schoolId == resource.data.schoolId
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','level','order','status','updatedAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','group','groupLabel','level','order','status','updatedAt'])
         && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 60
+        && validSchoolClass(request.resource.data.get('group', resource.data.get('group', 'custom')), resource.data.schoolId)
         && request.resource.data.status in ['active', 'archived'];
       allow delete: if false;                       // archive instead of delete
     }
@@ -10322,6 +10773,26 @@ service cloud.firestore {
             && request.resource.data.status in ['active', 'archived']);
       allow delete: if resource.data.get('schoolId', null) == null
         && (can('manage_content') || teacherCan('manage_lessons'));
+    }
+
+    // Class curriculum links: a class may use only subjects from the same school.
+    match /classSubjects/{id} {
+      allow read: if memberOf(resource.data.get('schoolId', null));
+      allow create: if schoolCan('manage_schools', request.resource.data.get('schoolId', null))
+        && id == request.resource.data.classId + '__' + request.resource.data.subjectId
+        && classOk(request.resource.data.classId, request.resource.data.schoolId)
+        && exists(/databases/$(database)/documents/subjects/$(request.resource.data.subjectId))
+        && get(/databases/$(database)/documents/subjects/$(request.resource.data.subjectId)).data.schoolId == request.resource.data.schoolId
+        && get(/databases/$(database)/documents/subjects/$(request.resource.data.subjectId)).data.get('status', 'active') == 'active'
+        && request.resource.data.status == 'active'
+        && request.resource.data.keys().hasOnly(['schoolId','classId','subjectId','subjectName','className','status','createdBy','createdAt','updatedAt']);
+      allow update: if schoolCan('manage_schools', resource.data.get('schoolId', null))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && request.resource.data.classId == resource.data.classId
+        && request.resource.data.subjectId == resource.data.subjectId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt'])
+        && request.resource.data.status in ['active','archived'];
+      allow delete: if false;
     }
 
     match /academicSessions/{sessionId} {
@@ -10407,11 +10878,12 @@ service cloud.firestore {
         || canManageStudents(resource.data.get('schoolId', null))
         || schoolCan('view_students', resource.data.get('schoolId', null))
         || schoolCan('view_reports', resource.data.get('schoolId', null))
-        || (teacherCan('view_students') && teachesClass(resource.data.get('schoolId', null), resource.data.get('classId', null)));
+        || (teacherCan('view_students') && teachesClass(resource.data.get('schoolId', null), resource.data.get('classId', null)))
+        || (isTeacher() && isFormMasterOf(resource.data.get('schoolId', null), resource.data.get('academicSessionId', currentSession(resource.data.get('schoolId', null))), resource.data.get('classId', null)));
       allow create: if canManageStudents(request.resource.data.get('schoolId', null))
         && idPrefixOk(studentId, request.resource.data.schoolId)
         && schoolOk(request.resource.data.schoolId)
-        && request.resource.data.keys().hasOnly(['schoolId','studentId','admissionNo','fullName','classId','gender','dateOfBirth','userId','status','createdBy','createdAt','updatedAt'])
+        && request.resource.data.keys().hasOnly(['schoolId','studentId','admissionNo','fullName','classId','gender','dateOfBirth','academicSessionId','parentName','parentPhone','phone','email','userId','status','createdBy','createdAt','updatedAt'])
         && request.resource.data.studentId == studentId
         && request.resource.data.fullName is string && request.resource.data.fullName.size() > 1 && request.resource.data.fullName.size() <= 100
         && request.resource.data.get('userId', null) == null
@@ -10436,6 +10908,33 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Daily student attendance. School leaders manage it; students may read only their own records.
+    match /attendance/{id} {
+      allow read: if schoolCan('view_reports', resource.data.get('schoolId', null))
+        || schoolCan('manage_results', resource.data.get('schoolId', null))
+        || (isStudent() && userDoc().get('schoolId', null) == resource.data.get('schoolId', null)
+            && userDoc().get('studentId', null) == resource.data.get('studentId', null));
+      allow create: if schoolCan('manage_results', request.resource.data.get('schoolId', null))
+        && idPrefixOk(id, request.resource.data.schoolId)
+        && schoolOk(request.resource.data.schoolId)
+        && classOk(request.resource.data.classId, request.resource.data.schoolId)
+        && exists(/databases/$(database)/documents/students/$(request.resource.data.studentId))
+        && get(/databases/$(database)/documents/students/$(request.resource.data.studentId)).data.schoolId == request.resource.data.schoolId
+        && get(/databases/$(database)/documents/students/$(request.resource.data.studentId)).data.classId == request.resource.data.classId
+        && request.resource.data.status in ['present','absent','late']
+        && request.resource.data.markedBy == uid()
+        && request.resource.data.keys().hasOnly(['schoolId','date','classId','studentId','status','markedBy','updatedAt']);
+      allow update: if schoolCan('manage_results', resource.data.get('schoolId', null))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && request.resource.data.classId == resource.data.classId
+        && request.resource.data.studentId == resource.data.studentId
+        && request.resource.data.date == resource.data.date
+        && request.resource.data.status in ['present','absent','late']
+        && request.resource.data.markedBy == uid()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','markedBy','updatedAt']);
+      allow delete: if false;
+    }
+
     // =====================================================================
     // MARKS / RESULTS / REPORT CARDS (school-scoped)
     //   marks: a teacher writes ONLY for a class+subject+session they are assigned to
@@ -10451,9 +10950,12 @@ service cloud.firestore {
                 || teachesSubject(resource.data.get('schoolId', null), resource.data.get('academicSessionId', null),
                                   resource.data.get('classId', null), resource.data.get('subjectId', null))));
       allow create: if teacherCan('grade')
-        && request.resource.data.keys().hasOnly(['schoolId','academicSessionId','term','classId','subjectId','studentId','teacherId','scores','total','status','createdAt','updatedAt'])
+        && request.resource.data.keys().hasOnly(['schoolId','academicSessionId','term','classId','subjectId','studentId','teacherId','scores','total','status','enteredBy','updatedBy','createdBy','createdAt','updatedAt'])
         && request.resource.data.schoolId == mySchool()
         && request.resource.data.teacherId == uid()
+        && request.resource.data.enteredBy == uid()
+        && request.resource.data.updatedBy == uid()
+        && request.resource.data.createdBy == uid()
         && idPrefixOk(markId, request.resource.data.schoolId)
         && teachesSubject(request.resource.data.schoolId, request.resource.data.academicSessionId,
                           request.resource.data.classId, request.resource.data.subjectId)
@@ -10461,8 +10963,8 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/students/$(request.resource.data.studentId)).data.classId == request.resource.data.classId
         && get(/databases/$(database)/documents/students/$(request.resource.data.studentId)).data.schoolId == request.resource.data.schoolId
         && request.resource.data.status in ['draft', 'submitted']
-        && validScores(request.resource.data.scores)
-        && request.resource.data.total is number && request.resource.data.total >= 0 && request.resource.data.total <= 1000;
+        && request.resource.data.total is number && request.resource.data.total >= 0
+        && validConfiguredScores(request.resource.data.schoolId, request.resource.data.scores, request.resource.data.total);
       allow update: if (teacherCan('grade')
             && resource.data.teacherId == uid()
             && resource.data.status in ['draft', 'submitted']
@@ -10472,16 +10974,20 @@ service cloud.firestore {
             && request.resource.data.studentId == resource.data.studentId
             && request.resource.data.academicSessionId == resource.data.academicSessionId
             && request.resource.data.teacherId == resource.data.teacherId
-            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scores','total','status','updatedAt'])
+            && request.resource.data.updatedBy == uid()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scores','total','status','updatedAt','updatedBy'])
             && request.resource.data.status in ['draft', 'submitted']
             && teachesSubject(resource.data.schoolId, resource.data.academicSessionId, resource.data.classId, resource.data.subjectId)
             && sessionOk(resource.data.academicSessionId, resource.data.schoolId)
-            && validScores(request.resource.data.scores)
-            && request.resource.data.total is number && request.resource.data.total >= 0 && request.resource.data.total <= 1000)
+            && request.resource.data.total is number && request.resource.data.total >= 0
+            && validConfiguredScores(resource.data.schoolId, request.resource.data.scores, request.resource.data.total))
         || (schoolCan('manage_results', resource.data.get('schoolId', null))
             && request.resource.data.schoolId == resource.data.schoolId
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scores','total','status','updatedAt'])
-            && request.resource.data.status in ['draft', 'submitted', 'approved', 'locked']);
+            && request.resource.data.status in ['draft', 'submitted', 'approved', 'locked']
+            && ( !request.resource.data.diff(resource.data).affectedKeys().hasAny(['scores','total'])
+                 || (request.resource.data.total is number && request.resource.data.total >= 0
+                     && validConfiguredScores(resource.data.schoolId, request.resource.data.scores, request.resource.data.total))));
       allow delete: if false;
     }
 
@@ -10517,15 +11023,42 @@ service cloud.firestore {
         || (isStudent() && resource.data.get('status', '') == 'published'
             && userDoc().get('studentId', null) == resource.data.get('studentId', '-')
             && userDoc().get('schoolId', null) == resource.data.get('schoolId', '-'));
-      allow create: if schoolCan('manage_report_cards', request.resource.data.get('schoolId', null))
+      allow create: if (schoolCan('manage_report_cards', request.resource.data.get('schoolId', null))
+          || (isTeacher() && isFormMasterOf(request.resource.data.get('schoolId', null), request.resource.data.get('academicSessionId', null), request.resource.data.get('classId', null))))
         && idPrefixOk(id, request.resource.data.schoolId)
         && schoolOk(request.resource.data.schoolId)
-        && request.resource.data.status in ['draft', 'published']
-        && classOk(request.resource.data.get('classId', null), request.resource.data.schoolId);
-      allow update: if schoolCan('manage_report_cards', resource.data.get('schoolId', null))
+        && request.resource.data.status in ['draft', 'ready', 'published']
+        && classOk(request.resource.data.get('classId', null), request.resource.data.schoolId)
+        && (schoolCan('manage_report_cards', request.resource.data.schoolId)
+            || (isTeacher() && isFormMasterOf(request.resource.data.schoolId, request.resource.data.get('academicSessionId', null), request.resource.data.get('classId', null))));
+      allow update: if (schoolCan('manage_report_cards', resource.data.get('schoolId', null))
+          || (isTeacher() && isFormMasterOf(resource.data.get('schoolId', null), resource.data.get('academicSessionId', null), resource.data.get('classId', null))))
         && request.resource.data.schoolId == resource.data.schoolId
         && request.resource.data.studentId == resource.data.studentId
-        && request.resource.data.status in ['draft', 'published'];
+        && request.resource.data.classId == resource.data.classId
+        && request.resource.data.academicSessionId == resource.data.academicSessionId
+        && request.resource.data.status in ['draft', 'ready', 'reopened', 'published'];
+      allow delete: if false;
+    }
+
+    match /reportCardPublications/{id} {
+      allow read: if schoolCan('view_reports', resource.data.get('schoolId', null))
+        || schoolCan('manage_report_cards', resource.data.get('schoolId', null))
+        || (isTeacher() && isFormMasterOf(resource.data.get('schoolId', null), resource.data.get('academicSessionId', null), resource.data.get('classId', null)));
+      allow create: if (schoolCan('manage_report_cards', request.resource.data.get('schoolId', null))
+          || (isTeacher() && isFormMasterOf(request.resource.data.get('schoolId', null), request.resource.data.get('academicSessionId', null), request.resource.data.get('classId', null))))
+        && idPrefixOk(id, request.resource.data.schoolId)
+        && schoolOk(request.resource.data.schoolId)
+        && classOk(request.resource.data.classId, request.resource.data.schoolId)
+        && request.resource.data.publishedBy == uid()
+        && request.resource.data.status == 'published';
+      allow update: if (schoolCan('manage_report_cards', resource.data.get('schoolId', null))
+          || (isTeacher() && isFormMasterOf(resource.data.get('schoolId', null), resource.data.get('academicSessionId', null), resource.data.get('classId', null))))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && request.resource.data.classId == resource.data.classId
+        && request.resource.data.academicSessionId == resource.data.academicSessionId
+        && request.resource.data.publishedBy == uid()
+        && request.resource.data.status == 'published';
       allow delete: if false;
     }
 
@@ -10702,12 +11235,78 @@ service cloud.firestore {
 
     // =====================================================================
     // Certificates
+    //   * School certificates are isolated by schoolId and require manage_certificates.
+    //   * A student can read only their own PUBLISHED certificate.
+    //   * Public verification can query only PUBLISHED certificates, with limit <= 1.
+    //   * Legacy platform certificates remain available to platform content managers.
     // =====================================================================
+    function schoolCanManageCertificates(sid) {
+      return isSuperAdmin()
+        || (authed() && sid != null && mySchool() == sid && role() == 'admin' && adminHolds('manage_certificates'))
+        || (authed() && sid != null && mySchool() == sid && role() == 'headmaster'
+            && schoolTypeOf(sid) == 'primary' && explicitPerm('manage_certificates'))
+        || (authed() && sid != null && mySchool() == sid && role() == 'principal'
+            && schoolTypeOf(sid) in ['secondary','junior_secondary','senior_secondary']
+            && explicitPerm('manage_certificates'));
+    }
+    function certStudentPath(sid) { return /databases/$(database)/documents/students/$(sid); }
+    function validSchoolCertificate(d) {
+      return d.keys().hasOnly(['schoolId','studentId','userId','studentName','admissionNo','classId','title','courseTitle','description','certificateId','status','createdBy','createdAt','updatedAt','auditId'])
+        && d.schoolId is string && schoolOk(d.schoolId)
+        && d.studentId is string && exists(certStudentPath(d.studentId))
+        && get(certStudentPath(d.studentId)).data.get('schoolId', null) == d.schoolId
+        && get(certStudentPath(d.studentId)).data.get('userId', null) == d.userId
+        && d.userId is string && d.userId.size() > 0
+        && d.studentName is string && d.studentName.size() > 0 && d.studentName.size() <= 100
+        && d.title is string && d.title.size() > 0 && d.title.size() <= 120
+        && d.courseTitle == d.title
+        && d.description is string && d.description.size() <= 240
+        && d.certificateId is string && d.certificateId.size() >= 8 && d.certificateId.size() <= 60
+        && d.status in ['draft','approved','published','revoked']
+        && d.createdBy == uid() && d.auditId is string && d.auditId.size() > 0;
+    }
     match /certificates/{id} {
-      allow get: if authed() && (resource.data.get('userId', '') == uid() || can('manage_content'));
-      allow list: if (authed() && (resource.data.get('userId', '') == uid() || can('manage_content')))
-        || (request.query.limit != null && request.query.limit <= 1);   // public "verify certificate" lookup
-      allow write: if can('manage_content');
+      allow get: if authed() && (
+        (resource.data.get('schoolId', null) != null && (
+          schoolCanManageCertificates(resource.data.get('schoolId', null))
+          || schoolCan('view_reports', resource.data.get('schoolId', null))
+          || (isStudent() && resource.data.get('userId', '') == uid() && resource.data.get('status', '') == 'published')
+        ))
+        || (resource.data.get('schoolId', null) == null && (resource.data.get('userId', '') == uid() || can('manage_content')))
+      );
+      allow list: if (authed() && (
+          (resource.data.get('schoolId', null) != null && (
+            schoolCanManageCertificates(resource.data.get('schoolId', null))
+            || schoolCan('view_reports', resource.data.get('schoolId', null))
+            || (isStudent() && resource.data.get('userId', '') == uid() && resource.data.get('status', '') == 'published')
+          ))
+          || (resource.data.get('schoolId', null) == null && (resource.data.get('userId', '') == uid() || can('manage_content')))
+        ))
+        || (request.query.limit != null && request.query.limit <= 1
+            && resource.data.get('status', '') == 'published');
+      allow create: if (schoolCanManageCertificates(request.resource.data.get('schoolId', null))
+          && validSchoolCertificate(request.resource.data)
+          && request.resource.data.status == 'draft'
+          && auditedAfter(request.resource.data.auditId, 'certificate_issue_draft'))
+        || (can('manage_content') && request.resource.data.get('schoolId', null) == null);
+      allow update: if schoolCanManageCertificates(resource.data.get('schoolId', null))
+        && request.resource.data.schoolId == resource.data.schoolId
+        && request.resource.data.studentId == resource.data.studentId
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.certificateId == resource.data.certificateId
+        && request.resource.data.title == resource.data.title
+        && request.resource.data.courseTitle == resource.data.courseTitle
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','approvedBy','approvedAt','publishedBy','publishedAt','issuedAt','revokedBy','revokedAt','updatedAt','auditId'])
+        && ((resource.data.status == 'draft' && request.resource.data.status == 'approved'
+              && request.resource.data.approvedBy == uid()
+              && auditedAfter(request.resource.data.auditId, 'certificate_approved'))
+          || (resource.data.status == 'approved' && request.resource.data.status == 'published'
+              && request.resource.data.publishedBy == uid()
+              && auditedAfter(request.resource.data.auditId, 'certificate_published'))
+          || (resource.data.status == 'published' && request.resource.data.status == 'revoked'
+              && request.resource.data.revokedBy == uid()
+              && auditedAfter(request.resource.data.auditId, 'certificate_revoked')));
+      allow delete: if false;
     }
 
     // =====================================================================
@@ -10864,8 +11463,43 @@ window.ME_registerAccount = async function(payload) {
   if (!schoolId) throw new Error("Select the school for this account.");
   const allowedRoles = B.helpers && B.helpers.invitableRoles ? B.helpers.invitableRoles(actor) : [];
   if (!allowedRoles.includes(role)) throw new Error("Your role does not have permission to create this account in the selected school.");
-  const school = await B.schools.get(schoolId);
-  if (!school) throw new Error("The selected school was not found. Existing school records have not been changed.");
+  let school = await B.schools.get(schoolId);
+  // Directory selection (kt_primary_… / kt_secondary_…): create Firestore school doc once
+  if (!school && String(schoolId).startsWith("kt_")) {
+    const parts = String(schoolId).split("_");
+    const dirType = parts[1] === "primary" ? "primary" : "secondary";
+    const schoolName = String(payload.schoolName || "").trim() || schoolId;
+    const schoolTown = String(payload.schoolTown || "").trim() || null;
+    try {
+      if (B.schools.create) {
+        await B.schools.create({
+          id: schoolId,
+          name: schoolName,
+          schoolType: dirType,
+          town: schoolTown,
+          lga: schoolTown,
+          state: "Katsina",
+          status: "active",
+          source: "katsina_directory"
+        });
+      } else {
+        // fallback via ensure path used elsewhere
+        const dbMod = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+        // schools.create preferred — if missing, surface clear error
+        throw new Error("School bootstrap requires schools.create");
+      }
+      school = await B.schools.get(schoolId);
+    } catch (e) {
+      // Try set via backend helper if available
+      if (B.schools.ensureDirectorySchool) {
+        await B.schools.ensureDirectorySchool({ id: schoolId, name: schoolName, schoolType: dirType, town: schoolTown });
+        school = await B.schools.get(schoolId);
+      } else {
+        throw new Error("Could not register directory school in Firestore: " + (e.message || e));
+      }
+    }
+  }
+  if (!school) throw new Error("The selected school was not found. Choose a school from the list.");
   const schoolType = String(school.schoolType || school.type || "").toLowerCase();
   if (role === "headmaster" && schoolType !== "primary") throw new Error("A Headmaster must be linked to a Primary School.");
   if (role === "principal" && !["secondary", "junior_secondary", "senior_secondary"].includes(schoolType)) throw new Error("A Principal must be linked to a Secondary School.");
@@ -10895,12 +11529,12 @@ window.ME_registerAccount = async function(payload) {
     }
   }
 
-  // Headmasters and Principals need explicit school-scoped permissions for their full dashboards.
+  // The same operational permission set is enforced by the JS backend and Firestore Rules.
+  // It does not grant platform-wide content, payment, school-creation or access-control powers.
   const leaderPermissions = [
     "manage_users","create_student","create_teacher","manage_permissions","suspend_users",
-    "reset_passwords","manage_content","manage_payments","manage_schools",
-    "manage_announcements","manage_access","view_reports","view_students",
-    "manage_results","manage_report_cards"
+    "reset_passwords","manage_schools","manage_announcements","view_reports",
+    "view_students","manage_results","manage_report_cards","manage_certificates"
   ];
   const invitePayload = { email, fullName, role, schoolId };
   if (role === "student") { invitePayload.studentId = studentId; invitePayload.classId = classId; }
@@ -11158,7 +11792,13 @@ window.__initTeacherDash = async function() {
     if(classSel)classSel.onchange=()=>{const opt=classSel.selectedOptions[0];if(sessionSel&&opt?.dataset.session){sessionSel.value=opt.dataset.session;fillTermSelect(termSel,opt.dataset.session);}};
     if(sessionSel)sessionSel.onchange=()=>fillTermSelect(termSel,sessionSel.value);
   }
-  function printTeacherCard(card){const rows=(card.subjectResults||[]).map(r=>'<tr><td>'+eduEsc(r.subjectName||r.subjectId)+'</td><td>'+eduEsc(r.scores?.firstCA??'—')+'</td><td>'+eduEsc(r.scores?.secondCA??'—')+'</td><td>'+eduEsc(r.scores?.examination??'—')+'</td><td>'+eduEsc(r.total??'—')+'</td><td>'+eduEsc(r.grade||'—')+'</td><td>'+eduEsc(r.remark||'—')+'</td></tr>').join('');const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>Report Card</title><style>body{font:14px Arial;padding:24px}h1,h2{text-align:center}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #444;padding:8px}th{background:#e8f0f8}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}.summary div{border:1px solid #64748b;padding:10px;text-align:center}.summary b{display:block;font-size:12px;color:#475569;margin-bottom:5px}@media print{body{padding:8px}}</style></head><body><h1>'+eduEsc(school&&school.name||'School')+'</h1><h2>STUDENT REPORT CARD</h2><p><b>Student:</b> '+eduEsc(card.studentName||card.studentId)+'<br><b>Class:</b> '+eduEsc(className(card.classId))+'<br><b>Session:</b> '+eduEsc(sessionName(card.academicSessionId))+'<br><b>Term:</b> '+eduEsc(card.term)+'</p><div class="summary"><div><b>Aggregate</b>'+eduEsc(card.aggregate??'—')+'</div><div><b>Average</b>'+eduEsc(card.average==null?'—':Number(card.average).toFixed(2)+'%')+'</div><div><b>Overall Grade</b>'+eduEsc(card.overallGrade||'—')+'</div><div><b>Position</b>'+eduEsc(card.position??'—')+'</div></div><table><thead><tr><th>Subject</th><th>1st CA</th><th>2nd CA</th><th>Exam</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead><tbody>'+rows+'</tbody></table><p><b>Teacher Comment:</b> '+eduEsc(card.teacherComment||'—')+'</p></body></html>');w.onload=()=>w.print();w.document.close();}
+  function printTeacherCard(card){const rows=(card.subjectResults||[]).map(r=>'<tr><td>'+eduEsc(r.subjectName||r.subjectId)+'</td><td>'+eduEsc(r.scores?.firstCA??'—')+'</td><td>'+eduEsc(r.scores?.secondCA??'—')+'</td><td>'+eduEsc(r.scores?.examination??'—')+'</td><td>'+eduEsc(r.total??'—')+'</td><td>'+eduEsc(r.grade||'—')+'</td><td>'+eduEsc(r.remark||'—')+'</td></tr>').join('');const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>Report Card</title><style>body{font:14px Arial;padding:24px}h1,h2{text-align:center}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #444;padding:8px}th{background:#e8f0f8}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}.summary div{border:1px solid #64748b;padding:10px;text-align:center}.summary b{display:block;font-size:12px;color:#475569;margin-bottom:5px}@media print{body{padding:8px}}</style></head><body><h1>'+eduEsc(school&&school.name||'School')+'</h1><h2>STUDENT REPORT CARD</h2><p><b>Student:</b> '+eduEsc(card.studentName||card.studentId)+'<br><b>Class:</b> '+eduEsc(className(card.classId))+'<br><b>Session:</b> '+eduEsc(sessionName(card.academicSessionId))+'<br><b>Term:</b> '+eduEsc(card.term)+'</p><div class="summary"><div><b>Aggregate</b>'+eduEsc(card.aggregate??'—')+'</div><div><b>Average</b>'+eduEsc(card.average==null?'—':Number(card.average).toFixed(2)+'%')+'</div><div><b>Overall Grade</b>'+eduEsc(card.overallGrade||'—')+'</div><div><b>Position</b>'+eduEsc(card.position??'—')+'</div></div><table><thead><tr><th>Subject</th><th>1st CA</th><th>2nd CA</th><th>Exam</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead><tbody>'+rows+'</tbody></table><p><b>Teacher Comment:</b> '+eduEsc(card.teacherComment||'—')+'</p><script>
+window.ME_SUBJECT_CATALOGUE = {
+  primary: ["English Studies","Mathematics","Basic Science","Social Studies","Nigerian Language","Computer Studies","Writing","Cultural and Creative Arts","Home Economics","Practical Agriculture","Arabic Language","Religion","Physical and Health Education","Civic Education","Braille Writing","Type-Writing","Mobility Training","Sign Language"],
+  secondary: ["English Language","Mathematics","Hausa / Yoruba / Igbo Language","Physics","Government","Chemistry","History","Biology","Geography","Civic Education","Agricultural Science","Animal Husbandry","Woodwork","Metal Work","Economics","IRS / CRS","Literature in English","Hausa Literature","Fine Arts"]
+};
+<\/script>
+<\/body><\/html>');w.onload=()=>w.print();w.document.close();}
   async function loadFormMasterReportCards(){
     const box=$('tfmCardsList');if(!box||!fmPositions.length)return;
     try{const classId=$('tfmClass').value,sessionId=$('tfmSession').value,term=$('tfmTerm').value;if(!classId||!sessionId||!term){box.innerHTML='<p>Choose your assigned class, session and term.</p>';return;}const cards=await B.reportCards.list(schoolId,{classId,academicSessionId:sessionId,term});box.innerHTML=cards.length?'<div class="table-wrap"><table><thead><tr><th>Student</th><th>Status</th><th>Subjects</th><th>Teacher Comment</th><th>Save</th><th>Print</th></tr></thead><tbody>'+cards.map((c,i)=>'<tr data-card="'+eduEsc(c.id)+'"><td>'+eduEsc(c.studentName||c.studentId)+'</td><td>'+eduEsc(c.status)+'</td><td>'+eduEsc((c.subjectResults||[]).length)+'</td><td><input class="tfm-comment" maxlength="500" value="'+eduEsc(c.teacherComment||'')+'" style="min-width:180px;padding:7px;border:1px solid #ddd;border-radius:6px"></td><td><button type="button" class="btn btn-outline tfm-save-comment">Save</button></td><td><button type="button" class="btn btn-outline tfm-print-card" data-index="'+i+'">Print</button></td></tr>').join('')+'</tbody></table></div>':'<p>No report cards prepared for this selection. Click Prepare Drafts first.</p>';box.querySelectorAll('.tfm-print-card').forEach(btn=>btn.onclick=()=>printTeacherCard(cards[Number(btn.dataset.index)]));box.querySelectorAll('.tfm-save-comment').forEach(btn=>btn.onclick=async()=>{const tr=btn.closest('tr'),id=tr.dataset.card,input=tr.querySelector('.tfm-comment');try{await B.reportCards.saveTeacherComment(schoolId,id,input.value);if($('tfmStatus')){$('tfmStatus').textContent='Teacher comment saved.';$('tfmStatus').style.color='#15803d';}}catch(e){if($('tfmStatus')){$('tfmStatus').textContent=e.message||String(e);$('tfmStatus').style.color='#b91c1c';}}});}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}
@@ -11193,9 +11833,9 @@ window.__initStudentDash = async function() {
   async function loadSubjects(){const box=$('studentSubjectsList');if(!box)return;if(!classId){box.innerHTML='<p>No class assigned.</p>';return;}try{const rows=await B.classSubjects.listByClass(schoolId,classId),active=rows.filter(r=>r.status==='active');box.innerHTML=active.length?'<ul style="line-height:1.9;">'+active.map(r=>'<li>'+eduEsc(r.subjectName||r.subjectId)+'</li>').join('')+'</ul>':'<p style="color:#546e7a;">No subjects linked to your class yet.</p>';if($('studentStatSubjects'))$('studentStatSubjects').textContent=String(active.length);}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}}
   async function loadPublishedCards(){if(!studentId)return[];return B.reportCards.list(schoolId,{studentId,status:'published'});}
   async function loadResults(){const box=$('studentResultsList');if(!box)return;try{publishedCards=await loadPublishedCards();const cardRows=publishedCards.flatMap(c=>(c.subjectResults||[]).map(r=>({...r,term:c.term,session:c.academicSessionId,status:'published'})));let directRows=[];try{directRows=await B.results.list(schoolId,{studentId,status:'published'});}catch(_){}const rows=directRows.length?directRows:cardRows;box.innerHTML=rows.length?'<div class="table-wrap"><table><thead><tr><th>Session</th><th>Term</th><th>Subject</th><th>Total</th><th>Status</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+eduEsc(r.session)+'</td><td>'+eduEsc(r.term)+'</td><td>'+eduEsc(r.subjectId)+'</td><td>'+eduEsc(r.total)+'</td><td>Published</td></tr>').join('')+'</tbody></table></div>':'<p style="color:#546e7a;">No published results are available yet.</p>';}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}}
-  function printStudentCard(card){const subjects=card.subjectResults||[];const computedTotal=subjects.reduce((sum,r)=>sum+(Number(r.total)||0),0),computedAverage=subjects.length?(computedTotal/subjects.length).toFixed(2):'—',total=card.aggregate??computedTotal,average=card.average!=null?Number(card.average).toFixed(2):computedAverage;const rows=subjects.map(r=>'<tr><td>'+eduEsc(r.subjectName||r.subjectId)+'</td><td>'+eduEsc(r.scores?.firstCA??'—')+'</td><td>'+eduEsc(r.scores?.secondCA??'—')+'</td><td>'+eduEsc(r.scores?.examination??'—')+'</td><td>'+eduEsc(r.total??'—')+'</td><td>'+eduEsc(r.grade||'—')+'</td></tr>').join('');const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>My Report Card</title><style>body{font:14px Arial;padding:24px;color:#172033}h1,h2{text-align:center;margin:6px}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #444;padding:8px;text-align:left}th{background:#e8f0f8}.meta{margin-top:20px;line-height:1.8}.foot{margin-top:24px}</style></head><body><h1>'+eduEsc(school?.name||'School')+'</h1><h2>STUDENT REPORT CARD</h2><div class="meta"><b>Student:</b> '+eduEsc(student?.fullName||actor.fullName)+'<br><b>Admission No.:</b> '+eduEsc(student?.admissionNo||studentId)+'<br><b>Class:</b> '+eduEsc(className)+'<br><b>Session:</b> '+eduEsc(card.academicSessionId)+'<br><b>Term:</b> '+eduEsc(card.term)+'</div><table><thead><tr><th>Subject</th><th>1st CA</th><th>2nd CA</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>'+rows+'</tbody></table><div class="meta"><b>Total:</b> '+total+'<br><b>Average:</b> '+average+'%<br><b>Overall Grade:</b> '+eduEsc(card.overallGrade||'—')+' ('+eduEsc(card.overallRemark||'—')+')<br><b>Position:</b> '+eduEsc(card.position||'—')+'<br><b>Teacher Comment:</b> '+eduEsc(card.teacherComment||card.formMasterComment||'—')+'<br><b>Headmaster/Principal Comment:</b> '+eduEsc(card.headComment||card.principalComment||'—')+'</div><div class="foot">This report card was generated from the published school record.</div></body></html>');w.onload=()=>w.print();w.document.close();}
+  function printStudentCard(card){const subjects=card.subjectResults||[];const computedTotal=subjects.reduce((sum,r)=>sum+(Number(r.total)||0),0),computedAverage=subjects.length?(computedTotal/subjects.length).toFixed(2):'—',total=card.aggregate??computedTotal,average=card.average!=null?Number(card.average).toFixed(2):computedAverage;const rows=subjects.map(r=>'<tr><td>'+eduEsc(r.subjectName||r.subjectId)+'</td><td>'+eduEsc(r.scores?.firstCA??'—')+'</td><td>'+eduEsc(r.scores?.secondCA??'—')+'</td><td>'+eduEsc(r.scores?.examination??'—')+'</td><td>'+eduEsc(r.total??'—')+'</td><td>'+eduEsc(r.grade||'—')+'</td></tr>').join('');const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>My Report Card</title><style>body{font:14px Arial;padding:24px;color:#172033}h1,h2{text-align:center;margin:6px}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #444;padding:8px;text-align:left}th{background:#e8f0f8}.meta{margin-top:20px;line-height:1.8}.foot{margin-top:24px}</style></head><body><h1>'+eduEsc(school?.name||'School')+'</h1><h2>STUDENT REPORT CARD</h2><div class="meta"><b>Student:</b> '+eduEsc(student?.fullName||actor.fullName)+'<br><b>Admission No.:</b> '+eduEsc(student?.admissionNo||studentId)+'<br><b>Class:</b> '+eduEsc(className)+'<br><b>Session:</b> '+eduEsc(card.academicSessionId)+'<br><b>Term:</b> '+eduEsc(card.term)+'</div><table><thead><tr><th>Subject</th><th>1st CA</th><th>2nd CA</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>'+rows+'</tbody></table><div class="meta"><b>Total:</b> '+total+'<br><b>Average:</b> '+average+'%<br><b>Overall Grade:</b> '+eduEsc(card.overallGrade||'—')+' ('+eduEsc(card.overallRemark||'—')+')<br><b>Position:</b> '+eduEsc(card.position||'—')+'<br><b>Teacher Comment:</b> '+eduEsc(card.teacherComment||card.formMasterComment||'—')+'<br><b>Headmaster/Principal Comment:</b> '+eduEsc(card.headComment||card.principalComment||'—')+'</div><div class="foot">This report card was generated from the published school record.</div><\/body><\/html>');w.onload=()=>w.print();w.document.close();}
   async function loadReport(){const box=$('studentReportCard');if(!box)return;try{publishedCards=await loadPublishedCards();if($('studentStatReports'))$('studentStatReports').textContent=String(publishedCards.length);box.innerHTML=publishedCards.length?publishedCards.map((c,i)=>{const rows=(c.subjectResults||[]).map(r=>'<tr><td>'+eduEsc(r.subjectName||r.subjectId)+'</td><td>'+eduEsc(r.scores?.firstCA??'—')+'</td><td>'+eduEsc(r.scores?.secondCA??'—')+'</td><td>'+eduEsc(r.scores?.examination??'—')+'</td><td>'+eduEsc(r.total??'—')+'</td><td>'+eduEsc(r.grade||'—')+'</td></tr>').join('');const computedTotal=(c.subjectResults||[]).reduce((sum,r)=>sum+(Number(r.total)||0),0),computedAverage=(c.subjectResults||[]).length?(computedTotal/(c.subjectResults.length)).toFixed(2):'—',total=c.aggregate??computedTotal,avg=c.average!=null?Number(c.average).toFixed(2):computedAverage;return '<div style="border:1px solid #dbe3ed;border-radius:12px;padding:14px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><strong>'+eduEsc(c.term)+' — '+eduEsc(c.academicSessionId)+'</strong><button type="button" class="btn btn-outline student-print-card" data-index="'+i+'">Print / Download PDF</button></div><div class="table-wrap" style="margin-top:10px;"><table><thead><tr><th>Subject</th><th>1st CA</th><th>2nd CA</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>'+rows+'</tbody></table></div><p><strong>Total:</strong> '+total+' &nbsp; <strong>Average:</strong> '+avg+'% &nbsp; <strong>Overall Grade:</strong> '+eduEsc(c.overallGrade||'—')+' &nbsp; <strong>Position:</strong> '+eduEsc(c.position||'—')+'</p><p><strong>Teacher Comment:</strong> '+eduEsc(c.teacherComment||c.formMasterComment||'—')+'</p><p><strong>Headmaster/Principal Comment:</strong> '+eduEsc(c.headComment||c.principalComment||'—')+'</p></div>';}).join(''):'<p style="color:#546e7a;">No published report card yet.</p>';box.querySelectorAll('.student-print-card').forEach(btn=>btn.onclick=()=>printStudentCard(publishedCards[Number(btn.dataset.index)]));}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}}
-  async function loadCertificates(){const box=$('studentCertBody');if(!box)return;try{const q=query(collection(getFirestore(primaryApp()),'certificates'),where('userId','==',actor.uid),where('status','==','published'));const snap=await getDocs(q);publishedCertificates=snap.docs.map(d=>({id:d.id,...d.data()}));box.innerHTML=publishedCertificates.length?publishedCertificates.map((c,i)=>'<div style="padding:14px;border:1px solid #dbe3ed;border-radius:10px;margin-bottom:10px;"><strong>'+eduEsc(c.title||c.courseTitle||'Certificate')+'</strong><p>Certificate ID: '+eduEsc(c.certificateId||c.id)+'</p><p>Issued: '+eduEsc(c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString():c.issuedAt||'—')+'</p><button type="button" class="btn btn-outline student-print-certificate" data-index="'+i+'">Print / Save as PDF</button></div>').join(''):'<p>No published certificates yet.</p>';box.querySelectorAll('.student-print-certificate').forEach(btn=>btn.onclick=()=>{const c=publishedCertificates[Number(btn.dataset.index)];const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>Certificate</title><style>body{font-family:Georgia,serif;padding:48px;text-align:center;color:#172033}.sheet{border:8px double #1d4ed8;padding:48px;min-height:420px;display:flex;flex-direction:column;justify-content:center}h1{font-size:34px;letter-spacing:2px}h2{font-size:26px;margin:30px 0}p{font-size:18px;line-height:1.7}.id{font:13px Arial;margin-top:28px}</style></head><body><div class="sheet"><h1>'+eduEsc(school?.name||'School')+'</h1><h2>'+eduEsc(c.title||c.courseTitle||'CERTIFICATE')+'</h2><p>This is to certify that</p><h2>'+eduEsc(student?.fullName||actor.fullName)+'</h2><p>'+eduEsc(c.description||'has been recognised for the stated achievement.')+'</p><p>Issued: '+eduEsc(c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString():c.issuedAt||'')+'</p><div class="id">Certificate ID: '+eduEsc(c.certificateId||c.id)+'</div></div></body></html>');w.onload=()=>w.print();w.document.close();});}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}}
+  async function loadCertificates(){const box=$('studentCertBody');if(!box)return;try{const q=query(collection(getFirestore(primaryApp()),'certificates'),where('userId','==',actor.uid),where('status','==','published'));const snap=await getDocs(q);publishedCertificates=snap.docs.map(d=>({id:d.id,...d.data()}));box.innerHTML=publishedCertificates.length?publishedCertificates.map((c,i)=>'<div style="padding:14px;border:1px solid #dbe3ed;border-radius:10px;margin-bottom:10px;"><strong>'+eduEsc(c.title||c.courseTitle||'Certificate')+'</strong><p>Certificate ID: '+eduEsc(c.certificateId||c.id)+'</p><p>Issued: '+eduEsc(c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString():c.issuedAt||'—')+'</p><button type="button" class="btn btn-outline student-print-certificate" data-index="'+i+'">Print / Save as PDF</button></div>').join(''):'<p>No published certificates yet.</p>';box.querySelectorAll('.student-print-certificate').forEach(btn=>btn.onclick=()=>{const c=publishedCertificates[Number(btn.dataset.index)];const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>Certificate</title><style>body{font-family:Georgia,serif;padding:48px;text-align:center;color:#172033}.sheet{border:8px double #1d4ed8;padding:48px;min-height:420px;display:flex;flex-direction:column;justify-content:center}h1{font-size:34px;letter-spacing:2px}h2{font-size:26px;margin:30px 0}p{font-size:18px;line-height:1.7}.id{font:13px Arial;margin-top:28px}</style></head><body><div class="sheet"><h1>'+eduEsc(school?.name||'School')+'</h1><h2>'+eduEsc(c.title||c.courseTitle||'CERTIFICATE')+'</h2><p>This is to certify that</p><h2>'+eduEsc(student?.fullName||actor.fullName)+'</h2><p>'+eduEsc(c.description||'has been recognised for the stated achievement.')+'</p><p>Issued: '+eduEsc(c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString():c.issuedAt||'')+'</p><div class="id">Certificate ID: '+eduEsc(c.certificateId||c.id)+'</div></div><\/body><\/html>');w.onload=()=>w.print();w.document.close();});}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}}
   // Only expose certificate navigation after an explicit published certificate is found.
   try{const q=query(collection(getFirestore(primaryApp()),'certificates'),where('userId','==',actor.uid),where('status','==','published'));const snap=await getDocs(q);publishedCertificates=snap.docs.map(d=>d.data());if($('studentCertificateNav'))$('studentCertificateNav').hidden=publishedCertificates.length===0;}catch(e){if($('studentCertificateNav'))$('studentCertificateNav').hidden=true;}
   eduChangePassword('studentPasswordForm','studentCurrentPassword','studentNewPassword','studentConfirmPassword','studentPasswordStatus');
@@ -11222,18 +11862,8 @@ window.__initSchoolDash = async function() {
     "<div style='padding:9px 0;'><strong>Status:</strong> "+eduEsc(actor && actor.status || "active")+"</div>";
   // Seed the agreed class catalogue once per school; never mix Primary and Secondary classes.
   if (actor && school && B && ["headmaster","principal"].includes(role)) {
-    const primaryClasses = ["NURSERY 1","NURSERY 2","PRIMARY 1","PRIMARY 2","PRIMARY 3","PRIMARY 4","PRIMARY 5","PRIMARY 6"];
-    const secondaryClasses = ["JSS 1","JSS 2","JSS 3","SS 1","SS 2","SS 3"];
-    const catalogue = String(school.schoolType || "").toLowerCase() === "primary" ? primaryClasses : secondaryClasses;
-    try {
-      const existing = await B.classes.list(actor.schoolId, { includeArchived: true });
-      const existingByName = new Map(existing.map(c => [String(c.name || "").trim().toUpperCase(), c]));
-      for (let i = 0; i < catalogue.length; i++) {
-        const name = catalogue[i], found = existingByName.get(name);
-        if (!found) await B.classes.create(actor.schoolId, { name, level: name.split(" ")[0], order: i + 1 });
-        else if (found.status === "archived") await B.classes.setArchived(found.id, false);
-      }
-    } catch (e) { console.warn("Default class catalogue could not be completed. Check the leader's manage_schools permission:", e); }
+    try { await B.classes.ensureDefaults(actor.schoolId); }
+    catch (e) { console.warn("Default class structure could not be completed. Check the leader's manage_schools permission:", e); }
   }
   if ($("schoolLeadershipSectionTitle")) $("schoolLeadershipSectionTitle").textContent = isPrimary ? "Primary School Leadership" : role === "principal" ? "Secondary School Leadership" : "School Leadership";
   if ($("schoolUserName")) $("schoolUserName").textContent = actor && (actor.fullName || actor.name) || roleLabel;
@@ -11337,7 +11967,7 @@ window.__initSchoolDash = async function() {
         "<div style='padding:8px 0;'><strong>Academic Sessions:</strong> "+sessions.length+"</div>";
       if($("schoolTeachersTable"))$("schoolTeachersTable").innerHTML=teachers.length?teachers.map(t=>"<tr><td>"+eduEsc(t.fullName||t.name||"")+"</td><td>"+eduEsc(t.email||"")+"</td><td>"+eduEsc((t.assignedSubjects||[]).join(", "))+"</td><td>"+eduEsc(t.status||"active")+"</td><td><button type='button' class='btn btn-outline school-user-status' data-user='"+eduEsc(t.uid||t.id)+"' data-status='"+(t.status==="active"?"inactive":"active")+"'>"+(t.status==="active"?"Deactivate":"Activate")+"</button></td></tr>").join("") : "<tr><td colspan='5'>No teachers yet.</td></tr>";
       if($("schoolStudentsTable"))$("schoolStudentsTable").innerHTML=students.length?students.map(st=>"<tr><td>"+eduEsc(st.fullName||"")+"</td><td>"+eduEsc(st.admissionNo||"")+"</td><td>"+eduEsc((classes.find(c=>c.id===st.classId)||{}).name||st.classId)+"</td><td>"+eduEsc(st.status||"active")+"</td><td><button type='button' class='btn btn-outline school-student-status' data-student='"+eduEsc(st.id)+"' data-user='"+eduEsc(st.userId||"") +"' data-status='"+((st.status||"active")==="active"?"inactive":"active")+"'>"+((st.status||"active")==="active"?"Deactivate":"Activate")+"</button></td></tr>").join("") : "<tr><td colspan='5'>No students yet.</td></tr>";
-      if($("schoolClassesTable"))$("schoolClassesTable").innerHTML=classes.length?classes.map(c=>{const fm=formMasters.find(f=>f.classId===c.id&&f.status==="active");return "<tr><td>"+eduEsc(c.name)+"</td><td>"+eduEsc(c.level||"")+"</td><td>"+eduEsc((teacherMap.get(fm&&fm.teacherId)||{}).fullName||"—")+"</td><td>"+eduEsc(c.status||"active")+"</td></tr>";}).join("") : "<tr><td colspan='4'>No classes yet.</td></tr>";
+      if($("schoolClassesTable"))$("schoolClassesTable").innerHTML=classes.length?classes.map(c=>{const fm=formMasters.find(f=>f.classId===c.id&&f.status==="active");return "<tr><td>"+eduEsc(c.name)+"</td><td>"+eduEsc(c.groupLabel||c.group||"Custom")+"</td><td>"+eduEsc(c.level||"")+"</td><td>"+eduEsc((teacherMap.get(fm&&fm.teacherId)||{}).fullName||"—")+"</td><td>"+eduEsc(c.status||"active")+"</td><td><button type='button' class='btn btn-outline leader-class-edit' data-id='"+eduEsc(c.id)+"' data-name='"+eduEsc(c.name)+"' data-level='"+eduEsc(c.level||"")+"'>Edit</button> <button type='button' class='btn btn-outline leader-class-archive' data-id='"+eduEsc(c.id)+"' data-status='"+eduEsc(c.status||"active")+"'>"+(c.status==='archived'?'Restore':'Remove')+"</button></td></tr>";}).join("") : "<tr><td colspan='6'>No classes yet.</td></tr>";
       if($("schoolSubjectsTable"))$("schoolSubjectsTable").innerHTML=subjects.length?subjects.map(x=>"<tr><td>"+eduEsc(x.name)+"</td><td>"+eduEsc(x.code||"")+"</td><td>"+eduEsc(x.status||"active")+"</td></tr>").join("") : "<tr><td colspan='3'>No subjects yet.</td></tr>";
       if($("sessionsBody"))$("sessionsBody").innerHTML=sessions.length?sessions.map(x=>"<div style='padding:10px;border-bottom:1px solid #e5e7eb;'><strong>"+eduEsc(x.name)+"</strong> — "+eduEsc(x.status)+" "+(x.isCurrent?"(Current)":"")+"</div>").join("") : "<p class='empty-state'>No academic sessions created yet.</p>";
       if($("schoolFormMastersTable"))$("schoolFormMastersTable").innerHTML=formMasters.length?formMasters.map(f=>"<tr><td>"+eduEsc((teacherMap.get(f.teacherId)||{}).fullName||f.teacherId)+"</td><td>"+eduEsc((classes.find(c=>c.id===f.classId)||{}).name||f.classId)+"</td><td>"+eduEsc(f.academicSessionId)+"</td><td>"+eduEsc(f.status)+"</td></tr>").join("") : "<tr><td colspan='4'>No Form Masters assigned yet.</td></tr>";
@@ -11362,10 +11992,44 @@ window.__initSchoolDash = async function() {
   if(school&&school.logoUrl&&$("spLogoPreview")){$("spLogoPreview").src=school.logoUrl;$("spLogoPreview").style.display="block";}
   if($("spLogoFile"))$("spLogoFile").onchange=()=>{const file=$("spLogoFile").files&&$("spLogoFile").files[0];if(!file)return;if(!file.type.startsWith("image/")){alert("Choose an image file.");return;}const preview=$("spLogoPreview");preview.src=URL.createObjectURL(file);preview.style.display="block";};
   if($("btnSaveSchoolProfile"))$("btnSaveSchoolProfile").onclick=async()=>{try{const patch={name:$("spName").value.trim(),email:$("spEmail").value.trim(),headName:$("spHeadName").value.trim(),address:$("spAddress").value.trim(),phone:$("spPhone").value.trim()};const file=$("spLogoFile")?.files?.[0];if(file){if(file.size>5*1024*1024)throw new Error("Choose a logo image smaller than 5 MB.");const dataUrl=await new Promise((resolve,reject)=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{const scale=Math.min(1,480/Math.max(img.width,img.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);URL.revokeObjectURL(url);resolve(canvas.toDataURL("image/jpeg",0.72));};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Could not read the selected logo."));};img.src=url;});patch.logoUrl=dataUrl;}await B.schools.updateDetails(schoolId,patch);if($("schoolBrandName"))$("schoolBrandName").textContent=patch.name;if(school)Object.assign(school,patch);if(patch.logoUrl&&$("spLogoPreview"))$("spLogoPreview").src=patch.logoUrl;renderSchoolSettings();alert("School profile updated.");}catch(e){alert(e.message||String(e));}};
-  if($("btnAddClass"))$("btnAddClass").onclick=async()=>{const allowed=isPrimary?["NURSERY 1","NURSERY 2","PRIMARY 1","PRIMARY 2","PRIMARY 3","PRIMARY 4","PRIMARY 5","PRIMARY 6"]:["JSS 1","JSS 2","JSS 3","SS 1","SS 2","SS 3"];const name=prompt("Enter one class from this school list: \n"+allowed.join(", "));if(!name)return;try{await B.classes.create(schoolId,{name,level:name.trim().toUpperCase().split(" ")[0]});await refreshSchoolLists();}catch(e){alert(e.message||String(e));}};
+  if($("btnAddClass"))$("btnAddClass").onclick=async()=>{const name=prompt("Enter class name (e.g. Nursery 3, Primary 4, JSS 1, SS 1):");if(!name)return;const level=prompt("Level/section label (optional):",name.trim().toUpperCase().split(" ")[0])||"";try{await B.classes.create(schoolId,{name,level});await refreshSchoolLists();}catch(e){alert(e.message||String(e));}};
+  if($("schoolClassesTable")&&!$("schoolClassesTable").dataset.actionsBound){$("schoolClassesTable").dataset.actionsBound="1";$("schoolClassesTable").addEventListener("click",async event=>{const edit=event.target.closest(".leader-class-edit"),archive=event.target.closest(".leader-class-archive");try{if(edit){const name=prompt("Update class name:",edit.dataset.name||"");if(!name)return;const level=prompt("Update level/section label:",edit.dataset.level||"")||"";await B.classes.update(edit.dataset.id,{name,level});await refreshSchoolLists();}else if(archive){const restore=archive.dataset.status==="archived";if(!confirm(restore?"Restore this class?":"Remove this class from active use? Existing student records will be preserved."))return;await B.classes.setArchived(archive.dataset.id,!restore);await refreshSchoolLists();}}catch(e){alert(e.message||String(e));}});}
   if($("btnAddSchoolSubject"))$("btnAddSchoolSubject").onclick=async()=>{const name=prompt("Enter subject name:");if(!name)return;const code=prompt("Enter subject code (optional):")||"";try{await B.subjects.create(schoolId,{name,code});await refreshSchoolLists();}catch(e){alert(e.message||String(e));}};
   if($("btnAddSession"))$("btnAddSession").onclick=async()=>{const name=prompt("Academic session (e.g. 2026/2027):");if(!name)return;try{const sessionId=await B.academicSessions.create(schoolId,{name,terms:[{name:"First Term"},{name:"Second Term"},{name:"Third Term"}]});if(!school.currentSessionId){await B.academicSessions.setCurrent(schoolId,sessionId);school.currentSessionId=sessionId;}await refreshSchoolLists();}catch(e){alert(e.message||String(e));}};
-  if($("btnAddSchoolTeacher"))$("btnAddSchoolTeacher").onclick=async()=>{const fullName=prompt("Teacher full name:");if(!fullName)return;const email=prompt("Teacher email address:");if(!email)return;try{if(typeof window.ME_registerAccount!=="function")throw new Error("Account creation module is still loading. Refresh and try again.");const result=await window.ME_registerAccount({fullName,email,role:"teacher",schoolId});alert("Teacher account created. Temporary password: "+(result.temporaryPassword||"Existing account password must be used."));await refreshSchoolLists();}catch(e){alert(e.message||String(e));}};
+  if($("btnAddSchoolTeacher"))$("btnAddSchoolTeacher").onclick=async()=>{
+    try {
+      const fullName=prompt("Teacher full name:"); if(!fullName)return;
+      const email=prompt("Teacher email address:"); if(!email)return;
+      if(typeof window.ME_registerAccount!=="function")throw new Error("Account creation module is still loading. Refresh and try again.");
+      const sessionId=school&&school.currentSessionId;
+      if(!sessionId)throw new Error("Create an Academic Session and set it as the current session before registering teachers.");
+      const sessions=await B.academicSessions.list(schoolId);
+      if(!sessions.some(x=>x.id===sessionId&&(x.status||"active")==="active"))throw new Error("The current Academic Session is not active. Select an active session in School Settings.");
+      const classes=await B.classes.list(schoolId);
+      if(!classes.length)throw new Error("Create classes before registering teachers.");
+      const classChoice=prompt("Choose the class number(s) for this teacher, separated by commas:\n"+classes.map((c,i)=>(i+1)+". "+c.name).join("\n"));
+      if(!classChoice)return;
+      const indexes=Array.from(new Set(classChoice.split(",").map(x=>Number(x.trim())-1)));
+      if(indexes.some(i=>!Number.isInteger(i)||i<0||i>=classes.length))throw new Error("One or more class numbers are invalid.");
+      const assignments=[];
+      for(const index of indexes){
+        const cls=classes[index];
+        const linkedIds=await B.classSubjects.activeSubjectsForClass(schoolId,cls.id);
+        const allSubjects=await B.subjects.list(schoolId);
+        const subjects=allSubjects.filter(x=>linkedIds.includes(x.id)&&(x.status||"active")==="active");
+        if(!subjects.length)throw new Error("No active subjects are linked to "+cls.name+". Link subjects in Class Subjects first.");
+        const subjectChoice=prompt("Choose subject number(s) for "+cls.name+", separated by commas:\n"+subjects.map((x,i)=>(i+1)+". "+x.name).join("\n"));
+        if(!subjectChoice)throw new Error("Subject selection was cancelled for "+cls.name+".");
+        const subjectIndexes=Array.from(new Set(subjectChoice.split(",").map(x=>Number(x.trim())-1)));
+        if(!subjectIndexes.length||subjectIndexes.some(i=>!Number.isInteger(i)||i<0||i>=subjects.length))throw new Error("Invalid subject selection for "+cls.name+".");
+        assignments.push({classId:cls.id,className:cls.name,subjectIds:subjectIndexes.map(i=>subjects[i].id)});
+      }
+      const result=await window.ME_registerAccount({fullName,email,role:"teacher",schoolId,assignments});
+      const warning=result.assignmentWarnings&&result.assignmentWarnings.length?"\nAssignment warnings: "+result.assignmentWarnings.join("; "):"";
+      alert("Teacher account created successfully.\nEmail: "+result.email+"\nTemporary password: "+(result.temporaryPassword||"Existing account password must be used.")+"\nClasses assigned: "+assignments.map(x=>x.className).join(", ")+warning);
+      await refreshSchoolLists();
+    } catch(e) { alert(e.message||String(e)); }
+  };
   if($("btnAddSchoolStudent"))$("btnAddSchoolStudent").onclick=async()=>{const fullName=prompt("Student full name:");if(!fullName)return;const admissionNo=prompt("Admission number:");if(!admissionNo)return;const classes=await B.classes.list(schoolId);if(!classes.length){alert("Create/load classes first.");return;}const choice=prompt("Choose class by number: \n"+classes.map((c,i)=>(i+1)+". "+c.name).join("\n"));const cls=classes[Number(choice)-1];if(!cls){alert("Invalid class choice.");return;}const email=prompt("Student login email address:");if(!email)return;try{const studentId=await B.students.create(schoolId,{fullName,admissionNo,classId:cls.id,academicSessionId:school&&school.currentSessionId||null});const result=await window.ME_registerAccount({fullName,email,role:"student",schoolId,studentId,classId:cls.id});alert("Student account created. Temporary password: "+(result.temporaryPassword||"Existing account password must be used."));await refreshSchoolLists();}catch(e){alert("Student record/account setup: "+(e.message||String(e))+". If the student record was created, check the Students list before retrying.");await refreshSchoolLists();}};
   document.querySelectorAll(".school-user-status").forEach(()=>{});
   if($("schoolTeachersTable"))$("schoolTeachersTable").addEventListener("click",async ev=>{const btn=ev.target.closest(".school-user-status");if(!btn)return;try{await B.users.setStatus(btn.dataset.user,btn.dataset.status);await refreshSchoolLists();}catch(e){alert(e.message||String(e));}});
@@ -11497,9 +12161,23 @@ function wirePassReg() {
       ev.preventDefault();
       setBusy(form, true); setStatus(cfg.statusId, "Checking school and creating account…", true);
       try {
+        const sel = $(cfg.selectId);
+        let schoolName = "", schoolTown = "";
+        if (sel && sel.selectedOptions && sel.selectedOptions[0]) {
+          const opt = sel.selectedOptions[0];
+          schoolName = opt.getAttribute("data-name") || "";
+          schoolTown = opt.getAttribute("data-town") || "";
+          if (!schoolName) {
+            const label = opt.textContent || "";
+            const parts = label.split(" — ");
+            if (parts.length >= 2) { schoolTown = parts[0].trim(); schoolName = parts.slice(1).join(" — ").trim(); }
+            else schoolName = label.trim();
+          }
+        }
         const result = await window.ME_registerAccount({
           email: $(cfg.emailId).value, fullName: $(cfg.nameId).value,
-          role: cfg.role, schoolId: ($(cfg.schoolId).value || $(cfg.selectId).value || "").trim()
+          role: cfg.role, schoolId: ($(cfg.schoolId).value || $(cfg.selectId).value || "").trim(),
+          schoolName, schoolTown
         });
         showCreated(cfg.statusId, result);
         form.reset();
@@ -11781,7 +12459,7 @@ window.ME_schoolOptionLabel = function(s) {
       };
       target.querySelector("[data-bs-print]").onclick=()=>{
         const w=window.open("","_blank");if(!w){alert("Allow pop-ups to print the broadsheet.");return;}
-        w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Class Broadsheet</title><style>body{font:11px Arial,sans-serif;padding:16px;color:#111}h2,p{text-align:center;margin:4px}table{border-collapse:collapse;width:100%;font-size:9px}th,td{border:1px solid #555;padding:4px;text-align:center}th{background:#e8f0f8}.print-meta{margin:10px 0 16px}@page{size:landscape;margin:10mm}</style></head><body><h2>'+esc(schoolName)+'</h2><p>CLASS BROADSHEET</p><p class="print-meta">Class: '+esc(className)+' | Session: '+esc(academicSessionId)+' | Term: '+esc(term)+'</p>'+table.outerHTML+'<p style="margin-top:10px;font-size:9px;">Draft marks are excluded from totals and ranking. Incomplete students are not ranked.</p></body></html>');w.document.close();w.onload=()=>w.print();
+        w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Class Broadsheet</title><style>body{font:11px Arial,sans-serif;padding:16px;color:#111}h2,p{text-align:center;margin:4px}table{border-collapse:collapse;width:100%;font-size:9px}th,td{border:1px solid #555;padding:4px;text-align:center}th{background:#e8f0f8}.print-meta{margin:10px 0 16px}@page{size:landscape;margin:10mm}</style></head><body><h2>'+esc(schoolName)+'</h2><p>CLASS BROADSHEET</p><p class="print-meta">Class: '+esc(className)+' | Session: '+esc(academicSessionId)+' | Term: '+esc(term)+'</p>'+table.outerHTML+'<p style="margin-top:10px;font-size:9px;">Draft marks are excluded from totals and ranking. Incomplete students are not ranked.</p><\/body><\/html>');w.document.close();w.onload=()=>w.print();
       };
     } catch(e) {
       target.innerHTML='<p style="padding:12px;color:#b91c1c;">'+esc(e&&e.message||e)+'</p>';
