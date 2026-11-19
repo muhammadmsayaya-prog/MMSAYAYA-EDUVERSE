@@ -497,11 +497,35 @@ window.SITE_IMAGE_SLOTS = {
     }
     .lang-pill.active { background:var(--primary); color:#fff; border-color:var(--primary); }
 
-    /* Overlay for mobile sidebar */
+    /* Overlay for mobile sidebars */
     .sidebar-overlay {
       display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:150;
     }
     .sidebar-overlay.show { display:block; }
+
+    /* School leadership menu: colorful, clear and mobile-friendly */
+    #schoolApp .school-menu-toggle {
+      display:none; align-items:center; justify-content:center; gap:8px;
+      border:0; border-radius:12px; padding:10px 13px; cursor:pointer;
+      color:#fff; font-weight:800; font-size:.9rem;
+      background:linear-gradient(135deg,#0d9488,#2563eb,#7c3aed);
+      box-shadow:0 5px 14px rgba(37,99,235,.22);
+    }
+    #schoolApp .school-menu-toggle .menu-lines { font-size:1.25rem; line-height:1; }
+    #schoolApp #schoolSidebarNav .nav-item {
+      margin:4px 0; min-height:43px; border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.07); color:#f8fafc;
+    }
+    #schoolApp #schoolSidebarNav .nav-item:nth-of-type(4n+1) { border-left:4px solid #38bdf8; }
+    #schoolApp #schoolSidebarNav .nav-item:nth-of-type(4n+2) { border-left:4px solid #a78bfa; }
+    #schoolApp #schoolSidebarNav .nav-item:nth-of-type(4n+3) { border-left:4px solid #34d399; }
+    #schoolApp #schoolSidebarNav .nav-item:nth-of-type(4n) { border-left:4px solid #fbbf24; }
+    #schoolApp #schoolSidebarNav .nav-item:hover,
+    #schoolApp #schoolSidebarNav .nav-item.active {
+      background:linear-gradient(100deg,rgba(14,165,233,.38),rgba(124,58,237,.32));
+      border-color:rgba(255,255,255,.28); color:#fff; transform:translateX(2px);
+    }
+    #schoolApp .school-sidebar-overlay { z-index:190; }
 
     /* Responsive */
     @media (max-width:960px) {
@@ -509,6 +533,9 @@ window.SITE_IMAGE_SLOTS = {
       .sidebar.open { transform:translateX(0); }
       .main { margin-left:0; }
       .menu-toggle { display:flex; }
+      #schoolApp .school-menu-toggle { display:inline-flex; }
+      #schoolApp .topbar-left { min-width:0; }
+      #schoolApp .page-title { font-size:1rem; }
       .chart-row { grid-template-columns:1fr; }
     }
     @media (max-width:600px) {
@@ -2645,9 +2672,13 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         <button class="btn-logout" id="schoolLogoutBtn">Logout</button>
       </div>
     </aside>
+    <div class="sidebar-overlay school-sidebar-overlay" id="schoolSidebarOverlay"></div>
     <div class="main">
       <header class="topbar">
-        <div class="topbar-left"><h1 class="page-title" id="schoolPageTitle">Overview</h1></div>
+        <div class="topbar-left">
+          <button type="button" class="school-menu-toggle" id="schoolMenuToggle" aria-label="Open school menu" aria-controls="schoolSidebar" aria-expanded="false"><span class="menu-lines">☰</span><span>MENU</span></button>
+          <h1 class="page-title" id="schoolPageTitle">Overview</h1>
+        </div>
         <div class="topbar-right"><span class="topbar-badge" id="schoolSubBadge">Subscription</span></div>
       </header>
       <div class="content">
@@ -10875,7 +10906,28 @@ setTimeout(wirePassReg, 1200);
   function wire(){
     var nav=document.getElementById("schoolSidebarNav");
     var root=document.getElementById("schoolApp");
-    if(!nav||!root) return;
+    var sidebar=document.getElementById("schoolSidebar");
+    var toggle=document.getElementById("schoolMenuToggle");
+    var overlay=document.getElementById("schoolSidebarOverlay");
+    if(!nav||!root||!sidebar) return;
+    function closeSchoolMenu(){
+      sidebar.classList.remove("open");
+      if(overlay) overlay.classList.remove("show");
+      if(toggle) toggle.setAttribute("aria-expanded","false");
+    }
+    if(toggle && toggle.dataset.wired !== "1"){
+      toggle.dataset.wired="1";
+      toggle.addEventListener("click",function(){
+        var opening=!sidebar.classList.contains("open");
+        sidebar.classList.toggle("open",opening);
+        if(overlay) overlay.classList.toggle("show",opening);
+        toggle.setAttribute("aria-expanded",opening ? "true" : "false");
+      });
+    }
+    if(overlay && overlay.dataset.wired !== "1"){
+      overlay.dataset.wired="1";
+      overlay.addEventListener("click",closeSchoolMenu);
+    }
     nav.querySelectorAll(".nav-item[data-sview]").forEach(function(btn){
       if(btn.dataset.wired === "1") return;
       btn.dataset.wired="1";
@@ -10887,6 +10939,7 @@ setTimeout(wirePassReg, 1200);
         if(target) target.classList.add("active");
         var title=document.getElementById("schoolPageTitle");
         if(title) title.textContent=btn.textContent.trim();
+        closeSchoolMenu();
       });
     });
   }
