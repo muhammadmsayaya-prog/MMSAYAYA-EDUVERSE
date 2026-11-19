@@ -756,18 +756,6 @@ window.SITE_IMAGE_SLOTS = {
             <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
             <span>Continue with Google</span>
           </button>
-          <button type="button" class="link-btn" id="inviteToggleBtn">Have an invitation? Activate your account</button>
-          <div id="inviteForm" hidden>
-            <p class="login-hint">Use the email address your school or the platform invited. Choose your own password and verify your email; your account is then created with the role it was invited for.</p>
-            <div class="form-group"><label for="inviteEmail">Invited Email Address</label><input type="email" id="inviteEmail" autocomplete="email" maxlength="200" /></div>
-            <div class="form-group"><label for="invitePassword">Choose a Password</label>
-              <div class="pw-wrap"><input type="password" id="invitePassword" autocomplete="new-password" maxlength="128" /><button type="button" class="pw-toggle" data-target="invitePassword">Show</button></div>
-            </div>
-            <div class="form-group"><label for="inviteConfirm">Confirm Password</label>
-              <div class="pw-wrap"><input type="password" id="inviteConfirm" autocomplete="new-password" maxlength="128" /><button type="button" class="pw-toggle" data-target="inviteConfirm">Show</button></div>
-            </div>
-            <button class="btn btn-primary" id="inviteActivateBtn" style="width:100%;">Activate Account</button>
-          </div>
         </div>
 
         <div id="verifyPanel" hidden>
@@ -1523,9 +1511,9 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             </div>
             <div class="card-body">
               <form id="studentRegisterForm" style="display:grid;gap:10px;max-width:640px;margin-bottom:20px;padding:14px;border:1px solid var(--border);border-radius:12px;background:#fafbfc;">
-                <h3 style="font-size:1rem;">Register student (school record)</h3>
-                <div class="form-group"><label>Full Name *</label><input id="stFullName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Admission Number *</label><input id="stAdmissionNo" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <h3 style="font-size:1rem;">Create Student Account</h3>
+                <div class="form-group"><label>Full Name *</label><input id="stFullName" required maxlength="100" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email Address *</label><input id="stEmail" type="email" required autocomplete="email" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
                 <div class="form-group"><label>School *</label>
                   <select id="stSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Select school…</option></select>
                   <input type="hidden" id="stSchoolId" />
@@ -1534,17 +1522,8 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
                   <select id="stClassSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Select school first…</option></select>
                   <input type="hidden" id="stClassId" />
                 </div>
-                <div class="form-group"><label>Academic Session ID</label><input id="stSessionId" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Gender</label><select id="stGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select></div>
-                <div class="form-group"><label>Date of Birth</label><input id="stDob" type="date" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Email Address for Sign-in *</label><input id="stEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Password for the Student *</label><input id="stPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" autocomplete="new-password" /></div>
-                <div class="form-group"><label>Phone (optional)</label><input id="stPhone" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Parent/Guardian Name</label><input id="stParentName" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Parent/Guardian Phone</label><input id="stParentPhone" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label><input type="checkbox" id="stAlsoInvite" /> Also send login invitation to email</label></div>
-                <button type="submit" class="btn btn-primary">Register student</button>
-                <div id="stFormStatus" style="font-size:0.9rem;"></div>
+                <button type="submit" class="btn btn-primary">Create Student Account</button>
+                <div id="stFormStatus" style="font-size:0.9rem;" role="status" aria-live="polite"></div>
               </form>
 
               <div class="toolbar">
@@ -1573,18 +1552,20 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
               <button class="btn btn-primary" id="btnAddTeacher">+ Add Teacher</button>
             </div>
             <div class="card-body">
-              <form id="teacherRegisterForm" style="display:grid;gap:10px;max-width:560px;margin-bottom:20px;padding:14px;border:1px solid var(--border);border-radius:12px;background:#fafbfc;">
-                <h3 style="font-size:1rem;">Invite teacher</h3>
-                <div class="form-group"><label>Full Name *</label><input id="tFullName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Email Address for Sign-in *</label><input id="tEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Password for the Assigned Teacher *</label><input id="tPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" autocomplete="new-password" /></div>
-                <div class="form-group"><label>Phone</label><input id="tPhone" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Gender</label><select id="tGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select></div>
-                <div class="form-group"><label>School ID *</label><input id="tSchoolId" required placeholder="Auto for school admin" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Qualification</label><input id="tQualification" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Specialization</label><input id="tSpecialization" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <button type="submit" class="btn btn-primary">Send teacher invitation</button>
-                <div id="tFormStatus" style="font-size:0.9rem;"></div>
+              <form id="teacherRegisterForm" style="display:grid;gap:10px;max-width:640px;margin-bottom:20px;padding:14px;border:1px solid var(--border);border-radius:12px;background:#fafbfc;">
+                <h3 style="font-size:1rem;">Create Teacher Account</h3>
+                <div class="form-group"><label>Full Name *</label><input id="tFullName" required maxlength="100" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email Address *</label><input id="tEmail" type="email" required autocomplete="email" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>School *</label>
+                  <select id="tSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Loading schools…</option></select>
+                  <input type="hidden" id="tSchoolId" />
+                </div>
+                <div class="form-group"><label>Assigned Classes and Subjects *</label>
+                  <p style="font-size:0.82rem;color:#546e7a;margin:4px 0 10px;">Choose one or more classes. For each selected class, choose the subjects this teacher will teach.</p>
+                  <div id="tAssignmentsBuilder" style="display:grid;gap:10px;"><div class="empty-state">Select a school to load its classes and subjects.</div></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Teacher Account</button>
+                <div id="tFormStatus" style="font-size:0.9rem;" role="status" aria-live="polite"></div>
               </form>
 
               <div class="toolbar">
@@ -2087,10 +2068,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
               <p style="font-size:0.9rem;color:#546e7a;">Cloud Functions and Security Rules must run on Firebase's servers, not in the browser. This page holds their complete code so this one HTML file contains everything. Copy each block to the place shown.</p>
               <ol style="font-size:0.9rem;color:#37474f;line-height:1.7;padding-left:20px;">
                 <li>Firebase Console &gt; Authentication &gt; Sign-in method: enable <strong>Email/Password</strong> and <strong>Google</strong>; add your website domain under Settings &gt; Authorized domains.</li>
-                <li><strong>Spark plan:</strong> do NOT upgrade. Cloud Functions need Blaze, so the <code>functions</code> files below are an <em>optional, future</em> reference and are <strong>not used</strong>. Accounts are created through invitations and every permission is enforced by the Firestore rules.</li>
+                <li><strong>Spark plan:</strong> do NOT upgrade. Cloud Functions need Blaze, so the <code>functions</code> files below are an <em>optional, future</em> reference and are <strong>not used</strong>. Accounts are created immediately through a one-use internal role/school link; no invitation email is sent. Every permission is enforced by Firestore rules.</li>
                 <li>Skip the functions deployment on Spark. Do not run <code>firebase deploy --only functions</code>.</li>
                 <li>Paste the two <strong>rules</strong> into the Console and Publish (or run <code>firebase deploy --only firestore:rules,storage</code>, which works on Spark). <strong>Publish the new Firestore rules before anyone uses the invitation login.</strong></li>
-                <li>Existing users must verify their email once. If an old account's email cannot receive mail, add the boolean field <code>verificationBypass = true</code> to its <code>users/&lt;uid&gt;</code> document in Firestore.</li>
+                <li>Admin-created accounts receive a rule-validated <code>verificationBypass = true</code> profile flag and can sign in without email verification. Do not set this flag for arbitrary users.</li>
               </ol>
               <div style="margin-top:22px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -2129,64 +2110,8 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         </div>
 
         <div class="view" id="view-admin-create-user">
-          <div class="card">
-            <div class="card-header"><h2>Register / Invite User</h2></div>
-            <div class="card-body">
-              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:12px;">Creates a <strong>Firestore invitation</strong> with locked role + schoolId. User signs up, verifies email, and claims the profile. Compatible with Spark (no Cloud Functions, no admin-set passwords).</p>
-              <form id="adminCreateUserForm" style="display:grid;gap:10px;max-width:560px;">
-                <div class="form-group"><label>Full name *</label><input id="acuName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Email *</label><input id="acuEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Role *</label>
-                  <select id="acuRole" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;">
-                    <option value="teacher">Teacher</option>
-                    <option value="student">Student</option>
-                    <option value="headmaster">Headmaster (Primary)</option>
-                    <option value="principal">Principal (Secondary)</option>
-                    <option value="admin">School Admin</option>
-                  </select>
-                </div>
-                <div class="form-group"><label>School *</label>
-                  <select id="acuSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Select school…</option></select>
-                </div>
-                <input type="hidden" id="acuSchoolId" />
-                <div class="form-group"><label>Phone</label><input id="acuPhone" type="tel" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Gender</label>
-                  <select id="acuGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select>
-                </div>
-                <div class="form-group" id="acuTeacherFields" style="display:none;">
-                  <label>Qualification</label><input id="acuQualification" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-bottom:8px;" />
-                  <label>Specialization</label><input id="acuSpecialization" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
-                </div>
-                <div class="form-group" id="acuStudentFields" style="display:none;">
-                  <label>Student record ID (students/{id}) to link *</label>
-                  <input id="acuStudentId" placeholder="schoolId_admissionNo" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" />
-                  <small style="color:#546e7a;">Create the student record under Students first, then invite the login email.</small>
-                </div>
-                <div class="form-group"><label><input type="checkbox" id="acuForceReplace" /> Replace existing school leader if role is Headmaster/Principal</label></div>
-                <button type="submit" class="btn btn-primary" id="btnAdminCreateUser">Send invitation</button>
-                <div id="acuStatus" style="margin-top:10px;font-size:0.9rem;"></div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="view" id="view-ks-primary">
-          <div class="card">
-            <div class="card-header"><h2>Primary Schools — Katsina State</h2>
-              <button class="btn btn-primary" id="btnAddPrimarySchool">+ Add Primary School</button>
-            </div>
-            <div class="card-body">
-              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:12px;">All primary schools by Local Government (A–Z). School name and LGA only.</p>
-              <div class="toolbar">
-                <div class="search-box"><input type="text" id="primarySchoolSearch" placeholder="Search by school name or LGA…" /></div>
-                <select class="filter-select" id="primaryLgaFilter"><option value="all">All LGAs</option></select>
-              </div>
-              <div id="primarySchoolMeta" style="font-size:0.85rem;color:#546e7a;margin:8px 0;"></div>
-              <div class="table-wrap"><table>
-                <thead><tr><th style="width:48px;">#</th><th>School Name</th><th>Local Government</th><th>Status</th></tr></thead>
-                <tbody id="primarySchoolsTable"><tr><td colspan="4" class="loading"><div class="spinner"></div></td></tr></tbody>
-              </table></div>
-            </div>
+          <div class="card"><div class="card-header"><h2>Account Creation</h2></div>
+            <div class="card-body"><p style="color:#546e7a;">Use the dedicated Student, Teacher, Headmaster or Principal registration pages. Each form now creates the Firebase sign-in account, links its school and role, and applies the selected class/subject assignments without sending an invitation email.</p></div>
           </div>
         </div>
 
@@ -2437,23 +2362,16 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           <div class="card">
             <div class="card-header"><h2>Headmasters / Head Teachers</h2></div>
             <div class="card-body">
-              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:14px;">Register a Headmaster for a <strong>Primary</strong> school. Creates a secure invitation (schoolId locked). User activates via email verification — no admin-set password (Spark).</p>
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:14px;">Register a Headmaster for a <strong>Primary</strong> school. The account is created and linked to this school immediately; no invitation or email verification is sent.</p>
               <form id="hmRegisterForm" style="display:grid;gap:10px;max-width:560px;margin-bottom:20px;">
-                <div class="form-group"><label>Full Name *</label><input id="hmFullName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Email Address for Sign-in *</label><input id="hmEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Password for the Assigned Headmaster *</label><input id="hmPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" autocomplete="new-password" /><small style="color:#546e7a;">Min 8 characters. Stored only in Firebase Authentication (not Firestore).</small></div>
-                <div class="form-group"><label>Phone</label><input id="hmPhone" type="tel" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Gender</label>
-                  <select id="hmGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select>
-                </div>
-                <div class="form-group"><label>Select Primary School *</label>
+                <div class="form-group"><label>Full Name *</label><input id="hmFullName" required maxlength="100" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email Address *</label><input id="hmEmail" type="email" required autocomplete="email" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Assigned Primary School *</label>
                   <select id="hmSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Loading schools…</option></select>
                   <input type="hidden" id="hmSchoolId" />
                 </div>
-                <div class="form-group"><label>Residential Address (optional)</label><input id="hmAddress" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label><input type="checkbox" id="hmForceReplace" /> Replace existing active Headmaster (audited)</label></div>
-                <button type="submit" class="btn btn-primary">Send invitation</button>
-                <div id="hmFormStatus" style="font-size:0.9rem;"></div>
+                <button type="submit" class="btn btn-primary">Create Headmaster Account</button>
+                <div id="hmFormStatus" style="font-size:0.9rem;" role="status" aria-live="polite"></div>
               </form>
               <div class="toolbar"><input type="text" id="hmSearch" placeholder="Search name or email…" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:220px;" /></div>
               <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>School</th><th>Status</th></tr></thead>
@@ -2465,23 +2383,16 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           <div class="card">
             <div class="card-header"><h2>Principals</h2></div>
             <div class="card-body">
-              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:14px;">Register a Principal for a <strong>Secondary</strong> school. Invitation locks <code>schoolId</code> and role.</p>
+              <p style="font-size:0.9rem;color:#546e7a;margin-bottom:14px;">Register a Principal for a <strong>Secondary</strong> school. The account is created and linked to this school immediately; no invitation or email verification is sent.</p>
               <form id="prRegisterForm" style="display:grid;gap:10px;max-width:560px;margin-bottom:20px;">
-                <div class="form-group"><label>Full Name *</label><input id="prFullName" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Email Address for Sign-in *</label><input id="prEmail" type="email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Password for the Assigned Principal *</label><input id="prPassword" type="text" required minlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" autocomplete="new-password" /><small style="color:#546e7a;">Min 8 characters. Auth only — not stored in Firestore.</small></div>
-                <div class="form-group"><label>Phone</label><input id="prPhone" type="tel" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label>Gender</label>
-                  <select id="prGender" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">—</option><option>Male</option><option>Female</option></select>
-                </div>
-                <div class="form-group"><label>Select Secondary School *</label>
+                <div class="form-group"><label>Full Name *</label><input id="prFullName" required maxlength="100" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email Address *</label><input id="prEmail" type="email" required autocomplete="email" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Assigned Secondary School *</label>
                   <select id="prSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Loading schools…</option></select>
                   <input type="hidden" id="prSchoolId" />
                 </div>
-                <div class="form-group"><label>Residential Address (optional)</label><input id="prAddress" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
-                <div class="form-group"><label><input type="checkbox" id="prForceReplace" /> Replace existing active Principal (audited)</label></div>
-                <button type="submit" class="btn btn-primary">Send invitation</button>
-                <div id="prFormStatus" style="font-size:0.9rem;"></div>
+                <button type="submit" class="btn btn-primary">Create Principal Account</button>
+                <div id="prFormStatus" style="font-size:0.9rem;" role="status" aria-live="polite"></div>
               </form>
               <div class="toolbar"><input type="text" id="prSearch" placeholder="Search…" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:220px;" /></div>
               <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>School</th><th>Status</th></tr></thead>
@@ -3211,13 +3122,33 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       user = auth.currentUser || user;
 
       let profile = null;
-      if (!user.emailVerified) {
-        // Only an account the platform owner explicitly marked (Firebase Console) may skip verification.
+      // Load profile first so we can allow Admin-created accounts without email verification.
+      try {
+        const snap0 = await getDoc(doc(db, "users", user.uid));
+        if (snap0.exists()) profile = snap0.data();
+      } catch (e) {}
+
+      // If this email has an Admin-created pending link, claim it before the verification gate.
+      // No invitation email is sent; the internal Firestore record only locks role and school.
+      if (!profile) {
         try {
-          const s0 = await getDoc(doc(db, "users", user.uid));
-          if (s0.exists() && s0.data().verificationBypass === true) profile = s0.data();
-        } catch (e) {}
-        if (!profile) { showVerifyPanel(user); return; }
+          const B = window.MMSAYAYA_BACKEND;
+          if (B && await B.invitations.claim()) {
+            const claimed = await getDoc(doc(db, "users", user.uid));
+            if (claimed.exists()) profile = claimed.data();
+          }
+        } catch (e) { console.warn("Account linking:", e && e.message); }
+      }
+
+      // Admin-created accounts carry a rule-validated verificationBypass flag.
+      const adminCreated = !!(profile && (
+        profile.verificationBypass === true ||
+        profile.source === "admin_registration" ||
+        profile.source === "admin_create"
+      ));
+      if (!user.emailVerified && !adminCreated) {
+        showVerifyPanel(user);
+        return;
       }
 
       const tokenRes = await user.getIdTokenResult(true);
@@ -3230,18 +3161,6 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           const snap = await getDoc(doc(db, "users", user.uid));
           if (snap.exists()) profile = snap.data();
         } catch (e) {}
-      }
-
-      if (!profile) {
-        // Spark plan: the first VERIFIED login of an invited person creates their profile exactly as invited
-        // (role/school come from the invitation, never from the browser). See js/school-backend.js.
-        try {
-          const B = window.MMSAYAYA_BACKEND;
-          if (B && await B.invitations.claim()) {
-            const s2 = await getDoc(doc(db, "users", user.uid));
-            if (s2.exists()) profile = s2.data();
-          }
-        } catch (e) { console.warn("Invitation claim:", e && e.message); }
       }
 
       if (!profile) {
@@ -3378,8 +3297,11 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       const btn = byId("verifyCheckBtn"); btn.disabled = true;
       try {
         await u.reload();
-        if (!auth.currentUser.emailVerified) setAlert("error", "Your email is not verified yet. Open the link in the email first.");
-        else { hideVerifyPanel(); clearAlert(); await routeUser(auth.currentUser); }
+        if (!u.emailVerified) {
+          setAlert("info", "This account still needs email verification. Admin-created accounts linked by the school do not need this step.");
+        } else {
+          hideVerifyPanel(); clearAlert(); await routeUser(auth.currentUser);
+        }
       } catch (e) { setAlert("error", authError(e)); }
       finally { btn.disabled = false; }
     });
@@ -3403,28 +3325,6 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       byId("loginForm").hidden = false;
       byId("loginPassword").value = "";
       clearAlert();
-    });
-
-    // ---------- Activate an invited account (Spark replacement for Admin-created accounts) ----------
-    byId("inviteToggleBtn").addEventListener("click", () => { byId("inviteForm").hidden = !byId("inviteForm").hidden; });
-    byId("inviteActivateBtn").addEventListener("click", async () => {
-      const email = byId("inviteEmail").value.trim().toLowerCase();
-      const password = byId("invitePassword").value;
-      const confirm = byId("inviteConfirm").value;
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return setAlert("error", "Enter the email address you were invited with.");
-      if (password.length < 8 || !/[A-Za-z]/.test(password) || !/\d/.test(password)) return setAlert("error", "Password must be 8+ characters with letters and numbers.");
-      if (password !== confirm) return setAlert("error", "Passwords do not match.");
-      const btn = byId("inviteActivateBtn");
-      btn.disabled = true; btn.textContent = "Creating…"; clearAlert();
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        byId("invitePassword").value = ""; byId("inviteConfirm").value = ""; byId("inviteForm").hidden = true;
-        await routeUser(cred.user);          // sends the verification email; the profile is created after verification
-      } catch (e) {
-        setAlert("error", (e && e.code === "auth/email-already-in-use")
-          ? "This email already has a sign-in. Use the Login form with your password - your invitation is applied automatically after you verify your email."
-          : authError(e));
-      } finally { btn.disabled = false; btn.textContent = "Activate Account"; }
     });
 
     applyRoute(false);
@@ -3482,7 +3382,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         const snap = await getDoc(doc(db, "users", user.uid));
         if (snap.exists()) {
           currentProfile = snap.data();
-          if (!user.emailVerified && currentProfile.verificationBypass !== true) { document.documentElement.classList.remove("is-admin"); return; }
+          if (!user.emailVerified) {
+            const bypass = currentProfile && (currentProfile.verificationBypass === true || currentProfile.source === "admin_registration" || currentProfile.source === "admin_create");
+            if (!bypass) { document.documentElement.classList.remove("is-admin"); return; }
+          }
           if (["suspended", "inactive", "disabled", "deleted"].includes(String(currentProfile.status || "active").toLowerCase())) {
             document.documentElement.classList.remove("is-admin");
             try { await signOut(auth); } catch (_) {}
@@ -5422,152 +5325,11 @@ setTimeout(wireSaAcademicButtons, 800);
         fillSchoolSelect($id("prSchoolSelect"), $id("prSchoolId"), "secondary");
         fillSchoolSelect($id("acuSchoolSelect"), $id("acuSchoolId"), null);
       }
-      async function sendInvite(payload, statusEl) {
-        try {
-          if (!B()) throw new Error("Backend not ready");
-          const r = await B().invitations.create(payload);
-          msg(statusEl, "Invitation sent to "+r.email+" for school "+r.schoolId+". User must sign up, verify email, then sign in.", true);
-          return r;
-        } catch (e) {
-          msg(statusEl, e.message || String(e), false);
-          throw e;
-        }
-      }
-      // Headmaster form
-      const hmForm = $id("hmRegisterForm");
-      if (hmForm && !hmForm.dataset.bound) {
-        hmForm.dataset.bound = "1";
+      // Role-specific account creation is wired once by wirePassReg() near the end of this file.
+      function refreshSchoolDropdowns() {
         fillSchoolSelect($id("hmSchoolSelect"), $id("hmSchoolId"), "primary");
-        hmForm.addEventListener("submit", async (ev) => {
-          ev.preventDefault();
-          const schoolId = ($id("hmSchoolId").value || $id("hmSchoolSelect").value || "").trim();
-          if (!schoolId) return msg($id("hmFormStatus"), "Select a primary school.", false);
-          await sendInvite({
-            email: $id("hmEmail").value, fullName: $id("hmFullName").value, role: "headmaster",
-            schoolId, phone: $id("hmPhone").value, gender: $id("hmGender").value,
-            address: $id("hmAddress").value, forceReplace: !!($id("hmForceReplace") && $id("hmForceReplace").checked)
-          }, $id("hmFormStatus"));
-          if (typeof loadUsersByRole === "function") loadUsersByRole("headmaster", "headmastersTable");
-        });
-      }
-      // Principal form
-      const prForm = $id("prRegisterForm");
-      if (prForm && !prForm.dataset.bound) {
-        prForm.dataset.bound = "1";
         fillSchoolSelect($id("prSchoolSelect"), $id("prSchoolId"), "secondary");
-        prForm.addEventListener("submit", async (ev) => {
-          ev.preventDefault();
-          const schoolId = ($id("prSchoolId").value || $id("prSchoolSelect").value || "").trim();
-          if (!schoolId) return msg($id("prFormStatus"), "Select a secondary school.", false);
-          await sendInvite({
-            email: $id("prEmail").value, fullName: $id("prFullName").value, role: "principal",
-            schoolId, phone: $id("prPhone").value, gender: $id("prGender").value,
-            address: $id("prAddress").value, forceReplace: !!($id("prForceReplace") && $id("prForceReplace").checked)
-          }, $id("prFormStatus"));
-          if (typeof loadUsersByRole === "function") loadUsersByRole("principal", "principalsTable");
-        });
-      }
-      // Admin create / invite form
-      const acuForm = $id("adminCreateUserForm");
-      if (acuForm && !acuForm.dataset.bound) {
-        acuForm.dataset.bound = "1";
-        fillSchoolSelect($id("acuSchoolSelect"), $id("acuSchoolId"), null);
-        const roleEl = $id("acuRole");
-        function syncAcuRole() {
-          const r = roleEl ? roleEl.value : "";
-          if ($id("acuTeacherFields")) $id("acuTeacherFields").style.display = r === "teacher" ? "block" : "none";
-          if ($id("acuStudentFields")) $id("acuStudentFields").style.display = r === "student" ? "block" : "none";
-        }
-        if (roleEl) roleEl.addEventListener("change", syncAcuRole);
-        syncAcuRole();
-        acuForm.addEventListener("submit", async (ev) => {
-          ev.preventDefault();
-          const schoolId = ($id("acuSchoolId").value || $id("acuSchoolSelect").value || "").trim();
-          const role = ($id("acuRole").value || "").trim();
-          if (!schoolId) return msg($id("acuStatus"), "Select a school — required for school linking.", false);
-          if (role === "student" && !($id("acuStudentId").value || "").trim()) {
-            return msg($id("acuStatus"), "Student invitations require an existing student record ID.", false);
-          }
-          try {
-            const result = await B().legacyCall("createUserByAdmin", {
-              email: $id("acuEmail").value, fullName: $id("acuName").value, role, schoolId,
-              phone: $id("acuPhone") && $id("acuPhone").value,
-              gender: $id("acuGender") && $id("acuGender").value,
-              studentId: $id("acuStudentId") && $id("acuStudentId").value,
-              qualification: $id("acuQualification") && $id("acuQualification").value,
-              specialization: $id("acuSpecialization") && $id("acuSpecialization").value,
-              forceReplace: !!($id("acuForceReplace") && $id("acuForceReplace").checked)
-            });
-            msg($id("acuStatus"), (result && result.notice) || "Invitation created.", true);
-          } catch (e) {
-            msg($id("acuStatus"), e.message || String(e), false);
-          }
-        });
-      }
-      // Teacher invite
-      const tForm = $id("teacherRegisterForm");
-      if (tForm && !tForm.dataset.bound) {
-        tForm.dataset.bound = "1";
-        tForm.addEventListener("submit", async (ev) => {
-          ev.preventDefault();
-          let schoolId = ($id("tSchoolId").value || "").trim();
-          try {
-            if (!schoolId && B()) {
-              const actor = await B().loadActor();
-              schoolId = actor.schoolId || "";
-              if ($id("tSchoolId")) $id("tSchoolId").value = schoolId;
-            }
-            if (!schoolId) return msg($id("tFormStatus"), "School ID is required.", false);
-            const teacherId = schoolId + "_T_" + Date.now().toString(36).toUpperCase();
-            await sendInvite({
-              email: $id("tEmail").value, fullName: $id("tFullName").value, role: "teacher",
-              schoolId, phone: $id("tPhone").value, gender: $id("tGender").value,
-              qualification: $id("tQualification").value, specialization: $id("tSpecialization").value,
-              teacherId
-            }, $id("tFormStatus"));
-            if (typeof loadUsersByRole === "function") loadUsersByRole("teacher", "teachersTable");
-          } catch (e) { /* status already set */ }
-        });
-      }
-      // Student register
-      const sForm = $id("studentRegisterForm");
-      if (sForm && !sForm.dataset.bound) {
-        sForm.dataset.bound = "1";
-        sForm.addEventListener("submit", async (ev) => {
-          ev.preventDefault();
-          const statusEl = $id("stFormStatus");
-          try {
-            if (!B()) throw new Error("Backend not ready");
-            const schoolId = ($id("stSchoolId").value || "").trim();
-            if (!schoolId) throw new Error("School ID is required.");
-            const studentId = await B().students.create(schoolId, {
-              fullName: $id("stFullName").value,
-              admissionNo: $id("stAdmissionNo").value,
-              classId: $id("stClassId").value,
-              academicSessionId: $id("stSessionId").value || null,
-              gender: $id("stGender").value || null,
-              dateOfBirth: $id("stDob").value || null,
-              email: $id("stEmail").value || null,
-              phone: $id("stPhone").value || null,
-              parentName: $id("stParentName").value || null,
-              parentPhone: $id("stParentPhone").value || null
-            });
-            let extra = " Student ID: " + studentId;
-            if ($id("stAlsoInvite") && $id("stAlsoInvite").checked) {
-              const email = ($id("stEmail").value || "").trim();
-              if (!email) throw new Error("Email required to send login invitation.");
-              await B().invitations.create({
-                email, fullName: $id("stFullName").value, role: "student",
-                schoolId, studentId, phone: $id("stPhone").value
-              });
-              extra += " Invitation sent to " + email;
-            }
-            msg(statusEl, "Student registered." + extra, true);
-            if (typeof loadUsersByRole === "function") loadUsersByRole("student", "studentsTable");
-          } catch (e) {
-            msg(statusEl, e.message || String(e), false);
-          }
-        });
+        fillSchoolSelect($id("tSchoolSelect"), $id("tSchoolId"), null);
       }
       refreshSchoolDropdowns();
       setTimeout(refreshSchoolDropdowns, 500);
@@ -8039,7 +7801,7 @@ export function sameSchool(profile, schoolId) { return !!profile && !!schoolId &
 export function invitableRoles(actor) {
   const role = normRole(actor && actor.role);
   if (role === ROLES.SUPER_ADMIN) return ["admin", "headmaster", "principal", "teacher", "student"];
-  if (role === ROLES.ADMIN) {
+  if ([ROLES.ADMIN, ROLES.HEADMASTER, ROLES.PRINCIPAL].includes(role)) {
     const out = [];
     if (can(actor, "create_teacher", actor.schoolId)) out.push("teacher");
     if (can(actor, "create_student", actor.schoolId)) out.push("student");
@@ -8071,7 +7833,7 @@ export function createSchoolBackend({ db, auth, fs }) {
   async function loadActor() {
     const u = auth.currentUser;
     if (!u) fail("Sign in first.");
-    if (u.emailVerified !== true) fail("Verify your email address first.");
+    /* verification not required */
     const snap = await getDoc(doc(db, "users", u.uid));
     if (!snap.exists()) fail("No profile for this account.");
     const p = snap.data();
@@ -8450,8 +8212,8 @@ export function createSchoolBackend({ db, auth, fs }) {
   // ================================================================== invitations (Spark replacement for account creation)
   const invitations = {
     list: (schoolId) => listBySchool("invitations", schoolId),
-    /** Creates an invitation. The invited person later signs up + verifies e-mail + claims it. */
-    async create({ email, fullName, role, schoolId, permissions, studentId, days = 14, phone, gender, address, qualification, specialization, teacherId, forceReplace = false, profileExtras }) {
+    /** Creates an invitation. The Admin creates the Auth account without an email message; the account profile claims the internal role/school link immediately. */
+    async create({ email, fullName, role, schoolId, permissions, studentId, classId, days = 14, forceReplace = false }) {
       const actor = await loadActor();
       role = normRole(role); email = normalizeEmail(email); fullName = String(fullName || "").trim();
       if (!ROLE_LIST.includes(role) || role === ROLES.SUPER_ADMIN) fail("That role cannot be invited.");
@@ -8486,21 +8248,19 @@ export function createSchoolBackend({ db, auth, fs }) {
       }
       const data = {
         email, fullName, role, schoolId,
-        schoolName: school.name || "",
         status: "pending", invitedBy: actor.uid,
         expiresAt: Timestamp.fromMillis(Date.now() + Math.min(30, Math.max(1, days || 14)) * 864e5 - 6e4),
         createdAt: ts(), updatedAt: ts()
       };
-      if (phone) data.phone = String(phone).slice(0, 40);
-      if (gender) data.gender = String(gender).slice(0, 20);
-      if (address) data.address = String(address).slice(0, 300);
-      if (qualification) data.qualification = String(qualification).slice(0, 120);
-      if (specialization) data.specialization = String(specialization).slice(0, 120);
-      if (teacherId) data.teacherId = String(teacherId).slice(0, 80);
-      if (profileExtras && typeof profileExtras === "object") data.profileExtras = profileExtras;
       if (forceReplace && (role === "headmaster" || role === "principal")) data.forceReplace = true;
       if (permissions !== undefined) { need(actor, OPERATION_PERMS.setUserPermissions, schoolId); data.permissions = cleanPerms(role, permissions); }
-      if (role === "student") data.studentId = studentId;
+      if (role === "student") {
+        if (!classId) fail("Choose the student's class.");
+        const st = await getDoc(doc(db, "students", studentId));
+        if (!st.exists() || st.data().classId !== classId || st.data().schoolId !== schoolId) fail("Student class and school do not match.");
+        data.studentId = studentId;
+        data.classId = classId;
+      }
       const b = writeBatch(db);
       data.auditId = addAudit(b, actor, { action: "invitation_create", schoolId, targetType: "invitations", targetId: email, summary: { role } });
       if (prev.exists()) { // re-issue: drop stale revoke markers by overwriting
@@ -8518,9 +8278,9 @@ export function createSchoolBackend({ db, auth, fs }) {
       const auditId = addAudit(b, actor, { action: "invitation_revoke", schoolId: sid, targetType: "invitations", targetId: email });
       b.update(ref, { status: "revoked", revokedBy: actor.uid, revokedAt: ts(), updatedAt: ts(), auditId }); await b.commit();
     },
-    /** The invited person's own pending invitation (null if none). Requires verified e-mail. */
+    /** The signed-in account's own pending internal account link (null if none). */
     async mine() {
-      const u = auth.currentUser; if (!u || u.emailVerified !== true) return null;
+      const u = auth.currentUser; if (!u) return null;
       const snap = await getDoc(doc(db, "invitations", normalizeEmail(u.email)));
       if (!snap.exists()) return null; const d = snap.data();
       if (d.status !== "pending" || d.expiresAt.toMillis() <= Date.now()) return null;
@@ -8533,24 +8293,18 @@ export function createSchoolBackend({ db, auth, fs }) {
      */
     async claim() {
       const u = auth.currentUser; if (!u) fail("Sign in first.");
-      if (u.emailVerified !== true) fail("Verify your email address first.");
       const inv = await invitations.mine(); if (!inv) return null;
       if (!inv.schoolId) fail("Invitation has no school linked. Contact Super Admin.");
-      // Only fields allowed by Firestore claimKeys (plus optional phone/gender if rules permit)
+      // Only fields allowed by Firestore claimKeys; role and school come from the Admin-created link.
       const prof = {
         uid: u.uid, email: inv.email, fullName: inv.fullName, role: inv.role,
         schoolId: inv.schoolId, status: "active",
-        createdBy: inv.invitedBy, source: "invitation",
+        createdBy: inv.invitedBy, source: "admin_registration", verificationBypass: true,
         createdAt: ts(), updatedAt: ts()
       };
       if (inv.permissions !== undefined) prof.permissions = inv.permissions;
       if (inv.studentId) prof.studentId = inv.studentId;
-      if (inv.phone) prof.phone = inv.phone;
-      if (inv.gender) prof.gender = inv.gender;
-      if (inv.address) prof.address = inv.address;
-      if (inv.qualification) prof.qualification = inv.qualification;
-      if (inv.specialization) prof.specialization = inv.specialization;
-      if (inv.teacherId) prof.teacherId = inv.teacherId;
+      if (inv.classId) prof.classId = inv.classId;
       const b = writeBatch(db);
       // Replace previous leader if invitation was issued with forceReplace
       if (inv.forceReplace && (inv.role === "headmaster" || inv.role === "principal")) {
@@ -9151,10 +8905,10 @@ function effectivePerms(profile) {
 async function requireCaller(request) {
   if (!request.auth) fail("unauthenticated", "Sign in first.");
   const uid = request.auth.uid;
-  if (request.auth.token.email_verified !== true) fail("permission-denied", "Verify your email address first.");
   const snap = await db.collection("users").doc(uid).get();
   if (!snap.exists) fail("permission-denied", "No profile for this account.");
   const profile = snap.data();
+  if (request.auth.token.email_verified !== true && profile.verificationBypass !== true) fail("permission-denied", "This account is not eligible to bypass email verification.");
   if ((profile.status || "active") !== "active") fail("permission-denied", "This account is not active.");
   const role = normRole(profile.role);
   if (role !== ROLE_ADMIN && role !== ROLE_SUPER) fail("permission-denied", "Admin access required.");
@@ -9470,7 +9224,8 @@ exports.syncUserClaims = onDocumentWritten("users/{uid}", async (event) => {
   }
 }
 </script>
-<script type="text/plain" id="bsFirestoreSrc">rules_version = '2';
+<script type="text/plain" id="bsFirestoreSrc">
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -9497,8 +9252,8 @@ service cloud.firestore {
     function hasProfile() { return hasAuth() && exists(profilePath()); }
     function userDoc() { return get(profilePath()).data; }
 
-    // Protected-data gate: signed in + email verified + account active.
-    // "verificationBypass" can only be set from the Firebase Console (never by clients).
+    // Protected-data gate: signed in + active profile. Unverified email is accepted only
+    // when verificationBypass was included in a validated Admin-created account claim.
     function emailOk() {
       return request.auth.token.email_verified == true
         || (hasProfile() && userDoc().get('verificationBypass', false) == true);
@@ -9669,20 +9424,19 @@ service cloud.firestore {
     // =====================================================================
 
     // =====================================================================
-    // Invitation CLAIM (replaces Cloud-Function account creation on Spark).
-    //   1. A Super Admin / school Admin writes invitations/{email} (validated below).
-    //   2. The invited person signs up with Firebase Auth using that email and VERIFIES it.
-    //   3. They claim it: ONE batch creates users/{uid} + marks the invitation claimed.
-    // The new profile must equal the invitation, so the claimant can never pick a role/school.
+    // Admin account linking (Spark-compatible; no invitation email or email verification).
+    //   1. An authorized Admin creates a one-use internal invitations/{email} link.
+    //   2. The Admin creates the Firebase Auth account in a secondary Auth instance.
+    //   3. The new Auth user claims the link in one batch, creating users/{uid} and linking
+    //      the student record when applicable. Role and school always come from the link.
     // =====================================================================
     function invPathFor(email) { return /databases/$(database)/documents/invitations/$(email); }
     function claimKeys() {
-      return ['uid','email','fullName','role','schoolId','status','permissions','studentId',
-              'createdBy','source','createdAt','updatedAt'];
+      return ['uid','email','fullName','role','schoolId','status','permissions','studentId','classId',
+              'createdBy','source','verificationBypass','createdAt','updatedAt'];
     }
     function claimCreateOk(userId) {
       return isOwner(userId)
-        && request.auth.token.email_verified == true
         && request.auth.token.email != null
         && exists(invPathFor(request.auth.token.email.lower()))
         && claimMatches(request.resource.data, get(invPathFor(request.auth.token.email.lower())).data, userId)
@@ -9702,9 +9456,11 @@ service cloud.firestore {
         && d.fullName == inv.fullName
         && d.get('permissions', null) == inv.get('permissions', null)
         && d.get('studentId', null) == inv.get('studentId', null)
+        && d.get('classId', null) == inv.get('classId', null)
         && d.status == 'active'
         && d.createdBy == inv.invitedBy
-        && d.source == 'invitation'
+        && d.source == 'admin_registration'
+        && d.verificationBypass == true
         && d.createdAt == request.time && d.updatedAt == request.time
         && schoolOk(d.schoolId)
         && roleMatchesSchool(d.role, d.schoolId);
@@ -9775,14 +9531,15 @@ service cloud.firestore {
     // Invitations (document id = invited e-mail address, lower-case)
     // =====================================================================
     function inviteKeys() {
-      return ['email','fullName','role','schoolId','permissions','studentId','status','invitedBy',
-              'expiresAt','auditId','createdAt','updatedAt','revokedBy','revokedAt'];
+      return ['email','fullName','role','schoolId','permissions','studentId','classId','status','invitedBy',
+              'expiresAt','auditId','createdAt','updatedAt','revokedBy','revokedAt','forceReplace'];
     }
     function inviteStudentLinkOk(d) {
       return d.studentId is string
         && exists(/databases/$(database)/documents/students/$(d.studentId))
         && get(/databases/$(database)/documents/students/$(d.studentId)).data.schoolId == d.schoolId
         && get(/databases/$(database)/documents/students/$(d.studentId)).data.get('userId', null) == null
+        && get(/databases/$(database)/documents/students/$(d.studentId)).data.get('classId', null) == d.get('classId', null)
         && get(/databases/$(database)/documents/students/$(d.studentId)).data.get('status', 'active') == 'active';
     }
     function invitePermsOk(d) {
@@ -9804,6 +9561,7 @@ service cloud.firestore {
         && d.fullName is string && d.fullName.size() >= 2 && d.fullName.size() <= 80
         && d.role in ['admin','headmaster','principal','teacher','student']
         && schoolOk(d.schoolId)
+        && (d.role != 'student' || (d.get('classId', null) is string && classOk(d.classId, d.schoolId) && inviteStudentLinkOk(d)))
         && d.expiresAt is timestamp && d.expiresAt > request.time
         && d.expiresAt <= request.time + duration.value(30, 'd')
         && d.createdAt == request.time && d.updatedAt == request.time
@@ -9814,9 +9572,8 @@ service cloud.firestore {
       return schoolCan('create_teacher', sid) || schoolCan('create_student', sid);
     }
     match /invitations/{inviteId} {
-      // The invited person (verified e-mail) may read ONLY their own invitation.
-      allow get: if (hasAuth() && request.auth.token.email_verified == true
-                     && request.auth.token.email != null
+      // An authenticated user may read ONLY the internal link matching their Auth email.
+      allow get: if (hasAuth() && request.auth.token.email != null
                      && inviteId == request.auth.token.email.lower())
         || (authed() && canSeeInvites(resource.data.get('schoolId', null)));
       allow list: if authed() && canSeeInvites(resource.data.get('schoolId', null));
@@ -9834,9 +9591,8 @@ service cloud.firestore {
         || (authed() && (resource.data.status in ['revoked','expired']
                          || (resource.data.status == 'pending' && resource.data.expiresAt <= request.time))
             && inviteNewOk(inviteId, request.resource.data))
-        // (c) the invited, verified person claims it (the users/{uid} create in the same batch is validated above)
-        || (hasAuth() && request.auth.token.email_verified == true
-            && request.auth.token.email != null
+        // (c) the account owner claims the internal link (the users/{uid} create is validated above)
+        || (hasAuth() && request.auth.token.email != null
             && inviteId == request.auth.token.email.lower()
             && resource.data.status == 'pending'
             && resource.data.expiresAt > request.time
@@ -9844,7 +9600,10 @@ service cloud.firestore {
             && request.resource.data.claimedBy == uid()
             && request.resource.data.diff(resource.data).affectedKeys()
                  .hasOnly(['status','claimedBy','claimedAt','updatedAt'])
-            && existsAfter(userPath(uid())));
+            && existsAfter(userPath(uid()))
+            && getAfter(userPath(uid())).data.get('email', '') == request.auth.token.email.lower()
+            && getAfter(userPath(uid())).data.get('schoolId', null) == resource.data.schoolId
+            && getAfter(userPath(uid())).data.get('role', '') == resource.data.role);
       allow delete: if false;
     }
 
@@ -10035,7 +9794,7 @@ service cloud.firestore {
           && classOk(request.resource.data.classId, resource.data.schoolId)
           && request.resource.data.status in ['active','inactive','graduated','transferred','archived'])
         // the student's own account links to the record while claiming the invitation
-        || (hasAuth() && request.auth.token.email_verified == true
+        || (hasAuth() && request.auth.token.email != null
             && resource.data.get('userId', null) == null
             && request.resource.data.userId == uid()
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['userId','updatedAt'])
@@ -10366,13 +10125,14 @@ service cloud.firestore {
   }
 }
 </script>
-<script type="text/plain" id="bsStorageSrc">rules_version = '2';
+<script type="text/plain" id="bsStorageSrc">
+rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
 
     function hasAuth() { return request.auth != null; }
     function profile() { return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data; }
-    function verified() { return hasAuth() && request.auth.token.email_verified == true; }
+    function verified() { return hasAuth() && (request.auth.token.email_verified == true || (firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) && profile().get('verificationBypass', false) == true)); }
     function activeAdmin() {
       return verified()
         && firestore.exists(/databases/(default)/documents/users/$(request.auth.uid))
@@ -10433,7 +10193,7 @@ service firebase.storage {
 <script type="module">
 /* Role registration (Spark-safe): secondary Auth app creates the user without signing out Super Admin */
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signOut as secSignOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, deleteUser, signOut as secSignOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -10456,75 +10216,134 @@ function secondaryAuth() {
 }
 
 window.ME_registerAccount = async function(payload) {
-  const { email, password, fullName, role, schoolId, phone, gender, extra } = payload;
-  if (!email || !password || password.length < 8) throw new Error("Valid email and password (min 8) are required.");
-  if (!schoolId) throw new Error("School is required.");
-  if (!fullName) throw new Error("Full name is required.");
-  const allowed = ["student", "teacher", "headmaster", "principal", "admin"];
-  if (!allowed.includes(role)) throw new Error("Invalid role.");
-
-  // If school chosen from Katsina directory, ensure a Firestore schools/{id} doc exists
-  let resolvedSchoolId = schoolId;
-  try {
-    const db0 = getFirestore(primaryApp());
-    const sref = doc(db0, "schools", schoolId);
-    const ssnap = await getDoc(sref);
-    if (!ssnap.exists()) {
-      // Parse directory id: kt_primary_LGA_Name or kt_secondary_...
-      let schoolType = "secondary";
-      let name = schoolId;
-      let town = "";
-      if (String(schoolId).startsWith("kt_")) {
-        const parts = String(schoolId).split("_");
-        schoolType = parts[1] === "primary" ? "primary" : "secondary";
-        // recover name/town from selected option label if provided
-        if (payload.schoolName) name = payload.schoolName;
-        if (payload.schoolTown) town = payload.schoolTown;
-        await setDoc(sref, {
-          name: name,
-          schoolType: schoolType,
-          town: town || null,
-          lga: town || null,
-          state: "Katsina",
-          status: "active",
-          source: "katsina_directory",
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
-        }, { merge: true });
+  const B = window.MMSAYAYA_BACKEND;
+  if (!B) throw new Error("Account backend is not ready. Refresh the page and try again.");
+  const actor = await B.loadActor();
+  const email = String(payload.email || "").trim().toLowerCase();
+  const fullName = String(payload.fullName || "").trim();
+  const role = String(payload.role || "").trim().toLowerCase();
+  const schoolId = String(payload.schoolId || "").trim();
+  const studentId = payload.studentId ? String(payload.studentId) : null;
+  const classId = payload.classId ? String(payload.classId) : null;
+  const assignmentRows = Array.isArray(payload.assignments) ? payload.assignments : [];
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) throw new Error("Enter a valid email address.");
+  if (fullName.length < 2 || fullName.length > 100) throw new Error("Enter the full name (2–100 characters).");
+  if (!["student", "teacher", "headmaster", "principal"].includes(role)) throw new Error("Choose a valid account role.");
+  if (!schoolId) throw new Error("Select the school for this account.");
+  const allowedRoles = B.helpers && B.helpers.invitableRoles ? B.helpers.invitableRoles(actor) : [];
+  if (!allowedRoles.includes(role)) throw new Error("Your role does not have permission to create this account in the selected school.");
+  const school = await B.schools.get(schoolId);
+  if (!school) throw new Error("The selected school was not found. Existing school records have not been changed.");
+  const schoolType = String(school.schoolType || school.type || "").toLowerCase();
+  if (role === "headmaster" && schoolType !== "primary") throw new Error("A Headmaster must be linked to a Primary School.");
+  if (role === "principal" && !["secondary", "junior_secondary", "senior_secondary"].includes(schoolType)) throw new Error("A Principal must be linked to a Secondary School.");
+  if (role === "student") {
+    if (!classId || !studentId) throw new Error("Choose a class for the student.");
+    const cls = await B.classes.list(schoolId);
+    if (!cls.some(c => c.id === classId)) throw new Error("The selected class does not belong to this school.");
+  }
+  let sessionId = null;
+  if (role === "teacher") {
+    if (!assignmentRows.length) throw new Error("Choose at least one assigned class and its subjects.");
+    sessionId = school.currentSessionId || null;
+    if (!sessionId) throw new Error("Set a current Academic Session for this school before assigning a teacher.");
+    const sessions = await B.academicSessions.list(schoolId);
+    if (!sessions.some(s => s.id === sessionId && s.status === "active")) throw new Error("The school's current Academic Session is not active. Set an active session first.");
+    const classes = await B.classes.list(schoolId);
+    const subjects = await B.subjects.list(schoolId);
+    const classMap = new Map(classes.map(c => [c.id, c]));
+    const subjectMap = new Map(subjects.map(s => [s.id, s]));
+    for (const row of assignmentRows) {
+      if (!classMap.has(row.classId)) throw new Error("One selected class does not belong to the chosen school.");
+      if (!Array.isArray(row.subjectIds) || !row.subjectIds.length) throw new Error("Choose at least one subject for every selected class.");
+      const activeForClass = await B.classSubjects.activeSubjectsForClass(schoolId, row.classId);
+      for (const subjectId of row.subjectIds) {
+        if (!subjectMap.has(subjectId) || !activeForClass.includes(subjectId)) throw new Error("A selected subject is not linked to its selected class.");
       }
     }
-    resolvedSchoolId = schoolId;
-  } catch (e) {
-    console.warn("school ensure", e);
   }
 
+  // Headmasters and Principals need explicit school-scoped permissions for their full dashboards.
+  const leaderPermissions = [
+    "manage_users","create_student","create_teacher","manage_permissions","suspend_users",
+    "reset_passwords","manage_content","manage_payments","manage_schools",
+    "manage_announcements","manage_access","view_reports","view_students",
+    "manage_results","manage_report_cards"
+  ];
+  const invitePayload = { email, fullName, role, schoolId };
+  if (role === "student") { invitePayload.studentId = studentId; invitePayload.classId = classId; }
+  if (role === "headmaster" || role === "principal") invitePayload.permissions = leaderPermissions;
+
+  // The invitation document is an internal, one-use role/school lock only. No email is sent.
+  const invite = await B.invitations.create(invitePayload);
+  const tempPassword = makeTemporaryPassword();
   const sec = secondaryAuth();
-  let cred;
+  let cred = null;
   try {
-    cred = await createUserWithEmailAndPassword(sec, String(email).trim().toLowerCase(), password);
-  } catch (e) {
-    if (e.code === "auth/email-already-in-use") throw new Error("This email is already registered.");
-    throw e;
-  }
-  const uid = cred.user.uid;
-  const db = getFirestore(primaryApp());
-  const profile = {
-    uid, email: String(email).trim().toLowerCase(), fullName: String(fullName).trim(),
-    role, schoolId: resolvedSchoolId, status: "active",
-    phone: phone || null, gender: gender || null,
-    source: "admin_registration", createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
-    verificationBypass: true
-  };
-  if (extra && typeof extra === "object") Object.assign(profile, extra);
-  try {
-    await setDoc(doc(db, "users", uid), profile);
-  } catch (e) {
+    cred = await createUserWithEmailAndPassword(sec, email, tempPassword);
+    const uid = cred.user.uid;
+    const db2 = getFirestore(sec.app);
+    const invRef = doc(db2, "invitations", email);
+    const invSnap = await getDoc(invRef);
+    if (!invSnap.exists()) throw new Error("The account link record could not be found.");
+    const inv = invSnap.data();
+    if (inv.status !== "pending" || inv.email !== email || inv.role !== role || inv.schoolId !== schoolId) throw new Error("The account link does not match the selected role and school.");
+    const now = serverTimestamp();
+    const profile = {
+      uid, email, fullName, role, schoolId, status: "active",
+      createdBy: actor.uid, source: "admin_registration", verificationBypass: true,
+      createdAt: now, updatedAt: now
+    };
+    if (role === "student") { profile.studentId = studentId; profile.classId = classId; }
+    if (invitePayload.permissions) profile.permissions = invitePayload.permissions;
+    const batch = writeBatch(db2);
+    batch.set(doc(db2, "users", uid), profile);
+    batch.update(invRef, { status: "claimed", claimedBy: uid, claimedAt: now, updatedAt: now });
+    if (studentId) batch.update(doc(db2, "students", studentId), { userId: uid, updatedAt: now });
+    batch.set(doc(collection(db2, "auditLogs")), {
+      action: "invitation_claimed", actorId: uid, actorRole: role, actorEmail: email,
+      schoolId, targetType: "invitations", targetId: email,
+      summary: { role, schoolId, createdBy: actor.uid }, createdAt: now
+    });
+    await batch.commit();
+
+    // Create teacher class/subject assignments under the administrator's authenticated session.
+    const assignmentWarnings = [];
+    if (role === "teacher") {
+      for (const row of assignmentRows) {
+        try {
+          await B.teacherAssignments.assign(schoolId, {
+            teacherId: uid, classId: row.classId, academicSessionId: sessionId,
+            subjectIds: row.subjectIds
+          });
+        } catch (e) { assignmentWarnings.push((row.className || row.classId) + ": " + (e.message || e)); }
+      }
+    }
     try { await secSignOut(sec); } catch (_) {}
-    throw new Error("Auth user created but profile write failed: " + (e.message || e) + ". Deploy updated Firestore rules allowing admin user create.");
+    return { uid, email, role, schoolId, temporaryPassword: tempPassword, assignmentWarnings };
+  } catch (e) {
+    // Do not leave an orphan Auth account if the secure profile claim failed.
+    if (cred && cred.user) { try { await deleteUser(cred.user); } catch (_) {} }
+    try { await secSignOut(sec); } catch (_) {}
+    try { await B.invitations.revoke(email); } catch (_) {}
+    if (e && e.code === "auth/email-already-in-use") {
+      throw new Error("This email already has a Firebase Authentication account. This form creates new accounts only; use an email that has not been registered before.");
+    }
+    throw new Error(e && e.message ? e.message : "Account creation failed.");
   }
-  try { await secSignOut(sec); } catch (_) {}
-  return { uid, email: profile.email, role, schoolId };
 };
+
+function makeTemporaryPassword() {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+  const bytes = new Uint8Array(18);
+  crypto.getRandomValues(bytes);
+  let value = "";
+  for (const b of bytes) value += alphabet[b % alphabet.length];
+  if (!/[A-Z]/.test(value)) value = "A" + value.slice(1);
+  if (!/[a-z]/.test(value)) value = value.slice(0, -1) + "a";
+  if (!/\d/.test(value)) value = value.slice(0, -1) + "7";
+  return value;
+}
 
 // ----- Teacher dashboard -----
 window.__initTeacherDash = async function() {
@@ -10758,121 +10577,189 @@ window.__initSchoolDash = function() {
 // Wire registration forms to ME_registerAccount
 function wirePassReg() {
   const $ = (id) => document.getElementById(id);
-  async function handleLeader(formId, role, emailId, passId, nameId, phoneId, genderId, schoolIdEl, statusId, forceId) {
-    const form = $(formId);
-    if (!form || form.dataset.passBound) return;
-    form.dataset.passBound = "1";
-    form.addEventListener("submit", async (ev) => {
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      const st = $(statusId);
-      try {
-        let schoolId = ($(schoolIdEl) && $(schoolIdEl).value || "").trim();
-        if (!schoolId && formId === "hmRegisterForm" && $("hmSchoolSelect")) schoolId = $("hmSchoolSelect").value.trim();
-        if (!schoolId && formId === "prRegisterForm" && $("prSchoolSelect")) schoolId = $("prSchoolSelect").value.trim();
-        if (!schoolId) throw new Error("Select a school from the list.");
-        const sel = formId === "hmRegisterForm" ? $("hmSchoolSelect") : (formId === "prRegisterForm" ? $("prSchoolSelect") : null);
-        let schoolName = "", schoolTown = "";
-        if (sel && sel.selectedOptions && sel.selectedOptions[0]) {
-          const label = sel.selectedOptions[0].textContent || "";
-          const parts = label.split(" — ");
-          if (parts.length >= 2) { schoolTown = parts[0].trim(); schoolName = parts.slice(1).join(" — ").trim(); }
-          else schoolName = label.trim();
-        }
-        const r = await window.ME_registerAccount({
-          email: $(emailId).value, password: $(passId).value, fullName: $(nameId).value,
-          role, schoolId, phone: $(phoneId) && $(phoneId).value, gender: $(genderId) && $(genderId).value,
-          schoolName, schoolTown
-        });
-        if (st) { st.style.color = "#2e7d32"; st.textContent = "Account created: "+r.email+" → school "+r.schoolId+" (UID linked). They can sign in now."; }
-      } catch (e) {
-        if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); }
+  const B = () => window.MMSAYAYA_BACKEND;
+  const setStatus = (id, message, ok) => {
+    const el = $(id); if (!el) return;
+    el.style.color = ok ? "#2e7d32" : "#c62828";
+    el.textContent = message || "";
+  };
+  const setBusy = (form, busy) => {
+    const btn = form && form.querySelector('button[type="submit"]');
+    if (btn) { btn.disabled = busy; btn.textContent = busy ? "Creating account…" : (btn.dataset.originalText || btn.textContent); }
+  };
+  function showCreated(id, result, extra) {
+    const warning = result.assignmentWarnings && result.assignmentWarnings.length
+      ? "\nSome teacher assignments need attention: " + result.assignmentWarnings.join("; ") : "";
+    const pass = result.temporaryPassword
+      ? "\nTemporary password (copy and give it directly to the account owner): " + result.temporaryPassword
+      : "\nThe email already has an existing sign-in. The existing password must be used.";
+    setStatus(id, "Account created and linked successfully.\nEmail: " + result.email + "\nRole: " + result.role + "\nSchool: " + result.schoolId + pass + (extra || "") + warning, true);
+  }
+  async function loadTeacherAssignments() {
+    const schoolId = ($("tSchoolId")?.value || "").trim();
+    const box = $("tAssignmentsBuilder");
+    if (!box) return;
+    if (!schoolId || !B()) { box.innerHTML = '<div class="empty-state">Select a school to load its classes and subjects.</div>'; return; }
+    box.textContent = "Loading classes and subjects…";
+    try {
+      const [classes, subjects] = await Promise.all([B().classes.list(schoolId), B().subjects.list(schoolId)]);
+      const subjectMap = new Map(subjects.map(s => [s.id, s]));
+      if (!classes.length) { box.textContent = "No active classes exist in this school yet."; return; }
+      const rows = [];
+      for (const cls of classes) {
+        const ids = await B().classSubjects.activeSubjectsForClass(schoolId, cls.id);
+        const options = ids.map(id => subjectMap.get(id)).filter(Boolean);
+        rows.push({ cls, options });
       }
-    }, true);
+      box.innerHTML = rows.map(({cls, options}) => {
+        const subjectHtml = options.length
+          ? options.map(s => '<label style="display:inline-flex;align-items:center;gap:6px;margin:5px 12px 5px 0;font-size:.85rem;"><input type="checkbox" class="tAssignSubject" value="'+String(s.id).replace(/"/g,'&quot;')+'" disabled> '+String(s.name || s.id).replace(/</g,'&lt;')+'</label>').join("")
+          : '<span style="font-size:.82rem;color:#b45309;">No subjects have been linked to this class yet.</span>';
+        return '<div class="t-assignment-row" data-class-id="'+String(cls.id).replace(/"/g,'&quot;')+'" style="padding:12px;border:1px solid var(--border);border-radius:10px;background:#fff;">'+
+          '<label style="display:flex;align-items:center;gap:8px;font-weight:700;"><input type="checkbox" class="tAssignClass"> '+String(cls.name || cls.id).replace(/</g,'&lt;')+'</label>'+
+          '<div class="t-assignment-subjects" style="padding:8px 0 0 24px;">'+subjectHtml+'</div></div>';
+      }).join("");
+      box.querySelectorAll(".t-assignment-row").forEach(row => {
+        const classCheck = row.querySelector(".tAssignClass");
+        classCheck.addEventListener("change", () => row.querySelectorAll(".tAssignSubject").forEach(c => { c.disabled = !classCheck.checked; if (!classCheck.checked) c.checked = false; }));
+      });
+    } catch (e) { box.textContent = "Could not load this school's classes and subjects: " + (e.message || e); }
   }
-  handleLeader("hmRegisterForm", "headmaster", "hmEmail", "hmPassword", "hmFullName", "hmPhone", "hmGender", "hmSchoolId", "hmFormStatus");
-  handleLeader("prRegisterForm", "principal", "prEmail", "prPassword", "prFullName", "prPhone", "prGender", "prSchoolId", "prFormStatus");
-  const tForm = $("teacherRegisterForm");
-  if (tForm && !tForm.dataset.passBound) {
-    tForm.dataset.passBound = "1";
-    tForm.addEventListener("submit", async (ev) => {
-      ev.preventDefault(); ev.stopImmediatePropagation();
-      const st = $("tFormStatus");
+  function collectTeacherAssignments() {
+    const box = $("tAssignmentsBuilder");
+    return Array.from(box ? box.querySelectorAll(".t-assignment-row") : []).filter(row => row.querySelector(".tAssignClass")?.checked).map(row => ({
+      classId: row.dataset.classId,
+      className: row.querySelector("label")?.textContent.trim() || row.dataset.classId,
+      subjectIds: Array.from(row.querySelectorAll(".tAssignSubject:checked")).map(x => x.value)
+    }));
+  }
+
+  // School dropdowns are populated from the existing schools collection; no school records are recreated.
+  if (window.__fillSchoolSelect) {
+    window.__fillSchoolSelect($("hmSchoolSelect"), $("hmSchoolId"), "primary");
+    window.__fillSchoolSelect($("prSchoolSelect"), $("prSchoolId"), "secondary");
+    window.__fillSchoolSelect($("tSchoolSelect"), $("tSchoolId"), null);
+  }
+  $("tSchoolSelect")?.addEventListener("change", loadTeacherAssignments);
+  $("tSchoolId")?.addEventListener("change", loadTeacherAssignments);
+
+  const leaderForms = [
+    { formId: "hmRegisterForm", role: "headmaster", emailId: "hmEmail", nameId: "hmFullName", schoolId: "hmSchoolId", selectId: "hmSchoolSelect", statusId: "hmFormStatus" },
+    { formId: "prRegisterForm", role: "principal", emailId: "prEmail", nameId: "prFullName", schoolId: "prSchoolId", selectId: "prSchoolSelect", statusId: "prFormStatus" }
+  ];
+  leaderForms.forEach(cfg => {
+    const form = $(cfg.formId);
+    if (!form || form.dataset.accountCreateBound) return;
+    form.dataset.accountCreateBound = "1";
+    const btn = form.querySelector('button[type="submit"]'); if (btn) btn.dataset.originalText = btn.textContent;
+    form.addEventListener("submit", async ev => {
+      ev.preventDefault();
+      setBusy(form, true); setStatus(cfg.statusId, "Checking school and creating account…", true);
       try {
-        let schoolId = ($("tSchoolId").value || "").trim();
-        if (!schoolId && window.MMSAYAYA_BACKEND) {
-          const a = await window.MMSAYAYA_BACKEND.loadActor();
-          schoolId = a.schoolId || "";
-        }
-        const r = await window.ME_registerAccount({
-          email: $("tEmail").value, password: $("tPassword").value, fullName: $("tFullName").value,
-          role: "teacher", schoolId, phone: $("tPhone").value, gender: $("tGender").value,
-          extra: { qualification: $("tQualification") && $("tQualification").value, specialization: $("tSpecialization") && $("tSpecialization").value }
+        const result = await window.ME_registerAccount({
+          email: $(cfg.emailId).value, fullName: $(cfg.nameId).value,
+          role: cfg.role, schoolId: ($(cfg.schoolId).value || $(cfg.selectId).value || "").trim()
         });
-        if (st) { st.style.color = "#2e7d32"; st.textContent = "Teacher account created: "+r.email; }
-      } catch (e) { if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); } }
-    }, true);
-  }
-  const sForm = $("studentRegisterForm");
-  if (sForm && !sForm.dataset.passBound) {
-    sForm.dataset.passBound = "1";
-    // school -> classes cascade
-    const fillStSchools = async () => {
-      const sel = $("stSchoolSelect");
-      if (!sel || !window.MMSAYAYA_BACKEND) return;
+        showCreated(cfg.statusId, result);
+        form.reset();
+      } catch (e) { setStatus(cfg.statusId, e.message || String(e), false); }
+      finally { setBusy(form, false); }
+    });
+  });
+
+  const teacherForm = $("teacherRegisterForm");
+  if (teacherForm && !teacherForm.dataset.accountCreateBound) {
+    teacherForm.dataset.accountCreateBound = "1";
+    const btn = teacherForm.querySelector('button[type="submit"]'); if (btn) btn.dataset.originalText = btn.textContent;
+    teacherForm.addEventListener("submit", async ev => {
+      ev.preventDefault(); setBusy(teacherForm, true); setStatus("tFormStatus", "Validating assignments and creating account…", true);
       try {
-        let rows = await window.MMSAYAYA_BACKEND.schools.listAll();
-        if (window.ME_sortSchoolsAZ) rows = window.ME_sortSchoolsAZ(rows);
-        else rows = rows.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
-        sel.innerHTML = '<option value="">Select school…</option>' + rows.map(s => {
-          const label = window.ME_schoolOptionLabel ? window.ME_schoolOptionLabel(s) : ((s.town||s.lga||'') ? (s.town||s.lga)+' — '+(s.name||s.id) : (s.name||s.id));
-          return '<option value="'+s.id+'">'+label.replace(/</g,'&lt;')+'</option>';
+        const result = await window.ME_registerAccount({
+          email: $("tEmail").value, fullName: $("tFullName").value,
+          role: "teacher", schoolId: ($("tSchoolId").value || $("tSchoolSelect").value || "").trim(),
+          assignments: collectTeacherAssignments()
+        });
+        showCreated("tFormStatus", result);
+        teacherForm.reset();
+        if ($("tAssignmentsBuilder")) $("tAssignmentsBuilder").innerHTML = '<div class="empty-state">Select a school to load its classes and subjects.</div>';
+      } catch (e) { setStatus("tFormStatus", e.message || String(e), false); }
+      finally { setBusy(teacherForm, false); }
+    });
+  }
+
+  const studentForm = $("studentRegisterForm");
+  if (studentForm && !studentForm.dataset.accountCreateBound) {
+    studentForm.dataset.accountCreateBound = "1";
+    const btn = studentForm.querySelector('button[type="submit"]'); if (btn) btn.dataset.originalText = btn.textContent;
+    const schoolSelect = $("stSchoolSelect");
+    const fillStudentSchools = async () => {
+      if (!schoolSelect || !B()) return;
+      try {
+        let schools = await B().schools.listAll();
+        if (window.ME_sortSchoolsAZ) schools = window.ME_sortSchoolsAZ(schools);
+        else schools.sort((a,b) => String(a.name || a.id).localeCompare(String(b.name || b.id)));
+        schoolSelect.innerHTML = '<option value="">Select school…</option>' + schools.map(s => {
+          const label = window.ME_schoolOptionLabel ? window.ME_schoolOptionLabel(s) : ((s.town || s.lga || "") ? (s.town || s.lga) + " — " + (s.name || s.id) : (s.name || s.id));
+          return '<option value="'+String(s.id).replace(/"/g,'&quot;')+'">'+String(label).replace(/</g,'&lt;')+'</option>';
         }).join("");
-        sel.onchange = async () => {
-          $("stSchoolId").value = sel.value;
-          const cs = $("stClassSelect");
-          if (!cs) return;
-          cs.innerHTML = '<option value="">Loading classes…</option>';
-          try {
-            let classes = await window.MMSAYAYA_BACKEND.classes.list(sel.value);
-            classes = (window.ME_sortAZ ? window.ME_sortAZ(classes, c => c.name || c.id) : classes.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''))));
-            cs.innerHTML = '<option value="">Select class…</option>' + classes.map(c => '<option value="'+c.id+'">'+(c.name||c.id)+'</option>').join("");
-            cs.onchange = () => { $("stClassId").value = cs.value; };
-          } catch (e) { cs.innerHTML = '<option value="">'+(e.message||"Failed")+'</option>'; }
-        };
-      } catch (e) { sel.innerHTML = '<option value="">'+(e.message||"Failed")+'</option>'; }
+      } catch (e) { schoolSelect.innerHTML = '<option value="">Could not load schools</option>'; setStatus("stFormStatus", e.message || String(e), false); }
     };
-    fillStSchools();
-    setTimeout(fillStSchools, 1500);
-    sForm.addEventListener("submit", async (ev) => {
-      ev.preventDefault(); ev.stopImmediatePropagation();
-      const st = $("stFormStatus");
+    schoolSelect?.addEventListener("change", async () => {
+      const schoolId = schoolSelect.value;
+      $("stSchoolId").value = schoolId;
+      $("stClassId").value = "";
+      const classSelect = $("stClassSelect");
+      classSelect.innerHTML = '<option value="">Loading classes…</option>';
+      if (!schoolId) { classSelect.innerHTML = '<option value="">Select school first…</option>'; return; }
       try {
-        const schoolId = ($("stSchoolId").value || $("stSchoolSelect").value || "").trim();
+        const classes = await B().classes.list(schoolId);
+        classSelect.innerHTML = '<option value="">Select class…</option>' + classes.map(c => '<option value="'+String(c.id).replace(/"/g,'&quot;')+'">'+String(c.name || c.id).replace(/</g,'&lt;')+'</option>').join("");
+      } catch (e) { classSelect.innerHTML = '<option value="">Could not load classes</option>'; setStatus("stFormStatus", e.message || String(e), false); }
+    });
+    $("stClassSelect")?.addEventListener("change", () => { $("stClassId").value = $("stClassSelect").value; });
+    fillStudentSchools();
+    setTimeout(fillStudentSchools, 1200);
+    setTimeout(fillStudentSchools, 3000);
+    studentForm.addEventListener("submit", async ev => {
+      ev.preventDefault(); setBusy(studentForm, true); setStatus("stFormStatus", "Creating student record and sign-in account…", true);
+      let studentId = null;
+      try {
+        const schoolId = ($("stSchoolId").value || schoolSelect.value || "").trim();
         const classId = ($("stClassId").value || $("stClassSelect").value || "").trim();
-        if (!schoolId || !classId) throw new Error("School and class are required.");
-        const B = window.MMSAYAYA_BACKEND;
-        const studentId = await B.students.create(schoolId, {
-          fullName: $("stFullName").value, admissionNo: $("stAdmissionNo").value, classId,
-          academicSessionId: $("stSessionId") && $("stSessionId").value, gender: $("stGender").value,
-          dateOfBirth: $("stDob").value, email: $("stEmail").value, phone: $("stPhone").value,
-          parentName: $("stParentName") && $("stParentName").value, parentPhone: $("stParentPhone") && $("stParentPhone").value
+        if (!schoolId || !classId) throw new Error("Select both school and class.");
+        const school = await B().schools.get(schoolId);
+        if (!school) throw new Error("Selected school not found.");
+        const email = $("stEmail").value.trim().toLowerCase();
+        const existingRows = await B().students.list(schoolId);
+        const existingStudent = existingRows.find(row => String(row.email || "").trim().toLowerCase() === email);
+        if (existingStudent) {
+          if (existingStudent.userId) throw new Error("A student record is already linked to an account for this email.");
+          studentId = existingStudent.id;
+          if (existingStudent.classId !== classId || existingStudent.fullName !== $("stFullName").value.trim()) {
+            await B().students.update(studentId, { classId, fullName: $("stFullName").value.trim() });
+          }
+        } else {
+          const admissionNo = "AUTO-" + Date.now().toString(36).toUpperCase();
+          studentId = await B().students.create(schoolId, {
+            fullName: $("stFullName").value.trim(), admissionNo, classId,
+            academicSessionId: school.currentSessionId || null, email
+          });
+        }
+        const result = await window.ME_registerAccount({
+          email: $("stEmail").value, fullName: $("stFullName").value,
+          role: "student", schoolId, classId, studentId
         });
-        const r = await window.ME_registerAccount({
-          email: $("stEmail").value, password: $("stPassword").value, fullName: $("stFullName").value,
-          role: "student", schoolId, phone: $("stPhone").value, gender: $("stGender").value,
-          extra: { studentId, classId }
-        });
-        // link student.userId
-        try {
-          const db = getFirestore(primaryApp());
-          await setDoc(doc(db, "students", studentId), { userId: r.uid, updatedAt: serverTimestamp() }, { merge: true });
-        } catch (_) {}
-        if (st) { st.style.color = "#2e7d32"; st.textContent = "Student registered & login created: "+r.email+" (linked to "+studentId+")"; }
-      } catch (e) { if (st) { st.style.color = "#c62828"; st.textContent = e.message || String(e); } }
-    }, true);
+        showCreated("stFormStatus", result, "\nClass: " + classId + "\nAll active subjects linked to this class will appear automatically in the student's dashboard.");
+        studentForm.reset();
+        $("stSchoolId").value = ""; $("stClassId").value = "";
+        $("stClassSelect").innerHTML = '<option value="">Select school first…</option>';
+      } catch (e) {
+        setStatus("stFormStatus", (e.message || String(e)) + (studentId ? "\nStudent record ID: " + studentId + " (no login link was completed)." : ""), false);
+      } finally { setBusy(studentForm, false); }
+    });
   }
 }
+
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wirePassReg);
 else wirePassReg();
 setTimeout(wirePassReg, 1200);
