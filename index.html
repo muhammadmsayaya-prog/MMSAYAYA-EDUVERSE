@@ -20,17 +20,20 @@
    Admin can also paste full https:// URL (Firebase Storage or any CDN).
    ============================================================ */
 window.SITE_IMAGE_SLOTS = {
-  logo:        { key: "logoUrl",        path: "images/logo.png",        label: "Website Logo" },
-  favicon:     { key: "faviconUrl",     path: "images/favicon.png",     label: "Favicon" },
-  hero:        { key: "bannerUrl",      path: "images/hero-bg.jpg",     label: "Homepage Background" },
-  about:       { key: "aboutImageUrl",  path: "images/about-banner.jpg", label: "About Image" },
-  og:          { key: "ogImageUrl",     path: "images/og-cover.jpg",    label: "Social Cover" }
+  logo:        { key: "logoUrl",        path: "images/public-dashboard-logo.png", label: "Website Logo" },
+  favicon:     { key: "faviconUrl",     path: "images/main-platform-logo.png",   label: "Favicon" },
+  hero:        { key: "bannerUrl",      path: "images/main-platform-logo.png",   label: "Homepage Background" },
+  about:       { key: "aboutImageUrl",  path: "images/login-page-banner.jpg",    label: "About Image" },
+  og:          { key: "ogImageUrl",     path: "images/main-platform-logo.png",   label: "Social Cover" },
+  platform:    { key: "platformLogoUrl", path: "images/main-platform-logo.png",  label: "Main Platform Logo" },
+  loginBanner: { key: "loginBannerUrl", path: "images/login-page-banner.jpg",    label: "Login Page Banner" }
 };
 </script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MMSAYAYA EDUVERSE | Learn Today, Lead Tomorrow</title>
+  <link rel="icon" type="image/png" href="images/main-platform-logo.png" />
   <script>if(location.hash==="#login")document.documentElement.classList.add("is-login");</script>
   <meta name="description" content="MMSAYAYA EDUVERSE - Multi-disciplinary online learning platform." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -75,6 +78,32 @@ window.SITE_IMAGE_SLOTS = {
     .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.15rem; color:#fff; font-family:'Inter',system-ui,sans-serif; letter-spacing:0.04em; text-transform:uppercase; }
     .logo span, #siteLogoText { color:#fff !important; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; }
     .logo-icon { width:38px; height:38px; background:linear-gradient(135deg,var(--primary),var(--secondary)); border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; }
+    /* MMSAYAYA permanent brand logos — object-fit keeps aspect ratio */
+    .logo-img {
+      display: none;
+      height: 44px;
+      width: auto;
+      max-width: 220px;
+      object-fit: contain;
+      object-position: left center;
+      flex-shrink: 0;
+    }
+    .logo-img.is-on { display: block; }
+    .logo.has-img .logo-icon { display: none; }
+    .sidebar-brand .brand-logo {
+      width: 40px; height: 40px; border-radius: 10px;
+      object-fit: contain; background: #fff; flex-shrink: 0;
+    }
+    .login-brand-banner {
+      display: block; width: 100%; max-width: 100%; height: auto;
+      max-height: 160px; object-fit: contain; object-position: center;
+      margin: 0 auto 16px; border-radius: 12px;
+    }
+    .public-hero-logo {
+      display: block; width: min(100%, 520px); height: auto;
+      max-height: 120px; object-fit: contain; margin: 0 0 18px;
+    }
+
     .nav { display:flex; align-items:center; gap:22px; }
     .nav a { font-size:0.875rem; font-weight:500; color:var(--text-muted); }
     .nav a:hover { color:var(--primary); }
@@ -751,7 +780,7 @@ window.SITE_IMAGE_SLOTS = {
 <body>
   <header class="header">
     <div class="container header-inner">
-      <a href="#home" class="logo" id="siteLogoLink"><img class="logo-img" id="siteLogoImg" alt="Logo" /><div class="logo-icon" id="siteLogoIcon">ME</div><span id="siteLogoText">MMSAYAYA EDUVERSE</span></a>
+      <a href="#home" class="logo has-img" id="siteLogoLink"><img class="logo-img is-on" id="siteLogoImg" src="images/public-dashboard-logo.png" alt="MMSAYAYA EDUVERSE" /><div class="logo-icon" id="siteLogoIcon">ME</div><span id="siteLogoText">MMSAYAYA EDUVERSE</span></a>
       <nav class="nav">
         <a href="index.html">Home</a>
         <a href="#about">About Us</a>
@@ -804,6 +833,7 @@ window.SITE_IMAGE_SLOTS = {
   <div id="loginView">
     <div class="login-wrap">
       <div class="login-card">
+        <img class="login-brand-banner" id="loginBrandBanner" src="images/login-page-banner.jpg" alt="MMSAYAYA EDUVERSE Login" width="400" height="160" />
         <h1>Login</h1>
         <p class="login-sub">Sign in to continue to your dashboard.</p>
         <div class="form-alert" id="loginAlert" role="alert"></div>
@@ -842,6 +872,7 @@ window.SITE_IMAGE_SLOTS = {
   <section class="hero" id="home">
     <div class="container">
       <div class="hero-content">
+        <img class="public-hero-logo" src="images/public-dashboard-logo.png" alt="MMSAYAYA EDUVERSE" width="520" height="120" />
         <div class="hero-badge">Multi-Disciplinary Learning Platform</div>
         <h1>Explore Knowledge.<br>Develop Skills.<br>Build Your Future.</h1>
         <p class="slogan">Learn Today, Lead Tomorrow.</p>
@@ -1253,7 +1284,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
-        <div class="logo">ME</div>
+        <img class="brand-logo" src="images/main-platform-logo.png" alt="MMSAYAYA EDUVERSE" width="40" height="40" />
         <div>
           <span>MMSAYAYA EDUVERSE</span>
           <small>Admin Panel</small>
@@ -2752,7 +2783,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
   <div class="app" id="schoolApp">
     <aside class="sidebar" id="schoolSidebar">
       <div class="sidebar-brand">
-        <div class="logo">ME</div>
+        <img class="brand-logo" src="images/main-platform-logo.png" alt="MMSAYAYA EDUVERSE" width="40" height="40" />
         <div><span id="schoolBrandName">School</span><small>School Admin</small></div>
       </div>
       <nav class="sidebar-nav" id="schoolSidebarNav">
@@ -3033,7 +3064,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
   <div class="app" id="teacherSchoolApp">
     <aside class="sidebar" id="teacherSidebar">
       <div class="sidebar-brand">
-        <div class="logo">ME</div>
+        <img class="brand-logo" src="images/main-platform-logo.png" alt="MMSAYAYA EDUVERSE" width="40" height="40" />
         <div><span id="teacherBrandName">Teacher</span><small id="teacherBrandSub">Subject Teacher</small></div>
       </div>
       <nav class="sidebar-nav" id="teacherSidebarNav">
@@ -3126,7 +3157,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
   <div class="app" id="studentApp">
     <aside class="sidebar" id="studentSidebar">
       <div class="sidebar-brand">
-        <div class="logo">ME</div>
+        <img class="brand-logo" src="images/main-platform-logo.png" alt="MMSAYAYA EDUVERSE" width="40" height="40" />
         <div><span id="studentBrandName">Student</span><small id="studentBrandSub">Learner</small></div>
       </div>
       <nav class="sidebar-nav" id="studentSidebarNav">
