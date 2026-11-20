@@ -561,6 +561,8 @@ window.SITE_IMAGE_SLOTS = {
       border-color:rgba(255,255,255,.28); color:#fff; transform:translateX(2px);
     }
     #schoolApp .school-sidebar-overlay { z-index:190; }
+    #teacherSchoolApp #teacherSidebarOverlay { z-index:190; }
+    #teacherSchoolApp #teacherSidebar { z-index:200; }
 
     /* Responsive */
     @media (max-width:960px) {
@@ -3057,9 +3059,14 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         <button class="btn-logout" id="teacherLogoutBtn">Logout</button>
       </div>
     </aside>
+    <div class="sidebar-overlay" id="teacherSidebarOverlay"></div>
     <div class="main">
       <header class="topbar">
-        <div class="topbar-left"><h1 class="page-title" id="teacherPageTitle">My Assigned Classes</h1></div>
+        <div class="topbar-left">
+          <button type="button" class="menu-toggle" id="teacherMenuToggle" aria-label="Open teacher menu" aria-controls="teacherSidebar" aria-expanded="false"><span></span><span></span><span></span></button>
+          <h1 class="page-title" id="teacherPageTitle">Dashboard Overview</h1>
+        </div>
+        <div class="topbar-right"><span class="topbar-badge">Teacher Portal</span></div>
       </header>
       <div class="content" id="teacherContent">
         <div class="view active" id="tview-t-overview"><div class="stats-grid">
@@ -11779,7 +11786,7 @@ window.__initTeacherDash = async function() {
   if ($('teacherUserName')) $('teacherUserName').textContent = actor.fullName || actor.email || 'Teacher';
   if ($('teacherUserRole')) $('teacherUserRole').textContent = 'Teacher';
   if ($('teacherUserAvatar')) $('teacherUserAvatar').textContent = String(actor.fullName || 'T').charAt(0).toUpperCase();
-  try { [school, assignments, formMasterPositions, classRows, subjectRows] = await Promise.all([
+  try { [school, assignments, formMasterPositions, classRows, subjectRows, sessionRows] = await Promise.all([
     B.schools.get(schoolId), B.teacherAssignments.forTeacher(actor.uid, schoolId), B.formMasters.positionsOf(actor.uid, schoolId), B.classes.list(schoolId), B.subjects.list(schoolId), B.academicSessions.list(schoolId)
   ]); } catch (e) { console.warn('Teacher dashboard data load:', e); }
   assignments = assignments || []; formMasterPositions = formMasterPositions || []; classRows = classRows || []; subjectRows = subjectRows || []; sessionRows = sessionRows || [];
@@ -11798,7 +11805,22 @@ window.__initTeacherDash = async function() {
   setBox('teacherSubjectsBody', assignedSubjectIds.length ? '<ul style="line-height:2;">'+assignedSubjectIds.map(id=>'<li>'+eduEsc(subjectName(id))+'</li>').join('')+'</ul>' : '<p style="color:#546e7a;">No subjects assigned yet.</p>');
   if ($('teacherReportCardNav')) $('teacherReportCardNav').hidden = fmPositions.length === 0;
 
-  // Navigation: only the Form Master report-card item is conditional.
+  // Responsive teacher navigation: the sidebar is available on desktop and via the menu button on mobile.
+  const teacherSidebar = $('teacherSidebar');
+  const teacherOverlay = $('teacherSidebarOverlay');
+  const teacherMenuButton = $('teacherMenuToggle');
+  const closeTeacherMenu = () => {
+    if (teacherSidebar) teacherSidebar.classList.remove('open');
+    if (teacherOverlay) teacherOverlay.classList.remove('show');
+    if (teacherMenuButton) teacherMenuButton.setAttribute('aria-expanded','false');
+  };
+  if (teacherMenuButton) teacherMenuButton.onclick = () => {
+    const opening = !(teacherSidebar && teacherSidebar.classList.contains('open'));
+    if (teacherSidebar) teacherSidebar.classList.toggle('open', opening);
+    if (teacherOverlay) teacherOverlay.classList.toggle('show', opening);
+    teacherMenuButton.setAttribute('aria-expanded', opening ? 'true' : 'false');
+  };
+  if (teacherOverlay) teacherOverlay.onclick = closeTeacherMenu;
   document.querySelectorAll('#teacherSidebarNav .nav-item').forEach(btn => {
     btn.onclick = () => {
       document.querySelectorAll('#teacherSidebarNav .nav-item').forEach(b=>b.classList.remove('active'));
@@ -11807,6 +11829,7 @@ window.__initTeacherDash = async function() {
       document.querySelectorAll('#teacherContent .view').forEach(x=>x.classList.remove('active'));
       const el=$('tview-'+v); if(el) el.classList.add('active');
       if($('teacherPageTitle')) $('teacherPageTitle').textContent=btn.textContent.trim();
+      closeTeacherMenu();
       if(v==='t-classes') loadTeacherClasses();
       if(v==='t-results') loadTeacherResults();
       if(v==='t-students') loadTeacherStudents();
