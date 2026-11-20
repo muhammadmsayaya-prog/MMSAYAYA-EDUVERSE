@@ -8450,9 +8450,16 @@ export function invitableRoles(actor) {
   }
   return [];
 }
+export function normalizeSchoolType(schoolType) {
+  const t = String(schoolType || "").trim().toLowerCase().replace(/[\s-]+/g, "_");
+  if (["primary", "primary_school", "nursery", "nursery_primary"].includes(t)) return "primary";
+  if (["secondary", "secondary_school", "junior_secondary", "senior_secondary", "jss", "sss"].includes(t)) return "secondary";
+  return t;
+}
 export function roleMatchesSchoolType(role, schoolType) {
-  if (role === "headmaster") return schoolType === "primary";
-  if (role === "principal") return ["secondary", "junior_secondary", "senior_secondary"].includes(schoolType);
+  const t = normalizeSchoolType(schoolType);
+  if (role === "headmaster") return t === "primary";
+  if (role === "principal") return t === "secondary";
   return true;
 }
 export function cleanPerms(role, perms) {
@@ -10413,7 +10420,7 @@ service cloud.firestore {
     function leaderSchoolPerms() {
       return ['manage_users','create_student','create_teacher','manage_permissions','suspend_users',
               'reset_passwords','manage_schools','manage_announcements','view_reports',
-              'view_students','manage_results','manage_report_cards','manage_certificates'];
+              'view_students','manage_results','manage_report_cards','manage_certificates','manage_academic_sessions'];
     }
     function leaderCan(p, sid) {
       return sid != null && mySchool() == sid && p in leaderSchoolPerms()
@@ -10445,7 +10452,7 @@ service cloud.firestore {
       return isSuperAdmin() || (authed() && sid != null && mySchool() == sid
         && ((role() == 'admin' && adminHolds('manage_schools'))
           || (role() == 'headmaster' && schoolIsPrimary(sid))
-          || (role() == 'principal' && schoolTypeOf(sid) == 'secondary')));
+          || (role() == 'principal' && schoolIsSecondary(sid))));
     }
 
     function validEmail(e) {
@@ -10489,7 +10496,7 @@ service cloud.firestore {
     function roleMatchesSchool(r, sid) {
       return r in ['admin', 'teacher', 'student']
         || (r == 'headmaster' && schoolIsPrimary(sid))
-        || (r == 'principal' && schoolTypeOf(sid) in ['secondary', 'junior_secondary', 'senior_secondary']);
+        || (r == 'principal' && schoolIsSecondary(sid));
     }
     function currentSession(sid) { return get(schoolPath(sid)).data.get('currentSessionId', null); }
 
@@ -11450,7 +11457,6 @@ service cloud.firestore {
     }
   }
 }
-
 </script>
 <script type="text/plain" id="bsStorageSrc">
 rules_version = '2';
@@ -11596,9 +11602,11 @@ window.ME_registerAccount = async function(payload) {
     }
   }
   if (!school) throw new Error("The selected school was not found. Choose a school from the list.");
-  const schoolType = String(school.schoolType || school.type || "").toLowerCase();
-  if (role === "headmaster" && schoolType !== "primary") throw new Error("A Headmaster must be linked to a Primary School.");
-  if (role === "principal" && !["secondary", "junior_secondary", "senior_secondary"].includes(schoolType)) throw new Error("A Principal must be linked to a Secondary School.");
+  const schoolType = (B.helpers && B.helpers.normalizeSchoolType)
+    ? B.helpers.normalizeSchoolType(school.schoolType || school.type)
+    : String(school.schoolType || school.type || "").trim().toLowerCase().replace(/[\s-]+/g, "_");
+  if (role === "headmaster" && schoolType !== "primary") throw new Error("A Headmaster must be linked to a Primary School. Selected school type: " + (school.schoolType || school.type || "not set"));
+  if (role === "principal" && schoolType !== "secondary") throw new Error("A Principal must be linked to a Secondary School. Selected school type: " + (school.schoolType || school.type || "not set"));
   if (role === "student") {
     if (!classId || !studentId) throw new Error("Choose a class for the student.");
     const cls = await B.classes.list(schoolId);
@@ -11630,7 +11638,7 @@ window.ME_registerAccount = async function(payload) {
   const leaderPermissions = [
     "manage_users","create_student","create_teacher","manage_permissions","suspend_users",
     "reset_passwords","manage_schools","manage_announcements","view_reports",
-    "view_students","manage_results","manage_report_cards","manage_certificates"
+    "view_students","manage_results","manage_report_cards","manage_certificates","manage_academic_sessions"
   ];
   const invitePayload = { email, fullName, role, schoolId };
   if (role === "student") { invitePayload.studentId = studentId; invitePayload.classId = classId; }
@@ -12328,7 +12336,7 @@ function wirePassReg() {
       try {
         const result = await window.ME_registerAccount({
           email: $("tEmail").value, fullName: $("tFullName").value,
-          role: "teacher", schoolId: ($("tSchoolId").value || $("tSchoolSelect").value || "").trim(),
+          role: "teacher", schoolId: String($("tSchoolSelect").value || $("tSchoolId").value || "").trim(),
           assignments: collectTeacherAssignments()
         });
         showCreated("tFormStatus", result);
@@ -12376,8 +12384,8 @@ function wirePassReg() {
       ev.preventDefault(); setBusy(studentForm, true); setStatus("stFormStatus", "Creating student record and sign-in account…", true);
       let studentId = null;
       try {
-        const schoolId = ($("stSchoolId").value || schoolSelect.value || "").trim();
-        const classId = ($("stClassId").value || $("stClassSelect").value || "").trim();
+        const schoolId = String(schoolSelect?.value || $("stSchoolId").value || "").trim();
+        const classId = String($("stClassSelect").value || $("stClassId").value || "").trim();
         if (!schoolId || !classId) throw new Error("Select both school and class.");
         const school = await B().schools.get(schoolId);
         if (!school) throw new Error("Selected school not found.");
