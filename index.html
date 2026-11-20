@@ -8345,7 +8345,7 @@ export const EXPLICIT_ONLY_PERMS = Object.freeze(["view_students", "manage_resul
 export const LEADER_SCHOOL_PERMS = Object.freeze([
   "manage_users", "create_student", "create_teacher", "manage_permissions", "suspend_users",
   "reset_passwords", "manage_schools", "manage_announcements", "view_reports",
-  "view_students", "manage_results", "manage_report_cards", "manage_certificates"
+  "view_students", "manage_results", "manage_report_cards", "manage_certificates", "manage_academic_sessions"
 ]);
 /** Catalogue for Admin / Headmaster / Principal; platform-only powers remain separate. */
 export const STAFF_PERMS = Object.freeze([...ADMIN_PERMS, ...EXPLICIT_ONLY_PERMS]);
@@ -8360,7 +8360,8 @@ export const CATALOGUE = Object.freeze({
 
 /** Which permission authorises which school operation (mirrors firestore.rules). */
 export const OPERATION_PERMS = Object.freeze({
-  manageStructure: "manage_schools",            // classes, subjects, academic sessions, school details
+  manageStructure: "manage_schools",            // classes, subjects, school details
+  manageSessions: "manage_academic_sessions",   // current academic session and session records
   manageAssignments: "manage_users",            // teacherAssignments, formMasterAssignments
   inviteTeacher: "create_teacher",
   inviteStudent: "create_student",
@@ -8424,6 +8425,10 @@ export function can(profile, perm, schoolId) {
   if (role === ROLES.SUPER_ADMIN) return true;
   if (!["admin", "headmaster", "principal"].includes(role)) return false;
   if (!schoolId || profile.schoolId !== schoolId) return false;
+  if (perm === "manage_academic_sessions") {
+    if (role === ROLES.ADMIN) return true;
+    if (role === ROLES.HEADMASTER || role === ROLES.PRINCIPAL) return true; // school type is enforced by UI school context and Firestore Rules
+  }
   if (role === ROLES.HEADMASTER || role === ROLES.PRINCIPAL) return LEADER_SCHOOL_PERMS.includes(perm);
   const perms = effectivePerms(profile);
   return perms.includes(perm);
@@ -8641,7 +8646,7 @@ export function createSchoolBackend({ db, auth, fs }) {
       async update(id, patch) {
         const ref = doc(db, coll, id); const snap = await getDoc(ref);
         if (!snap.exists()) fail(label + " not found.");
-        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, cur.schoolId);
+        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageSessions, cur.schoolId);
         const data = {};
         ["name", "level", "order", "code", "group"].forEach((k) => { if (patch[k] !== undefined && (k !== "code" || coll === "subjects") && (k !== "order" || coll === "classes") && (k !== "group" || coll === "classes")) data[k] = patch[k]; });
         if (data.name !== undefined && !String(data.name).trim()) fail("Name cannot be empty.");
@@ -8659,7 +8664,7 @@ export function createSchoolBackend({ db, auth, fs }) {
       async setArchived(id, archived) {
         const ref = doc(db, coll, id); const snap = await getDoc(ref);
         if (!snap.exists()) fail(label + " not found.");
-        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, cur.schoolId);
+        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageSessions, cur.schoolId);
         const b = writeBatch(db);
         b.update(ref, { status: archived ? "archived" : "active", updatedAt: ts() });
         addAudit(b, actor, { action: label + (archived ? "_archive" : "_restore"), schoolId: cur.schoolId, targetType: coll, targetId: id });
@@ -8805,7 +8810,7 @@ export function createSchoolBackend({ db, auth, fs }) {
   const academicSessions = {
     list: (schoolId) => listBySchool("academicSessions", schoolId),
     async create(schoolId, input) {
-      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
+      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageSessions, schoolId);
       const name = String(input.name || "").trim(); if (!name) fail("Session name is required (e.g. 2026/2027).");
       const id = Ids.session(schoolId, name); const ref = doc(db, "academicSessions", id);
       if ((await getDoc(ref)).exists()) fail("This academic session already exists.");
@@ -8819,7 +8824,7 @@ export function createSchoolBackend({ db, auth, fs }) {
     },
     /** Makes one session current (updates schools/{id}.currentSessionId + flags) in ONE batch. */
     async setCurrent(schoolId, sessionId) {
-      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
+      const actor = await loadActor(); need(actor, OPERATION_PERMS.manageSessions, schoolId);
       const all = await listBySchool("academicSessions", schoolId);
       const target = all.find((s) => s.id === sessionId);
       if (!target) fail("Session not found in this school.");
@@ -8834,7 +8839,7 @@ export function createSchoolBackend({ db, auth, fs }) {
     async setStatus(sessionId, status) {
       if (!["active", "closed", "archived"].includes(status)) fail("Invalid status.");
       const ref = doc(db, "academicSessions", sessionId); const snap = await getDoc(ref); if (!snap.exists()) fail("Session not found.");
-      const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, cur.schoolId);
+      const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageSessions, cur.schoolId);
       const b = writeBatch(db);
       b.update(ref, { status, isCurrent: status === "active" ? !!cur.isCurrent : false, updatedAt: ts() });
       addAudit(b, actor, { action: "session_status", schoolId: cur.schoolId, targetType: "academicSessions", targetId: sessionId, summary: { status } });
@@ -10412,8 +10417,8 @@ service cloud.firestore {
     }
     function leaderCan(p, sid) {
       return sid != null && mySchool() == sid && p in leaderSchoolPerms()
-        && ((role() == 'headmaster' && schoolTypeOf(sid) == 'primary')
-            || (role() == 'principal' && schoolTypeOf(sid) in ['secondary','junior_secondary','senior_secondary']));
+        && ((role() == 'headmaster' && schoolIsPrimary(sid))
+            || (role() == 'principal' && schoolIsSecondary(sid)));
     }
     // Super Admin: all schools; school Admin: permissions; Headmaster/Principal:
     // all school-operational permissions for their own matching school type.
@@ -10424,6 +10429,23 @@ service cloud.firestore {
     }
     function memberOf(sid) {
       return isSuperAdmin() || (authed() && sid != null && mySchool() == sid);
+    }
+    // Academic sessions: any Super Admin globally, or the Admin / correctly typed
+    // Headmaster / Principal assigned to this exact school. This permission is
+    // deliberately separate from manage_schools so existing class/subject controls
+    // and other role permissions are not broadened.
+    function canManageAcademicSessions(sid) {
+      return isSuperAdmin()
+        || (authed() && sid != null && mySchool() == sid && role() == 'admin')
+        || (authed() && sid != null && mySchool() == sid && role() == 'headmaster' && schoolIsPrimary(sid))
+        || (authed() && sid != null && mySchool() == sid && role() == 'principal' && schoolIsSecondary(sid));
+    }
+    // School leaders may update the operational profile of their assigned school only.
+    function canManageSchoolProfile(sid) {
+      return isSuperAdmin() || (authed() && sid != null && mySchool() == sid
+        && ((role() == 'admin' && adminHolds('manage_schools'))
+          || (role() == 'headmaster' && schoolIsPrimary(sid))
+          || (role() == 'principal' && schoolTypeOf(sid) == 'secondary')));
     }
 
     function validEmail(e) {
@@ -10438,15 +10460,17 @@ service cloud.firestore {
       return sid is string && exists(schoolPath(sid))
         && !(get(schoolPath(sid)).data.get('status', 'active') in ['suspended', 'archived', 'deleted']);
     }
-    function schoolTypeOf(sid) { return get(schoolPath(sid)).data.get('schoolType', ''); }
+    function schoolTypeOf(sid) { return get(schoolPath(sid)).data.get('schoolType', get(schoolPath(sid)).data.get('type', '')); }
+    function schoolIsPrimary(sid) { return schoolTypeOf(sid) in ['primary','primary_school','Primary School','PRIMARY SCHOOL','nursery','nursery_primary']; }
+    function schoolIsSecondary(sid) { return schoolTypeOf(sid) in ['secondary','secondary_school','Secondary School','SECONDARY SCHOOL','junior_secondary','senior_secondary','jss','sss']; }
     // Marks settings are controlled by the platform Super Admin or the school's own
     // Admin / correctly matched school leader. Teachers and students are never writers.
     function canManageMarksSettings(sid) {
       return isSuperAdmin()
         || (authed() && sid != null && mySchool() == sid && role() == 'admin')
-        || (authed() && sid != null && mySchool() == sid && role() == 'headmaster' && schoolTypeOf(sid) == 'primary')
+        || (authed() && sid != null && mySchool() == sid && role() == 'headmaster' && schoolIsPrimary(sid))
         || (authed() && sid != null && mySchool() == sid && role() == 'principal'
-            && schoolTypeOf(sid) in ['secondary','junior_secondary','senior_secondary']);
+            && schoolIsSecondary(sid));
     }
     function markSettingsPath(sid) { return /databases/$(database)/documents/schoolMarkSettings/$(sid + '_marks'); }
     function validConfiguredScores(sid, scores, total) {
@@ -10464,7 +10488,7 @@ service cloud.firestore {
     // Headmaster -> Primary school, Principal -> Secondary school, Admin -> any
     function roleMatchesSchool(r, sid) {
       return r in ['admin', 'teacher', 'student']
-        || (r == 'headmaster' && schoolTypeOf(sid) == 'primary')
+        || (r == 'headmaster' && schoolIsPrimary(sid))
         || (r == 'principal' && schoolTypeOf(sid) in ['secondary', 'junior_secondary', 'senior_secondary']);
     }
     function currentSession(sid) { return get(schoolPath(sid)).data.get('currentSessionId', null); }
@@ -10741,7 +10765,10 @@ service cloud.firestore {
       allow read: if true;
       allow create, delete: if can('manage_schools');
       allow update: if can('manage_schools')
-        || (isSchoolStaff() && mySchool() == id && schoolCan('manage_schools', id)
+        || (canManageAcademicSessions(id)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['currentSessionId','updatedAt'])
+            && sessionOk(request.resource.data.currentSessionId, id))
+        || (canManageSchoolProfile(id)
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(schoolSelfEditKeys())
             && (request.resource.data.get('currentSessionId', null) == resource.data.get('currentSessionId', null)
                 || sessionOk(request.resource.data.currentSessionId, id)));
@@ -10792,8 +10819,8 @@ service cloud.firestore {
     // =====================================================================
     // Classes are school-specific and configurable by authorised school leadership.
     function validSchoolClass(group, sid) {
-      return (schoolTypeOf(sid) == 'primary' && group in ['nursery','primary','custom'])
-        || (schoolTypeOf(sid) in ['secondary','junior_secondary','senior_secondary']
+      return (schoolIsPrimary(sid) && group in ['nursery','primary','custom'])
+        || (schoolIsSecondary(sid)
             && group in ['junior_secondary','senior_secondary','custom']);
     }
 
@@ -10865,7 +10892,7 @@ service cloud.firestore {
 
     match /academicSessions/{sessionId} {
       allow read: if memberOf(resource.data.get('schoolId', null));
-      allow create: if schoolCan('manage_schools', request.resource.data.get('schoolId', null))
+      allow create: if canManageAcademicSessions(request.resource.data.get('schoolId', null))
         && idPrefixOk(sessionId, request.resource.data.schoolId)
         && schoolOk(request.resource.data.schoolId)
         && request.resource.data.keys().hasOnly(['schoolId','name','startDate','endDate','terms','status','isCurrent','createdBy','createdAt','updatedAt'])
@@ -10873,7 +10900,7 @@ service cloud.firestore {
         && request.resource.data.terms is list && request.resource.data.terms.size() <= 8
         && request.resource.data.status == 'active'
         && request.resource.data.createdBy == uid();
-      allow update: if schoolCan('manage_schools', resource.data.get('schoolId', null))
+      allow update: if canManageAcademicSessions(resource.data.get('schoolId', null))
         && request.resource.data.schoolId == resource.data.schoolId
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','startDate','endDate','terms','status','isCurrent','updatedAt'])
         && request.resource.data.terms is list && request.resource.data.terms.size() <= 8
@@ -11312,9 +11339,9 @@ service cloud.firestore {
       return isSuperAdmin()
         || (authed() && sid != null && mySchool() == sid && role() == 'admin' && adminHolds('manage_certificates'))
         || (authed() && sid != null && mySchool() == sid && role() == 'headmaster'
-            && schoolTypeOf(sid) == 'primary' && leaderCan('manage_certificates', sid))
+            && schoolIsPrimary(sid) && leaderCan('manage_certificates', sid))
         || (authed() && sid != null && mySchool() == sid && role() == 'principal'
-            && schoolTypeOf(sid) in ['secondary','junior_secondary','senior_secondary']
+            && schoolIsSecondary(sid)
             && leaderCan('manage_certificates', sid));
     }
     function certStudentPath(sid) { return /databases/$(database)/documents/students/$(sid); }
@@ -11423,6 +11450,7 @@ service cloud.firestore {
     }
   }
 }
+
 </script>
 <script type="text/plain" id="bsStorageSrc">
 rules_version = '2';
@@ -11937,8 +11965,9 @@ window.__initSchoolDash = async function() {
   const schoolId = actor && actor.schoolId;
   const db = getFirestore(primaryApp());
   const canEditMarksSettings = !!(actor && schoolId && B && B.marksSettings && B.marksSettings._mayManage(actor, schoolId, school && school.schoolType));
-  const schoolKind = String(school && school.schoolType || "").toLowerCase();
-  const leaderTypeOk = role === "headmaster" ? schoolKind === "primary" : role === "principal" ? ["secondary","junior_secondary","senior_secondary"].includes(schoolKind) : true;
+  const schoolKindRaw = String(school && (school.schoolType || school.type) || "").toLowerCase().replace(/[ -]+/g,"_");
+  const schoolKind = ["primary","primary_school","nursery","nursery_primary"].includes(schoolKindRaw) ? "primary" : ["secondary","secondary_school","junior_secondary","senior_secondary","jss","sss"].includes(schoolKindRaw) ? "secondary" : schoolKindRaw;
+  const leaderTypeOk = role === "headmaster" ? schoolKind === "primary" : role === "principal" ? schoolKind === "secondary" : true;
   const canManageCertificates = !!(actor && schoolId && B && B.helpers && B.helpers.can(actor, "manage_certificates", schoolId) && leaderTypeOk);
   if ($("schoolCertificatesNav")) $("schoolCertificatesNav").hidden = !canManageCertificates;
   const canViewSchoolAudit = !!(actor && schoolId && B && B.helpers && B.helpers.can(actor, "view_reports", schoolId) && leaderTypeOk);
@@ -11991,6 +12020,7 @@ window.__initSchoolDash = async function() {
   loadMarksSettingsForm();
   const schoolStatus = (message, ok) => { const el=$("schoolOverviewBody"); if(el) el.dataset.lastStatus = message; };
   const canManageSchoolStructure = !!(actor && schoolId && B && B.helpers && B.helpers.can(actor, "manage_schools", schoolId) && leaderTypeOk);
+  const canManageSessions = !!(actor && schoolId && B && B.helpers && B.helpers.can(actor, "manage_academic_sessions", schoolId) && leaderTypeOk);
   let schoolSessionRows = [];
   function renderSchoolSettings() {
     const setText=(id,value)=>{const el=$(id);if(el)el.textContent=value||"—";};
@@ -11999,13 +12029,13 @@ window.__initSchoolDash = async function() {
     const current=schoolSessionRows.find(x=>x.id===(school&&school.currentSessionId));
     setText("schoolSettingsCurrentSession",current&&current.name||"Not set");
     const select=$("schoolSettingsSession");
-    if(select){select.innerHTML='<option value="">Choose active session</option>'+schoolSessionRows.filter(x=>(x.status||"active")==="active").map(x=>'<option value="'+eduEsc(x.id)+'">'+eduEsc(x.name||x.id)+'</option>').join('');select.value=school&&school.currentSessionId||"";select.disabled=!canManageSchoolStructure;}
-    const save=$("schoolSettingsSaveSession");if(save)save.disabled=!canManageSchoolStructure;
-    const status=$("schoolSettingsStatus");if(status&&!canManageSchoolStructure)status.textContent="You can view these settings, but your account does not have permission to change the school's structure or current session.";
+    if(select){select.innerHTML='<option value="">Choose active session</option>'+schoolSessionRows.filter(x=>(x.status||"active")==="active").map(x=>'<option value="'+eduEsc(x.id)+'">'+eduEsc(x.name||x.id)+'</option>').join('');select.value=school&&school.currentSessionId||"";select.disabled=!canManageSessions;}
+    const save=$("schoolSettingsSaveSession");if(save)save.disabled=!canManageSessions;
+    const status=$("schoolSettingsStatus");if(status&&!canManageSessions)status.textContent="You can view these settings, but your account does not have permission to change the current academic session.";
   }
   if($("schoolSettingsOpenProfile"))$("schoolSettingsOpenProfile").onclick=()=>{const nav=document.querySelector('[data-sview="s-profile"]');if(nav)nav.click();};
   if($("schoolSettingsReload"))$("schoolSettingsReload").onclick=async()=>{try{const fresh=await B.schools.get(schoolId);if(fresh)Object.assign(school||{},fresh);schoolSessionRows=await B.academicSessions.list(schoolId);renderSchoolSettings();const st=$("schoolSettingsStatus");if(st)st.textContent="School settings reloaded.";}catch(e){const st=$("schoolSettingsStatus");if(st)st.textContent=e.message||String(e);}};
-  if($("schoolSettingsSaveSession"))$("schoolSettingsSaveSession").onclick=async()=>{const st=$("schoolSettingsStatus");try{if(!canManageSchoolStructure)throw new Error("You are not authorised to change the current academic session.");const sessionId=$("schoolSettingsSession").value;if(!sessionId)throw new Error("Choose an active academic session first.");await B.academicSessions.setCurrent(schoolId,sessionId);if(school)school.currentSessionId=sessionId;schoolSessionRows=await B.academicSessions.list(schoolId);renderSchoolSettings();if(st){st.textContent="Current academic session updated successfully. An audit record has been saved.";st.style.color="#15803d";}}catch(e){if(st){st.textContent=e.message||String(e);st.style.color="#b91c1c";}}};
+  if($("schoolSettingsSaveSession"))$("schoolSettingsSaveSession").onclick=async()=>{const st=$("schoolSettingsStatus");try{if(!canManageSessions)throw new Error("You are not authorised to change the current academic session.");const sessionId=$("schoolSettingsSession").value;if(!sessionId)throw new Error("Choose an active academic session first.");await B.academicSessions.setCurrent(schoolId,sessionId);if(school)school.currentSessionId=sessionId;schoolSessionRows=await B.academicSessions.list(schoolId);renderSchoolSettings();if(st){st.textContent="Current academic session updated successfully. An audit record has been saved.";st.style.color="#15803d";}}catch(e){if(st){st.textContent=e.message||String(e);st.style.color="#b91c1c";}}};
   renderSchoolSettings();
   async function refreshSchoolLists() {
     if (!schoolId || !B) return;
@@ -12033,8 +12063,8 @@ window.__initSchoolDash = async function() {
       if($("schoolSubjectsTable"))$("schoolSubjectsTable").innerHTML=subjects.length?subjects.map(x=>"<tr><td>"+eduEsc(x.name)+"</td><td>"+eduEsc(x.code||"")+"</td><td>"+eduEsc(x.status||"active")+"</td></tr>").join("") : "<tr><td colspan='3'>No subjects yet.</td></tr>";
       if($("sessionsBody"))$("sessionsBody").innerHTML=sessions.length?"<div class='table-wrap'><table><thead><tr><th>#</th><th>Session</th><th>Status</th><th>Current</th><th>Action</th></tr></thead><tbody>"+sessions.map((x,i)=>"<tr><td>"+(i+1)+"</td><td><strong>"+eduEsc(x.name)+"</strong></td><td>"+eduEsc(x.status||"active")+"</td><td>"+(x.isCurrent?"Yes":"No")+"</td><td>"+((x.status||"active")==="active"&&!x.isCurrent?"<button type='button' class='btn btn-outline school-session-make-current' data-session='"+eduEsc(x.id)+"'>Make Current</button>":(x.isCurrent?"Current":"—"))+"</td></tr>").join("")+"</tbody></table></div>":"<p class='empty-state'>No academic sessions created yet. Use + Add Session to create the first session.</p>";
       const currentSelect=$("schoolCurrentSessionSelect");
-      if(currentSelect){currentSelect.innerHTML="<option value=''>Choose an active session</option>"+sessions.filter(x=>(x.status||"active")==="active").map(x=>"<option value='"+eduEsc(x.id)+"'>"+eduEsc(x.name)+(x.isCurrent?" (Current)":"")+"</option>").join("");currentSelect.value=(school&&school.currentSessionId)||sessions.find(x=>x.isCurrent)?.id||"";currentSelect.disabled=!canManageSchoolStructure;}
-      const setCurrentBtn=$("schoolSetCurrentSession");if(setCurrentBtn)setCurrentBtn.disabled=!canManageSchoolStructure;
+      if(currentSelect){currentSelect.innerHTML="<option value=''>Choose an active session</option>"+sessions.filter(x=>(x.status||"active")==="active").map(x=>"<option value='"+eduEsc(x.id)+"'>"+eduEsc(x.name)+(x.isCurrent?" (Current)":"")+"</option>").join("");currentSelect.value=(school&&school.currentSessionId)||sessions.find(x=>x.isCurrent)?.id||"";currentSelect.disabled=!canManageSessions;}
+      const setCurrentBtn=$("schoolSetCurrentSession");if(setCurrentBtn)setCurrentBtn.disabled=!canManageSessions;
       if($("schoolFormMastersTable"))$("schoolFormMastersTable").innerHTML=formMasters.length?formMasters.map(f=>"<tr><td>"+eduEsc((teacherMap.get(f.teacherId)||{}).fullName||f.teacherId)+"</td><td>"+eduEsc((classes.find(c=>c.id===f.classId)||{}).name||f.classId)+"</td><td>"+eduEsc(f.academicSessionId)+"</td><td>"+eduEsc(f.status)+"</td></tr>").join("") : "<tr><td colspan='4'>No Form Masters assigned yet.</td></tr>";
       if($("schoolTaTable"))$("schoolTaTable").innerHTML=teacherAssignments.length?'<div class="table-wrap"><table><thead><tr><th>Teacher</th><th>Class</th><th>Subjects</th><th>Session</th><th>Status</th></tr></thead><tbody>'+teacherAssignments.map(a=>'<tr><td>'+eduEsc((teacherMap.get(a.teacherId)||{}).fullName||a.teacherId)+'</td><td>'+eduEsc((classes.find(c=>c.id===a.classId)||{}).name||a.classId)+'</td><td>'+eduEsc((a.subjectIds||[]).map(id=>(subjects.find(x=>x.id===id)||{}).name||id).join(', '))+'</td><td>'+eduEsc(a.academicSessionId)+'</td><td>'+eduEsc(a.status)+'</td></tr>').join('')+'</tbody></table></div>':'<p>No teacher assignments yet.</p>';
       const classOptions='<option value="">Choose class</option>'+classes.map(c=>'<option value="'+eduEsc(c.id)+'">'+eduEsc(c.name)+'</option>').join('');
@@ -12056,12 +12086,12 @@ window.__initSchoolDash = async function() {
   if($("spPhone"))$("spPhone").value=school&&school.phone||"";
   if(school&&school.logoUrl&&$("spLogoPreview")){$("spLogoPreview").src=school.logoUrl;$("spLogoPreview").style.display="block";}
   if($("spLogoFile"))$("spLogoFile").onchange=()=>{const file=$("spLogoFile").files&&$("spLogoFile").files[0];if(!file)return;if(!file.type.startsWith("image/")){alert("Choose an image file.");return;}const preview=$("spLogoPreview");preview.src=URL.createObjectURL(file);preview.style.display="block";};
-  if($("btnSaveSchoolProfile"))$("btnSaveSchoolProfile").onclick=async()=>{try{const patch={name:$("spName").value.trim(),email:$("spEmail").value.trim(),headName:$("spHeadName").value.trim(),address:$("spAddress").value.trim(),phone:$("spPhone").value.trim()};const file=$("spLogoFile")?.files?.[0];if(file){if(file.size>5*1024*1024)throw new Error("Choose a logo image smaller than 5 MB.");const dataUrl=await new Promise((resolve,reject)=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{const scale=Math.min(1,480/Math.max(img.width,img.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);URL.revokeObjectURL(url);resolve(canvas.toDataURL("image/jpeg",0.72));};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Could not read the selected logo."));};img.src=url;});patch.logoUrl=dataUrl;}await B.schools.updateDetails(schoolId,patch);if($("schoolBrandName"))$("schoolBrandName").textContent=patch.name;if(school)Object.assign(school,patch);if(patch.logoUrl&&$("spLogoPreview"))$("spLogoPreview").src=patch.logoUrl;renderSchoolSettings();alert("School profile updated.");}catch(e){alert(e.message||String(e));}};
+  if($("btnSaveSchoolProfile"))$("btnSaveSchoolProfile").onclick=async()=>{try{const patch={name:$("spName").value.trim(),email:$("spEmail").value.trim(),headName:$("spHeadName").value.trim(),address:$("spAddress").value.trim(),phone:$("spPhone").value.trim()};const file=$("spLogoFile")?.files?.[0];if(file){if(file.size>5*1024*1024)throw new Error("Choose a logo image smaller than 5 MB.");const dataUrl=await new Promise((resolve,reject)=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{const scale=Math.min(1,480/Math.max(img.width,img.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);URL.revokeObjectURL(url);resolve(canvas.toDataURL("image/jpeg",0.72));};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Could not read the selected logo."));};img.src=url;});patch.logoUrl=dataUrl;}if(!B.helpers.can(actor,"manage_schools",schoolId))throw new Error("You are not authorised to update this school profile.");await B.schools.updateDetails(schoolId,patch);if($("schoolBrandName"))$("schoolBrandName").textContent=patch.name;if(school)Object.assign(school,patch);if(patch.logoUrl&&$("spLogoPreview"))$("spLogoPreview").src=patch.logoUrl;renderSchoolSettings();alert("School profile updated.");}catch(e){alert(e.message||String(e));}};
   if($("btnAddClass"))$("btnAddClass").onclick=async()=>{const name=prompt("Enter class name (e.g. Nursery 3, Primary 4, JSS 1, SS 1):");if(!name)return;const level=prompt("Level/section label (optional):",name.trim().toUpperCase().split(" ")[0])||"";try{await B.classes.create(schoolId,{name,level});await refreshSchoolLists();}catch(e){alert(e.message||String(e));}};
   if($("schoolClassesTable")&&!$("schoolClassesTable").dataset.actionsBound){$("schoolClassesTable").dataset.actionsBound="1";$("schoolClassesTable").addEventListener("click",async event=>{const edit=event.target.closest(".leader-class-edit"),archive=event.target.closest(".leader-class-archive");try{if(edit){const name=prompt("Update class name:",edit.dataset.name||"");if(!name)return;const level=prompt("Update level/section label:",edit.dataset.level||"")||"";await B.classes.update(edit.dataset.id,{name,level});await refreshSchoolLists();}else if(archive){const restore=archive.dataset.status==="archived";if(!confirm(restore?"Restore this class?":"Remove this class from active use? Existing student records will be preserved."))return;await B.classes.setArchived(archive.dataset.id,!restore);await refreshSchoolLists();}}catch(e){alert(e.message||String(e));}});}
   if($("btnAddSchoolSubject"))$("btnAddSchoolSubject").onclick=async()=>{const name=prompt("Enter subject name:");if(!name)return;const code=prompt("Enter subject code (optional):")||"";try{await B.subjects.create(schoolId,{name,code});await refreshSchoolLists();}catch(e){alert(e.message||String(e));}};
   if($("btnAddSession"))$("btnAddSession").onclick=async()=>{const name=prompt("Academic session (e.g. 2026/2027):");if(!name)return;try{const sessionId=await B.academicSessions.create(schoolId,{name,terms:[{name:"First Term"},{name:"Second Term"},{name:"Third Term"}]});if(!school.currentSessionId){await B.academicSessions.setCurrent(schoolId,sessionId);school.currentSessionId=sessionId;}await refreshSchoolLists();}catch(e){alert(e.message||String(e));}};
-  async function setSchoolCurrentSession(sessionId){const status=$("schoolSessionStatus");try{if(!canManageSchoolStructure)throw new Error("Only the school Super Admin/Admin/Headmaster/Principal with school-structure permission can change this setting.");if(!sessionId)throw new Error("Choose an active academic session first.");if(status){status.style.color="#64748b";status.textContent="Updating current academic session…";}await B.academicSessions.setCurrent(schoolId,sessionId);if(school)school.currentSessionId=sessionId;await refreshSchoolLists();if(status){status.style.color="#15803d";status.textContent="Current academic session saved successfully for this school.";}}catch(e){if(status){status.style.color="#b91c1c";status.textContent=e.message||String(e);}else alert(e.message||String(e));}}
+  async function setSchoolCurrentSession(sessionId){const status=$("schoolSessionStatus");try{if(!canManageSessions)throw new Error("Only the Super Admin, school Admin, Headmaster or Principal can change this school's academic session.");if(!sessionId)throw new Error("Choose an active academic session first.");if(status){status.style.color="#64748b";status.textContent="Updating current academic session…";}await B.academicSessions.setCurrent(schoolId,sessionId);if(school)school.currentSessionId=sessionId;await refreshSchoolLists();if(status){status.style.color="#15803d";status.textContent="Current academic session saved successfully for this school.";}}catch(e){if(status){status.style.color="#b91c1c";status.textContent=e.message||String(e);}else alert(e.message||String(e));}}
   if($("schoolSetCurrentSession"))$("schoolSetCurrentSession").onclick=()=>setSchoolCurrentSession($("schoolCurrentSessionSelect")?.value||"");
   if($("schoolReloadSessions"))$("schoolReloadSessions").onclick=async()=>{const status=$("schoolSessionStatus");try{schoolSessionRows=await B.academicSessions.list(schoolId);await refreshSchoolLists();if(status){status.style.color="#15803d";status.textContent="Academic sessions reloaded.";}}catch(e){if(status){status.style.color="#b91c1c";status.textContent=e.message||String(e);}}};
   if($("sessionsBody")&&!$("sessionsBody").dataset.currentBound){$("sessionsBody").dataset.currentBound="1";$("sessionsBody").addEventListener("click",event=>{const btn=event.target.closest(".school-session-make-current");if(btn)setSchoolCurrentSession(btn.dataset.session);});}
