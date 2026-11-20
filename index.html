@@ -2178,7 +2178,18 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
 
         <div class="view" id="view-admin-create-user">
           <div class="card"><div class="card-header"><h2>Account Creation</h2></div>
-            <div class="card-body"><p style="color:#546e7a;">Use the dedicated Student, Teacher, Headmaster or Principal registration pages. Each form now creates the Firebase sign-in account, links its school and role, and applies the selected class/subject assignments without sending an invitation email.</p></div>
+            <div class="card-body">
+              <p style="color:#546e7a;">Super Admin only: create a school Admin account. Admin, Headmaster and Principal accounts are restricted to their assigned school; only Super Admin can create or reassign school leadership.</p>
+              <form id="adminRegisterForm" style="display:grid;gap:10px;max-width:560px;margin:14px 0;padding:14px;border:1px solid var(--border);border-radius:12px;background:#fafbfc;">
+                <h3 style="font-size:1rem;margin:0;">Create School Admin Account</h3>
+                <div class="form-group"><label>Full Name *</label><input id="adFullName" required maxlength="100" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Email Address *</label><input id="adEmail" type="email" required autocomplete="email" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;" /></div>
+                <div class="form-group"><label>Assigned School *</label><select id="adSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Loading schools…</option></select></div>
+                <button type="submit" class="btn btn-primary">Create Admin Account</button>
+                <div id="adFormStatus" style="font-size:.9rem;" role="status" aria-live="polite"></div>
+              </form>
+              <p style="color:#546e7a;">Students, Teachers, Headmasters and Principals are created from their dedicated registration pages. Every account is linked to one school; Headmasters must belong to Primary schools and Principals to Secondary schools.</p>
+            </div>
           </div>
         </div>
 
@@ -8661,6 +8672,37 @@ export function createSchoolBackend({ db, auth, fs }) {
     }
     return { added, total: catalogue.length, unsupported: false };
   };
+
+  /** Super Admin: apply the official class catalogue to every active school of a type.
+   * Uses bounded concurrency so a large directory does not freeze the page or
+   * overwhelm Firestore with an unbounded burst of writes. Existing classes are preserved.
+   */
+  classes.applyCatalogueToAll = async function(schoolType) {
+    const actor = await loadActor();
+    if (actor.role !== ROLES.SUPER_ADMIN && actor.role !== "superadmin") fail("Only Super Admin can update all schools.");
+    const t = String(schoolType || "").toLowerCase();
+    if (t !== "primary" && t !== "secondary") fail("schoolType must be primary or secondary.");
+    const all = await schools.listAll();
+    const targets = all.filter(s => {
+      const st = String(s.schoolType || s.type || "").toLowerCase();
+      return t === "primary" ? st === "primary" : ["secondary", "junior_secondary", "senior_secondary"].includes(st);
+    }).filter(s => !["suspended", "archived", "deleted"].includes(String(s.status || "active").toLowerCase()));
+    let schoolsUpdated = 0, classesAdded = 0;
+    const errors = [];
+    const concurrency = 4;
+    for (let i = 0; i < targets.length; i += concurrency) {
+      const group = targets.slice(i, i + concurrency);
+      const results = await Promise.all(group.map(async sch => {
+        try { return { school: sch, result: await classes.ensureDefaults(sch.id) }; }
+        catch (error) { return { school: sch, error }; }
+      }));
+      for (const item of results) {
+        if (item.error) errors.push({ schoolId: item.school.id, name: item.school.name || item.school.id, error: item.error.message || String(item.error) });
+        else { schoolsUpdated++; classesAdded += item.result.added || 0; }
+      }
+    }
+    return { schoolType: t, schoolsTargeted: targets.length, schoolsUpdated, classesAdded, errors };
+  };
   
   const subjects = structureService({ coll: "subjects", label: "subject", idFn: Ids.subject });
 
@@ -9538,15 +9580,20 @@ export function createSchoolBackend({ db, auth, fs }) {
       }
       const check = await this.completionCheck(schoolId, { academicSessionId, term, classId });
       const summary = await this._buildClassSummary(schoolId, { academicSessionId, term, classId });
-      const b = writeBatch(db);
+      // One filtered read replaces one getDoc round-trip per student.
+      const existingCards = await this.list(schoolId, { academicSessionId, term, classId });
+      const existingById = new Map(existingCards.map(card => [card.id, card]));
+      let b = writeBatch(db);
+      let writesInBatch = 0;
       const ids = [];
+      const commitChunk = async () => { if (writesInBatch) { await b.commit(); b = writeBatch(db); writesInBatch = 0; } };
       for (const row of summary.rows) {
         const sid = row.studentId;
         const id = this._cardId(schoolId, academicSessionId, term, classId, sid);
         ids.push(id);
         const ref = doc(db, "reportCards", id);
-        const existing = await getDoc(ref);
-        if (existing.exists() && existing.data().status === "published") continue;
+        const existing = existingById.get(id) || null;
+        if (existing && existing.status === "published") continue;
         const payload = {
           schoolId, academicSessionId, term: String(term), classId, studentId: sid,
           studentName: row.student.fullName || "",
@@ -9565,8 +9612,10 @@ export function createSchoolBackend({ db, auth, fs }) {
           updatedAt: ts(),
           updatedBy: actor.uid
         };
-        if (existing.exists()) b.update(ref, payload);
+        if (existing) b.update(ref, payload);
         else b.set(ref, { ...payload, createdAt: ts(), createdBy: actor.uid });
+        writesInBatch++;
+        if (writesInBatch >= 400) await commitChunk();
       }
       addAudit(b, actor, {
         action: "report_cards_prepare", schoolId, targetType: "reportCards", targetId: classId,
@@ -9595,14 +9644,19 @@ export function createSchoolBackend({ db, auth, fs }) {
       // refresh drafts to ready then publish
       await this.prepareDrafts(schoolId, { academicSessionId, term, classId });
       const summary = await this._buildClassSummary(schoolId, { academicSessionId, term, classId });
-      const b = writeBatch(db);
+      // Read existing cards in one school/class/session/term query, not N individual reads.
+      const existingCards = await this.list(schoolId, { academicSessionId, term, classId });
+      const existingById = new Map(existingCards.map(card => [card.id, card]));
+      let b = writeBatch(db);
+      let writesInBatch = 0;
       const publishedIds = [];
+      const commitChunk = async () => { if (writesInBatch) { await b.commit(); b = writeBatch(db); writesInBatch = 0; } };
       for (const row of summary.rows) {
         const sid = row.studentId;
         const id = this._cardId(schoolId, academicSessionId, term, classId, sid);
         const ref = doc(db, "reportCards", id);
-        const prev = await getDoc(ref);
-        if (prev.exists() && prev.data().status === "published" && prev.data().publishVersion) {
+        const prev = existingById.get(id) || null;
+        if (prev && prev.status === "published" && prev.publishVersion) {
           // already published — skip to prevent accidental duplicate publish; use reopen+publish for corrections
           continue;
         }
@@ -9622,12 +9676,14 @@ export function createSchoolBackend({ db, auth, fs }) {
           workflow: "published",
           publishedBy: actor.uid,
           publishedAt: ts(),
-          publishVersion: (prev.exists() && prev.data().publishVersion) ? (prev.data().publishVersion + 1) : 1,
+          publishVersion: (prev && prev.publishVersion) ? (prev.publishVersion + 1) : 1,
           updatedAt: ts(), updatedBy: actor.uid
         };
-        if (prev.exists()) b.update(ref, payload);
+        if (prev) b.update(ref, payload);
         else b.set(ref, { ...payload, createdAt: ts(), createdBy: actor.uid });
         publishedIds.push(id);
+        writesInBatch++;
+        if (writesInBatch >= 400) await commitChunk();
       }
       // class-level publication receipt
       const receiptId = schoolId + "_pub_" + [academicSessionId, slug(term), classId]
@@ -11244,10 +11300,10 @@ service cloud.firestore {
       return isSuperAdmin()
         || (authed() && sid != null && mySchool() == sid && role() == 'admin' && adminHolds('manage_certificates'))
         || (authed() && sid != null && mySchool() == sid && role() == 'headmaster'
-            && schoolTypeOf(sid) == 'primary' && explicitPerm('manage_certificates'))
+            && schoolTypeOf(sid) == 'primary' && leaderCan('manage_certificates', sid))
         || (authed() && sid != null && mySchool() == sid && role() == 'principal'
             && schoolTypeOf(sid) in ['secondary','junior_secondary','senior_secondary']
-            && explicitPerm('manage_certificates'));
+            && leaderCan('manage_certificates', sid));
     }
     function certStudentPath(sid) { return /databases/$(database)/documents/students/$(sid); }
     function validSchoolCertificate(d) {
@@ -11459,7 +11515,7 @@ window.ME_registerAccount = async function(payload) {
   const assignmentRows = Array.isArray(payload.assignments) ? payload.assignments : [];
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) throw new Error("Enter a valid email address.");
   if (fullName.length < 2 || fullName.length > 100) throw new Error("Enter the full name (2–100 characters).");
-  if (!["student", "teacher", "headmaster", "principal"].includes(role)) throw new Error("Choose a valid account role.");
+  if (!["admin", "student", "teacher", "headmaster", "principal"].includes(role)) throw new Error("Choose a valid account role.");
   if (!schoolId) throw new Error("Select the school for this account.");
   const allowedRoles = B.helpers && B.helpers.invitableRoles ? B.helpers.invitableRoles(actor) : [];
   if (!allowedRoles.includes(role)) throw new Error("Your role does not have permission to create this account in the selected school.");
@@ -11792,13 +11848,7 @@ window.__initTeacherDash = async function() {
     if(classSel)classSel.onchange=()=>{const opt=classSel.selectedOptions[0];if(sessionSel&&opt?.dataset.session){sessionSel.value=opt.dataset.session;fillTermSelect(termSel,opt.dataset.session);}};
     if(sessionSel)sessionSel.onchange=()=>fillTermSelect(termSel,sessionSel.value);
   }
-  function printTeacherCard(card){const rows=(card.subjectResults||[]).map(r=>'<tr><td>'+eduEsc(r.subjectName||r.subjectId)+'</td><td>'+eduEsc(r.scores?.firstCA??'—')+'</td><td>'+eduEsc(r.scores?.secondCA??'—')+'</td><td>'+eduEsc(r.scores?.examination??'—')+'</td><td>'+eduEsc(r.total??'—')+'</td><td>'+eduEsc(r.grade||'—')+'</td><td>'+eduEsc(r.remark||'—')+'</td></tr>').join('');const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>Report Card</title><style>body{font:14px Arial;padding:24px}h1,h2{text-align:center}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #444;padding:8px}th{background:#e8f0f8}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}.summary div{border:1px solid #64748b;padding:10px;text-align:center}.summary b{display:block;font-size:12px;color:#475569;margin-bottom:5px}@media print{body{padding:8px}}</style></head><body><h1>'+eduEsc(school&&school.name||'School')+'</h1><h2>STUDENT REPORT CARD</h2><p><b>Student:</b> '+eduEsc(card.studentName||card.studentId)+'<br><b>Class:</b> '+eduEsc(className(card.classId))+'<br><b>Session:</b> '+eduEsc(sessionName(card.academicSessionId))+'<br><b>Term:</b> '+eduEsc(card.term)+'</p><div class="summary"><div><b>Aggregate</b>'+eduEsc(card.aggregate??'—')+'</div><div><b>Average</b>'+eduEsc(card.average==null?'—':Number(card.average).toFixed(2)+'%')+'</div><div><b>Overall Grade</b>'+eduEsc(card.overallGrade||'—')+'</div><div><b>Position</b>'+eduEsc(card.position??'—')+'</div></div><table><thead><tr><th>Subject</th><th>1st CA</th><th>2nd CA</th><th>Exam</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead><tbody>'+rows+'</tbody></table><p><b>Teacher Comment:</b> '+eduEsc(card.teacherComment||'—')+'</p><script>
-window.ME_SUBJECT_CATALOGUE = {
-  primary: ["English Studies","Mathematics","Basic Science","Social Studies","Nigerian Language","Computer Studies","Writing","Cultural and Creative Arts","Home Economics","Practical Agriculture","Arabic Language","Religion","Physical and Health Education","Civic Education","Braille Writing","Type-Writing","Mobility Training","Sign Language"],
-  secondary: ["English Language","Mathematics","Hausa / Yoruba / Igbo Language","Physics","Government","Chemistry","History","Biology","Geography","Civic Education","Agricultural Science","Animal Husbandry","Woodwork","Metal Work","Economics","IRS / CRS","Literature in English","Hausa Literature","Fine Arts"]
-};
-<\/script>
-<\/body><\/html>');w.onload=()=>w.print();w.document.close();}
+  function printTeacherCard(card){const rows=(card.subjectResults||[]).map(r=>'<tr><td>'+eduEsc(r.subjectName||r.subjectId)+'</td><td>'+eduEsc(r.scores?.firstCA??'—')+'</td><td>'+eduEsc(r.scores?.secondCA??'—')+'</td><td>'+eduEsc(r.scores?.examination??'—')+'</td><td>'+eduEsc(r.total??'—')+'</td><td>'+eduEsc(r.grade||'—')+'</td><td>'+eduEsc(r.remark||'—')+'</td></tr>').join('');const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>Report Card</title><style>body{font:14px Arial;padding:24px}h1,h2{text-align:center}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #444;padding:8px}th{background:#e8f0f8}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}.summary div{border:1px solid #64748b;padding:10px;text-align:center}.summary b{display:block;font-size:12px;color:#475569;margin-bottom:5px}@media print{body{padding:8px}}</style></head><body><h1>'+eduEsc(school&&school.name||'School')+'</h1><h2>STUDENT REPORT CARD</h2><p><b>Student:</b> '+eduEsc(card.studentName||card.studentId)+'<br><b>Class:</b> '+eduEsc(className(card.classId))+'<br><b>Session:</b> '+eduEsc(sessionName(card.academicSessionId))+'<br><b>Term:</b> '+eduEsc(card.term)+'</p><div class="summary"><div><b>Aggregate</b>'+eduEsc(card.aggregate??'—')+'</div><div><b>Average</b>'+eduEsc(card.average==null?'—':Number(card.average).toFixed(2)+'%')+'</div><div><b>Overall Grade</b>'+eduEsc(card.overallGrade||'—')+'</div><div><b>Position</b>'+eduEsc(card.position??'—')+'</div></div><table><thead><tr><th>Subject</th><th>1st CA</th><th>2nd CA</th><th>Exam</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead><tbody>'+rows+'</tbody></table><p><b>Teacher Comment:</b> '+eduEsc(card.teacherComment||'—')+'</p></body></html>');w.onload=()=>w.print();w.document.close();}
   async function loadFormMasterReportCards(){
     const box=$('tfmCardsList');if(!box||!fmPositions.length)return;
     try{const classId=$('tfmClass').value,sessionId=$('tfmSession').value,term=$('tfmTerm').value;if(!classId||!sessionId||!term){box.innerHTML='<p>Choose your assigned class, session and term.</p>';return;}const cards=await B.reportCards.list(schoolId,{classId,academicSessionId:sessionId,term});box.innerHTML=cards.length?'<div class="table-wrap"><table><thead><tr><th>Student</th><th>Status</th><th>Subjects</th><th>Teacher Comment</th><th>Save</th><th>Print</th></tr></thead><tbody>'+cards.map((c,i)=>'<tr data-card="'+eduEsc(c.id)+'"><td>'+eduEsc(c.studentName||c.studentId)+'</td><td>'+eduEsc(c.status)+'</td><td>'+eduEsc((c.subjectResults||[]).length)+'</td><td><input class="tfm-comment" maxlength="500" value="'+eduEsc(c.teacherComment||'')+'" style="min-width:180px;padding:7px;border:1px solid #ddd;border-radius:6px"></td><td><button type="button" class="btn btn-outline tfm-save-comment">Save</button></td><td><button type="button" class="btn btn-outline tfm-print-card" data-index="'+i+'">Print</button></td></tr>').join('')+'</tbody></table></div>':'<p>No report cards prepared for this selection. Click Prepare Drafts first.</p>';box.querySelectorAll('.tfm-print-card').forEach(btn=>btn.onclick=()=>printTeacherCard(cards[Number(btn.dataset.index)]));box.querySelectorAll('.tfm-save-comment').forEach(btn=>btn.onclick=async()=>{const tr=btn.closest('tr'),id=tr.dataset.card,input=tr.querySelector('.tfm-comment');try{await B.reportCards.saveTeacherComment(schoolId,id,input.value);if($('tfmStatus')){$('tfmStatus').textContent='Teacher comment saved.';$('tfmStatus').style.color='#15803d';}}catch(e){if($('tfmStatus')){$('tfmStatus').textContent=e.message||String(e);$('tfmStatus').style.color='#b91c1c';}}});}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}
@@ -12185,6 +12235,40 @@ function wirePassReg() {
       finally { setBusy(form, false); }
     });
   });
+
+  // Super Admin creates school Admin accounts through the same one-use invitation claim.
+  const adminForm = $("adminRegisterForm");
+  if (adminForm && !adminForm.dataset.accountCreateBound) {
+    adminForm.dataset.accountCreateBound = "1";
+    const schoolSelect = $("adSchoolSelect");
+    const loadAdminSchools = async () => {
+      if (!schoolSelect || !B()) return;
+      try {
+        const actor = await B().loadActor();
+        if (actor.role !== "super_admin" && actor.role !== "superadmin") {
+          schoolSelect.innerHTML = '<option value="">Super Admin access required</option>';
+          adminForm.querySelector('button[type="submit"]')?.setAttribute("disabled", "disabled");
+          return;
+        }
+        const schools = await B().schools.listAll();
+        schoolSelect.innerHTML = '<option value="">Select school…</option>' + schools
+          .filter(s => !["suspended","archived","deleted"].includes(String(s.status || "active").toLowerCase()))
+          .map(s => '<option value="'+String(s.id).replace(/"/g,'&quot;')+'">'+String(s.name || s.id).replace(/</g,'&lt;')+'</option>').join("");
+      } catch (e) { schoolSelect.innerHTML = '<option value="">Could not load schools</option>'; setStatus("adFormStatus", e.message || String(e), false); }
+    };
+    loadAdminSchools(); setTimeout(loadAdminSchools, 1200);
+    adminForm.addEventListener("submit", async ev => {
+      ev.preventDefault(); setBusy(adminForm, true); setStatus("adFormStatus", "Creating school Admin account…", true);
+      try {
+        const result = await window.ME_registerAccount({
+          email: $("adEmail").value, fullName: $("adFullName").value,
+          role: "admin", schoolId: schoolSelect.value
+        });
+        showCreated("adFormStatus", result); adminForm.reset();
+      } catch (e) { setStatus("adFormStatus", e.message || String(e), false); }
+      finally { setBusy(adminForm, false); }
+    });
+  }
 
   const teacherForm = $("teacherRegisterForm");
   if (teacherForm && !teacherForm.dataset.accountCreateBound) {
