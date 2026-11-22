@@ -61,6 +61,13 @@ window.SITE_IMAGE_SLOTS = {
     };
   </script>
   <style>
+    /* Safety display fix: executable/source script elements must never appear as page text. */
+    script { display: none !important; }
+    html, body { max-width: 100%; overflow-x: hidden; }
+    body { overflow-wrap: break-word; }
+    img, video, iframe, canvas, svg { max-width: 100%; }
+    pre, code { max-width: 100%; }
+    pre { overflow-x: auto; }
     :root {
       --primary: #0D47A1; --secondary: #1976D2; --emerald: #00796B;
       --text: #1a237e; --text-muted: #546e7a; --bg: #f8fafc;
@@ -2511,8 +2518,8 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
                 <div id="hmFormStatus" style="font-size:0.9rem;" role="status" aria-live="polite"></div>
               </form>
               <div class="toolbar"><input type="text" id="hmSearch" placeholder="Search name or email…" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:220px;" /></div>
-              <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>School</th><th>Status</th></tr></thead>
-                <tbody id="headmastersTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody></table></div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>School</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="headmastersTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody></table></div>
             </div>
           </div>
         </div>
@@ -2532,8 +2539,8 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
                 <div id="prFormStatus" style="font-size:0.9rem;" role="status" aria-live="polite"></div>
               </form>
               <div class="toolbar"><input type="text" id="prSearch" placeholder="Search…" style="padding:10px;border-radius:8px;border:1px solid var(--border);min-width:220px;" /></div>
-              <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>School</th><th>Status</th></tr></thead>
-                <tbody id="principalsTable"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody></table></div>
+              <div class="table-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>School</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="principalsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody></table></div>
             </div>
           </div>
         </div>
@@ -2837,7 +2844,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           <button class="nav-item" data-sview="s-certificates" id="schoolCertificatesNav" hidden><span class="icon">🏅</span> Certificates</button>
           <button class="nav-item" data-sview="s-broadsheets"><span class="icon">📑</span> Broadsheets</button>
           <button class="nav-item" data-sview="s-promotion"><span class="icon">⬆️</span> Student Promotion</button>
-          <button class="nav-item" data-sview="s-attendance"><span class="icon">📅</span> Attendance</button>
+          
           <button class="nav-item" data-sview="s-announcements"><span class="icon">📢</span> Announcements</button>
         </div>
         <div class="nav-section">
@@ -2903,7 +2910,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
                 <button type="button" class="btn btn-outline" id="schoolTeacherCreateCancel">Cancel</button>
                 <div id="schoolTeacherCreateStatus" role="status" aria-live="polite" style="margin-top:10px;white-space:pre-line;"></div>
               </form>
-              <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Subjects</th><th>Status</th><th>Actions</th></tr></thead>
+              <div class="table-wrap"><table><thead><tr><th>Full Name</th><th>Email Address</th><th>Assigned Classes & Subjects</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody id="schoolTeachersTable"><tr><td colspan="5"><div class="empty-state">No teachers yet.</div></td></tr></tbody></table></div>
             </div>
           </div>
@@ -2921,7 +2928,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         </div>
         <div class="view" id="sview-s-students">
           <div class="card"><div class="card-header"><h2>Students</h2><button class="btn btn-primary" id="btnAddSchoolStudent">+ Add Student</button></div>
-            <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Admission No</th><th>Class</th><th>Status</th><th>Actions</th></tr></thead>
+            <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Full Name</th><th>Email Address</th><th>Class</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody id="schoolStudentsTable"><tr><td colspan="5"><div class="empty-state">No students yet.</div></td></tr></tbody></table></div></div>
           </div>
         </div>
@@ -4356,59 +4363,92 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     // =====================================================================
     async function loadUsersByRole(role, tableId) {
       const tbody = $(tableId);
-      tbody.innerHTML = `<tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr>`;
       try {
         const snap = await getDocs(query(collection(db, "users"), where("role", "==", role)));
         if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No ${role}s found.</p></div></td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No ${role}s found.</p></div></td></tr>`;
           return;
         }
         const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         docs.sort((a, b) => String(a.fullName || a.email || "").localeCompare(String(b.fullName || b.email || ""), undefined, { sensitivity: "base" }));
         const byId = {}; docs.forEach(u => byId[u.id] = u);
-        const authInfo = {};
-        try {
-          for (let i = 0; i < docs.length; i += 100) {
-            const r = await callFn("getUsersAuthStatus", { uids: docs.slice(i, i + 100).map(x => x.id) });
-            Object.assign(authInfo, r.users || {});
-          }
-        } catch (e) { /* status badges are optional */ }
+        if (role === "headmaster" || role === "principal") {
+          const schoolMap = new Map();
+          await Promise.all([...new Set(docs.map(u => u.schoolId).filter(Boolean))].map(async sid => {
+            try { const ss = await getDoc(doc(db, "schools", sid)); if (ss.exists()) schoolMap.set(sid, {id:ss.id,...ss.data()}); } catch (_) {}
+          }));
+          tbody.innerHTML = docs.map((u, i) => {
+            const school = schoolMap.get(u.schoolId) || {};
+            const st = String(school.status || "unknown").toLowerCase();
+            const userSt = String(u.status || "active").toLowerCase();
+            const badge = st === "active" ? "badge-success" : st === "suspended" ? "badge-danger" : "badge-warning";
+            return `<tr><td>${i+1}</td><td><strong>${escapeHtml(u.fullName || "—")}</strong></td><td>${escapeHtml(u.email || "—")}</td><td>${escapeHtml(school.name || u.schoolId || "Not assigned")}</td><td><span class="badge ${badge}">${escapeHtml(st)}</span> · Account: ${escapeHtml(userSt)}</td><td class="actions"><button class="btn btn-sm btn-outline btn-edit-leader" data-id="${u.id}">Edit Details</button><button class="btn btn-sm btn-ghost btn-toggle-leader-school" data-id="${u.id}" data-school="${escapeHtml(u.schoolId || "")}" data-status="${escapeHtml(st)}">${st === "active" ? "Deactivate School" : "Activate School"}</button></td></tr>`;
+          }).join("");
+          tbody.querySelectorAll(".btn-edit-leader").forEach(btn => btn.onclick = () => openEditLeaderModal(byId[btn.dataset.id], role, tableId));
+          tbody.querySelectorAll(".btn-toggle-leader-school").forEach(btn => btn.onclick = async () => {
+            const sid = btn.dataset.school; if (!sid) return toast("This account has no assigned school.", "error");
+            const next = btn.dataset.status === "active" ? "suspended" : "active";
+            const ok = await confirmDialog(next === "suspended" ? "Deactivate School" : "Reactivate School", next === "suspended" ? "All school staff operations will stop. Students will retain access to their learning records. No school data will be deleted. Continue?" : "Reactivate this school and restore staff operations?");
+            if (!ok) return;
+            try {
+              const actor = auth.currentUser; if (!actor) throw new Error("Sign in again.");
+              const auditRef = doc(collection(db, "auditLogs")); const batch = writeBatch(db);
+              batch.update(doc(db, "schools", sid), { status: next, updatedAt: serverTimestamp() });
+              batch.set(auditRef, { action: next === "suspended" ? "school_deactivated" : "school_activated", actorId: actor.uid, actorRole: "super_admin", actorEmail: actor.email || "", schoolId: sid, targetType: "schools", targetId: sid, summary: { status: next, leaderUid: btn.dataset.id }, createdAt: serverTimestamp() });
+              await batch.commit(); toast("School status updated to " + next, "success");
+            } catch (e) { toast(e.message || String(e), "error"); }
+            loadUsersByRole(role, tableId);
+          });
+          return;
+        }
         let html = "";
         docs.forEach(u => {
           const status = String(u.status || "active").toLowerCase();
           const badge = status === "active" ? "badge-success" : (status === "inactive" ? "badge-muted" : "badge-danger");
-          const ai = authInfo[u.id];
-          const ver = ai ? (ai.emailVerified ? `<span class="badge badge-success">Email verified</span>` : `<span class="badge badge-muted">Not verified</span>`) : "";
-          html += `<tr>
-            <td><strong>${escapeHtml(u.fullName || "—")}</strong></td>
-            <td>${escapeHtml(u.email || "—")}</td>
-            <td><span class="badge ${badge}">${escapeHtml(status)}</span> ${ver}</td>
-            <td>${formatDate(u.createdAt)}</td>
-            <td class="actions">
-              <button class="btn btn-sm btn-outline btn-edit-user" data-id="${u.id}">Edit</button>
-              <button class="btn btn-sm btn-outline btn-perm-user" data-id="${u.id}">Permissions</button>
-              <button class="btn btn-sm btn-ghost btn-toggle-user" data-id="${u.id}" data-status="${escapeHtml(status)}">${status === "active" ? "Suspend" : "Activate"}</button>
-              <button class="btn btn-sm btn-ghost btn-pw-user" data-id="${u.id}">Password</button>
-            </td>
-          </tr>`;
+          html += `<tr><td><strong>${escapeHtml(u.fullName || "—")}</strong></td><td>${escapeHtml(u.email || "—")}</td><td><span class="badge ${badge}">${escapeHtml(status)}</span></td><td>${formatDate(u.createdAt)}</td><td class="actions"><button class="btn btn-sm btn-outline btn-edit-user" data-id="${u.id}">Edit</button><button class="btn btn-sm btn-outline btn-perm-user" data-id="${u.id}">Permissions</button><button class="btn btn-sm btn-ghost btn-toggle-user" data-id="${u.id}" data-status="${escapeHtml(status)}">${status === "active" ? "Suspend" : "Activate"}</button><button class="btn btn-sm btn-ghost btn-pw-user" data-id="${u.id}">Password</button></td></tr>`;
         });
         tbody.innerHTML = html;
         tbody.querySelectorAll(".btn-edit-user").forEach(btn => btn.onclick = () => openEditUserModal(byId[btn.dataset.id], role, tableId));
         tbody.querySelectorAll(".btn-perm-user").forEach(btn => btn.onclick = () => openPermissionsModal(byId[btn.dataset.id], role, tableId));
         tbody.querySelectorAll(".btn-pw-user").forEach(btn => btn.onclick = () => openPasswordModal(byId[btn.dataset.id]));
-        tbody.querySelectorAll(".btn-toggle-user").forEach(btn => {
-          btn.onclick = async () => {
-            const next = btn.dataset.status === "active" ? "suspended" : "active";
-            const ok = await confirmDialog(next === "suspended" ? "Suspend User" : "Activate User", `Set status to ${next}?`);
-            if (!ok) return;
-            try { await callFn("setUserStatus", { uid: btn.dataset.id, status: next }); toast("Status updated", "success"); }
-            catch (e) { toast(e.message, "error"); }
-            loadUsersByRole(role, tableId);
-          };
+        tbody.querySelectorAll(".btn-toggle-user").forEach(btn => btn.onclick = async () => {
+          const next = btn.dataset.status === "active" ? "suspended" : "active";
+          const ok = await confirmDialog(next === "suspended" ? "Suspend User" : "Activate User", `Set status to ${next}?`);
+          if (!ok) return;
+          try { await callFn("setUserStatus", { uid: btn.dataset.id, status: next }); toast("Status updated", "success"); }
+          catch (e) { toast(e.message, "error"); }
+          loadUsersByRole(role, tableId);
         });
       } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="5">Error: ${escapeHtml(e.message)}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6">Error: ${escapeHtml(e.message)}</td></tr>`;
       }
+    }
+
+    async function openEditLeaderModal(u, role, tableId) {
+      if (!u) return;
+      try {
+        const schools = await getDocs(collection(db, "schools"));
+        const expected = role === "headmaster" ? "primary" : "secondary";
+        const options = schools.docs.map(d => ({id:d.id,...d.data()})).filter(sc => {
+          const t=String(sc.schoolType||sc.type||"").toLowerCase().replace(/[\s-]+/g,"_");
+          return expected === "primary" ? ["primary","primary_school","nursery","nursery_primary"].includes(t) : ["secondary","secondary_school","junior_secondary","senior_secondary","jss","sss"].includes(t);
+        });
+        const assigned = options.find(sc => sc.id === u.schoolId) || {};
+        const html = `<p class="form-hint">Review the account details and assigned school. The role remains ${escapeHtml(role)}.</p><div class="form-group"><label>Full Name</label><input id="leaderEditName" value="${escapeHtml(u.fullName||"")}" maxlength="100"></div><div class="form-group"><label>Email (sign-in)</label><input value="${escapeHtml(u.email||"")}" disabled></div><div class="form-group"><label>Phone Number</label><input id="leaderEditPhone" value="${escapeHtml(u.phone||"")}" maxlength="40"></div><div class="form-group"><label>Assigned ${expected === "primary" ? "Primary" : "Secondary"} School</label><select id="leaderEditSchool">${options.map(sc=>`<option value="${escapeHtml(sc.id)}" ${sc.id===u.schoolId?"selected":""}>${escapeHtml(sc.name||sc.schoolName||sc.id)} — ${escapeHtml(sc.status||"active")}</option>`).join("")}</select></div><div class="form-group" style="padding:10px;background:#f8fafc;border-radius:8px"><strong>Current school information</strong><div>Name: ${escapeHtml(assigned.name||assigned.schoolName||u.schoolId||"—")}</div><div>Type: ${escapeHtml(assigned.schoolType||assigned.type||"—")}</div><div>Address: ${escapeHtml(assigned.address||"—")}</div><div>Phone: ${escapeHtml(assigned.phone||"—")}</div><div>School status: ${escapeHtml(assigned.status||"unknown")}</div><div>Account created: ${escapeHtml(formatDate(u.createdAt))}</div></div><div class="form-group"><label>Account Status</label><input value="${escapeHtml(u.status||"active")}" disabled></div>`;
+        openModal("Edit " + (role === "headmaster" ? "Headmaster" : "Principal") + " Details", html, async () => {
+          const schoolId = $("leaderEditSchool")?.value; const fullName = $("leaderEditName")?.value.trim(); const phone = $("leaderEditPhone")?.value.trim() || "";
+          if (!fullName || fullName.length < 2) throw new Error("Enter a valid full name.");
+          if (!schoolId) throw new Error("Select the assigned school.");
+          const otherLeaders = await getDocs(query(collection(db, "users"), where("role", "==", role), where("schoolId", "==", schoolId), where("status", "==", "active")));
+          if (otherLeaders.docs.some(d => d.id !== u.id)) throw new Error("This school already has an active " + (role === "headmaster" ? "Headmaster" : "Principal") + ". Deactivate or reassign the existing leader first.");
+          const actor = auth.currentUser; if (!actor) throw new Error("Sign in again.");
+          const auditRef = doc(collection(db, "auditLogs")); const batch = writeBatch(db);
+          batch.update(doc(db, "users", u.id), { fullName, phone, schoolId, updatedAt: serverTimestamp(), lastAuditId: auditRef.id });
+          batch.set(auditRef, { action:"user_update", actorId:actor.uid, actorRole:"super_admin", actorEmail:actor.email||"", schoolId, targetType:"users", targetId:u.id, summary:{fields:["fullName","phone","schoolId"],role}, createdAt:serverTimestamp() });
+          await batch.commit(); toast("Leader details updated.", "success"); closeModal(); loadUsersByRole(role, tableId);
+        });
+      } catch (e) { toast(e.message || String(e), "error"); }
     }
 
     $("btnAddStudent")?.addEventListener("click", () => openAddUserModal("student"));
@@ -8586,7 +8626,8 @@ export function effectivePerms(profile) {
   if (role === ROLES.SUPER_ADMIN) return ["*"];
   // Leaders always receive the school-operational permission set. Firestore Rules
   // independently enforce their schoolId and the Headmaster/Principal school type.
-  if (role === ROLES.HEADMASTER || role === ROLES.PRINCIPAL) return Array.from(LEADER_SCHOOL_PERMS);
+  if (role === ROLES.HEADMASTER) return Array.from(LEADER_SCHOOL_PERMS);
+  if (role === ROLES.PRINCIPAL) return LEADER_SCHOOL_PERMS.filter(p => p !== "manage_certificates");
   if (profile && Array.isArray(profile.permissions)) return profile.permissions;
   return Array.from(DEFAULT_PERMS[role] || []);
 }
@@ -8606,7 +8647,7 @@ export function can(profile, perm, schoolId) {
     if (role === ROLES.ADMIN) return true;
     if (role === ROLES.HEADMASTER || role === ROLES.PRINCIPAL) return true; // school type is enforced by UI school context and Firestore Rules
   }
-  if (role === ROLES.HEADMASTER || role === ROLES.PRINCIPAL) return LEADER_SCHOOL_PERMS.includes(perm);
+  if (role === ROLES.HEADMASTER || role === ROLES.PRINCIPAL) return effectivePerms(profile).includes(perm);
   const perms = effectivePerms(profile);
   return perms.includes(perm);
 }
@@ -8663,7 +8704,15 @@ export function createSchoolBackend({ db, auth, fs }) {
     if (!snap.exists()) fail("No profile for this account.");
     const p = snap.data();
     if ((p.status || "active") !== "active") fail("This account is not active.");
-    return { uid: u.uid, email: u.email || "", ...p, role: normRole(p.role) };
+    const actorRole = normRole(p.role);
+    if (p.schoolId && actorRole !== ROLES.STUDENT) {
+      const schoolSnap = await getDoc(doc(db, "schools", p.schoolId));
+      const schoolStatus = schoolSnap.exists() ? String(schoolSnap.data().status || "active").toLowerCase() : "missing";
+      if (["suspended", "archived", "deleted", "missing"].includes(schoolStatus)) {
+        fail("This school is currently deactivated. Only students may continue to access their learning records until the Super Admin reactivates the school.");
+      }
+    }
+    return { uid: u.uid, email: u.email || "", ...p, role: actorRole };
   }
   function need(actor, perm, schoolId) {
     if (!schoolId) fail("schoolId is required.");
@@ -8778,20 +8827,27 @@ export function createSchoolBackend({ db, auth, fs }) {
   // ================================================================== classes / subjects (dynamic)
   const SCHOOL_CLASS_CATALOGUE = Object.freeze({
     primary: [
-      { name: "NURSERY 1", group: "nursery", order: 1 }, { name: "NURSERY 2", group: "nursery", order: 2 }, { name: "NURSERY 3", group: "nursery", order: 3 },
-      { name: "PRIMARY 1", group: "primary", order: 4 }, { name: "PRIMARY 2", group: "primary", order: 5 }, { name: "PRIMARY 3", group: "primary", order: 6 },
-      { name: "PRIMARY 4", group: "primary", order: 7 }, { name: "PRIMARY 5", group: "primary", order: 8 }, { name: "PRIMARY 6", group: "primary", order: 9 }
+      ...Array.from({length: 6}, (_, level) => Array.from({length: 5}, (_, section) => ({
+        name: `PRIMARY ${level + 1}${String.fromCharCode(65 + section)}`,
+        group: "primary", order: (level * 5) + section + 1
+      }))).flat()
     ],
     secondary: [
-      { name: "JSS 1", group: "junior_secondary", order: 1 }, { name: "JSS 2", group: "junior_secondary", order: 2 }, { name: "JSS 3", group: "junior_secondary", order: 3 },
-      { name: "SS 1", group: "senior_secondary", order: 4 }, { name: "SS 2", group: "senior_secondary", order: 5 }, { name: "SS 3", group: "senior_secondary", order: 6 }
+      ...Array.from({length: 3}, (_, level) => Array.from({length: 5}, (_, section) => ({
+        name: `JSS ${level + 1}${String.fromCharCode(65 + section)}`,
+        group: "junior_secondary", order: (level * 5) + section + 1
+      }))).flat(),
+      ...Array.from({length: 3}, (_, level) => Array.from({length: 5}, (_, section) => ({
+        name: `SS ${level + 1}${String.fromCharCode(65 + section)}`,
+        group: "senior_secondary", order: 15 + (level * 5) + section + 1
+      }))).flat()
     ],
-    junior_secondary: [
-      { name: "JSS 1", group: "junior_secondary", order: 1 }, { name: "JSS 2", group: "junior_secondary", order: 2 }, { name: "JSS 3", group: "junior_secondary", order: 3 }
-    ],
-    senior_secondary: [
-      { name: "SS 1", group: "senior_secondary", order: 1 }, { name: "SS 2", group: "senior_secondary", order: 2 }, { name: "SS 3", group: "senior_secondary", order: 3 }
-    ]
+    junior_secondary: Array.from({length: 3}, (_, level) => Array.from({length: 5}, (_, section) => ({
+      name: `JSS ${level + 1}${String.fromCharCode(65 + section)}`, group: "junior_secondary", order: level * 5 + section + 1
+    }))).flat(),
+    senior_secondary: Array.from({length: 3}, (_, level) => Array.from({length: 5}, (_, section) => ({
+      name: `SS ${level + 1}${String.fromCharCode(65 + section)}`, group: "senior_secondary", order: level * 5 + section + 1
+    }))).flat()
   });
   function inferClassGroup(name) {
     const n = String(name || "").trim().toUpperCase();
@@ -8860,18 +8916,30 @@ export function createSchoolBackend({ db, auth, fs }) {
   classes.ensureDefaults = async function(schoolId) {
     const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, schoolId);
     const school = await schools.get(schoolId); if (!school) fail("School not found.");
-    const type = String(school.schoolType || school.type || "").toLowerCase();
+    const rawType = String(school.schoolType || school.type || "").toLowerCase().replace(/[\s-]+/g, "_");
+    const type = ["primary_school", "nursery", "nursery_primary"].includes(rawType) ? "primary"
+      : ["secondary_school", "junior_secondary", "senior_secondary", "jss", "sss"].includes(rawType) ? "secondary" : rawType;
     const catalogue = SCHOOL_CLASS_CATALOGUE[type] || [];
-    if (!catalogue.length) return { added: 0, unsupported: true };
+    if (!catalogue.length) return { added: 0, restored: 0, unsupported: true };
     const existing = await this.list(schoolId, { includeArchived: true });
     const byName = new Map(existing.map(c => [String(c.name || "").trim().toUpperCase(), c]));
-    let added = 0;
+    const batch = writeBatch(db); let added = 0, restored = 0;
     for (const item of catalogue) {
       const found = byName.get(item.name);
-      if (!found) { await this.create(schoolId, { ...item, level: item.group === "nursery" ? "Nursery" : item.group === "primary" ? "Primary" : item.group === "junior_secondary" ? "JSS" : "SS" }); added++; }
-      else if (found.status === "archived") await this.setArchived(found.id, false);
+      if (!found) {
+        const id = Ids.class(schoolId, item.name); const level = item.group === "primary" ? "Primary" : item.group === "junior_secondary" ? "JSS" : "SS";
+        batch.set(doc(db, "classes", id), { schoolId, name:item.name, key:slug(item.name), group:item.group, groupLabel:CLASS_GROUP_LABELS[item.group] || CLASS_GROUP_LABELS.custom, level, order:item.order, status:"active", createdBy:actor.uid, createdAt:ts(), updatedAt:ts() });
+        added++;
+      } else if (found.status === "archived") {
+        batch.update(doc(db, "classes", found.id), { status:"active", updatedAt:ts() });
+        restored++;
+      }
     }
-    return { added, total: catalogue.length, unsupported: false };
+    if (added || restored) {
+      addAudit(batch, actor, { action:"classes_template_apply", schoolId, targetType:"classes", targetId:schoolId, summary:{added, restored, template:type} });
+      await batch.commit();
+    }
+    return { added, restored, total: catalogue.length, unsupported: false };
   };
 
   /** Super Admin: apply the official class catalogue to every active school of a type.
@@ -9038,9 +9106,11 @@ export function createSchoolBackend({ db, auth, fs }) {
       const actor = await loadActor();
       if (!can(actor, OPERATION_PERMS.manageStudents, schoolId) && !can(actor, "manage_users", schoolId)) fail("You do not have permission to add students.");
       const admissionNo = String(input.admissionNo || "").trim(); const fullName = String(input.fullName || "").trim();
-      if (!admissionNo) fail("Admission number is required."); if (!isValidName(fullName)) fail("Enter the student's full name.");
+      if (!isValidName(fullName)) fail("Enter the student's full name.");
       if (!input.classId) fail("A student must be assigned to a class.");
-      const id = Ids.student(schoolId, admissionNo); const ref = doc(db, "students", id);
+      // Admission numbers are optional. When omitted, use a generated internal record ID.
+      const id = admissionNo ? Ids.student(schoolId, admissionNo) : `${schoolId}_STU_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`;
+      const ref = doc(db, "students", id);
       if ((await getDoc(ref)).exists()) fail("A student with this admission number already exists.");
       const b = writeBatch(db);
       b.set(ref, {
@@ -10528,18 +10598,27 @@ service cloud.firestore {
       return request.auth.token.email_verified == true
         || (hasProfile() && userDoc().get('verificationBypass', false) == true);
     }
+    // School status gate: school staff cannot use any protected school operation
+    // while the school is suspended/archived/deleted. Student access is exempted in authed().
+    function schoolOperational(sid) {
+      return sid is string && exists(/databases/$(database)/documents/schools/$(sid))
+        && !(get(/databases/$(database)/documents/schools/$(sid)).data.get('status', 'active') in ['suspended', 'archived', 'deleted']);
+    }
     function authed() {
       return hasAuth() && emailOk() && hasProfile()
-        && userDoc().get('status', 'active') == 'active';
+        && userDoc().get('status', 'active') == 'active'
+        && (userDoc().get('role', '') == 'student'
+            || userDoc().get('schoolId', null) == null
+            || schoolOperational(userDoc().get('schoolId', null)));
     }
 
     function role() { return authed() ? userDoc().role : ''; }
     function isSuperAdmin() { return role() in ['super_admin', 'superadmin']; }
     function isAdmin() { return role() in ['admin', 'super_admin', 'superadmin']; }
-    function isTeacher() { return role() == 'teacher'; }
+    function isTeacher() { return role() == 'teacher' && schoolOperational(mySchool()); }
     function isStudent() { return role() == 'student'; }
-    function isSchoolLeader() { return role() in ['headmaster', 'principal']; }
-    function isSchoolStaff() { return role() in ['admin', 'headmaster', 'principal']; }
+    function isSchoolLeader() { return role() in ['headmaster', 'principal'] && schoolOperational(mySchool()); }
+    function isSchoolStaff() { return role() in ['admin', 'headmaster', 'principal'] && (mySchool() == null || schoolOperational(mySchool())); }
     function isOwner(userId) { return hasAuth() && uid() == userId; }
     function mySchool() { return authed() ? userDoc().get('schoolId', null) : null; }
 
@@ -10587,7 +10666,7 @@ service cloud.firestore {
     // Platform-level permission: Super Admin, or a legacy (school-less) admin who holds p.
     function can(p) { return isSuperAdmin() || (legacyAdmin() && adminHolds(p)); }
     function teacherCan(p) {
-      return isTeacher()
+      return isTeacher() && schoolOperational(mySchool())
         && ('permissions' in userDoc() ? explicitPerm(p) : p in defaultTeacherPerms());
     }
     function assignedCourses() { return userDoc().get('assignedCourses', []); }
@@ -10608,11 +10687,12 @@ service cloud.firestore {
     // all school-operational permissions for their own matching school type.
     function schoolCan(p, sid) {
       return isSuperAdmin()
-        || (sid != null && mySchool() == sid
+        || (sid != null && mySchool() == sid && schoolOperational(sid)
             && ((role() == 'admin' && adminHolds(p)) || (isSchoolLeader() && leaderCan(p, sid))));
     }
     function memberOf(sid) {
-      return isSuperAdmin() || (authed() && sid != null && mySchool() == sid);
+      return isSuperAdmin() || (authed() && sid != null && mySchool() == sid
+        && (isStudent() || schoolOperational(sid)));
     }
     // Academic sessions: any Super Admin globally, or the Admin / correctly typed
     // Headmaster / Principal assigned to this exact school. This permission is
@@ -10620,13 +10700,13 @@ service cloud.firestore {
     // and other role permissions are not broadened.
     function canManageAcademicSessions(sid) {
       return isSuperAdmin()
-        || (authed() && sid != null && mySchool() == sid && role() == 'admin')
-        || (authed() && sid != null && mySchool() == sid && role() == 'headmaster' && schoolIsPrimary(sid))
-        || (authed() && sid != null && mySchool() == sid && role() == 'principal' && schoolIsSecondary(sid));
+        || (authed() && sid != null && mySchool() == sid && schoolOperational(sid) && role() == 'admin')
+        || (authed() && sid != null && mySchool() == sid && schoolOperational(sid) && role() == 'headmaster' && schoolIsPrimary(sid))
+        || (authed() && sid != null && mySchool() == sid && schoolOperational(sid) && role() == 'principal' && schoolIsSecondary(sid));
     }
     // School leaders may update the operational profile of their assigned school only.
     function canManageSchoolProfile(sid) {
-      return isSuperAdmin() || (authed() && sid != null && mySchool() == sid
+      return isSuperAdmin() || (authed() && sid != null && mySchool() == sid && schoolOperational(sid)
         && ((role() == 'admin' && adminHolds('manage_schools'))
           || (role() == 'headmaster' && schoolIsPrimary(sid))
           || (role() == 'principal' && schoolIsSecondary(sid))));
@@ -10644,6 +10724,8 @@ service cloud.firestore {
       return sid is string && exists(schoolPath(sid))
         && !(get(schoolPath(sid)).data.get('status', 'active') in ['suspended', 'archived', 'deleted']);
     }
+    // A suspended school is read-only for students: staff leadership and teachers
+    // lose operational access until Super Admin changes the school back to active.
     function schoolTypeOf(sid) { return get(schoolPath(sid)).data.get('schoolType', get(schoolPath(sid)).data.get('type', '')); }
     function schoolIsPrimary(sid) { return schoolTypeOf(sid) in ['primary','primary_school','Primary School','PRIMARY SCHOOL','nursery','nursery_primary']; }
     function schoolIsSecondary(sid) { return schoolTypeOf(sid) in ['secondary','secondary_school','Secondary School','SECONDARY SCHOOL','junior_secondary','senior_secondary','jss','sss']; }
@@ -10651,9 +10733,9 @@ service cloud.firestore {
     // Admin / correctly matched school leader. Teachers and students are never writers.
     function canManageMarksSettings(sid) {
       return isSuperAdmin()
-        || (authed() && sid != null && mySchool() == sid && role() == 'admin')
-        || (authed() && sid != null && mySchool() == sid && role() == 'headmaster' && schoolIsPrimary(sid))
-        || (authed() && sid != null && mySchool() == sid && role() == 'principal'
+        || (authed() && sid != null && mySchool() == sid && schoolOperational(sid) && role() == 'admin')
+        || (authed() && sid != null && mySchool() == sid && schoolOperational(sid) && role() == 'headmaster' && schoolIsPrimary(sid))
+        || (authed() && sid != null && mySchool() == sid && schoolOperational(sid) && role() == 'principal'
             && schoolIsSecondary(sid));
     }
     function markSettingsPath(sid) { return /databases/$(database)/documents/schoolMarkSettings/$(sid + '_marks'); }
@@ -10718,20 +10800,20 @@ service cloud.firestore {
       return /databases/$(database)/documents/formMasterAssignments/$(xid + '_' + cid);
     }
     function isFormMasterOf(sid, xid, cid) {
-      return isTeacher() && mySchool() == sid && xid is string && cid is string
+      return isTeacher() && schoolOperational(sid) && mySchool() == sid && xid is string && cid is string
         && exists(fmPath(xid, cid))
         && get(fmPath(xid, cid)).data.teacherId == uid()
         && get(fmPath(xid, cid)).data.get('status', 'active') == 'active';
     }
     function teachesSubject(sid, xid, cid, subjectId) {
-      return isTeacher() && mySchool() == sid && xid is string && cid is string && subjectId is string
+      return isTeacher() && schoolOperational(sid) && mySchool() == sid && xid is string && cid is string && subjectId is string
         && exists(taPath(xid, cid))
         && get(taPath(xid, cid)).data.get('status', 'active') == 'active'
         && get(taPath(xid, cid)).data.subjectIds.hasAny([subjectId]);
     }
     // Teacher belongs to the class in the school's CURRENT academic session
     function teachesClass(sid, cid) {
-      return isTeacher() && mySchool() == sid && cid is string
+      return isTeacher() && schoolOperational(sid) && mySchool() == sid && cid is string
         && currentSession(sid) != null
         && ((exists(taPath(currentSession(sid), cid))
              && get(taPath(currentSession(sid), cid)).data.get('status', 'active') == 'active')
@@ -11532,17 +11614,14 @@ service cloud.firestore {
     // =====================================================================
     function schoolCanManageCertificates(sid) {
       return isSuperAdmin()
-        || (authed() && sid != null && mySchool() == sid && role() == 'admin' && adminHolds('manage_certificates'))
-        || (authed() && sid != null && mySchool() == sid && role() == 'headmaster'
-            && schoolIsPrimary(sid) && leaderCan('manage_certificates', sid))
-        || (authed() && sid != null && mySchool() == sid && role() == 'principal'
-            && schoolIsSecondary(sid)
+        || (authed() && sid != null && mySchool() == sid && schoolOperational(sid)
+            && role() == 'headmaster' && schoolIsPrimary(sid)
             && leaderCan('manage_certificates', sid));
     }
     function certStudentPath(sid) { return /databases/$(database)/documents/students/$(sid); }
     function validSchoolCertificate(d) {
       return d.keys().hasOnly(['schoolId','studentId','userId','studentName','admissionNo','classId','title','courseTitle','description','certificateId','status','createdBy','createdAt','updatedAt','auditId'])
-        && d.schoolId is string && schoolOk(d.schoolId)
+        && d.schoolId is string && schoolOk(d.schoolId) && schoolIsPrimary(d.schoolId)
         && d.studentId is string && exists(certStudentPath(d.studentId))
         && get(certStudentPath(d.studentId)).data.get('schoolId', null) == d.schoolId
         && get(certStudentPath(d.studentId)).data.get('userId', null) == d.userId
@@ -11560,7 +11639,7 @@ service cloud.firestore {
         (resource.data.get('schoolId', null) != null && (
           schoolCanManageCertificates(resource.data.get('schoolId', null))
           || schoolCan('view_reports', resource.data.get('schoolId', null))
-          || (isStudent() && resource.data.get('userId', '') == uid() && resource.data.get('status', '') == 'published')
+          || (isStudent() && resource.data.get('schoolId', null) == mySchool() && schoolIsPrimary(resource.data.get('schoolId', null)) && resource.data.get('userId', '') == uid() && resource.data.get('status', '') == 'published')
         ))
         || (resource.data.get('schoolId', null) == null && (resource.data.get('userId', '') == uid() || can('manage_content')))
       );
@@ -11568,7 +11647,7 @@ service cloud.firestore {
           (resource.data.get('schoolId', null) != null && (
             schoolCanManageCertificates(resource.data.get('schoolId', null))
             || schoolCan('view_reports', resource.data.get('schoolId', null))
-            || (isStudent() && resource.data.get('userId', '') == uid() && resource.data.get('status', '') == 'published')
+            || (isStudent() && resource.data.get('schoolId', null) == mySchool() && schoolIsPrimary(resource.data.get('schoolId', null)) && resource.data.get('userId', '') == uid() && resource.data.get('status', '') == 'published')
           ))
           || (resource.data.get('schoolId', null) == null && (resource.data.get('userId', '') == uid() || can('manage_content')))
         ))
@@ -11826,8 +11905,9 @@ window.ME_registerAccount = async function(payload) {
   const leaderPermissions = [
     "manage_users","create_student","create_teacher","manage_permissions","suspend_users",
     "reset_passwords","manage_schools","manage_announcements","view_reports",
-    "view_students","manage_results","manage_report_cards","manage_certificates","manage_academic_sessions"
+    "view_students","manage_results","manage_report_cards","manage_academic_sessions"
   ];
+  if (role === "headmaster") leaderPermissions.push("manage_certificates");
   const invitePayload = { email, fullName, role, schoolId };
   if (role === "student") { invitePayload.studentId = studentId; invitePayload.classId = classId; }
   if (role === "headmaster" || role === "principal") invitePayload.permissions = leaderPermissions;
@@ -12137,9 +12217,9 @@ window.__initStudentDash = async function() {
   async function loadResults(){const box=$('studentResultsList');if(!box)return;try{publishedCards=await loadPublishedCards();const cardRows=publishedCards.flatMap(c=>(c.subjectResults||[]).map(r=>({...r,term:c.term,session:c.academicSessionId,status:'published'})));let directRows=[];try{directRows=await B.results.list(schoolId,{studentId,status:'published'});}catch(_){}const rows=directRows.length?directRows:cardRows;box.innerHTML=rows.length?'<div class="table-wrap"><table><thead><tr><th>Session</th><th>Term</th><th>Subject</th><th>Total</th><th>Status</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+eduEsc(r.session)+'</td><td>'+eduEsc(r.term)+'</td><td>'+eduEsc(r.subjectId)+'</td><td>'+eduEsc(r.total)+'</td><td>Published</td></tr>').join('')+'</tbody></table></div>':'<p style="color:#546e7a;">No published results are available yet.</p>';}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}}
   function printStudentCard(card){const subjects=card.subjectResults||[];const computedTotal=subjects.reduce((sum,r)=>sum+(Number(r.total)||0),0),computedAverage=subjects.length?(computedTotal/subjects.length).toFixed(2):'—',total=card.aggregate??computedTotal,average=card.average!=null?Number(card.average).toFixed(2):computedAverage;const rows=subjects.map(r=>'<tr><td>'+eduEsc(r.subjectName||r.subjectId)+'</td><td>'+eduEsc(r.scores?.firstCA??'—')+'</td><td>'+eduEsc(r.scores?.secondCA??'—')+'</td><td>'+eduEsc(r.scores?.examination??'—')+'</td><td>'+eduEsc(r.total??'—')+'</td><td>'+eduEsc(r.grade||'—')+'</td></tr>').join('');const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>My Report Card</title><style>body{font:14px Arial;padding:24px;color:#172033}h1,h2{text-align:center;margin:6px}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #444;padding:8px;text-align:left}th{background:#e8f0f8}.meta{margin-top:20px;line-height:1.8}.foot{margin-top:24px}</style></head><body><h1>'+eduEsc(school?.name||'School')+'</h1><h2>STUDENT REPORT CARD</h2><div class="meta"><b>Student:</b> '+eduEsc(student?.fullName||actor.fullName)+'<br><b>Admission No.:</b> '+eduEsc(student?.admissionNo||studentId)+'<br><b>Class:</b> '+eduEsc(className)+'<br><b>Session:</b> '+eduEsc(card.academicSessionId)+'<br><b>Term:</b> '+eduEsc(card.term)+'</div><table><thead><tr><th>Subject</th><th>1st CA</th><th>2nd CA</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>'+rows+'</tbody></table><div class="meta"><b>Total:</b> '+total+'<br><b>Average:</b> '+average+'%<br><b>Overall Grade:</b> '+eduEsc(card.overallGrade||'—')+' ('+eduEsc(card.overallRemark||'—')+')<br><b>Position:</b> '+eduEsc(card.position||'—')+'<br><b>Teacher Comment:</b> '+eduEsc(card.teacherComment||card.formMasterComment||'—')+'<br><b>Headmaster/Principal Comment:</b> '+eduEsc(card.headComment||card.principalComment||'—')+'</div><div class="foot">This report card was generated from the published school record.</div><\/body><\/html>');w.onload=()=>w.print();w.document.close();}
   async function loadReport(){const box=$('studentReportCard');if(!box)return;try{publishedCards=await loadPublishedCards();if($('studentStatReports'))$('studentStatReports').textContent=String(publishedCards.length);box.innerHTML=publishedCards.length?publishedCards.map((c,i)=>{const rows=(c.subjectResults||[]).map(r=>'<tr><td>'+eduEsc(r.subjectName||r.subjectId)+'</td><td>'+eduEsc(r.scores?.firstCA??'—')+'</td><td>'+eduEsc(r.scores?.secondCA??'—')+'</td><td>'+eduEsc(r.scores?.examination??'—')+'</td><td>'+eduEsc(r.total??'—')+'</td><td>'+eduEsc(r.grade||'—')+'</td></tr>').join('');const computedTotal=(c.subjectResults||[]).reduce((sum,r)=>sum+(Number(r.total)||0),0),computedAverage=(c.subjectResults||[]).length?(computedTotal/(c.subjectResults.length)).toFixed(2):'—',total=c.aggregate??computedTotal,avg=c.average!=null?Number(c.average).toFixed(2):computedAverage;return '<div style="border:1px solid #dbe3ed;border-radius:12px;padding:14px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><strong>'+eduEsc(c.term)+' — '+eduEsc(c.academicSessionId)+'</strong><button type="button" class="btn btn-outline student-print-card" data-index="'+i+'">Print / Download PDF</button></div><div class="table-wrap" style="margin-top:10px;"><table><thead><tr><th>Subject</th><th>1st CA</th><th>2nd CA</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>'+rows+'</tbody></table></div><p><strong>Total:</strong> '+total+' &nbsp; <strong>Average:</strong> '+avg+'% &nbsp; <strong>Overall Grade:</strong> '+eduEsc(c.overallGrade||'—')+' &nbsp; <strong>Position:</strong> '+eduEsc(c.position||'—')+'</p><p><strong>Teacher Comment:</strong> '+eduEsc(c.teacherComment||c.formMasterComment||'—')+'</p><p><strong>Headmaster/Principal Comment:</strong> '+eduEsc(c.headComment||c.principalComment||'—')+'</p></div>';}).join(''):'<p style="color:#546e7a;">No published report card yet.</p>';box.querySelectorAll('.student-print-card').forEach(btn=>btn.onclick=()=>printStudentCard(publishedCards[Number(btn.dataset.index)]));}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}}
-  async function loadCertificates(){const box=$('studentCertBody');if(!box)return;try{const q=query(collection(getFirestore(primaryApp()),'certificates'),where('userId','==',actor.uid),where('status','==','published'));const snap=await getDocs(q);publishedCertificates=snap.docs.map(d=>({id:d.id,...d.data()}));box.innerHTML=publishedCertificates.length?publishedCertificates.map((c,i)=>'<div style="padding:14px;border:1px solid #dbe3ed;border-radius:10px;margin-bottom:10px;"><strong>'+eduEsc(c.title||c.courseTitle||'Certificate')+'</strong><p>Certificate ID: '+eduEsc(c.certificateId||c.id)+'</p><p>Issued: '+eduEsc(c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString():c.issuedAt||'—')+'</p><button type="button" class="btn btn-outline student-print-certificate" data-index="'+i+'">Print / Save as PDF</button></div>').join(''):'<p>No published certificates yet.</p>';box.querySelectorAll('.student-print-certificate').forEach(btn=>btn.onclick=()=>{const c=publishedCertificates[Number(btn.dataset.index)];const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>Certificate</title><style>body{font-family:Georgia,serif;padding:48px;text-align:center;color:#172033}.sheet{border:8px double #1d4ed8;padding:48px;min-height:420px;display:flex;flex-direction:column;justify-content:center}h1{font-size:34px;letter-spacing:2px}h2{font-size:26px;margin:30px 0}p{font-size:18px;line-height:1.7}.id{font:13px Arial;margin-top:28px}</style></head><body><div class="sheet"><h1>'+eduEsc(school?.name||'School')+'</h1><h2>'+eduEsc(c.title||c.courseTitle||'CERTIFICATE')+'</h2><p>This is to certify that</p><h2>'+eduEsc(student?.fullName||actor.fullName)+'</h2><p>'+eduEsc(c.description||'has been recognised for the stated achievement.')+'</p><p>Issued: '+eduEsc(c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString():c.issuedAt||'')+'</p><div class="id">Certificate ID: '+eduEsc(c.certificateId||c.id)+'</div></div><\/body><\/html>');w.onload=()=>w.print();w.document.close();});}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}}
+  async function loadCertificates(){const box=$('studentCertBody');if(!box)return;try{const q=query(collection(getFirestore(primaryApp()),'certificates'),where('schoolId','==',actor.schoolId),where('userId','==',actor.uid),where('status','==','published'));const snap=await getDocs(q);publishedCertificates=snap.docs.map(d=>({id:d.id,...d.data()}));box.innerHTML=publishedCertificates.length?publishedCertificates.map((c,i)=>'<div style="padding:14px;border:1px solid #dbe3ed;border-radius:10px;margin-bottom:10px;"><strong>'+eduEsc(c.title||c.courseTitle||'Certificate')+'</strong><p>Certificate ID: '+eduEsc(c.certificateId||c.id)+'</p><p>Issued: '+eduEsc(c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString():c.issuedAt||'—')+'</p><button type="button" class="btn btn-outline student-print-certificate" data-index="'+i+'">Print / Save as PDF</button></div>').join(''):'<p>No published certificates yet.</p>';box.querySelectorAll('.student-print-certificate').forEach(btn=>btn.onclick=()=>{const c=publishedCertificates[Number(btn.dataset.index)];const w=window.open('','_blank');if(!w)return;w.document.write('<!doctype html><html><head><title>Certificate</title><style>body{font-family:Georgia,serif;padding:48px;text-align:center;color:#172033}.sheet{border:8px double #1d4ed8;padding:48px;min-height:420px;display:flex;flex-direction:column;justify-content:center}h1{font-size:34px;letter-spacing:2px}h2{font-size:26px;margin:30px 0}p{font-size:18px;line-height:1.7}.id{font:13px Arial;margin-top:28px}</style></head><body><div class="sheet"><h1>'+eduEsc(school?.name||'School')+'</h1><h2>'+eduEsc(c.title||c.courseTitle||'CERTIFICATE')+'</h2><p>This is to certify that</p><h2>'+eduEsc(student?.fullName||actor.fullName)+'</h2><p>'+eduEsc(c.description||'has been recognised for the stated achievement.')+'</p><p>Issued: '+eduEsc(c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString():c.issuedAt||'')+'</p><div class="id">Certificate ID: '+eduEsc(c.certificateId||c.id)+'</div></div><\/body><\/html>');w.onload=()=>w.print();w.document.close();});}catch(e){box.innerHTML='<p style="color:#b91c1c;">'+eduEsc(e.message||e)+'</p>';}}
   // Only expose certificate navigation after an explicit published certificate is found.
-  try{const q=query(collection(getFirestore(primaryApp()),'certificates'),where('userId','==',actor.uid),where('status','==','published'));const snap=await getDocs(q);publishedCertificates=snap.docs.map(d=>d.data());if($('studentCertificateNav'))$('studentCertificateNav').hidden=publishedCertificates.length===0;}catch(e){if($('studentCertificateNav'))$('studentCertificateNav').hidden=true;}
+  try{const q=query(collection(getFirestore(primaryApp()),'certificates'),where('schoolId','==',actor.schoolId),where('userId','==',actor.uid),where('status','==','published'));const snap=await getDocs(q);publishedCertificates=snap.docs.map(d=>d.data());if($('studentCertificateNav'))$('studentCertificateNav').hidden=publishedCertificates.length===0;}catch(e){if($('studentCertificateNav'))$('studentCertificateNav').hidden=true;}
   eduChangePassword('studentPasswordForm','studentCurrentPassword','studentNewPassword','studentConfirmPassword','studentPasswordStatus');
   await loadSubjects();
 };
@@ -12180,7 +12260,7 @@ window.__initSchoolDash = async function() {
   const schoolKindRaw = String(school && (school.schoolType || school.type) || "").toLowerCase().replace(/[ -]+/g,"_");
   const schoolKind = ["primary","primary_school","nursery","nursery_primary"].includes(schoolKindRaw) ? "primary" : ["secondary","secondary_school","junior_secondary","senior_secondary","jss","sss"].includes(schoolKindRaw) ? "secondary" : schoolKindRaw;
   const leaderTypeOk = role === "headmaster" ? schoolKind === "primary" : role === "principal" ? schoolKind === "secondary" : true;
-  const canManageCertificates = !!(actor && schoolId && B && B.helpers && B.helpers.can(actor, "manage_certificates", schoolId) && leaderTypeOk);
+  const canManageCertificates = !!(role === "headmaster" && schoolKind === "primary" && actor && schoolId && B && B.helpers && B.helpers.can(actor, "manage_certificates", schoolId));
   if ($("schoolCertificatesNav")) $("schoolCertificatesNav").hidden = !canManageCertificates;
   const canViewSchoolAudit = !!(actor && schoolId && B && B.helpers && B.helpers.can(actor, "view_reports", schoolId) && leaderTypeOk);
   if ($("schoolAuditNav")) $("schoolAuditNav").hidden = !canViewSchoolAudit;
@@ -12269,8 +12349,8 @@ window.__initSchoolDash = async function() {
         "<div style='padding:8px 0;'><strong>Students:</strong> "+students.length+"</div>"+
         "<div style='padding:8px 0;'><strong>Classes:</strong> "+classes.length+"</div>"+
         "<div style='padding:8px 0;'><strong>Academic Sessions:</strong> "+sessions.length+"</div>";
-      if($("schoolTeachersTable"))$("schoolTeachersTable").innerHTML=teachers.length?teachers.map(t=>"<tr><td>"+eduEsc(t.fullName||t.name||"")+"</td><td>"+eduEsc(t.email||"")+"</td><td>"+eduEsc((t.assignedSubjects||[]).join(", "))+"</td><td>"+eduEsc(t.status||"active")+"</td><td><button type='button' class='btn btn-outline school-user-status' data-user='"+eduEsc(t.uid||t.id)+"' data-status='"+(t.status==="active"?"inactive":"active")+"'>"+(t.status==="active"?"Deactivate":"Activate")+"</button></td></tr>").join("") : "<tr><td colspan='5'>No teachers yet.</td></tr>";
-      if($("schoolStudentsTable"))$("schoolStudentsTable").innerHTML=students.length?students.map(st=>"<tr><td>"+eduEsc(st.fullName||"")+"</td><td>"+eduEsc(st.admissionNo||"")+"</td><td>"+eduEsc((classes.find(c=>c.id===st.classId)||{}).name||st.classId)+"</td><td>"+eduEsc(st.status||"active")+"</td><td><button type='button' class='btn btn-outline school-student-status' data-student='"+eduEsc(st.id)+"' data-user='"+eduEsc(st.userId||"") +"' data-status='"+((st.status||"active")==="active"?"inactive":"active")+"'>"+((st.status||"active")==="active"?"Deactivate":"Activate")+"</button></td></tr>").join("") : "<tr><td colspan='5'>No students yet.</td></tr>";
+      if($("schoolTeachersTable"))$("schoolTeachersTable").innerHTML=teachers.length?teachers.map(t=>{const tid=t.uid||t.id;const assignments=teacherAssignments.filter(a=>a.teacherId===tid&&(a.status||"active")==="active");const details=assignments.map(a=>{const cn=(classes.find(c=>c.id===a.classId)||{}).name||a.classId;const sn=(a.subjectIds||[]).map(id=>(subjects.find(x=>x.id===id)||{}).name||id).join(", ");return cn+": "+(sn||"No subjects");}).join("<br>");return "<tr><td>"+eduEsc(t.fullName||t.name||"")+"</td><td>"+eduEsc(t.email||"")+"</td><td>"+(details||"—")+"</td><td>"+eduEsc(t.status||"active")+"</td><td><button type='button' class='btn btn-outline school-user-status' data-user='"+eduEsc(tid)+"' data-status='"+(t.status==="active"?"inactive":"active")+"'>"+(t.status==="active"?"Deactivate":"Activate")+"</button></td></tr>";}).join("") : "<tr><td colspan='5'>No teachers yet.</td></tr>";
+      if($("schoolStudentsTable"))$("schoolStudentsTable").innerHTML=students.length?students.map(st=>"<tr><td>"+eduEsc(st.fullName||"")+"</td><td>"+eduEsc(st.email||"")+"</td><td>"+eduEsc((classes.find(c=>c.id===st.classId)||{}).name||st.classId)+"</td><td>"+eduEsc(st.status||"active")+"</td><td><button type='button' class='btn btn-outline school-student-status' data-student='"+eduEsc(st.id)+"' data-user='"+eduEsc(st.userId||"") +"' data-status='"+((st.status||"active")==="active"?"inactive":"active")+"'>"+((st.status||"active")==="active"?"Deactivate":"Activate")+"</button> <button type='button' class='btn btn-danger school-student-archive' data-student='"+eduEsc(st.id)+"' data-user='"+eduEsc(st.userId||"") +"'>Delete / Archive</button></td></tr>").join("") : "<tr><td colspan='5'>No students yet.</td></tr>";
       if($("schoolClassesTable"))$("schoolClassesTable").innerHTML=classes.length?classes.map(c=>{const fm=formMasters.find(f=>f.classId===c.id&&f.status==="active");return "<tr><td>"+eduEsc(c.name)+"</td><td>"+eduEsc(c.groupLabel||c.group||"Custom")+"</td><td>"+eduEsc(c.level||"")+"</td><td>"+eduEsc((teacherMap.get(fm&&fm.teacherId)||{}).fullName||"—")+"</td><td>"+eduEsc(c.status||"active")+"</td><td><button type='button' class='btn btn-outline leader-class-edit' data-id='"+eduEsc(c.id)+"' data-name='"+eduEsc(c.name)+"' data-level='"+eduEsc(c.level||"")+"'>Edit</button> <button type='button' class='btn btn-outline leader-class-archive' data-id='"+eduEsc(c.id)+"' data-status='"+eduEsc(c.status||"active")+"'>"+(c.status==='archived'?'Restore':'Remove')+"</button></td></tr>";}).join("") : "<tr><td colspan='6'>No classes yet.</td></tr>";
       if($("schoolSubjectsTable"))$("schoolSubjectsTable").innerHTML=subjects.length?subjects.map(x=>"<tr><td>"+eduEsc(x.name)+"</td><td>"+eduEsc(x.code||"")+"</td><td>"+eduEsc(x.status||"active")+"</td></tr>").join("") : "<tr><td colspan='3'>No subjects yet.</td></tr>";
       if($("sessionsBody"))$("sessionsBody").innerHTML=sessions.length?"<div class='table-wrap'><table><thead><tr><th>#</th><th>Session</th><th>Status</th><th>Current</th><th>Action</th></tr></thead><tbody>"+sessions.map((x,i)=>"<tr><td>"+(i+1)+"</td><td><strong>"+eduEsc(x.name)+"</strong></td><td>"+eduEsc(x.status||"active")+"</td><td>"+(x.isCurrent?"Yes":"No")+"</td><td>"+((x.status||"active")==="active"&&!x.isCurrent?"<button type='button' class='btn btn-outline school-session-make-current' data-session='"+eduEsc(x.id)+"'>Make Current</button>":(x.isCurrent?"Current":"—"))+"</td></tr>").join("")+"</tbody></table></div>":"<p class='empty-state'>No academic sessions created yet. Use + Add Session to create the first session.</p>";
@@ -12356,10 +12436,10 @@ window.__initSchoolDash = async function() {
     }catch(e){status.style.color="#b91c1c";status.textContent=e.message||String(e);}
     finally{btn.disabled=false;btn.textContent="Create Teacher Account";}
   });
-  if($("btnAddSchoolStudent"))$("btnAddSchoolStudent").onclick=async()=>{const fullName=prompt("Student full name:");if(!fullName)return;const admissionNo=prompt("Admission number:");if(!admissionNo)return;const classes=await B.classes.list(schoolId);if(!classes.length){alert("Create/load classes first.");return;}const choice=prompt("Choose class by number: \n"+classes.map((c,i)=>(i+1)+". "+c.name).join("\n"));const cls=classes[Number(choice)-1];if(!cls){alert("Invalid class choice.");return;}const email=prompt("Student login email address:");if(!email)return;try{const studentId=await B.students.create(schoolId,{fullName,admissionNo,classId:cls.id,academicSessionId:school&&school.currentSessionId||null});const result=await window.ME_registerAccount({fullName,email,role:"student",schoolId,studentId,classId:cls.id});alert("Student account created. Temporary password: "+(result.temporaryPassword||"Existing account password must be used."));await refreshSchoolLists();}catch(e){alert("Student record/account setup: "+(e.message||String(e))+". If the student record was created, check the Students list before retrying.");await refreshSchoolLists();}};
+  if($("btnAddSchoolStudent"))$("btnAddSchoolStudent").onclick=async()=>{const fullName=prompt("Student full name:");if(!fullName)return;const classes=await B.classes.list(schoolId);if(!classes.length){alert("Create/load classes first.");return;}const choice=prompt("Choose class by number: \n"+classes.map((c,i)=>(i+1)+". "+c.name).join("\n"));const cls=classes[Number(choice)-1];if(!cls){alert("Invalid class choice.");return;}const email=prompt("Student login email address:");if(!email)return;try{const studentId=await B.students.create(schoolId,{fullName,email,classId:cls.id,academicSessionId:school&&school.currentSessionId||null});const result=await window.ME_registerAccount({fullName,email,role:"student",schoolId,studentId,classId:cls.id});alert("Student account created successfully.\nEmail: "+email+"\nInitial password: "+(result.temporaryPassword||"Use the password issued at registration." )+"\nPlease give the initial password privately to the student.");await refreshSchoolLists();}catch(e){alert("Student record/account setup: "+(e.message||String(e))+". If the student record was created, check the Students list before retrying.");await refreshSchoolLists();}};
   document.querySelectorAll(".school-user-status").forEach(()=>{});
   if($("schoolTeachersTable"))$("schoolTeachersTable").addEventListener("click",async ev=>{const btn=ev.target.closest(".school-user-status");if(!btn)return;try{await B.users.setStatus(btn.dataset.user,btn.dataset.status);await refreshSchoolLists();}catch(e){alert(e.message||String(e));}});
-  if($("schoolStudentsTable"))$("schoolStudentsTable").addEventListener("click",async ev=>{const btn=ev.target.closest(".school-student-status");if(!btn)return;try{await B.students.update(btn.dataset.student,{status:btn.dataset.status});if(btn.dataset.user)await B.users.setStatus(btn.dataset.user,btn.dataset.status);await refreshSchoolLists();}catch(e){alert(e.message||String(e));}});
+  if($("schoolStudentsTable"))$("schoolStudentsTable").addEventListener("click",async ev=>{const archive=ev.target.closest(".school-student-archive");const btn=ev.target.closest(".school-student-status");try{if(archive){if(!confirm("Archive this student? Their account will be deactivated, but academic history and report records will be preserved."))return;await B.students.update(archive.dataset.student,{status:"archived"});if(archive.dataset.user)await B.users.setStatus(archive.dataset.user,"inactive");await refreshSchoolLists();return;}if(!btn)return;await B.students.update(btn.dataset.student,{status:btn.dataset.status});if(btn.dataset.user)await B.users.setStatus(btn.dataset.user,btn.dataset.status);await refreshSchoolLists();}catch(e){alert(e.message||String(e));}});
   if($("schoolCsSave"))$("schoolCsSave").onclick=async()=>{const classId=$("schoolCsClass").value,subjectIds=Array.from($("schoolCsSubject").selectedOptions).map(o=>o.value);try{if(!classId||!subjectIds.length)throw new Error("Choose a class and at least one subject.");await B.classSubjects.assignMany(schoolId,{classId,subjectIds});$("schoolCsStatus").textContent="Class subjects saved.";$("schoolCsStatus").style.color="#15803d";}catch(e){$("schoolCsStatus").textContent=e.message||String(e);$("schoolCsStatus").style.color="#b91c1c";}};
   if($("schoolTaSave"))$("schoolTaSave").onclick=async()=>{const academicSessionId=$("schoolTaSession").value,teacherId=$("schoolTaTeacher").value,classId=$("schoolTaClass").value,subjectIds=Array.from($("schoolTaSubjects").selectedOptions).map(o=>o.value);try{if(!academicSessionId||!teacherId||!classId||!subjectIds.length)throw new Error("Choose session, teacher, class and subjects.");await B.teacherAssignments.assign(schoolId,{academicSessionId,teacherId,classId,subjectIds});$("schoolTaStatus").textContent="Teacher assignment saved.";$("schoolTaStatus").style.color="#15803d";await refreshSchoolLists();}catch(e){$("schoolTaStatus").textContent=e.message||String(e);$("schoolTaStatus").style.color="#b91c1c";}};
   if($("schoolFmAssign"))$("schoolFmAssign").onclick=async()=>{const academicSessionId=$("schoolFmSession").value,teacherId=$("schoolFmTeacher").value,classId=$("schoolFmClass").value;try{if(!academicSessionId||!teacherId||!classId)throw new Error("Choose session, teacher and class.");await B.formMasters.assign(schoolId,{academicSessionId,teacherId,classId});alert("Form Master assigned.");await refreshSchoolLists();}catch(e){alert(e.message||String(e));}};
