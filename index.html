@@ -9581,11 +9581,16 @@ export function createSchoolBackend({ db, auth, fs }) {
       if (!cls.exists() || cls.data().schoolId !== schoolId || cls.data().status !== "active") fail("Invalid class.");
       const sub = await getDoc(doc(db, "subjects", subjectId));
       if (!sub.exists() || sub.data().schoolId !== schoolId || sub.data().status !== "active") fail("Invalid subject.");
-      const ta = await getDoc(doc(db, "teacherAssignments", Ids.teacherAssignment(academicSessionId, classId, actor.uid)));
-      const fmOk = await access.isFormMaster(schoolId, actor.uid, classId, academicSessionId);
-      const teachOk = ta.exists() && ta.data().status === "active" && (ta.data().subjectIds || []).includes(subjectId);
-      if (!teachOk && !fmOk) fail("Not assigned to this subject/class (or Form Master).");
-      if (!canTeacher(actor, "grade") && !fmOk) fail("Missing 'grade' permission.");
+      const isSchoolLeader = [ROLES.HEADMASTER, ROLES.PRINCIPAL, ROLES.ADMIN, ROLES.SUPER_ADMIN].includes(normRole(actor.role));
+      if (!isSchoolLeader) {
+        const ta = await getDoc(doc(db, "teacherAssignments", Ids.teacherAssignment(academicSessionId, classId, actor.uid)));
+        const fmOk = await access.isFormMaster(schoolId, actor.uid, classId, academicSessionId);
+        const teachOk = ta.exists() && ta.data().status === "active" && (ta.data().subjectIds || []).includes(subjectId);
+        if (!teachOk && !fmOk) fail("Not assigned to this subject/class (or Form Master).");
+        if (!canTeacher(actor, "grade") && !fmOk) fail("Missing 'grade' permission.");
+      } else {
+        need(actor, OPERATION_PERMS.manageResults, schoolId);
+      }
       return { student: st.data(), className: cls.data().name, subjectName: sub.data().name };
     },
     async save(schoolId, { academicSessionId, term, classId, subjectId, studentId, scores, status = "draft", maxComponent, maxTotal }) {
@@ -10574,8 +10579,7 @@ exports.syncUserClaims = onDocumentWritten("users/{uid}", async (event) => {
   }
 }
 </script>
-<script type="text/plain" id="bsFirestoreSrc">
-rules_version = '2';
+<script type="text/plain" id="bsFirestoreSrc">rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -10737,8 +10741,8 @@ service cloud.firestore {
     // A suspended school is read-only for students: staff leadership and teachers
     // lose operational access until Super Admin changes the school back to active.
     function schoolTypeOf(sid) { return get(schoolPath(sid)).data.get('schoolType', get(schoolPath(sid)).data.get('type', '')); }
-    function schoolIsPrimary(sid) { return schoolTypeOf(sid) in ['primary','primary_school','Primary School','PRIMARY SCHOOL','nursery','nursery_primary']; }
-    function schoolIsSecondary(sid) { return schoolTypeOf(sid) in ['secondary','secondary_school','Secondary School','SECONDARY SCHOOL','junior_secondary','senior_secondary','jss','sss']; }
+    function schoolIsPrimary(sid) { return schoolTypeOf(sid) in ['primary','Primary','PRIMARY','primary_school','Primary School','PRIMARY SCHOOL','nursery','Nursery','NURSERY','nursery_primary']; }
+    function schoolIsSecondary(sid) { return schoolTypeOf(sid) in ['secondary','Secondary','SECONDARY','secondary_school','Secondary School','SECONDARY SCHOOL','junior_secondary','Junior Secondary','JUNIOR SECONDARY','senior_secondary','Senior Secondary','SENIOR SECONDARY','jss','JSS','sss','SSS']; }
     // Marks settings are controlled by the platform Super Admin or the school's own
     // Admin / correctly matched school leader. Teachers and students are never writers.
     function canManageMarksSettings(sid) {
@@ -11325,7 +11329,7 @@ service cloud.firestore {
             && (isFormMasterOf(resource.data.get('schoolId', null), resource.data.get('academicSessionId', null), resource.data.get('classId', null))
                 || teachesSubject(resource.data.get('schoolId', null), resource.data.get('academicSessionId', null),
                                   resource.data.get('classId', null), resource.data.get('subjectId', null))));
-      allow create: if teacherCan('grade')
+      allow create: if (teacherCan('grade')
         && request.resource.data.keys().hasOnly(['schoolId','academicSessionId','term','classId','subjectId','studentId','teacherId','scores','total','status','enteredBy','updatedBy','createdBy','createdAt','updatedAt'])
         && request.resource.data.schoolId == mySchool()
         && request.resource.data.teacherId == uid()
@@ -11340,7 +11344,25 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/students/$(request.resource.data.studentId)).data.schoolId == request.resource.data.schoolId
         && request.resource.data.status in ['draft', 'submitted']
         && request.resource.data.total is number && request.resource.data.total >= 0
-        && validConfiguredScores(request.resource.data.schoolId, request.resource.data.scores, request.resource.data.total);
+        && validConfiguredScores(request.resource.data.schoolId, request.resource.data.scores, request.resource.data.total))
+        || (schoolCan('manage_results', request.resource.data.get('schoolId', null))
+            && request.resource.data.keys().hasOnly(['schoolId','academicSessionId','term','classId','subjectId','studentId','teacherId','scores','total','status','enteredBy','updatedBy','createdBy','createdAt','updatedAt'])
+            && request.resource.data.schoolId == mySchool()
+            && request.resource.data.teacherId == uid()
+            && request.resource.data.enteredBy == uid()
+            && request.resource.data.updatedBy == uid()
+            && request.resource.data.createdBy == uid()
+            && idPrefixOk(markId, request.resource.data.schoolId)
+            && classOk(request.resource.data.classId, request.resource.data.schoolId)
+            && sessionOk(request.resource.data.academicSessionId, request.resource.data.schoolId)
+            && exists(/databases/$(database)/documents/students/$(request.resource.data.studentId))
+            && get(/databases/$(database)/documents/students/$(request.resource.data.studentId)).data.schoolId == request.resource.data.schoolId
+            && get(/databases/$(database)/documents/students/$(request.resource.data.studentId)).data.classId == request.resource.data.classId
+            && exists(/databases/$(database)/documents/subjects/$(request.resource.data.subjectId))
+            && get(/databases/$(database)/documents/subjects/$(request.resource.data.subjectId)).data.schoolId == request.resource.data.schoolId
+            && request.resource.data.status in ['draft', 'submitted']
+            && request.resource.data.total is number && request.resource.data.total >= 0
+            && validConfiguredScores(request.resource.data.schoolId, request.resource.data.scores, request.resource.data.total));
       allow update: if (teacherCan('grade')
             && resource.data.teacherId == uid()
             && resource.data.status in ['draft', 'submitted']
@@ -11739,7 +11761,6 @@ service cloud.firestore {
     }
   }
 }
-
 </script>
 <script type="text/plain" id="bsStorageSrc">
 rules_version = '2';
