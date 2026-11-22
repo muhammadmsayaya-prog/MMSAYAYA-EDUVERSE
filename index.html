@@ -2514,6 +2514,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
                   <select id="hmSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Loading schools…</option></select>
                   <input type="hidden" id="hmSchoolId" />
                 </div>
+                <label style="display:flex;align-items:flex-start;gap:9px;padding:10px;border:1px solid #f0c36d;border-radius:9px;background:#fffaf0;color:#704b00;font-size:.88rem;line-height:1.45;">
+                  <input type="checkbox" id="hmReplaceLeader" style="margin-top:3px;" />
+                  <span><strong>Replace existing leader</strong><br>Deactivate the current active Headmaster for this school and record the change in the audit log. Use only when intentionally transferring leadership.</span>
+                </label>
                 <button type="submit" class="btn btn-primary">Create Headmaster Account</button>
                 <div id="hmFormStatus" style="font-size:0.9rem;" role="status" aria-live="polite"></div>
               </form>
@@ -2535,6 +2539,10 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
                   <select id="prSchoolSelect" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;"><option value="">Loading schools…</option></select>
                   <input type="hidden" id="prSchoolId" />
                 </div>
+                <label style="display:flex;align-items:flex-start;gap:9px;padding:10px;border:1px solid #f0c36d;border-radius:9px;background:#fffaf0;color:#704b00;font-size:.88rem;line-height:1.45;">
+                  <input type="checkbox" id="prReplaceLeader" style="margin-top:3px;" />
+                  <span><strong>Replace existing leader</strong><br>Deactivate the current active Principal for this school and record the change in the audit log. Use only when intentionally transferring leadership.</span>
+                </label>
                 <button type="submit" class="btn btn-primary">Create Principal Account</button>
                 <div id="prFormStatus" style="font-size:0.9rem;" role="status" aria-live="polite"></div>
               </form>
@@ -9344,7 +9352,9 @@ export function createSchoolBackend({ db, auth, fs }) {
       }
       const ref = doc(db, "invitations", email);
       const prev = await getDoc(ref);
-      if (prev.exists() && prev.data().status === "claimed") fail("This email already has an account.");
+      if (prev.exists() && prev.data().status === "claimed" && !(forceReplace && (role === "headmaster" || role === "principal") && actor.role === ROLES.SUPER_ADMIN)) {
+        fail("This email already has a claimed account. If its Firebase Authentication account was deleted and you are recreating this leader, enable 'Replace existing leader' and try again.");
+      }
       if (prev.exists() && prev.data().status === "pending" && prev.data().expiresAt && prev.data().expiresAt.toMillis && prev.data().expiresAt.toMillis() > Date.now()) fail("A pending invitation already exists for this email. Revoke it first.");
       if (role === "student") {
         if (!studentId) fail("Choose the student record to link this account to.");
@@ -9412,12 +9422,10 @@ export function createSchoolBackend({ db, auth, fs }) {
       if (inv.studentId) prof.studentId = inv.studentId;
       if (inv.classId) prof.classId = inv.classId;
       const b = writeBatch(db);
-      // Replace previous leader if invitation was issued with forceReplace
+      // Leader replacement requires the Super Admin's authenticated registration workflow.
+      // A newly signed-in invitee must never be allowed to deactivate another account.
       if (inv.forceReplace && (inv.role === "headmaster" || inv.role === "principal")) {
-        const existing = await getDocs(query(collection(db, "users"), where("schoolId", "==", inv.schoolId), where("role", "==", inv.role), where("status", "==", "active")));
-        existing.forEach((d) => {
-          if (d.id !== u.uid) b.update(d.ref, { status: "inactive", updatedAt: ts(), replacedBy: u.uid });
-        });
+        fail("This leadership replacement must be completed by the Super Admin from the Headmaster/Principal registration page.");
       }
       b.set(doc(db, "users", u.uid), prof);
       b.update(doc(db, "invitations", inv.id), { status: "claimed", claimedBy: u.uid, claimedAt: ts(), updatedAt: ts() });
@@ -10968,6 +10976,7 @@ service cloud.firestore {
         && d.expiresAt is timestamp && d.expiresAt > request.time
         && d.expiresAt <= request.time + duration.value(30, 'd')
         && d.createdAt == request.time && d.updatedAt == request.time
+        && (!('forceReplace' in d) || (d.forceReplace is bool && d.forceReplace == true && d.role in ['headmaster','principal'] && isSuperAdmin()))
         && inviteRoleAllowed(d)
         && auditedAfter(d.get('auditId', null), 'invitation_create');
     }
@@ -10992,7 +11001,11 @@ service cloud.firestore {
            && auditedAfter(request.resource.data.get('auditId', null), 'invitation_revoke'))
         // (b) re-issue after revoked / expired / (claimed account no longer exists is NOT allowed)
         || (authed() && (resource.data.status in ['revoked','expired']
-                         || (resource.data.status == 'pending' && resource.data.expiresAt <= request.time))
+                         || (resource.data.status == 'pending' && resource.data.expiresAt <= request.time)
+                         || (resource.data.status == 'claimed'
+                             && isSuperAdmin()
+                             && request.resource.data.get('forceReplace', false) == true
+                             && resource.data.role in ['headmaster','principal']))
             && inviteNewOk(inviteId, request.resource.data))
         // (c) the account owner claims the internal link (the users/{uid} create is validated above)
         || (hasAuth() && request.auth.token.email != null
@@ -11724,6 +11737,7 @@ service cloud.firestore {
     }
   }
 }
+
 </script>
 <script type="text/plain" id="bsStorageSrc">
 rules_version = '2';
@@ -11826,6 +11840,8 @@ window.ME_registerAccount = async function(payload) {
   const studentId = payload.studentId ? String(payload.studentId) : null;
   const classId = payload.classId ? String(payload.classId) : null;
   const assignmentRows = Array.isArray(payload.assignments) ? payload.assignments : [];
+  const forceReplace = payload.forceReplace === true;
+  if (forceReplace && !["headmaster", "principal"].includes(role)) throw new Error("Leader replacement is only available for Headmaster and Principal accounts.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) throw new Error("Enter a valid email address.");
   if (fullName.length < 2 || fullName.length > 100) throw new Error("Enter the full name (2–100 characters).");
   if (!["admin", "student", "teacher", "headmaster", "principal"].includes(role)) throw new Error("Choose a valid account role.");
@@ -11911,15 +11927,28 @@ window.ME_registerAccount = async function(payload) {
   const invitePayload = { email, fullName, role, schoolId };
   if (role === "student") { invitePayload.studentId = studentId; invitePayload.classId = classId; }
   if (role === "headmaster" || role === "principal") invitePayload.permissions = leaderPermissions;
+  if (role === "headmaster" || role === "principal") invitePayload.forceReplace = forceReplace;
 
   // The invitation document is an internal, one-use role/school lock only. No email is sent.
   const invite = await B.invitations.create(invitePayload);
   const tempPassword = makeTemporaryPassword();
   const sec = secondaryAuth();
   let cred = null;
+  const replacedLeaderIds = [];
   try {
     cred = await createUserWithEmailAndPassword(sec, email, tempPassword);
     const uid = cred.user.uid;
+    // Replacement must be performed by the currently authenticated Super Admin (primary app),
+    // not by the newly-created account (secondary app). Each deactivation is separately audited.
+    if (forceReplace && (role === "headmaster" || role === "principal")) {
+      const currentLeaders = await B.users.listBySchool(schoolId, role);
+      for (const leader of currentLeaders) {
+        if (leader.id !== uid && String(leader.status || "active").toLowerCase() === "active") {
+          await B.users.setStatus(leader.id, "inactive");
+          replacedLeaderIds.push(leader.id);
+        }
+      }
+    }
     const db2 = getFirestore(sec.app);
     const invRef = doc(db2, "invitations", email);
     const invSnap = await getDoc(invRef);
@@ -11960,6 +11989,11 @@ window.ME_registerAccount = async function(payload) {
     try { await secSignOut(sec); } catch (_) {}
     return { uid, email, role, schoolId, temporaryPassword: tempPassword, assignmentWarnings };
   } catch (e) {
+    // Restore previous leadership if account creation/claim fails after replacement.
+    for (const oldUid of replacedLeaderIds.reverse()) {
+      try { await B.users.setStatus(oldUid, "active"); }
+      catch (restoreError) { console.error("Could not restore previous leader status:", oldUid, restoreError); }
+    }
     // Do not leave an orphan Auth account if the secure profile claim failed.
     if (cred && cred.user) { try { await deleteUser(cred.user); } catch (_) {} }
     try { await secSignOut(sec); } catch (_) {}
@@ -12585,7 +12619,8 @@ function wirePassReg() {
         const result = await window.ME_registerAccount({
           email: $(cfg.emailId).value, fullName: $(cfg.nameId).value,
           role: cfg.role, schoolId: ($(cfg.schoolId).value || $(cfg.selectId).value || "").trim(),
-          schoolName, schoolTown
+          schoolName, schoolTown,
+          forceReplace: (cfg.role === "headmaster" ? $("hmReplaceLeader")?.checked : $("prReplaceLeader")?.checked) === true
         });
         showCreated(cfg.statusId, result);
         form.reset();
