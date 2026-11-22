@@ -8894,7 +8894,7 @@ export function createSchoolBackend({ db, auth, fs }) {
       async update(id, patch) {
         const ref = doc(db, coll, id); const snap = await getDoc(ref);
         if (!snap.exists()) fail(label + " not found.");
-        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageSessions, cur.schoolId);
+        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, cur.schoolId);
         const data = {};
         ["name", "level", "order", "code", "group"].forEach((k) => { if (patch[k] !== undefined && (k !== "code" || coll === "subjects") && (k !== "order" || coll === "classes") && (k !== "group" || coll === "classes")) data[k] = patch[k]; });
         if (data.name !== undefined && !String(data.name).trim()) fail("Name cannot be empty.");
@@ -8912,7 +8912,7 @@ export function createSchoolBackend({ db, auth, fs }) {
       async setArchived(id, archived) {
         const ref = doc(db, coll, id); const snap = await getDoc(ref);
         if (!snap.exists()) fail(label + " not found.");
-        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageSessions, cur.schoolId);
+        const cur = snap.data(); const actor = await loadActor(); need(actor, OPERATION_PERMS.manageStructure, cur.schoolId);
         const b = writeBatch(db);
         b.update(ref, { status: archived ? "archived" : "active", updatedAt: ts() });
         addAudit(b, actor, { action: label + (archived ? "_archive" : "_restore"), schoolId: cur.schoolId, targetType: coll, targetId: id });
@@ -9008,11 +9008,13 @@ export function createSchoolBackend({ db, auth, fs }) {
     need(actor, OPERATION_PERMS.manageStructure, schoolId);
     const school = await schools.get(schoolId);
     if (!school) fail("School not found.");
-    const type = String(school.schoolType || school.type || "").toLowerCase();
+    const rawType = String(school.schoolType || school.type || "").trim().toLowerCase().replace(/[\s-]+/g, "_");
+    const type = ["primary", "primary_school", "nursery", "nursery_primary"].includes(rawType) ? "primary"
+      : ["secondary", "secondary_school", "junior_secondary", "senior_secondary", "jss", "sss"].includes(rawType) ? "secondary" : rawType;
     let catalogue = [];
     if (type === "primary") catalogue = SCHOOL_SUBJECT_CATALOGUE.primary;
-    else if (["secondary", "junior_secondary", "senior_secondary"].includes(type)) catalogue = SCHOOL_SUBJECT_CATALOGUE.secondary;
-    else fail("School type must be primary or secondary to apply standard subjects.");
+    else if (type === "secondary") catalogue = SCHOOL_SUBJECT_CATALOGUE.secondary;
+    else fail("School type must be Primary or Secondary to apply standard subjects.");
     const existing = await this.list(schoolId, { includeArchived: true });
     const byName = new Map(existing.map(s => [String(s.name || "").trim().toUpperCase(), s]));
     let added = 0;
@@ -12276,10 +12278,17 @@ window.__initSchoolDash = async function() {
     "<div style='padding:9px 0;border-bottom:1px solid #e8edf2;'><strong>Role:</strong> "+eduEsc(roleLabel)+"</div>"+
     "<div style='padding:9px 0;border-bottom:1px solid #e8edf2;'><strong>School:</strong> "+eduEsc(schoolName)+"</div>"+
     "<div style='padding:9px 0;'><strong>Status:</strong> "+eduEsc(actor && actor.status || "active")+"</div>";
-  // Seed the agreed class catalogue once per school; never mix Primary and Secondary classes.
+  // Ensure each leader's own school has its standard class AND subject catalogue.
+  // These helpers are school-scoped and never write to another school's records.
   if (actor && school && B && ["headmaster","principal"].includes(role)) {
-    try { await B.classes.ensureDefaults(actor.schoolId); }
-    catch (e) { console.warn("Default class structure could not be completed. Check the leader's manage_schools permission:", e); }
+    try {
+      const [classSeed, subjectSeed] = await Promise.allSettled([
+        B.classes.ensureDefaults(actor.schoolId),
+        B.subjects.ensureDefaults(actor.schoolId)
+      ]);
+      if (classSeed.status === "rejected") console.warn("Default class structure could not be completed:", classSeed.reason);
+      if (subjectSeed.status === "rejected") console.warn("Default subject catalogue could not be completed:", subjectSeed.reason);
+    } catch (e) { console.warn("School structure setup could not be completed:", e); }
   }
   if ($("schoolLeadershipSectionTitle")) $("schoolLeadershipSectionTitle").textContent = isPrimary ? "Primary School Leadership" : role === "principal" ? "Secondary School Leadership" : "School Leadership";
   if ($("schoolUserName")) $("schoolUserName").textContent = actor && (actor.fullName || actor.name) || roleLabel;
@@ -12366,10 +12375,25 @@ window.__initSchoolDash = async function() {
   async function refreshSchoolLists() {
     if (!schoolId || !B) return;
     try {
-      const [teachers, students, classes, subjects, sessions, formMasters, teacherAssignments] = await Promise.all([
-        B.users.listBySchool(schoolId, "teacher"), B.students.list(schoolId), B.classes.list(schoolId),
-        B.subjects.list(schoolId), B.academicSessions.list(schoolId), B.formMasters.list(schoolId), B.teacherAssignments.list(schoolId)
+      // Load each school collection independently. A denied/failed unrelated query must
+      // not hide Classes and Subjects from the school leader.
+      const requests = await Promise.allSettled([
+        B.users.listBySchool(schoolId, "teacher"),
+        B.students.list(schoolId),
+        B.classes.list(schoolId),
+        B.subjects.list(schoolId),
+        B.academicSessions.list(schoolId),
+        B.formMasters.list(schoolId),
+        B.teacherAssignments.list(schoolId)
       ]);
+      const labels = ["teachers", "students", "classes", "subjects", "sessions", "form masters", "teacher assignments"];
+      const values = requests.map((r, i) => {
+        if (r.status === "fulfilled") return r.value || [];
+        console.warn("School " + labels[i] + " query failed:", r.reason);
+        return [];
+      });
+      const [teachers, students, classes, subjects, sessions, formMasters, teacherAssignments] = values;
+      const structureErrors = requests.slice(2, 4).filter(r => r.status === "rejected");
       schoolSessionRows = sessions;
       renderSchoolSettings();
       const teacherMap = new Map(teachers.map(t=>[t.uid || t.id,t]));
@@ -12401,7 +12425,14 @@ window.__initSchoolDash = async function() {
       ['schoolFmTeacher','schoolTaTeacher'].forEach(id=>{if($(id))$(id).innerHTML=teacherOptions;});
       if($('schoolCsSubject'))$('schoolCsSubject').innerHTML=subjects.map(x=>'<option value="'+eduEsc(x.id)+'">'+eduEsc(x.name)+'</option>').join('');
       if($('schoolTaSubjects'))$('schoolTaSubjects').innerHTML=subjects.map(x=>'<option value="'+eduEsc(x.id)+'">'+eduEsc(x.name)+'</option>').join('');
-      schoolStatus("School data loaded",true);
+      if (structureErrors.length) {
+        const msg = "Classes/Subjects could not be loaded. Check Firestore Rules and this school's schoolId. See browser console for the exact query error.";
+        if ($("schoolClassesTable") && requests[2].status === "rejected") $("schoolClassesTable").innerHTML = "<tr><td colspan='6'>"+eduEsc(msg)+"</td></tr>";
+        if ($("schoolSubjectsTable") && requests[3].status === "rejected") $("schoolSubjectsTable").innerHTML = "<tr><td colspan='3'>"+eduEsc(msg)+"</td></tr>";
+        schoolStatus(msg,false);
+      } else {
+        schoolStatus("School data loaded",true);
+      }
     } catch(e) { console.warn("School management lists could not load:",e); schoolStatus(e.message||String(e),false); }
   }
   refreshSchoolLists();
