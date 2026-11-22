@@ -8565,7 +8565,7 @@ export const LEADER_SCHOOL_PERMS = Object.freeze([
   "view_students", "manage_results", "manage_report_cards", "manage_certificates", "manage_academic_sessions"
 ]);
 /** Catalogue for Admin / Headmaster / Principal; platform-only powers remain separate. */
-export const STAFF_PERMS = Object.freeze([...ADMIN_PERMS, ...EXPLICIT_ONLY_PERMS]);
+export const STAFF_PERMS = Object.freeze([...ADMIN_PERMS, ...EXPLICIT_ONLY_PERMS, "manage_academic_sessions"]);
 
 export const DEFAULT_PERMS = Object.freeze({
   admin: ADMIN_PERMS, teacher: TEACHER_PERMS, student: STUDENT_PERMS,
@@ -10642,7 +10642,7 @@ service cloud.firestore {
       return ['manage_users','create_student','create_teacher','manage_permissions','suspend_users',
               'reset_passwords','manage_content','manage_certificates','manage_payments','manage_schools',
               'manage_announcements','manage_access','view_reports',
-              'view_students','manage_results','manage_report_cards'];
+              'view_students','manage_results','manage_report_cards','manage_academic_sessions'];
     }
     function permsValidFor(r, perms) {
       return perms is list && perms.size() <= 30
