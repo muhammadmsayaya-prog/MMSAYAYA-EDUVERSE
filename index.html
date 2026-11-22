@@ -874,7 +874,7 @@ window.SITE_IMAGE_SLOTS = {
 
         <div id="signedInPanel" hidden>
           <p class="login-hint" id="signedInText"></p>
-          <button class="btn btn-outline" id="logoutBtn" style="width:100%;">Logout</button>
+          <button class="btn btn-outline" id="loginLogoutBtn" style="width:100%;">Logout</button>
         </div>
 
       </div>
@@ -1406,7 +1406,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
             <div class="role" id="adminRole">Administrator</div>
           </div>
         </div>
-        <button class="btn-logout" id="logoutBtn">Logout</button>
+        <button class="btn-logout" id="adminLogoutBtn">Logout</button>
       </div>
     </aside>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -1427,13 +1427,13 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         <!-- ========== OVERVIEW ========== -->
         <div class="view active" id="view-overview">
           <div class="stats-grid" id="overviewStats">
-            <div class="stat-card"><div class="label">Categories</div><div class="value" id="statCategories">—</div></div>
-            <div class="stat-card"><div class="label">Published Courses</div><div class="value" id="statCourses">—</div></div>
+            <div class="stat-card"><div class="label">Categories</div><div class="value" id="adminStatCategories">—</div></div>
+            <div class="stat-card"><div class="label">Published Courses</div><div class="value" id="adminStatCourses">—</div></div>
             <div class="stat-card emerald"><div class="label">Students</div><div class="value" id="statStudents">—</div></div>
             <div class="stat-card"><div class="label">Teachers</div><div class="value" id="statTeachers">—</div></div>
-            <div class="stat-card gold"><div class="label">Practice Questions</div><div class="value" id="statQuestions">—</div></div>
+            <div class="stat-card gold"><div class="label">Practice Questions</div><div class="value" id="adminStatQuestions">—</div></div>
             <div class="stat-card"><div class="label">Contact Requests</div><div class="value" id="statContacts">—</div></div>
-            <div class="stat-card"><div class="label">Announcements</div><div class="value" id="statAnnouncements">—</div></div>
+            <div class="stat-card"><div class="label">Announcements</div><div class="value" id="adminStatAnnouncements">—</div></div>
             <div class="stat-card emerald"><div class="label">Pending Access</div><div class="value" id="statPendingAccess">—</div></div>
           </div>
           <div class="chart-row">
@@ -3713,7 +3713,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
       } catch (e) { setAlert("error", authError(e)); }
     });
 
-    byId("logoutBtn").addEventListener("click", async () => {
+    byId("loginLogoutBtn").addEventListener("click", async () => {
       try { await signOut(auth); } catch (e) {}
       byId("signedInPanel").hidden = true;
       byId("loginForm").hidden = false;
@@ -3846,7 +3846,7 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
     });
 
     (function(){
-      const adminLogoutBtn = document.getElementById("logoutBtn");
+      const adminLogoutBtn = document.getElementById("adminLogoutBtn");
       if (adminLogoutBtn) adminLogoutBtn.addEventListener("click", async () => {
         try { await signOut(auth); } catch (e) {}
         document.documentElement.classList.remove("is-admin");
@@ -4004,8 +4004,8 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
           getDocs(collection(db, "announcements")),
           getDocs(query(collection(db, "courseAccess"), where("status", "==", "pending"))).catch(() => ({ size: 0, docs: [] }))
         ]);
-        $("statCategories").textContent = cats.size;
-        $("statCourses").textContent = courses.size;
+        $("adminStatCategories").textContent = cats.size;
+        $("adminStatCourses").textContent = courses.size;
         let students = 0, teachers = 0;
         users.forEach(d => {
           const r = String(d.data().role || "").toLowerCase();
@@ -4014,9 +4014,9 @@ window.KATSINA_SCHOOLS = {"Bakori": {"primary": ["Abdulkadir Barau Primary Schoo
         });
         $("statStudents").textContent = students;
         $("statTeachers").textContent = teachers;
-        $("statQuestions").textContent = questions.size;
+        $("adminStatQuestions").textContent = questions.size;
         $("statContacts").textContent = contacts.size;
-        $("statAnnouncements").textContent = anns.size;
+        $("adminStatAnnouncements").textContent = anns.size;
         $("statPendingAccess").textContent = access.size || 0;
 
         // Simple bar chart for course statuses
@@ -7371,7 +7371,7 @@ setTimeout(wireSaAcademicButtons, 800);
       location.hash = "login";
       setTimeout(() => { location.hash = ""; navigateSection("home", true); }, 400);
     }
-    document.getElementById("logoutBtn")?.addEventListener("click", doLogout);
+    document.getElementById("adminLogoutBtn")?.addEventListener("click", doLogout);
     document.getElementById("schoolLogoutBtn")?.addEventListener("click", doLogout);
 
     // Auth gate: protected hashes
@@ -7575,11 +7575,11 @@ setTimeout(wireSaAcademicButtons, 800);
       location.hash = "";
       location.reload();
     }
-    const logoutBtn = $("logoutBtn");
+    const logoutBtn = $("adminLogoutBtn");
     if (logoutBtn) {
       const lb = logoutBtn.cloneNode(true);
       logoutBtn.parentNode.replaceChild(lb, logoutBtn);
-      lb.id = "logoutBtn";
+      lb.id = "adminLogoutBtn";
       lb.addEventListener("click", (e) => { e.preventDefault(); hardLogout(); });
     }
 
